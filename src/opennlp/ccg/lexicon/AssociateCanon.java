@@ -36,8 +36,10 @@ public class AssociateCanon extends Word {
 	/** List of attribute-value pairs, which must be strings. */
 	protected List<Pair<String, String>> associates;
 
-	/** The stem. */
-	protected String term;
+	/** The semantic class (optional). */
+	protected String entityClass;
+
+	protected String form;
 
 	/** The part of speech. */
 	protected String functions;
@@ -45,39 +47,11 @@ public class AssociateCanon extends Word {
 	/** The supertag. */
 	protected String supertag;
 
-	/** The semantic class (optional). */
-	protected String entityClass;
+	/** The stem. */
+	protected String term;
 
 	protected String tone;
 
-	protected String form;
-
-	@Override
-	public final List<Pair<String, String>> getAssociates() {
-		return associates;
-	}
-
-	@Override
-	public final String getTerm() {
-		return term;
-	}
-
-	@Override
-	public final String getFunctions() {
-		return functions;
-	}
-
-	@Override
-	public final String getSupertag() {
-		return supertag;
-	}
-
-	@Override
-	public final String getEntityClass() {
-		return entityClass;
-	}
-
-	/** Constructor for full word. */
 	/**
 	 * Constructor
 	 * 
@@ -101,13 +75,8 @@ public class AssociateCanon extends Word {
 	}
 
 	@Override
-	public final String getForm() {
-		return form;
-	}
-
-	@Override
-	public final String getTone() {
-		return tone;
+	public final List<Pair<String, String>> getAssociates() {
+		return associates;
 	}
 
 	@Override
@@ -134,6 +103,36 @@ public class AssociateCanon extends Word {
 				return p.b;
 		}
 		return null;
+	}
+
+	@Override
+	public final String getEntityClass() {
+		return entityClass;
+	}
+
+	@Override
+	public final String getForm() {
+		return form;
+	}
+
+	@Override
+	public final String getFunctions() {
+		return functions;
+	}
+
+	@Override
+	public final String getSupertag() {
+		return supertag;
+	}
+
+	@Override
+	public final String getTerm() {
+		return term;
+	}
+
+	@Override
+	public final String getTone() {
+		return tone;
 	}
 
 }
