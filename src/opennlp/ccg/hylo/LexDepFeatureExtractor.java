@@ -573,7 +573,7 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 	 * The default implementation tests for the finite verb POS tags VBD, VBP and VBZ.
 	 */
 	protected boolean isVerb(Word word) {
-		String pos = word.getPOS();
+		String pos = word.getFunctions();
 		return (pos == "VBD" || pos == "VBP" || pos == "VBZ");
 	}
 	
@@ -644,7 +644,7 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 	protected String getWordClass(Word word) {
 		String retval = cachedWordClasses.get(word);
 		if (retval != null) return retval;
-		String wClass = word.getSemClass();
+		String wClass = word.getEntityClass();
 		if (wClass != null) return updateCachedWordClasses(word, wClass);
 		if (isPro(word)) return updateCachedWordClasses(word, CLASS_PRO);
 		String form = word.getForm();
@@ -660,7 +660,7 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 	 * Returns whether a word is a pronoun.
 	 * The default implementation returns whether the POS tag starts with "PR".
 	 */
-	protected boolean isPro(Word word) { return word.getPOS().startsWith("PR"); }
+	protected boolean isPro(Word word) { return word.getFunctions().startsWith("PR"); }
 	
 	/**
 	 * The set of color words to check for in determining the word class.

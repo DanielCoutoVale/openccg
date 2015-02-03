@@ -198,7 +198,7 @@ public class FactoredNgramModel extends NgramScorer
             return FactorKey.getKey(attr, form);
         }
         // get val for this attr
-        String val = w.getFormalAttributeValue(attr);
+        String val = w.getAssociateValue(attr);
         // check for sem class replacement for form or stem
         if (attr == Tokenizer.WORD_ASSOCIATE || attr == Tokenizer.TERM_ASSOCIATE) {
             String scr = semClassReplacement(w);

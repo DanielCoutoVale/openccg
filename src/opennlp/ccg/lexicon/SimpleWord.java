@@ -41,22 +41,22 @@ public class SimpleWord extends Word {
 	}
 
 	/** Returns the pitch accent. */
-	public String getPitchAccent() {
+	public String getTone() {
 		return null;
 	}
 
 	/** Returns the list of extra attribute-value pairs. */
-	protected List<Pair<String, String>> getFormalAttributes() {
+	protected List<Pair<String, String>> getAssociates() {
 		return null;
 	}
 
 	/** Returns the stem. */
-	public String getStem() {
+	public String getTerm() {
 		return null;
 	}
 
 	/** Returns the part of speech. */
-	public String getPOS() {
+	public String getFunctions() {
 		return null;
 	}
 
@@ -66,7 +66,7 @@ public class SimpleWord extends Word {
 	}
 
 	/** Returns the semantic class. */
-	public String getSemClass() {
+	public String getEntityClass() {
 		return null;
 	}
 
@@ -75,21 +75,21 @@ public class SimpleWord extends Word {
 	 * The attribute names Tokenizer.WORD_ATTR, ..., Tokenizer.SEM_CLASS_ATTR
 	 * may be used to retrieve the form, ..., semantic class.
 	 */
-	public String getFormalAttributeValue(String attr) {
+	public String getAssociateValue(String attr) {
 		String internedAttr = attr.intern(); // use == on interned attr
 		if (internedAttr == Tokenizer.WORD_ASSOCIATE)
 			return getForm();
 		if (internedAttr == Tokenizer.TONE_ASSOCIATE)
-			return getPitchAccent();
+			return getTone();
 		if (internedAttr == Tokenizer.TERM_ASSOCIATE)
-			return getStem();
+			return getTerm();
 		if (internedAttr == Tokenizer.FUNCTIONS_ASSOCIATE)
-			return getPOS();
+			return getFunctions();
 		if (internedAttr == Tokenizer.SUPERTAG_ASSOCIATE)
 			return getSupertag();
 		if (internedAttr == Tokenizer.ENTITY_CLASS_ASSOCIATE)
-			return getSemClass();
-		List<Pair<String, String>> pairs = getFormalAttributes();
+			return getEntityClass();
+		List<Pair<String, String>> pairs = getAssociates();
 		if (pairs == null)
 			return null;
 		for (int i = 0; i < pairs.size(); i++) {

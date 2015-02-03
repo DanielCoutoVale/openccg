@@ -277,7 +277,7 @@ public class SyntacticFeatureExtractor implements FeatureExtractor {
 	 * The default implementation tests for a POS tag beginning with V.
 	 */
 	protected boolean isVerb(Word word) {
-		String pos = word.getPOS();
+		String pos = word.getFunctions();
 		return (pos.startsWith("V"));
 	}
 	

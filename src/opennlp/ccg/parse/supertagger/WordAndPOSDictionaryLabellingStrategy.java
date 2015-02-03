@@ -232,7 +232,7 @@ public class WordAndPOSDictionaryLabellingStrategy implements LabellingStrategy,
         Arrays.sort(sortedOutcomes);
         String tempOutcome = "";
         String word = thisWord.getForm();
-        String pos = thisWord.getPOS();
+        String pos = thisWord.getFunctions();
         ArrayList<Pair<Double, String>> retVal = new ArrayList<Pair<Double, String>>(30);
 
         // Find the best outcomes seen with the word in training that
@@ -400,8 +400,8 @@ public class WordAndPOSDictionaryLabellingStrategy implements LabellingStrategy,
         while (wds.hasNext() && ctxts.hasNext()) {
             // get the next word.
             w = wds.next();
-            if(w.getPOS() == null) {
-                w = WordPool.createFullWord(w, w.getForm(), tagging.get(cursor).getPOSTagging().get(0).b, w.getSupertag(), w.getSemClass()); 
+            if(w.getFunctions() == null) {
+                w = WordPool.createFullWord(w, w.getForm(), tagging.get(cursor).getPOSTagging().get(0).b, w.getSupertag(), w.getEntityClass()); 
             }
             context = ctxts.next();
             if (seqScorer != null) {
@@ -434,7 +434,7 @@ public class WordAndPOSDictionaryLabellingStrategy implements LabellingStrategy,
             List<Pair<Double, String>> tempTagging = new ArrayList<Pair<Double, String>>(mtagging.size());            
             Word thisWord = inputSentence.get(wordIndex);
             // set to a (possibly different, possibly less restrictive?) beta if this POS has a beta multiplier set.
-            Double bmult = betaMultipliers.get(thisWord.getPOS());
+            Double bmult = betaMultipliers.get(thisWord.getFunctions());
             double possiblyNewBeta = Math.min(1.0, (bmult != null) ? (bmult * beta) : beta);
             
             double best = mtagging.get(0).a;

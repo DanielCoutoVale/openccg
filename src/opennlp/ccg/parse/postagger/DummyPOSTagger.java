@@ -36,7 +36,7 @@ public class DummyPOSTagger extends POSTagger {
         List<TaggedWord> result = new ArrayList<TaggedWord>(sentence.size());
         for(Word w : sentence) {            
             List<Pair<Double,String>> tmpTagging = new ArrayList<Pair<Double,String>>(1);
-            tmpTagging.add(new Pair<Double,String>(1.0,w.getPOS()));            
+            tmpTagging.add(new Pair<Double,String>(1.0,w.getFunctions()));            
             TaggedWord tmp = new TaggedWord(w);
             tmp.setPOSTagging(tmpTagging);
             result.add(tmp);            

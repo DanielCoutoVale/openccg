@@ -548,7 +548,7 @@ public class Testbed {
 					Symbol s = it.next();
 
 					Word wTemp = s.getWords().get(0);
-					String morphClass = wTemp.getSemClass();
+					String morphClass = wTemp.getEntityClass();
 					if (morphClass == null || morphClass.length() == 0)
 						morphClass = "NoClass";
 
@@ -564,7 +564,7 @@ public class Testbed {
 					}
 					else {
 						UnifyControl.reindex(lexcat);
-						if (wTemp.getPOS().equals(pos)) {
+						if (wTemp.getFunctions().equals(pos)) {
 							matchPOS++;
 							if (semClass.equals("NoClass") && morphClass.equals("NoClass"))
 								matchNoClass = true;
@@ -576,12 +576,12 @@ public class Testbed {
 					for (Iterator<Symbol> it = lexSigns.asSymbolSet().iterator(); it.hasNext();) {
 						Symbol s = it.next();
 						Word wTemp = s.getWords().get(0);
-						if (!wTemp.getPOS().equals(pos)) {
+						if (!wTemp.getFunctions().equals(pos)) {
 							it.remove(); continue;
 						}
 						// filter by mismatched class if apropos
 						if (matchNoClass) {
-							String morphClass = wTemp.getSemClass();
+							String morphClass = wTemp.getEntityClass();
 							if (morphClass != null && morphClass.length() != 0)
 								it.remove();
 						}

@@ -61,10 +61,10 @@ public class LexicalDiversityPruningStrategy extends DiversityPruningStrategy
     public boolean notCompellinglyDifferent(Symbol sign1, Symbol sign2) {
     	stemsSeen.clear();
     	for (Word w : sign1.getWords()) {
-    		if (posValsToUse.contains(w.getPOS())) stemsSeen.add(w.getStem());
+    		if (posValsToUse.contains(w.getFunctions())) stemsSeen.add(w.getTerm());
     	}
     	for (Word w : sign2.getWords()) {
-    		if (posValsToUse.contains(w.getPOS()) && !stemsSeen.contains(w.getStem()))
+    		if (posValsToUse.contains(w.getFunctions()) && !stemsSeen.contains(w.getTerm()))
     			return false;
     	}
         return true;

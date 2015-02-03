@@ -181,9 +181,9 @@ public class TrueCaser {
     public String tcWordToString(String newWordForm, Word oldWord) {
         StringBuffer sb = new StringBuffer();
         sb.append(newWordForm);
-        if (oldWord.getPOS() != null) sb.append(":P-").append(DefaultTokenizer.escape(oldWord.getPOS()));
+        if (oldWord.getFunctions() != null) sb.append(":P-").append(DefaultTokenizer.escape(oldWord.getFunctions()));
         if (oldWord.getSupertag() != null) sb.append(":T-").append(DefaultTokenizer.escape(oldWord.getSupertag()));
-        if (oldWord.getSemClass() != null) sb.append(":C-").append(DefaultTokenizer.escape(oldWord.getSemClass()));
+        if (oldWord.getEntityClass() != null) sb.append(":C-").append(DefaultTokenizer.escape(oldWord.getEntityClass()));
         if (sb.length() == 0) sb.append((String) null);
         return sb.toString();
     }

@@ -105,7 +105,7 @@ public class KenNgramModel extends AbstractStandardNgramModel {
 		for(String part : parts) {
 		    String newWdForm = (lowercaseText) ? part.toLowerCase() : part;
 		    // add null attr/val list, since it is not accessible.
-		    tmp.add(WordPool.createWord(newWdForm, w.getPitchAccent(), null, newWdForm, w.getPOS(), w.getSupertag(), w.getSemClass()));
+		    tmp.add(WordPool.createWord(newWdForm, w.getTone(), null, newWdForm, w.getFunctions(), w.getSupertag(), w.getEntityClass()));
 		}
 	    }
 	    return tmp;

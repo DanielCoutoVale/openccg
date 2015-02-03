@@ -29,59 +29,111 @@ import java.util.*;
  * @author Michael White
  * @version $Revision: 1.6 $, $Date: 2009/07/17 04:23:30 $
  */
-public class AssociateCanon extends WordWithPitchAccent {
+public class AssociateCanon extends Word {
 
 	private static final long serialVersionUID = -3115687437782457735L;
 
 	/** List of attribute-value pairs, which must be strings. */
-	protected List<Pair<String, String>> attrValPairs;
+	protected List<Pair<String, String>> associates;
 
 	/** The stem. */
-	protected String stem;
+	protected String term;
 
 	/** The part of speech. */
-	protected String POS;
+	protected String functions;
 
 	/** The supertag. */
 	protected String supertag;
 
 	/** The semantic class (optional). */
-	protected String semClass;
+	protected String entityClass;
 
-	/** Returns the list of extra attribute-value pairs. */
-	protected List<Pair<String, String>> getFormalAttributes() {
-		return attrValPairs;
+	protected String tone;
+
+	protected String form;
+
+	@Override
+	public final List<Pair<String, String>> getAssociates() {
+		return associates;
 	}
 
-	/** Returns the stem. */
-	public String getStem() {
-		return stem;
+	@Override
+	public final String getTerm() {
+		return term;
 	}
 
-	/** Returns the part of speech. */
-	public String getPOS() {
-		return POS;
+	@Override
+	public final String getFunctions() {
+		return functions;
 	}
 
-	/** Returns the supertag. */
-	public String getSupertag() {
+	@Override
+	public final String getSupertag() {
 		return supertag;
 	}
 
-	/** Returns the semantic class (may be null). */
-	public String getSemClass() {
-		return semClass;
+	@Override
+	public final String getEntityClass() {
+		return entityClass;
 	}
 
 	/** Constructor for full word. */
-	protected AssociateCanon(String form, String pitchAccent, List<Pair<String, String>> attrValPairs,
-			String stem, String POS, String supertag, String semClass) {
-		super(form, pitchAccent);
-		this.attrValPairs = attrValPairs;
-		this.stem = stem;
-		this.POS = POS;
+	/**
+	 * Constructor
+	 * 
+	 * @param form the form of the word
+	 * @param tone the tone of the word
+	 * @param associates the non-canonical associates
+	 * @param term the term
+	 * @param functions the functions
+	 * @param supertag the supertag
+	 * @param entityClass the rhetoric entity class
+	 */
+	protected AssociateCanon(String form, String tone, List<Pair<String, String>> associates,
+			String term, String functions, String supertag, String entityClass) {
+		this.form = form;
+		this.tone = tone;
+		this.associates = associates;
+		this.term = term;
+		this.functions = functions;
 		this.supertag = supertag;
-		this.semClass = semClass;
+		this.entityClass = entityClass;
+	}
+
+	@Override
+	public final String getForm() {
+		return form;
+	}
+
+	@Override
+	public final String getTone() {
+		return tone;
+	}
+
+	@Override
+	public final String getAssociateValue(String associateKey) {
+		associateKey = associateKey.intern();
+		if (associateKey == Tokenizer.WORD_ASSOCIATE)
+			return getForm();
+		if (associateKey == Tokenizer.TONE_ASSOCIATE)
+			return getTone();
+		if (associateKey == Tokenizer.TERM_ASSOCIATE)
+			return getTerm();
+		if (associateKey == Tokenizer.FUNCTIONS_ASSOCIATE)
+			return getFunctions();
+		if (associateKey == Tokenizer.SUPERTAG_ASSOCIATE)
+			return getSupertag();
+		if (associateKey == Tokenizer.ENTITY_CLASS_ASSOCIATE)
+			return getEntityClass();
+		List<Pair<String, String>> pairs = getAssociates();
+		if (pairs == null)
+			return null;
+		for (int i = 0; i < pairs.size(); i++) {
+			Pair<String, String> p = pairs.get(i);
+			if (p.a == associateKey)
+				return p.b;
+		}
+		return null;
 	}
 
 }

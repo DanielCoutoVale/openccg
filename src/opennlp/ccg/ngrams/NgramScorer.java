@@ -428,7 +428,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
 	 */
     protected String semClassReplacement(Word w) {
         if (useSemClasses) {
-            String semClass = w.getSemClass();
+            String semClass = w.getEntityClass();
             if (isReplacementSemClass(semClass)) 
                 return semClass.toUpperCase().intern();
         }

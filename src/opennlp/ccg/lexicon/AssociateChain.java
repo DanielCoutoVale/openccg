@@ -59,12 +59,12 @@ public class AssociateChain extends Word {
 	}
 
 	/** Returns the pitch accent. */
-	public String getPitchAccent() {
+	public String getTone() {
 		return getValFromInterned(Tokenizer.TONE_ASSOCIATE);
 	}
 
 	/** Returns the list of extra attribute-value pairs. */
-	protected List<Pair<String, String>> getFormalAttributes() {
+	protected List<Pair<String, String>> getAssociates() {
 		List<Pair<String, String>> retval = null;
 		AssociateChain current = this;
 		while (current != null) {
@@ -82,12 +82,12 @@ public class AssociateChain extends Word {
 	}
 
 	/** Returns the stem. */
-	public String getStem() {
+	public String getTerm() {
 		return getValFromInterned(Tokenizer.TERM_ASSOCIATE);
 	}
 
 	/** Returns the part of speech. */
-	public String getPOS() {
+	public String getFunctions() {
 		return getValFromInterned(Tokenizer.FUNCTIONS_ASSOCIATE);
 	}
 
@@ -97,7 +97,7 @@ public class AssociateChain extends Word {
 	}
 
 	/** Returns the semantic class. */
-	public String getSemClass() {
+	public String getEntityClass() {
 		return getValFromInterned(Tokenizer.ENTITY_CLASS_ASSOCIATE);
 	}
 
@@ -106,7 +106,7 @@ public class AssociateChain extends Word {
 	 * The attribute names Tokenizer.WORD_ATTR, ..., Tokenizer.SEM_CLASS_ATTR
 	 * may be used to retrieve the form, ..., semantic class.
 	 */
-	public String getFormalAttributeValue(String attr) {
+	public String getAssociateValue(String attr) {
 		String internedAttr = attr.intern(); // use == on interned attr
 		return getValFromInterned(internedAttr);
 	}

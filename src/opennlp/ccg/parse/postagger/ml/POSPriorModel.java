@@ -197,7 +197,7 @@ public class POSPriorModel extends ConditionalProbabilityTable {
             Map<String, Integer> vocab = new HashMap<String, Integer>();
             for (List<Word> inLine : in) {
                 for (Word w : inLine) {
-                    String pos = POS_TAG + "-" + DefaultTokenizer.escape(w.getPOS()),
+                    String pos = POS_TAG + "-" + DefaultTokenizer.escape(w.getFunctions()),
                         wform = WORD + "-" + DefaultTokenizer.escape(w.getForm());
 
                     vocab.put(pos, (vocab.get(pos) == null) ? 1 : vocab.get(pos) + 1);

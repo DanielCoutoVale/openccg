@@ -100,7 +100,7 @@ public class MorphBuilderSfl implements MorphBuilder {
 		Word coartIndexingWord = null;
 		if (modal) {
 			String indexAttribute = form.substring(0, form.indexOf("-"));
-			String indexValue = surfaceWord.getFormalAttributeValue(indexAttribute);
+			String indexValue = surfaceWord.getAssociateValue(indexAttribute);
 			coartIndexingWord = WordPool.createWord(indexAttribute, indexValue);
 		}
 		morph.getMorphItems().add(new MorphItem(surfaceWord, word, coartIndexingWord, features,

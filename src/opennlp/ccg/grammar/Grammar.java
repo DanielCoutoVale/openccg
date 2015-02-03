@@ -634,12 +634,12 @@ public class Grammar {
 		for (Word w : words) {
 			Element e = new Element("entry");
 			e.setAttribute("word", w.getForm());
-			if (w.getForm() != w.getStem() && w.getStem() != null)
-				e.setAttribute("stem", w.getStem());
-			if (w.getPOS() != null)
-				e.setAttribute("pos", w.getPOS());
-			if (w.getSemClass() != null)
-				e.setAttribute("class", w.getSemClass());
+			if (w.getForm() != w.getTerm() && w.getTerm() != null)
+				e.setAttribute("stem", w.getTerm());
+			if (w.getFunctions() != null)
+				e.setAttribute("pos", w.getFunctions());
+			if (w.getEntityClass() != null)
+				e.setAttribute("class", w.getEntityClass());
 			xout.output(e, out);
 			out.println();
 		}

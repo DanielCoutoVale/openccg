@@ -20,12 +20,12 @@ public class AssociateCanonFactory implements WordFactory {
 	private void setW(String form, String pitchAccent, List<Pair<String, String>> attrValPairs,
 			String stem, String POS, String supertag, String semClass) {
 		w.form = form;
-		w.pitchAccent = pitchAccent;
-		w.attrValPairs = attrValPairs;
-		w.stem = stem;
-		w.POS = POS;
+		w.tone = pitchAccent;
+		w.associates = attrValPairs;
+		w.term = stem;
+		w.functions = POS;
 		w.supertag = supertag;
-		w.semClass = semClass;
+		w.entityClass = semClass;
 	}
 
 	// looks up the word equivalent to w, or if none, returns a new one
@@ -34,14 +34,14 @@ public class AssociateCanonFactory implements WordFactory {
 		Word retval = (Word) Interner.getGlobalInterned(w);
 		if (retval != null)
 			return retval;
-		if (w.isSurfaceWord() && w.attrValPairs == null) {
-			if (w.pitchAccent == null)
+		if (w.isSurfaceWord() && w.associates == null) {
+			if (w.tone == null)
 				retval = new SimpleWord(w.form);
 			else
-				retval = new WordWithPitchAccent(w.form, w.pitchAccent);
+				retval = new WordWithPitchAccent(w.form, w.tone);
 		} else
-			retval = new AssociateCanon(w.form, w.pitchAccent, w.attrValPairs, w.stem, w.POS, w.supertag,
-					w.semClass);
+			retval = new AssociateCanon(w.form, w.tone, w.associates, w.term, w.functions, w.supertag,
+					w.entityClass);
 		return (Word) Interner.globalIntern(retval);
 	}
 

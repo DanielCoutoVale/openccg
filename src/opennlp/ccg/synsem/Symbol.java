@@ -446,11 +446,11 @@ public class Symbol implements EntityRealizer, Serializable {
 				return;
 			}
 			// check for pitch accent
-			if (word.getPitchAccent() != null) {
+			if (word.getTone() != null) {
 				// add pitchaccent element containing word(s) with corresponding
 				// accent
 				Element pitchaccent = new Element("pitchaccent");
-				pitchaccent.setAttribute("type", word.getPitchAccent());
+				pitchaccent.setAttribute("type", word.getTone());
 				addWords(pitchaccent, word);
 				parent.addContent(pitchaccent);
 				return;
@@ -535,7 +535,7 @@ public class Symbol implements EntityRealizer, Serializable {
 	 * Returns the POS tag of the first word.
 	 */
 	public final String getPOS() {
-		return words.get(0).getPOS();
+		return words.get(0).getFunctions();
 	}
 
 	/**

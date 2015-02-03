@@ -107,7 +107,7 @@ public class BasicPOSTagger extends POSTagger {
             double best = distroList.get(0).a;
             double widenedBeta = beta/8;            
             
-            String goldPOS = sentence.get(wordIndex).getPOS();
+            String goldPOS = sentence.get(wordIndex).getFunctions();
             
             for(Pair<Double,Integer> outcome : distroList) { 
                 if( (outcome.a >= (widenedBeta * best)) || (includeGold && tagMod.getOutcome(outcome.b).equals(goldPOS)) ) {

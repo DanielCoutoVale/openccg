@@ -122,8 +122,8 @@ public class RepetitionScorer implements SymbolScorer
      * unless the stem is in stemsToIgnore; otherwise returns null.
      */
     protected String relevantStem(Word word) {
-        if (!(posValsToUse.contains(word.getPOS()))) return null;
-        String stem = word.getStem();
+        if (!(posValsToUse.contains(word.getFunctions()))) return null;
+        String stem = word.getTerm();
         if (!(stemsToIgnore.contains(stem))) return stem;
         return null;
     }

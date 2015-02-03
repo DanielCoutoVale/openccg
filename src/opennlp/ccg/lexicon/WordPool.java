@@ -17,9 +17,9 @@ public class WordPool {
 	/** Creates a core surface word from the given one, removing all attrs in the given set. */
 	public static synchronized Word createCoreSurfaceWord(Word word, Set<String> attrsSet) {
 	    String form = word.getForm();
-	    String accent = word.getPitchAccent();
+	    String accent = word.getTone();
 	    if (accent != null && attrsSet.contains(Tokenizer.TONE_ASSOCIATE)) accent = null;
-	    List<Pair<String,String>> pairs = word.getFormalAttributes(); 
+	    List<Pair<String,String>> pairs = word.getAssociates(); 
 	    if (pairs != null) {
 	        pairs = new ArrayList<Pair<String,String>>(pairs); 
 	        Iterator<Pair<String,String>> pairsIt = pairs.iterator(); 
@@ -40,7 +40,7 @@ public class WordPool {
 	    POS = (POS != null) ? POS.intern() : null;
 	    supertag = (supertag != null) ? supertag.intern() : null;
 	    semClass = (semClass != null) ? semClass.intern() : null; 
-	    return createWordDirectly(word.getForm(), word.getPitchAccent(), word.getFormalAttributes(), stem, POS, supertag, semClass);
+	    return createWordDirectly(word.getForm(), word.getTone(), word.getAssociates(), stem, POS, supertag, semClass);
 	}
 
 	/** Creates a full word from the given surface one, 
@@ -49,8 +49,8 @@ public class WordPool {
 	    plus the given supertag. */
 	public static synchronized Word createFullWord(Word word, Word word2, String supertag) {
 	    boolean mixedAttrs = false;
-	    List<Pair<String,String>> pairs = word.getFormalAttributes(); 
-	    List<Pair<String,String>> pairs2 = word2.getFormalAttributes(); 
+	    List<Pair<String,String>> pairs = word.getAssociates(); 
+	    List<Pair<String,String>> pairs2 = word2.getAssociates(); 
 	    if (pairs == null && pairs2 != null) { pairs = pairs2; }
 	    else if (pairs2 != null) {
 	        mixedAttrs = true;
@@ -63,36 +63,36 @@ public class WordPool {
 	    }
 	    if (mixedAttrs) { 
 	        return createWord(
-	            word.getForm(), word.getPitchAccent(), pairs, 
-	            word2.getStem(), word2.getPOS(), supertag, word2.getSemClass()
+	            word.getForm(), word.getTone(), pairs, 
+	            word2.getTerm(), word2.getFunctions(), supertag, word2.getEntityClass()
 	        );
 	    }
 	    else {
 	        supertag = (supertag != null) ? supertag.intern() : null;
 	        return createWordDirectly(
-	            word.getForm(), word.getPitchAccent(), pairs, 
-	            word2.getStem(), word2.getPOS(), supertag, word2.getSemClass()
+	            word.getForm(), word.getTone(), pairs, 
+	            word2.getTerm(), word2.getFunctions(), supertag, word2.getEntityClass()
 	        );
 	    }
 	}
 
 	/** Creates a surface word from the given one, removing the stem, POS, supertag and semantic class. */
 	public static synchronized Word createSurfaceWord(Word word) {
-	    return createWordDirectly(word.getForm(), word.getPitchAccent(), word.getFormalAttributes(), null, null, null, null);
+	    return createWordDirectly(word.getForm(), word.getTone(), word.getAssociates(), null, null, null, null);
 	}
 
 	/** Creates a surface word from the given one, removing the stem, POS, supertag and semantic class, 
 	    and replacing the form with the given one. */
 	public static synchronized Word createSurfaceWord(Word word, String form) {
 	    form = (form != null) ? form.intern() : null; 
-	    return createWordDirectly(form, word.getPitchAccent(), word.getFormalAttributes(), null, null, null, null);
+	    return createWordDirectly(form, word.getTone(), word.getAssociates(), null, null, null, null);
 	}
 
 	/** Creates a surface word from the given one, removing the stem, POS, supertag and semantic class, 
 	    and replacing the form with the semantic class, uppercased. */
 	public static synchronized Word createSurfaceWordUsingSemClass(Word word) {
-	    String form = word.getSemClass().toUpperCase().intern();
-	    return createWordDirectly(form, word.getPitchAccent(), word.getFormalAttributes(), null, null, null, null);
+	    String form = word.getEntityClass().toUpperCase().intern();
+	    return createWordDirectly(form, word.getTone(), word.getAssociates(), null, null, null, null);
 	}
 
 	// NB: could try different factory methods for concrete words, but 
@@ -147,8 +147,8 @@ public class WordPool {
 	public static synchronized Word createWord(Word word, String form) {
 	    if (form != null) form = form.intern();
 	    return createWordDirectly(
-	        form, word.getPitchAccent(), word.getFormalAttributes(), 
-	        word.getStem(), word.getPOS(), word.getSupertag(), word.getSemClass()
+	        form, word.getTone(), word.getAssociates(), 
+	        word.getTerm(), word.getFunctions(), word.getSupertag(), word.getEntityClass()
 	    );
 	}
 
@@ -163,11 +163,11 @@ public class WordPool {
 	/** Creates a (surface or full) word from the given one, 
 	    replacing the form and stem with the semantic class, uppercased. */
 	public static synchronized Word createWordUsingSemClass(Word word) {
-	    String form = word.getSemClass().toUpperCase().intern();
+	    String form = word.getEntityClass().toUpperCase().intern();
 	    String stem = form;
 	    return createWordDirectly(
-	        form, word.getPitchAccent(), word.getFormalAttributes(), 
-	        stem, word.getPOS(), word.getSupertag(), word.getSemClass()
+	        form, word.getTone(), word.getAssociates(), 
+	        stem, word.getFunctions(), word.getSupertag(), word.getEntityClass()
 	    );
 	}
 
@@ -175,12 +175,12 @@ public class WordPool {
 	    second word's additional attr-val pairs. */
 	public static synchronized Word createWordWithAttrs(Word word, Word word2) {
 	    // get accent
-	    String accent = word.getPitchAccent();
-	    if (accent == null) accent = word2.getPitchAccent();
+	    String accent = word.getTone();
+	    if (accent == null) accent = word2.getTone();
 	    // get attrs
 	    boolean mixedAttrs = false;
-	    List<Pair<String,String>> pairs = word.getFormalAttributes();
-	    List<Pair<String,String>> pairs2 = word2.getFormalAttributes(); 
+	    List<Pair<String,String>> pairs = word.getAssociates();
+	    List<Pair<String,String>> pairs2 = word2.getAssociates(); 
 	    if (pairs == null && pairs2 != null) { pairs = pairs2; }
 	    else if (pairs2 != null) {
 	        mixedAttrs = true;
@@ -192,8 +192,8 @@ public class WordPool {
 	        }
 	    }
 	    // get rest
-	    String form = word.getForm(); String stem = word.getStem(); 
-	    String POS = word.getPOS(); String supertag = word.getSupertag(); String semClass = word.getSemClass(); 
+	    String form = word.getForm(); String stem = word.getTerm(); 
+	    String POS = word.getFunctions(); String supertag = word.getSupertag(); String semClass = word.getEntityClass(); 
 	    // with mixed attrs, need to normalize
 	    if (mixedAttrs) 
 	        return createWord(form, accent, pairs, stem, POS, supertag, semClass);

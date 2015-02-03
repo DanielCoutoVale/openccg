@@ -86,17 +86,17 @@ public class ResultSink {
      * log pos-specific error stats).
      */
     public void addResult(List<Pair<Double, String>> tagging, Word goldTagging) {
-        String goldTag = (whatType == ResultSinkType.SUPERTAG) ? goldTagging.getSupertag() : goldTagging.getPOS();
+        String goldTag = (whatType == ResultSinkType.SUPERTAG) ? goldTagging.getSupertag() : goldTagging.getFunctions();
         totalTags += tagging.size();
         totalWords++;
         // mww: check for missing gold POS (grrr)
-        if (goldTagging.getPOS() == null) {
+        if (goldTagging.getFunctions() == null) {
             System.err.println("Warning: found null gold POS, skipping word: " + goldTagging);
             this.allCorrect = false;
             return;
         }
 
-        String thisPOS = goldTagging.getPOS(), thisGenPOS = goldTagging.getPOS().substring(0, 1);
+        String thisPOS = goldTagging.getFunctions(), thisGenPOS = goldTagging.getFunctions().substring(0, 1);
         Integer posT = this.posTot.get(thisPOS), gPOST = this.genPOSTot.get(thisGenPOS);
         if (posT == null) {
             this.posTot.put(thisPOS, new Integer(1));

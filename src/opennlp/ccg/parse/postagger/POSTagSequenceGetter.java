@@ -54,7 +54,7 @@ public class POSTagSequenceGetter {
         for(List<Word> sent : corp) {
             out.write("<s> ");
             for(Word w : sent) {
-                out.write(w.getPOS()+" ");
+                out.write(w.getFunctions()+" ");
             }
             out.write("</s>"+System.getProperty("line.separator"));
         }

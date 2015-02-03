@@ -51,7 +51,7 @@ public class StemPruningStrategy extends DiversityPruningStrategy
 	List<Word> words2 = sign2.getWords();
 	if (words1.size() != words2.size()) return false;
     	for (int i=0; i < words1.size(); i++) {
-	    if (words1.get(i).getStem() != words2.get(i).getStem())
+	    if (words1.get(i).getTerm() != words2.get(i).getTerm())
 		return false;
     	}
         return true;

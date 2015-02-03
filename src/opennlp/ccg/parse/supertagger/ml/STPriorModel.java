@@ -179,13 +179,13 @@ public class STPriorModel extends ConditionalProbabilityTable {
 
     /** Get the POS-dict restricted prior distribution (sorted descending by prob.) */
     protected List<Pair<Double, String>> getPOSRestrictedPriors(Word w) {
-        Collection<String> tagsAllowed = posDict.getEntry(w.getPOS());
+        Collection<String> tagsAllowed = posDict.getEntry(w.getFunctions());
         if (tagsAllowed == null || tagsAllowed.size() == 0) {
             return priors;
         } else {
             List<Pair<Double, String>> sortedTags = new ArrayList<Pair<Double, String>>(tagsAllowed.size());
             for (String tag : tagsAllowed) {
-                sortedTags.add(new Pair<Double, String>(getPriorOf(tag, w.getForm(), w.getPOS()), tag));
+                sortedTags.add(new Pair<Double, String>(getPriorOf(tag, w.getForm(), w.getFunctions()), tag));
             }
             Collections.sort(sortedTags, ppcomp);
             return sortedTags;
@@ -246,7 +246,7 @@ public class STPriorModel extends ConditionalProbabilityTable {
         attrVals.clear();
         Pair<String, String> surfaceForm = pairs.intern(new Pair<String, String>(WORD, DefaultTokenizer.escape(w.getForm()).intern()));
         attrVals.add(surfaceForm);
-        Pair<String, String> pos = pairs.intern(new Pair<String, String>(POS_TAG, DefaultTokenizer.escape(w.getPOS()).intern()));
+        Pair<String, String> pos = pairs.intern(new Pair<String, String>(POS_TAG, DefaultTokenizer.escape(w.getFunctions()).intern()));
         attrVals.add(pos);
 
         int cnt = 0;
@@ -332,7 +332,7 @@ public class STPriorModel extends ConditionalProbabilityTable {
             for (List<Word> inLine : in) {
                 for (Word w : inLine) {
                     String st = SUPERTAG + "-" + DefaultTokenizer.escape(w.getSupertag()),
-                            pos = POS_TAG + "-" + DefaultTokenizer.escape(w.getPOS()),
+                            pos = POS_TAG + "-" + DefaultTokenizer.escape(w.getFunctions()),
                             wform = WORD + "-" + DefaultTokenizer.escape(w.getForm());
 
                     vocab.put(st, (vocab.get(st) == null) ? 1 : vocab.get(st) + 1);
@@ -355,7 +355,7 @@ public class STPriorModel extends ConditionalProbabilityTable {
             for (List<Word> inLine : in) {
                 for (Word w : inLine) {
                     String st = SUPERTAG + "-" + DefaultTokenizer.escape(w.getSupertag()),
-                            pos = POS_TAG + "-" + DefaultTokenizer.escape(w.getPOS()),
+                            pos = POS_TAG + "-" + DefaultTokenizer.escape(w.getFunctions()),
                             wform = WORD + "-" + DefaultTokenizer.escape(w.getForm());
                     if (vocab.get(st) > catCutoff) {
                         out.write(wform + ":" + pos + ":" + st + " ");

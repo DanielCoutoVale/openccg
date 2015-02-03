@@ -154,7 +154,7 @@ public class TaggingDictionaryExtractor {
                 currsent = incorp.next();
                 for (Word w : currsent) {
                     currForm = w.getForm();
-                    currPOS = w.getPOS();
+                    currPOS = w.getFunctions();
                     Object wfetch = wdmap.get(currForm);
                     String stag = w.getSupertag();
                     catCount.put(stag, catCount.get(stag)==null ? 1 : catCount.get(stag) + 1);

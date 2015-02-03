@@ -232,7 +232,7 @@ public class EnglishAgreementExtractor implements FeatureExtractor{
 					}
 					
 					//Of-complement subjects (for non-numeral, non-%-sign subjs)
-					String subjClass=dep.lexDep.getWords().get(0).getSemClass();
+					String subjClass=dep.lexDep.getWords().get(0).getEntityClass();
 					String subjPOS=dep.lexDep.getPOS();
 					if(subjClass==null)subjClass="NULL";
 					if(!subjClass.equals("PERCENT") && !subjPOS.startsWith("CD")){
@@ -391,7 +391,7 @@ public class EnglishAgreementExtractor implements FeatureExtractor{
 	
 	//checks for punct
 	private boolean isPunct(Word w) {
-		String pos = w.getPOS();
+		String pos = w.getFunctions();
 		boolean retval = pos.startsWith("PUNCT");
 		retval = retval || pos.equals(".") || pos.equals(",") || pos.equals(";") || pos.equals(":") || pos.equals("LRB") || pos.equals("RRB");
 		//if (retval) {
@@ -616,17 +616,17 @@ public class EnglishAgreementExtractor implements FeatureExtractor{
 	
 	//head stem
 	private void add_head_stem(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return headSign.getWords().get(0).getStem();}});
+		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return headSign.getWords().get(0).getTerm();}});
 	}
 	
 	//head class
 	private void add_head_class(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ String semClass=adjustSemClass(headSign.getWords().get(0).getSemClass());return semClass;}});
+		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ String semClass=adjustSemClass(headSign.getWords().get(0).getEntityClass());return semClass;}});
 	}
 	
 	// head pos
 	private void add_head_pos(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ String pos=adjustPOS(headSign.getOrthography(),headSign.getPOS(),headSign.getWords().get(0).getSemClass());return pos; }});
+		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ String pos=adjustPOS(headSign.getOrthography(),headSign.getPOS(),headSign.getWords().get(0).getEntityClass());return pos; }});
 	}
 	
 	// dep word
@@ -636,6 +636,6 @@ public class EnglishAgreementExtractor implements FeatureExtractor{
 	
 	// dep pos
 	private void add_dep_pos(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ String pos=adjustPOS(depSign.getOrthography(),depSign.getPOS(),depSign.getWords().get(0).getSemClass());return pos; }});
+		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ String pos=adjustPOS(depSign.getOrthography(),depSign.getPOS(),depSign.getWords().get(0).getEntityClass());return pos; }});
 	}
 }

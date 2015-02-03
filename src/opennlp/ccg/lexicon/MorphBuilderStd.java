@@ -100,7 +100,7 @@ public class MorphBuilderStd implements MorphBuilder {
 		Word coartIndexingWord = null;
 		if (coart) {
 			String indexAttr = wordString.substring(0, wordString.indexOf("-"));
-			String indexVal = surfaceWord.getFormalAttributeValue(indexAttr);
+			String indexVal = surfaceWord.getAssociateValue(indexAttr);
 			coartIndexingWord = WordPool.createWord(indexAttr, indexVal);
 		}
 		morph.getMorphItems().add(

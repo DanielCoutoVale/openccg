@@ -410,13 +410,13 @@ public class DefaultTokenizer implements Tokenizer {
 	 */
 	public String getOrthography(Word w, boolean semClassReplacement) {
 		StringBuffer sb = new StringBuffer();
-		String semClass = w.getSemClass();
+		String semClass = w.getEntityClass();
 		if (semClassReplacement && semClass != null && replacementSemClasses.contains(semClass))
 			sb.append(semClass.toUpperCase());
 		else
 			sb.append(w.getForm());
-		if (w.getPitchAccent() != null)
-			sb.append("_").append(w.getPitchAccent());
+		if (w.getTone() != null)
+			sb.append("_").append(w.getTone());
 		for (Pair<String, String> pair : w.getFormalAttributesProtected()) {
 			sb.append("_").append(pair.b);
 		}
@@ -471,11 +471,11 @@ public class DefaultTokenizer implements Tokenizer {
 	public String format(Word w, boolean semClassReplacement) {
 		StringBuffer sb = new StringBuffer();
 		String form = w.getForm();
-		String pitchAccent = w.getPitchAccent();
-		String stem = w.getStem();
-		String POS = w.getPOS();
+		String pitchAccent = w.getTone();
+		String stem = w.getTerm();
+		String POS = w.getFunctions();
 		String supertag = w.getSupertag();
-		String semClass = w.getSemClass();
+		String semClass = w.getEntityClass();
 		if (semClassReplacement && semClass != null && replacementSemClasses.contains(semClass)) {
 			form = escape(semClass.toUpperCase());
 			stem = form;
@@ -636,7 +636,7 @@ public class DefaultTokenizer implements Tokenizer {
 	 */
 	public List<String> expandWord(Word word) {
 		String token = word.getForm();
-		String sc = word.getSemClass();
+		String sc = word.getEntityClass();
 		if (sc == Tokenizer.DATE_CLASS && isDate(token))
 			return expandDate(token);
 		if (sc == Tokenizer.TIME_CLASS && isTime(token))

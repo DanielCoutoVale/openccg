@@ -180,7 +180,7 @@ public class JavaSupertaggingApp {
                   outf.write("<s>"+System.getProperty("line.separator"));
                   for(List<Pair<Double,String>> tagging : taggings) {                      
                       Word nextw = sentiter.next();
-                      outf.write(nextw.getForm() + "\t1\t" + nextw.getPOS() + "\t1.0\t" + tagging.size() + "\t");// + nextw.getSupertag() + " ");
+                      outf.write(nextw.getForm() + "\t1\t" + nextw.getFunctions() + "\t1.0\t" + tagging.size() + "\t");// + nextw.getSupertag() + " ");
                       //outf.write(nextw.getForm() + "|||"+ nextw.getStem() + "|||" + nextw.getPOS() + "|||");
                       String tags = "";
                       for(Pair<Double,String> tg : tagging) {

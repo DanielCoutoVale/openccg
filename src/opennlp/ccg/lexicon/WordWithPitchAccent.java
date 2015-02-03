@@ -33,7 +33,7 @@ public class WordWithPitchAccent extends SimpleWord {
     protected String pitchAccent;
     
     /** Returns the pitch accent. */
-    public String getPitchAccent() { return pitchAccent; }
+    public String getTone() { return pitchAccent; }
     
     /** Constructor. */
     protected WordWithPitchAccent(String form, String pitchAccent) {

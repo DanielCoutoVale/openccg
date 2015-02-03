@@ -43,14 +43,14 @@ public class TaggedWord {
     /** Decorators for the core functionality of the underlying word. */
     public String getSupertag() { return oldWord.getSupertag(); }
     public String getForm() { return oldWord.getForm(); }
-    public String getPOS() { return oldWord.getPOS(); }
+    public String getPOS() { return oldWord.getFunctions(); }
     
     /** Accessor for the underlying vanilla Word. */
     public Word getWord() { return oldWord; }
     
     /** Constructor with a Word. */
     public TaggedWord(Word wd) { 
-        oldWord = WordPool.createFullWord(wd, wd.getForm(), wd.getPOS(), wd.getSupertag(), wd.getSemClass()); 
+        oldWord = WordPool.createFullWord(wd, wd.getForm(), wd.getFunctions(), wd.getSupertag(), wd.getEntityClass()); 
     }
         
     /** This does the obvious thing. */
@@ -63,7 +63,7 @@ public class TaggedWord {
      */
     public void setPOSTagging(List<Pair<Double,String>> postagging) { 
         this.postagging = postagging; 
-        oldWord = WordPool.createFullWord(oldWord, oldWord.getForm(), this.postagging.get(0).b, oldWord.getSupertag(), oldWord.getSemClass());            
+        oldWord = WordPool.createFullWord(oldWord, oldWord.getForm(), this.postagging.get(0).b, oldWord.getSupertag(), oldWord.getEntityClass());            
     }
     
     
@@ -77,6 +77,6 @@ public class TaggedWord {
     public String getGoldSuper() { return oldWord.getSupertag(); }
     
     /** Gets the gold-standard POS tag. */
-    public String getGoldPOS() { return oldWord.getPOS(); }
+    public String getGoldPOS() { return oldWord.getFunctions(); }
     
 }

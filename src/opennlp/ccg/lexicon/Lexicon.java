@@ -154,7 +154,7 @@ public class Lexicon {
 		for (MorphItem morphItem : morphItems) {
 			Word surfaceWord = morphItem.getSurfaceWord();
 			_words.put(surfaceWord, morphItem);
-			_predToWords.put(morphItem.getWord().getStem(), surfaceWord);
+			_predToWords.put(morphItem.getWord().getTerm(), surfaceWord);
 			if (morphItem.isCoart()) {
 				Word indexingWord = morphItem.getCoartIndexingWord();
 				_words.put(indexingWord, morphItem);
@@ -288,10 +288,10 @@ public class Lexicon {
 		// with morph items, check POS, macro names, excluded list for xref
 		for (MorphItem morphItem : morphItems) {
 			Word w = morphItem.getWord();
-			if (!openlex && !_stems.containsKey(w.getStem() + w.getPOS())
-					&& !_posToEntries.containsKey(w.getPOS())) {
-				System.err.println("Warning: no entries for stem '" + w.getStem() + "' and POS '"
-						+ w.getPOS() + "' found for word '" + w + "'");
+			if (!openlex && !_stems.containsKey(w.getTerm() + w.getFunctions())
+					&& !_posToEntries.containsKey(w.getFunctions())) {
+				System.err.println("Warning: no entries for stem '" + w.getTerm() + "' and POS '"
+						+ w.getFunctions() + "' found for word '" + w + "'");
 			}
 			String[] macroNames = morphItem.getMacros();
 			for (int j = 0; j < macroNames.length; j++) {
@@ -685,8 +685,8 @@ public class Lexicon {
 		MacroAdder macAdder = getMacAdder(mi);
 
 		// if we have this stem in our lexicon
-		String stem = mi.getWord().getStem();
-		String pos = mi.getWord().getPOS();
+		String stem = mi.getWord().getTerm();
+		String pos = mi.getWord().getFunctions();
 		Set<EntriesItem[]> explicitEntries = null; // for storing entries from
 													// explicitly listed family
 													// members
@@ -790,7 +790,7 @@ public class Lexicon {
 
 			// replace DEFAULT_VAL with pred, after first
 			// unifying type of associated nom var(s) with sem class
-			unifySemClass(cat, mi.getWord().getSemClass());
+			unifySemClass(cat, mi.getWord().getEntityClass());
 			REPLACEMENT = pred;
 			cat.deepMap(defaultReplacer);
 
