@@ -24,7 +24,9 @@
 package opennlp.ccg.parse.tagger;
 
 import java.util.List;
+
 import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.WordPool;
 import opennlp.ccg.util.Pair;
 
 /**
@@ -48,7 +50,7 @@ public class TaggedWord {
     
     /** Constructor with a Word. */
     public TaggedWord(Word wd) { 
-        oldWord = Word.createFullWord(wd, wd.getForm(), wd.getPOS(), wd.getSupertag(), wd.getSemClass()); 
+        oldWord = WordPool.createFullWord(wd, wd.getForm(), wd.getPOS(), wd.getSupertag(), wd.getSemClass()); 
     }
         
     /** This does the obvious thing. */
@@ -61,7 +63,7 @@ public class TaggedWord {
      */
     public void setPOSTagging(List<Pair<Double,String>> postagging) { 
         this.postagging = postagging; 
-        oldWord = Word.createFullWord(oldWord, oldWord.getForm(), this.postagging.get(0).b, oldWord.getSupertag(), oldWord.getSemClass());            
+        oldWord = WordPool.createFullWord(oldWord, oldWord.getForm(), this.postagging.get(0).b, oldWord.getSupertag(), oldWord.getSemClass());            
     }
     
     

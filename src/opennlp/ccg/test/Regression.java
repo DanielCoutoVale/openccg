@@ -29,6 +29,7 @@ import opennlp.ccg.hylo.*;
 import opennlp.ccg.lexicon.ParseProduct;
 import opennlp.ccg.lexicon.Tokenizer;
 import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.WordPool;
 import opennlp.ccg.ngrams.*;
 import opennlp.ccg.parse.ParseException;
 import opennlp.ccg.parse.Parser;
@@ -1438,13 +1439,13 @@ public class Regression {
 	            if (reverse) {
 	                List<Word> tmp = words;
 	                words = new ArrayList<Word>(words.size());
-	                words.add(Word.createWord("<s>"));
+	                words.add(WordPool.createWord("<s>"));
 	                for (int j = tmp.size()-1; j >= 0; j--) {
 	                    Word w = tmp.get(j);
 	                    if (w.getForm() == "<s>" || w.getForm() == "</s>") continue; // skip <s> or </s>
 	                    words.add(w);
 	                }
-	                words.add(Word.createWord("</s>"));
+	                words.add(WordPool.createWord("</s>"));
 	            }
 	            // write str, add to unique set
 	            String str = (!withFactors)

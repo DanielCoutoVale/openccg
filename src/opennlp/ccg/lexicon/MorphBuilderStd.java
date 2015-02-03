@@ -72,7 +72,7 @@ public class MorphBuilderStd implements MorphBuilder {
 										// with coart items
 		Word tokenizedWord = Grammar.theGrammar.lexicon.tokenizer.parseToken(wordString,
 				strictFactors);
-		Word surfaceWord = Word.createSurfaceWord(tokenizedWord);
+		Word surfaceWord = WordPool.createSurfaceWord(tokenizedWord);
 
 		String stem = element.getAttributeValue("stem");
 		if (stem == null)
@@ -82,7 +82,7 @@ public class MorphBuilderStd implements MorphBuilder {
 		String supertag = null; // supertag comes later from syn cat
 		String semClass = element.getAttributeValue("class");
 
-		Word word = Word.createFullWord(surfaceWord, stem, POS, supertag, semClass);
+		Word word = WordPool.createFullWord(surfaceWord, stem, POS, supertag, semClass);
 
 		String macrosString = element.getAttributeValue("macros");
 		String[] macros = empty;
@@ -101,7 +101,7 @@ public class MorphBuilderStd implements MorphBuilder {
 		if (coart) {
 			String indexAttr = wordString.substring(0, wordString.indexOf("-"));
 			String indexVal = surfaceWord.getFormalAttributeValue(indexAttr);
-			coartIndexingWord = Word.createWord(indexAttr, indexVal);
+			coartIndexingWord = WordPool.createWord(indexAttr, indexVal);
 		}
 		morph.getMorphItems().add(
 				new MorphItem(surfaceWord, word, coartIndexingWord, macros, excluded, coart));

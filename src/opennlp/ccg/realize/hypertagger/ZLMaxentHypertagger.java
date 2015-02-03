@@ -23,11 +23,11 @@ import java.util.regex.Pattern;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-
 import opennlp.ccg.hylo.Nominal;
 import opennlp.ccg.hylo.SatOp;
 import opennlp.ccg.lexicon.DefaultTokenizer;
 import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.WordPool;
 import opennlp.ccg.parse.supertagger.io.XMLPOSDictionaryReader;
 import opennlp.ccg.parse.supertagger.io.XMLWordDictionaryReader;
 import opennlp.ccg.parse.supertagger.ml.STPriorModel;
@@ -243,7 +243,7 @@ public class ZLMaxentHypertagger extends TagExtractor implements Hypertagger {
 		}
 		// prior features
 		if(priorModel != null) {
-			Word w = Word.createWord(n.getPredicateName(), null, null, n.getPredicateName(),
+			Word w = WordPool.createWord(n.getPredicateName(), null, null, n.getPredicateName(),
 					getPOS(n), null, null);
 			priorModel.computePriors(w);
 			List<Pair<String, Double>> tags = priorModel.getBetaBestPriors(w, priorBeta);
@@ -834,12 +834,12 @@ public class ZLMaxentHypertagger extends TagExtractor implements Hypertagger {
 
 	public Word getPredAsWord(int idx) {
 		LfGraphNode n = findNode(idx);
-		Word w = Word.createWord(n.getPredicateName(), null, null, n.getPredicateName(),
+		Word w = WordPool.createWord(n.getPredicateName(), null, null, n.getPredicateName(),
 				getPOS(n), getGoldSupertag(n), null);
 		return w;
 	}
 	private Word getPredAsWord() {
-		Word w = Word.createWord(currentPred.getPredicateName(), null, null, currentPred.getPredicateName(), getPOS(currentPred), getGoldSupertag(currentPred), null);
+		Word w = WordPool.createWord(currentPred.getPredicateName(), null, null, currentPred.getPredicateName(), getPOS(currentPred), getGoldSupertag(currentPred), null);
 		return w;
 	}
 

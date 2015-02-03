@@ -237,7 +237,7 @@ public class DefaultTokenizer implements Tokenizer {
 		if (specialTokenClass != null)
 			semClass = specialTokenClass;
 		// done
-		return Word.createWord(form, pitchAccent, attrValPairs, stem, POS, supertag, semClass);
+		return WordPool.createWord(form, pitchAccent, attrValPairs, stem, POS, supertag, semClass);
 	}
 
 	/**

@@ -137,8 +137,8 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
     /** Returns the given word reduced to a surface word, using the sem class, if apropos. */
     protected Word reduceWord(Word w) {
         if (useSemClasses && isReplacementSemClass(w.getSemClass())) 
-            return Word.createSurfaceWordUsingSemClass(w);
-        else return Word.createSurfaceWord(w);
+            return WordPool.createSurfaceWordUsingSemClass(w);
+        else return WordPool.createSurfaceWord(w);
     }
     
     /** 

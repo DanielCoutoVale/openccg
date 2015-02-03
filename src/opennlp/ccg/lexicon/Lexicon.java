@@ -526,7 +526,7 @@ public class Lexicon {
 			words = new ArrayList<Word>(specialTokenWords.size());
 			for (Iterator<Word> it = specialTokenWords.iterator(); it.hasNext();) {
 				Word stw = it.next();
-				Word w = Word.createSurfaceWord(stw, pred);
+				Word w = WordPool.createSurfaceWord(stw, pred);
 				words.add(w);
 			}
 		}
@@ -591,8 +591,8 @@ public class Lexicon {
 	 */
 	public SymbolHash getSymbolsForWord(Word w) throws LexException {
 		// reduce word to its core, removing coart attrs if any
-		Word surfaceWord = Word.createSurfaceWord(w);
-		Word coreWord = (surfaceWord.attrsIntersect(_coartAttrs)) ? Word.createCoreSurfaceWord(
+		Word surfaceWord = WordPool.createSurfaceWord(w);
+		Word coreWord = (surfaceWord.attrsIntersect(_coartAttrs)) ? WordPool.createCoreSurfaceWord(
 				surfaceWord, _coartAttrs) : surfaceWord;
 		// lookup core word
 		SymbolHash result = getSymbolsFromWord(coreWord, null, null, null);
@@ -619,7 +619,7 @@ public class Lexicon {
 			if (!_indexedCoartAttrs.contains(attributeName))
 				continue;
 			String attributeValue = (String) pair.b;
-			Word coartWord = Word.createWord(attributeName, attributeValue);
+			Word coartWord = WordPool.createWord(attributeName, attributeValue);
 			SymbolHash coartSymbolHash = getSymbolsFromWord(coartWord, null, null, null);
 			for (Symbol coartSymbol : coartSymbolHash.asSymbolSet()) {
 				// apply to each input
@@ -653,7 +653,7 @@ public class Lexicon {
 				targetPred = w.getForm();
 			}
 			if (specialTokenConst != null) {
-				Word key = Word.createSurfaceWord(w, specialTokenConst);
+				Word key = WordPool.createSurfaceWord(w, specialTokenConst);
 				morphItems = (Collection<MorphItem>) _words.get(key);
 			}
 			// otherwise throw lex exception
@@ -819,7 +819,7 @@ public class Lexicon {
 
 			// merge stem, pos, sem class from morph item, plus supertag from
 			// cat
-			Word word = Word.createFullWord(w, mi.getWord(), cat.getSupertag());
+			Word word = WordPool.createFullWord(w, mi.getWord(), cat.getSupertag());
 
 			// set origin and lexprob
 			Symbol sign = new Symbol(new SingletonList<Word>(word), cat);

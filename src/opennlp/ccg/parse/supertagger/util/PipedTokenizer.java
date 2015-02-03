@@ -18,8 +18,10 @@
 package opennlp.ccg.parse.supertagger.util;
 
 import java.util.List;
+
 import opennlp.ccg.lexicon.DefaultTokenizer;
 import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.WordPool;
 import opennlp.ccg.util.Pair;
 
 /**
@@ -74,6 +76,6 @@ public class PipedTokenizer extends DefaultTokenizer {
                     "form|lemma|POS|(Supertag) ... form|lemma|POS(Supertag).");
         }
         // done
-        return Word.createWord(form, pitchAccent, attrValPairs, stem, POS, supertag, semClass);
+        return WordPool.createWord(form, pitchAccent, attrValPairs, stem, POS, supertag, semClass);
     }
 }

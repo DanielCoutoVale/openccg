@@ -76,7 +76,7 @@ public class MorphBuilderSfl implements MorphBuilder {
 		boolean modal = "graphic".equals(modeString) || "phonetic".equals(modeString);
 		String form = element.getAttributeValue("form");
 		Word tokenizedWord = Grammar.theGrammar.lexicon.tokenizer.parseToken(form, modal);
-		Word surfaceWord = Word.createSurfaceWord(tokenizedWord);
+		Word surfaceWord = WordPool.createSurfaceWord(tokenizedWord);
 		String term = element.getAttributeValue("term");
 		if (term == null) {
 			term = surfaceWord.getForm();
@@ -84,7 +84,7 @@ public class MorphBuilderSfl implements MorphBuilder {
 		String functions = element.getAttributeValue("functions");
 		String supertag = null;
 		String entityClass = element.getAttributeValue("entity-class");
-		Word word = Word.createFullWord(surfaceWord, term, functions, supertag, entityClass);
+		Word word = WordPool.createFullWord(surfaceWord, term, functions, supertag, entityClass);
 		String featuresString = element.getAttributeValue("features");
 		String[] features = empty;
 		if (featuresString != null) {
@@ -101,7 +101,7 @@ public class MorphBuilderSfl implements MorphBuilder {
 		if (modal) {
 			String indexAttribute = form.substring(0, form.indexOf("-"));
 			String indexValue = surfaceWord.getFormalAttributeValue(indexAttribute);
-			coartIndexingWord = Word.createWord(indexAttribute, indexValue);
+			coartIndexingWord = WordPool.createWord(indexAttribute, indexValue);
 		}
 		morph.getMorphItems().add(new MorphItem(surfaceWord, word, coartIndexingWord, features,
 				excluded, modal));

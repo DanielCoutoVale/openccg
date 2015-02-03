@@ -104,8 +104,8 @@ public class AAnFilter implements NgramFilter, Reversible
     }
     
     // words for a/an
-    private static final Word A_WORD = Word.createWord("a");
-    private static final Word AN_WORD = Word.createWord("an");
+    private static final Word A_WORD = WordPool.createWord("a");
+    private static final Word AN_WORD = WordPool.createWord("an");
     
     // reusable list for lookup
     private List<Word> keyList = new ArrayListWithIdentityEquals<Word>(2);
@@ -115,7 +115,7 @@ public class AAnFilter implements NgramFilter, Reversible
         if (exceptions == null) return false;
         keyList.clear();
         keyList.add((w1 == "a") ? A_WORD : AN_WORD);
-        keyList.add(Word.createWord(w2));
+        keyList.add(WordPool.createWord(w2));
         return exceptions.contains(keyList);
     }
     
@@ -138,7 +138,7 @@ public class AAnFilter implements NgramFilter, Reversible
         if (exceptions == null) exceptions = new THashSet();
         // intern and add bigram
         List<Word> w1Singleton = (w1 == "a") ? A_SINGLETON : AN_SINGLETON;
-        List<Word> w2Singleton = (List<Word>) Interner.globalIntern(new SingletonList<Word>(Word.createWord(w2)));
+        List<Word> w2Singleton = (List<Word>) Interner.globalIntern(new SingletonList<Word>(WordPool.createWord(w2)));
         List<Word> excBigram = (List<Word>) Interner.globalIntern(new StructureSharingList<Word>(w1Singleton, w2Singleton));
         exceptions.add(excBigram);
     }

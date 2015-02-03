@@ -1,14 +1,17 @@
 package opennlp.ccg.ngrams;
 import opennlp.ccg.ngrams.kenlm.jni.KenLM;
 import opennlp.ccg.ngrams.kenlm.MurmurHash;
+
 import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+
 import opennlp.ccg.lexicon.DefaultTokenizer;
 import opennlp.ccg.lexicon.Tokenizer;
 import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.WordPool;
 
 public class KenNgramModel extends AbstractStandardNgramModel {
     
@@ -102,7 +105,7 @@ public class KenNgramModel extends AbstractStandardNgramModel {
 		for(String part : parts) {
 		    String newWdForm = (lowercaseText) ? part.toLowerCase() : part;
 		    // add null attr/val list, since it is not accessible.
-		    tmp.add(Word.createWord(newWdForm, w.getPitchAccent(), null, newWdForm, w.getPOS(), w.getSupertag(), w.getSemClass()));
+		    tmp.add(WordPool.createWord(newWdForm, w.getPitchAccent(), null, newWdForm, w.getPOS(), w.getSupertag(), w.getSemClass()));
 		}
 	    }
 	    return tmp;

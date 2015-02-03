@@ -26,7 +26,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.WordPool;
 import opennlp.ccg.ngrams.StandardNgramModel;
 import opennlp.ccg.util.Interner;
 import opennlp.ccg.util.Pair;
@@ -131,7 +133,7 @@ public class SequenceScorer extends StandardNgramModel {
                 // add observation score, and convert to log-prob domain, if needed.
                 scrs.add((tagging.a > 0) ? Math.log(tagging.a) : tagging.a);
                 fscs.add(null);
-                sLabs.add(words.intern(Word.createWord(tagging.b, null, null, null, null, null, null)));
+                sLabs.add(words.intern(WordPool.createWord(tagging.b, null, null, null, null, null, null)));
                 bpts.add(null);
             }
             tmpInitScores.add(scrs);
@@ -228,7 +230,7 @@ public class SequenceScorer extends StandardNgramModel {
                     if (u == (size - 1)) { // right-hand end of sequence.
 
                         bestHist = getBestHist(u, v, order - 1);
-                        bestHist.add(words.intern(Word.createWord("</s>", null, null, null, null, null, null)));
+                        bestHist.add(words.intern(WordPool.createWord("</s>", null, null, null, null, null, null)));
                         double bsc = fbScores.getCoord(u, v) + obsScore;
                         normTot += Math.exp(bsc);
                         fbScores.setCoord(u, v, bsc);
@@ -238,7 +240,7 @@ public class SequenceScorer extends StandardNgramModel {
                         List<Pair<Double, String>> followingTaggedWd = observationSequence.get(u + 1);
                         double backwardSum = 0.0;
                         for (int z = 0; z < followingTaggedWd.size(); z++) {
-                            Word followingTag = words.intern(Word.createWord(followingTaggedWd.get(z).b.intern(), null, null, null, null, null, null));
+                            Word followingTag = words.intern(WordPool.createWord(followingTaggedWd.get(z).b.intern(), null, null, null, null, null, null));
                             if (z > 0) {
                                 bestHist.remove(bestHist.size() - 1);
                             }
@@ -298,7 +300,7 @@ public class SequenceScorer extends StandardNgramModel {
         if (i == -1) {
             // base case (off of the end of the sequence).            
             retVal = new ArrayList<Word>(size);
-            retVal.add(words.intern(Word.createWord("<s>", null, null, null, null, null, null)));
+            retVal.add(words.intern(WordPool.createWord("<s>", null, null, null, null, null, null)));
             return retVal;
         } else if (i == 0) {
             // base case (at beginning of sequence)
