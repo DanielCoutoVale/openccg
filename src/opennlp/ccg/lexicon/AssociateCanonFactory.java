@@ -90,13 +90,13 @@ public class AssociateCanonFactory implements WordFactory {
 			attrValPairs = new ArrayList<Pair<String, String>>(1);
 			attrValPairs.add(new Pair<String, String>(attributeName, attributeValue));
 		}
-		return create(form, pitchAccent, attrValPairs, stem, POS, supertag, semClass);
+		return create(form, pitchAccent, stem, POS, supertag, semClass, attrValPairs);
 	}
 
 	/** Creates a (surface or full) word from the given canonical factors. */
 	public synchronized Word create(String form, String tone,
-			List<Pair<String, String>> attrValPairs, String stem, String POS, String supertag,
-			String semClass) {
+			String stem, String POS, String supertag, String semClass,
+			List<Pair<String, String>> attrValPairs) {
 		setAssociates(form, tone, stem, POS, supertag, semClass, attrValPairs);
 		return getOrCreateFromW();
 	}

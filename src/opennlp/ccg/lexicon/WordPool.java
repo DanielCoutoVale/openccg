@@ -157,7 +157,7 @@ public class WordPool {
 	    String form, String pitchAccent, List<Pair<String,String>> attrValPairs, 
 	    String stem, String POS, String supertag, String semClass 
 	) {
-	    return wordFactory.create(form, pitchAccent, attrValPairs, stem, POS, supertag, semClass);
+	    return wordFactory.create(form, pitchAccent, stem, POS, supertag, semClass, attrValPairs);
 	}
 
 	/** Creates a (surface or full) word from the given one, 

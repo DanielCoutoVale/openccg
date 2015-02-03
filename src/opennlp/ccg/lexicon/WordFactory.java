@@ -5,36 +5,45 @@ import java.util.List;
 import opennlp.ccg.util.Pair;
 
 /**
- * A factory of words.
+ * A factory of associations.
  * 
  * @author Daniel Couto-Vale
  */
 public interface WordFactory {
 
 	/**
-	 * Creates a sufrace word with the given interned form
+	 * Creates an association with a single associate: namely, the form.
 	 * 
-	 * @param form the form to intern
-	 * @return the word
+	 * @param form the form of the association
+	 * @return the association
 	 */
-    public Word create(String form);
+	public Word create(String form);
 
-    /**
-     * Creates a surface or full word with the given normalized parallel value. The parallel keys
-     * Tokenizer.FORM_ASSOCIATE... Tokenizer.ENTITY_CLASS_ASSOCIATE can be used to create a muster
-     * with form... entity class.
-     *   
-     * @param associateKey
-     * @param associateKey
-     * @return the word
-     */
-    public Word create(String associateKey, String associateValue);
+	/**
+	 * Creates an association with a single associate. The canonical associate
+	 * keys are Tokenizer.FORM_ASSOCIATE... Tokenizer.ENTITY_CLASS_ASSOCIATE and
+	 * they can be used to create an association respectively with a form... or
+	 * an entity class.
+	 * 
+	 * @param associateKey the associate key
+	 * @param associateValue the associate value
+	 * @return the association
+	 */
+	public Word create(String associateKey, String associateValue);
 
-    /**
-     * Creates a (surface or full) word with canonical associates.
-     */
-    public Word create(String form, String tone, List<Pair<String,String>> parallelPairs, 
-        String stem, String POS, String supertag, String semClass 
-    );
+	/**
+	 * Creates an association.
+	 * 
+	 * @param form the form
+	 * @param tone the tone
+	 * @param term the term
+	 * @param functions the functions
+	 * @param supertag the supertag
+	 * @param entityClass the entity class
+	 * @param associates the associates
+	 * @return the association
+	 */
+	public Word create(String form, String tone, String term, String functions, String supertag,
+			String entityClass, List<Pair<String, String>> associates);
 
 }

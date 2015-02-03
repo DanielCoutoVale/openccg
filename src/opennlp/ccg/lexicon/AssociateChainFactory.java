@@ -30,8 +30,8 @@ public class AssociateChainFactory implements WordFactory {
 	 * Returns null if no non-null vals.
 	 */
 	public synchronized Word create(String form, String pitchAccent,
-			List<Pair<String, String>> attrValPairs, String stem, String POS, String supertag,
-			String semClass) {
+			String stem, String POS, String supertag, String semClass,
+			List<Pair<String, String>> attrValPairs) {
 		// adds non-null vals from the root, in a rough specificity order
 		TrieMap<Object, AssociateChain> currentNode = factorChainRoot;
 		if (POS != null)
