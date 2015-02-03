@@ -11,10 +11,10 @@ import opennlp.ccg.util.Pair;
  * 
  * @author Daniel Couto-Vale
  */
-public class FullWordFactory implements WordFactory {
+public class AssociateCanonFactory implements WordFactory {
 
 	// reusable word, for looking up already interned ones
-	private FullWord w = new FullWord(null, null, null, null, null, null, null);
+	private AssociateCanon w = new AssociateCanon(null, null, null, null, null, null, null);
 
 	// sets the form and factors of the reusable word w
 	private void setW(String form, String pitchAccent, List<Pair<String, String>> attrValPairs,
@@ -40,7 +40,7 @@ public class FullWordFactory implements WordFactory {
 			else
 				retval = new WordWithPitchAccent(w.form, w.pitchAccent);
 		} else
-			retval = new FullWord(w.form, w.pitchAccent, w.attrValPairs, w.stem, w.POS, w.supertag,
+			retval = new AssociateCanon(w.form, w.pitchAccent, w.attrValPairs, w.stem, w.POS, w.supertag,
 					w.semClass);
 		return (Word) Interner.globalIntern(retval);
 	}

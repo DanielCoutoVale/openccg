@@ -12,7 +12,7 @@ public class WordPool {
 	// factory methods
 	
 	/** The word factory to use. */
-	protected static WordFactory wordFactory = new FullWordFactory();
+	protected static WordFactory wordFactory = new AssociateCanonFactory();
 
 	/** Creates a core surface word from the given one, removing all attrs in the given set. */
 	public static synchronized Word createCoreSurfaceWord(Word word, Set<String> attrsSet) {
