@@ -94,10 +94,10 @@ public class AssociateCanonFactory implements WordFactory {
 	}
 
 	/** Creates a (surface or full) word from the given canonical factors. */
-	public synchronized Word create(String form, String pitchAccent,
+	public synchronized Word create(String form, String tone,
 			List<Pair<String, String>> attrValPairs, String stem, String POS, String supertag,
 			String semClass) {
-		setAssociates(form, pitchAccent, stem, POS, supertag, semClass, attrValPairs);
+		setAssociates(form, tone, stem, POS, supertag, semClass, attrValPairs);
 		return getOrCreateFromW();
 	}
 }
