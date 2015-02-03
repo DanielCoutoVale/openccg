@@ -119,7 +119,7 @@ abstract public class Word implements Serializable, Comparable<Word> {
     
     
     /** Returns true if the form is non-null, while the stem, part of speech, supertag and semantic class are null. */
-    public boolean isSurfaceWord() {
+    public boolean isMuster() {
         return getForm() != null && getTerm() == null && getFunctions() == null && getSupertag() == null && getEntityClass() == null;
     }
 

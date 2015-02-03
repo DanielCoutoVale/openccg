@@ -7,18 +7,18 @@ import opennlp.ccg.util.Interner;
 import opennlp.ccg.util.Pair;
 
 /**
- * A factory of "full words".
+ * A factory of associate canons.
  * 
  * @author Daniel Couto-Vale
  */
 public class AssociateCanonFactory implements WordFactory {
 
 	// reusable word, for looking up already interned ones
-	private AssociateCanon w = new AssociateCanon(null, null, null, null, null, null, null);
+	private final AssociateCanon association = new AssociateCanon(null, null, null, null, null,
+			null, null);
 
-	// sets asso of the reusable word w
 	/**
-	 * Sets the associates of the reusable associate canon.
+	 * Sets the associates of the reusable association.
 	 * 
 	 * @param form the form
 	 * @param tone the tone
@@ -28,76 +28,81 @@ public class AssociateCanonFactory implements WordFactory {
 	 * @param entityClass the entity classes
 	 * @param associates the associates
 	 */
-	private void setAssociates(String form, String tone, String term, String functions,
+	private final void updateAssociates(String form, String tone, String term, String functions,
 			String supertag, String entityClass, List<Pair<String, String>> associates) {
-		w.form = form;
-		w.tone = tone;
-		w.term = term;
-		w.functions = functions;
-		w.supertag = supertag;
-		w.entityClass = entityClass;
-		w.associates = associates;
+		association.form = form;
+		association.tone = tone;
+		association.term = term;
+		association.functions = functions;
+		association.supertag = supertag;
+		association.entityClass = entityClass;
+		association.associates = associates;
 	}
 
 	// looks up the word equivalent to w, or if none, returns a new one
 	// based on it
-	private Word getOrCreateFromW() {
-		Word retval = (Word) Interner.getGlobalInterned(w);
-		if (retval != null)
-			return retval;
-		if (w.isSurfaceWord() && w.associates == null) {
-			if (w.tone == null)
-				retval = new SimpleWord(w.form);
-			else
-				retval = new WordWithPitchAccent(w.form, w.tone);
-		} else
-			retval = new AssociateCanon(w.form, w.tone, w.term, w.functions, w.supertag,
-					w.entityClass, w.associates);
-		return (Word) Interner.globalIntern(retval);
+	/**
+	 * Looks up whether there is an interned equivalent association and returns it if there is one.
+	 * Otherwise, interns the association and returns the interned.
+	 * 
+	 * @return the interned association
+	 */
+	private Word internAssociation() {
+		Word intern = (Word) Interner.getGlobalInterned(association);
+		if (intern != null) {
+			return intern;
+		}
+		if (association.isMuster() && association.associates == null) {
+			if (association.tone != null) {
+				intern = new FormToneAssociates(association.form, association.tone);
+			} else {
+				intern = new FormAssociate(association.form);
+			}
+		} else {
+			intern = new AssociateCanon(association.form, association.tone, association.term,
+					association.functions, association.supertag, association.entityClass,
+					association.associates);
+		}
+		return (Word) Interner.globalIntern(intern);
 	}
 
-	/** Creates a surface word with the given interned form. */
-	public synchronized Word create(String form) {
+	@Override
+	public final synchronized Word create(String form) {
 		return create(form, null, null, null, null, null, null);
 	}
 
-	/**
-	 * Creates a (surface or full) word with the given normalized attribute name
-	 * and value. The attribute names Tokenizer.WORD_ATTR, ...,
-	 * Tokenizer.SEM_CLASS_ATTR may be used for the form, ..., semantic class.
-	 */
-	public synchronized Word create(String attributeName, String attributeValue) {
+	@Override
+	public final synchronized Word create(String attributeName, String attributeValue) {
 		String form = null;
-		String pitchAccent = null;
-		List<Pair<String, String>> attrValPairs = null;
-		String stem = null;
-		String POS = null;
+		String tone = null;
+		String term = null;
+		String functions = null;
 		String supertag = null;
-		String semClass = null;
+		String entityClass = null;
+		List<Pair<String, String>> associates = null;
 		if (attributeName == Tokenizer.WORD_ASSOCIATE) {
 			form = attributeValue;
 		} else if (attributeName == Tokenizer.TONE_ASSOCIATE) {
-			pitchAccent = attributeValue;
+			tone = attributeValue;
 		} else if (attributeName == Tokenizer.TERM_ASSOCIATE) {
-			stem = attributeValue;
+			term = attributeValue;
 		} else if (attributeName == Tokenizer.FUNCTIONS_ASSOCIATE) {
-			POS = attributeValue;
+			functions = attributeValue;
 		} else if (attributeName == Tokenizer.SUPERTAG_ASSOCIATE) {
 			supertag = attributeValue;
 		} else if (attributeName == Tokenizer.ENTITY_CLASS_ASSOCIATE) {
-			semClass = attributeValue;
+			entityClass = attributeValue;
 		} else {
-			attrValPairs = new ArrayList<Pair<String, String>>(1);
-			attrValPairs.add(new Pair<String, String>(attributeName, attributeValue));
+			associates = new ArrayList<Pair<String, String>>(1);
+			associates.add(new Pair<String, String>(attributeName, attributeValue));
 		}
-		return create(form, pitchAccent, stem, POS, supertag, semClass, attrValPairs);
+		return create(form, tone, term, functions, supertag, entityClass, associates);
 	}
 
-	/** Creates a (surface or full) word from the given canonical factors. */
-	public synchronized Word create(String form, String tone,
-			String stem, String POS, String supertag, String semClass,
-			List<Pair<String, String>> attrValPairs) {
-		setAssociates(form, tone, stem, POS, supertag, semClass, attrValPairs);
-		return getOrCreateFromW();
+	@Override
+	public final synchronized Word create(String form, String tone, String term, String functions,
+			String supertag, String entityClass, List<Pair<String, String>> associates) {
+		updateAssociates(form, tone, term, functions, supertag, entityClass, associates);
+		return internAssociation();
 	}
 }

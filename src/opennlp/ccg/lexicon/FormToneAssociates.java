@@ -25,7 +25,7 @@ package opennlp.ccg.lexicon;
  * @author      Michael White
  * @version     $Revision: 1.4 $, $Date: 2009/07/17 04:23:30 $
  */
-public class WordWithPitchAccent extends SimpleWord {
+public class FormToneAssociates extends FormAssociate {
     
 	private static final long serialVersionUID = 1510997962756436949L;
 	
@@ -36,7 +36,7 @@ public class WordWithPitchAccent extends SimpleWord {
     public String getTone() { return pitchAccent; }
     
     /** Constructor. */
-    protected WordWithPitchAccent(String form, String pitchAccent) {
+    protected FormToneAssociates(String form, String pitchAccent) {
         super(form); 
         this.pitchAccent = pitchAccent;
     }

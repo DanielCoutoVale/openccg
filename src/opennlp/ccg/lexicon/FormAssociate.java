@@ -28,7 +28,7 @@ import java.util.*;
  * @author Michael White
  * @version $Revision: 1.4 $, $Date: 2009/07/17 04:23:30 $
  */
-public class SimpleWord extends Word {
+public class FormAssociate extends Word {
 
 	private static final long serialVersionUID = 181491057498517717L;
 
@@ -101,7 +101,7 @@ public class SimpleWord extends Word {
 	}
 
 	/** Constructor. */
-	protected SimpleWord(String form) {
+	protected FormAssociate(String form) {
 		this.form = form;
 	}
 }
