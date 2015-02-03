@@ -57,21 +57,21 @@ public class AssociateCanon extends Word {
 	 * 
 	 * @param form the form of the word
 	 * @param tone the tone of the word
-	 * @param associates the non-canonical associates
 	 * @param term the term
 	 * @param functions the functions
 	 * @param supertag the supertag
 	 * @param entityClass the rhetoric entity class
+	 * @param associates the non-canonical associates
 	 */
-	protected AssociateCanon(String form, String tone, List<Pair<String, String>> associates,
-			String term, String functions, String supertag, String entityClass) {
+	protected AssociateCanon(String form, String tone, String term, String functions,
+			String supertag, String entityClass, List<Pair<String, String>> associates) {
 		this.form = form;
 		this.tone = tone;
-		this.associates = associates;
 		this.term = term;
 		this.functions = functions;
 		this.supertag = supertag;
 		this.entityClass = entityClass;
+		this.associates = associates;
 	}
 
 	@Override

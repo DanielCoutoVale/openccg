@@ -16,16 +16,27 @@ public class AssociateCanonFactory implements WordFactory {
 	// reusable word, for looking up already interned ones
 	private AssociateCanon w = new AssociateCanon(null, null, null, null, null, null, null);
 
-	// sets the form and factors of the reusable word w
-	private void setW(String form, String pitchAccent, List<Pair<String, String>> attrValPairs,
-			String stem, String POS, String supertag, String semClass) {
+	// sets asso of the reusable word w
+	/**
+	 * Sets the associates of the reusable associate canon.
+	 * 
+	 * @param form the form
+	 * @param tone the tone
+	 * @param term the term
+	 * @param functions the functions
+	 * @param supertag the supertag
+	 * @param entityClass the entity classes
+	 * @param associates the associates
+	 */
+	private void setAssociates(String form, String tone, String term, String functions,
+			String supertag, String entityClass, List<Pair<String, String>> associates) {
 		w.form = form;
-		w.tone = pitchAccent;
-		w.associates = attrValPairs;
-		w.term = stem;
-		w.functions = POS;
+		w.tone = tone;
+		w.term = term;
+		w.functions = functions;
 		w.supertag = supertag;
-		w.entityClass = semClass;
+		w.entityClass = entityClass;
+		w.associates = associates;
 	}
 
 	// looks up the word equivalent to w, or if none, returns a new one
@@ -40,8 +51,8 @@ public class AssociateCanonFactory implements WordFactory {
 			else
 				retval = new WordWithPitchAccent(w.form, w.tone);
 		} else
-			retval = new AssociateCanon(w.form, w.tone, w.associates, w.term, w.functions, w.supertag,
-					w.entityClass);
+			retval = new AssociateCanon(w.form, w.tone, w.term, w.functions, w.supertag,
+					w.entityClass, w.associates);
 		return (Word) Interner.globalIntern(retval);
 	}
 
@@ -86,7 +97,7 @@ public class AssociateCanonFactory implements WordFactory {
 	public synchronized Word create(String form, String pitchAccent,
 			List<Pair<String, String>> attrValPairs, String stem, String POS, String supertag,
 			String semClass) {
-		setW(form, pitchAccent, attrValPairs, stem, POS, supertag, semClass);
+		setAssociates(form, pitchAccent, stem, POS, supertag, semClass, attrValPairs);
 		return getOrCreateFromW();
 	}
 }
