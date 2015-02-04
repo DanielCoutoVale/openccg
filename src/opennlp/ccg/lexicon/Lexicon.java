@@ -55,7 +55,7 @@ public class Lexicon {
 	private SupertaggerAdapter _supertagger = null;
 
 	// various maps
-	private GroupMap<Association, MorphItem> associationMap;
+	public GroupMap<Association, MorphItem> associationMap;
 	private GroupMap<String, Object> _stems;
 	private GroupMap<String, FeatureStructure> _macros;
 	private HashMap<String, MacroItem> _macroItems;

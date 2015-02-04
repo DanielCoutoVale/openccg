@@ -47,8 +47,8 @@ public class StemPruningStrategy extends DiversityPruningStrategy {
 	 * particular, returns true iff the signs have the same sequence of stems.
 	 */
 	public boolean notCompellinglyDifferent(Symbol sign1, Symbol sign2) {
-		List<Association> words1 = sign1.getWords();
-		List<Association> words2 = sign2.getWords();
+		List<Association> words1 = sign1.getAssociations();
+		List<Association> words2 = sign2.getAssociations();
 		if (words1.size() != words2.size())
 			return false;
 		for (int i = 0; i < words1.size(); i++) {

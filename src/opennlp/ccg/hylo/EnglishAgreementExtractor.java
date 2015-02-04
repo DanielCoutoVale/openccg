@@ -255,7 +255,7 @@ public class EnglishAgreementExtractor implements FeatureExtractor {
 
 					// Of-complement subjects (for non-numeral, non-%-sign
 					// subjs)
-					String subjClass = dep.lexDep.getWords().get(0).getEntityClass();
+					String subjClass = dep.lexDep.getAssociations().get(0).getEntityClass();
 					String subjPOS = dep.lexDep.getPOS();
 					if (subjClass == null)
 						subjClass = "NULL";
@@ -364,7 +364,7 @@ public class EnglishAgreementExtractor implements FeatureExtractor {
 					// Left child has unbalanced punct feature
 					SignProps lchildProps = (SignProps) inputs[0].getData(SignProps.class);
 					if (lchildProps != null && lchildProps.getUnbalancedPunct() != null) {
-						Association nextWord = inputs[1].getWords().get(0);
+						Association nextWord = inputs[1].getAssociations().get(0);
 						// Check whether right child begins with a punctuation
 						// mark; else fire feature
 						if (!isPunct(nextWord)) {
@@ -753,7 +753,7 @@ public class EnglishAgreementExtractor implements FeatureExtractor {
 	private void add_head_stem(List<TrieMap.KeyExtractor<String>> retval) {
 		retval.add(new TrieMap.KeyExtractor<String>() {
 			public String getKey() {
-				return headSign.getWords().get(0).getTerm();
+				return headSign.getAssociations().get(0).getTerm();
 			}
 		});
 	}
@@ -762,7 +762,7 @@ public class EnglishAgreementExtractor implements FeatureExtractor {
 	private void add_head_class(List<TrieMap.KeyExtractor<String>> retval) {
 		retval.add(new TrieMap.KeyExtractor<String>() {
 			public String getKey() {
-				String semClass = adjustSemClass(headSign.getWords().get(0).getEntityClass());
+				String semClass = adjustSemClass(headSign.getAssociations().get(0).getEntityClass());
 				return semClass;
 			}
 		});
@@ -773,7 +773,7 @@ public class EnglishAgreementExtractor implements FeatureExtractor {
 		retval.add(new TrieMap.KeyExtractor<String>() {
 			public String getKey() {
 				String pos = adjustPOS(headSign.getOrthography(), headSign.getPOS(), headSign
-						.getWords().get(0).getEntityClass());
+						.getAssociations().get(0).getEntityClass());
 				return pos;
 			}
 		});
@@ -794,7 +794,7 @@ public class EnglishAgreementExtractor implements FeatureExtractor {
 		retval.add(new TrieMap.KeyExtractor<String>() {
 			public String getKey() {
 				String pos = adjustPOS(depSign.getOrthography(), depSign.getPOS(), depSign
-						.getWords().get(0).getEntityClass());
+						.getAssociations().get(0).getEntityClass());
 				return pos;
 			}
 		});

@@ -190,7 +190,7 @@ public class Parse {
 					signMap.put(actualID, thisParse);
 					// Add parsed words as a separate LF element
 					Element fullWordsElt = new Element("full-words");
-					fullWordsElt.addContent(tokenizer.format(thisParse.getWords()));
+					fullWordsElt.addContent(tokenizer.format(thisParse.getAssociations()));
 					item.addContent(fullWordsElt);
 					if (predInfo != null) {
 						Element predInfoElt = new Element("pred-info");

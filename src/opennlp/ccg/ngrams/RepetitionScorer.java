@@ -106,7 +106,7 @@ public class RepetitionScorer implements SymbolScorer {
 	 * items.
 	 */
 	public void updateContext(Symbol sign) {
-		List words = sign.getWords();
+		List words = sign.getAssociations();
 		if (words == null)
 			return;
 		for (int i = 0; i < words.size(); i++) {
@@ -145,7 +145,7 @@ public class RepetitionScorer implements SymbolScorer {
 	 * times repeated items), or zero if there are no words.
 	 */
 	public double score(Symbol sign, boolean complete) {
-		List words = sign.getWords();
+		List words = sign.getAssociations();
 		if (words == null)
 			return 0;
 		return Math.pow(10, -1 * penalty * repeatedItems(words));

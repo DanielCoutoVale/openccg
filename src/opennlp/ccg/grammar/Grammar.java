@@ -609,7 +609,7 @@ public class Grammar {
 		}
 		// return words of first parse
 		Symbol sign = parses.get(0);
-		return sign.getWords();
+		return sign.getAssociations();
 	}
 
 	/**

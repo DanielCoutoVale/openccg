@@ -57,8 +57,8 @@ public class NgramDiversityPruningStrategy extends DiversityPruningStrategy {
 	 * same.
 	 */
 	public boolean notCompellinglyDifferent(Symbol sign1, Symbol sign2) {
-		List<Association> words1 = sign1.getWords();
-		List<Association> words2 = sign2.getWords();
+		List<Association> words1 = sign1.getAssociations();
+		List<Association> words2 = sign2.getAssociations();
 		int words1Len = words1.size();
 		int words2Len = words2.size();
 		for (int i = 0; i < order - 1 && i < words1Len && i < words2Len; i++) {

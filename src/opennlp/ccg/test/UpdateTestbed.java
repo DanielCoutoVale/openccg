@@ -66,7 +66,7 @@ public class UpdateTestbed {
 		for (int i = 0; i < numItems; i++) {
 			RegressionInfo.TestItem testItem = tbInfo.getItem(i);
 			if (testItem.fullWords == null) {
-				List<Association> words = (testItem.sign != null) ? testItem.sign.getWords()
+				List<Association> words = (testItem.sign != null) ? testItem.sign.getAssociations()
 						: grammar.getParsedWords(testItem.sentence);
 				testItem.fullWords = tokenizer.format(words);
 			}

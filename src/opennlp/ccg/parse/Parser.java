@@ -521,7 +521,7 @@ public class Parser {
 	 * parse.
 	 */
 	public final void addSupertaggerLogProbs(Symbol gold) {
-		List<Association> words = gold.getWords();
+		List<Association> words = gold.getAssociations();
 		supertagger.mapWords(words);
 		addSupertaggerLogProbs(gold, gold);
 		for (int i = 0; i < words.size(); i++) {

@@ -210,9 +210,9 @@ public class SyntacticFeatureExtractor implements FeatureExtractor {
 	protected void setCurrentWords() {
 		if (currentWords != null)
 			return;
-		currentWords = currentSign.getWords();
-		Association head = currentSign.getLexHead().getWords().get(0);
-		Association sibHead = currentSibling.getLexHead().getWords().get(0);
+		currentWords = currentSign.getAssociations();
+		Association head = currentSign.getLexHead().getAssociations().get(0);
+		Association sibHead = currentSibling.getLexHead().getAssociations().get(0);
 		currentHeadIndex = find(currentWords, head);
 		currentSibHeadIndex = find(currentWords, sibHead);
 	}

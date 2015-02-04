@@ -592,7 +592,7 @@ public class Regression {
 						if (words.get(words.size() - 1).getForm() == "</s>")
 							words.remove(words.size() - 1);
 					} else if (testItem.sign != null) {
-						words = testItem.sign.getWords();
+						words = testItem.sign.getAssociations();
 					}
 					if (words != null) {
 						// parse 'em
@@ -1640,7 +1640,7 @@ public class Regression {
 				if (semClassReplacement || withFactors) {
 					// use words from sign or pre-parsed full words if available
 					if (testItem.sign != null)
-						words = testItem.sign.getWords();
+						words = testItem.sign.getAssociations();
 					else if (testItem.fullWords != null)
 						words = tokenizer.tokenize(testItem.fullWords, true);
 					// otherwise parse

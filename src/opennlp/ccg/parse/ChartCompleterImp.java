@@ -307,7 +307,7 @@ public class ChartCompleterImp implements ChartCompleter {
 			unpackAlt(alt, unpacked, startedUnpacking, merged);
 		}
 		// score
-		boolean complete = (scoredSymbol.symbol.getWords().size() == chart.size());
+		boolean complete = (scoredSymbol.symbol.getAssociations().size() == chart.size());
 		for (ScoredSymbol m : merged.asEdgeSet()) {
 			m.setScore(config.symbolScorer.score(m.symbol, complete));
 		}
@@ -643,7 +643,7 @@ public class ChartCompleterImp implements ChartCompleter {
 														// new combo
 		nonfinalScoredSymbolCount++;
 		// score it
-		boolean complete = (sign.getWords().size() == chart.size());
+		boolean complete = (sign.getAssociations().size() == chart.size());
 		retval.setScore(config.symbolScorer.score(sign, complete));
 		// done
 		return retval;

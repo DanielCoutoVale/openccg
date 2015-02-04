@@ -194,7 +194,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
 	 * then returns the result of <code>logProb()</code>.
 	 */
 	public synchronized double logprob(Symbol sign, boolean complete) {
-		List<Association> words = sign.getWords();
+		List<Association> words = sign.getAssociations();
 		if (words == null)
 			return 0;
 		if (!complete) { // check cache
@@ -279,7 +279,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
 	public FeatureMap extractFeatureMap(Symbol sign, boolean complete) {
 		FeatureMap featmap = new FeatureMap();
 		// do setup as with scoring
-		List<Association> words = sign.getWords();
+		List<Association> words = sign.getAssociations();
 		if (words == null)
 			return featmap;
 		signToScore = sign;
@@ -380,7 +380,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
 			Symbol[] inputs = signToScore.getDerivationHistory().getInputs();
 			if (inputs != null) {
 				Symbol initialSign = (!reverse) ? inputs[0] : inputs[inputs.length - 1];
-				List<Association> initialWords = initialSign.getWords();
+				List<Association> initialWords = initialSign.getAssociations();
 				Float logprob = getCachedLogProb(initialWords);
 				if (logprob != null) {
 					logProbTotal = logprob.floatValue();
@@ -394,7 +394,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
 			logProbTotal += logProbFromNgram(startPos, orderToUse);
 		}
 		if (!tagsAdded && signToScore != null) { // add log prob to cache
-			putCachedLogProb(signToScore.getWords(), new Float(logProbTotal));
+			putCachedLogProb(signToScore.getAssociations(), new Float(logProbTotal));
 		}
 		return logProbTotal;
 	}

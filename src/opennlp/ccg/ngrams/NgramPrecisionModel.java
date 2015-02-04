@@ -167,7 +167,7 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
 	 */
 	public synchronized double score(Symbol sign, boolean complete) {
 		// setup
-		List<Association> words = sign.getWords();
+		List<Association> words = sign.getAssociations();
 		if (words == null)
 			return 0;
 		signToScore = sign;

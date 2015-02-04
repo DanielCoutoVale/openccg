@@ -973,7 +973,7 @@ public class EdgeFactory {
 	// return null if LF doesn't unify with preds
 	private List<Edge> createInitialEdges(Symbol sign, int predIndex) {
 		// get parts of sign
-		List<Association> words = sign.getWords();
+		List<Association> words = sign.getAssociations();
 		Category cat = sign.getCategory();
 		// instantiate
 		List<Pair<Substitution, BitSet>> instantiations = instantiate(cat, null, predIndex);
@@ -1664,7 +1664,7 @@ public class EdgeFactory {
 				for (Category instCat : instantiatedCats) {
 					featureLicenser.updateFeatureMap(instCat);
 					featureLicenser.indexSemanticallyNullWords(instCat);
-					Symbol instSign = new Symbol(sign.getWords(), instCat);
+					Symbol instSign = new Symbol(sign.getAssociations(), instCat);
 					instEdges.add(makeEdge(instSign, new BitSet(preds.size()), emptyLfAlts));
 				}
 				// add edges for uninstantiated cats to no-sem edges, updating
@@ -1672,7 +1672,7 @@ public class EdgeFactory {
 				for (Category uninstCat : uninstantiatedCats) {
 					featureLicenser.updateFeatureMap(uninstCat);
 					featureLicenser.indexSemanticallyNullWords(uninstCat);
-					Symbol uninstSign = new Symbol(sign.getWords(), uninstCat);
+					Symbol uninstSign = new Symbol(sign.getAssociations(), uninstCat);
 					Edge noSemEdge = makeEdge(uninstSign, new BitSet(preds.size()), emptyLfAlts);
 					uninstEdges.add(noSemEdge);
 				}

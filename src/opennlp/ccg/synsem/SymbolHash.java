@@ -134,8 +134,8 @@ public class SymbolHash extends THashSet {
 		cmp = sign1.getDerivationHistory().compareTo(sign2.getDerivationHistory());
 		if (cmp != 0)
 			return cmp;
-		List<Association> words1 = sign1.getWords();
-		List<Association> words2 = sign2.getWords();
+		List<Association> words1 = sign1.getAssociations();
+		List<Association> words2 = sign2.getAssociations();
 		cmp = compareTo(words1, words2);
 		if (cmp != 0)
 			return cmp;

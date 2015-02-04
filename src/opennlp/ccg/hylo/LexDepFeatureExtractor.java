@@ -601,7 +601,7 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 		int wordlen = 0, punctlen = 0, verblen = 0;
 		// lex case
 		if (sign.isIndexed()) {
-			for (Association w : sign.getWords()) {
+			for (Association w : sign.getAssociations()) {
 				wordlen++;
 				if (isPunct(w))
 					punctlen++;
@@ -689,7 +689,7 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 	 * each word in a collapsed NE separately.
 	 */
 	protected int depLen() {
-		List<Association> words = currentSign.getWords();
+		List<Association> words = currentSign.getAssociations();
 		int min = Math.min(currentHeadIndex, currentDepIndex);
 		int max = Math.max(currentHeadIndex, currentDepIndex);
 		int count = 0;
@@ -954,7 +954,7 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 		retval.add(new TrieMap.KeyExtractor<String>() {
 			public String getKey() {
 				Symbol first = (currentDepPrecedesSib) ? currentDep.lexDep : currentSib.lexDep;
-				return getWordClass(first.getWords().get(0));
+				return getWordClass(first.getAssociations().get(0));
 			}
 		});
 	}
@@ -964,7 +964,7 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 		retval.add(new TrieMap.KeyExtractor<String>() {
 			public String getKey() {
 				Symbol second = (currentDepPrecedesSib) ? currentSib.lexDep : currentDep.lexDep;
-				return getWordClass(second.getWords().get(0));
+				return getWordClass(second.getAssociations().get(0));
 			}
 		});
 	}
@@ -1088,8 +1088,8 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 	private ConditionalLazyExtractor sibs_precedence_class() {
 		ConditionalLazyExtractor retval = new ConditionalLazyExtractor() {
 			boolean test() {
-				return getWordClass(currentDep.lexDep.getWords().get(0)) != getWordClass(currentSib.lexDep
-						.getWords().get(0));
+				return getWordClass(currentDep.lexDep.getAssociations().get(0)) != getWordClass(currentSib.lexDep
+						.getAssociations().get(0));
 			}
 		};
 		add_sibs_precedence_common(retval.lazyExtractor);

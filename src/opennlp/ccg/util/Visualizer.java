@@ -83,7 +83,7 @@ public class Visualizer {
 	public int getTreeDepth(Symbol sign, int level) {
 		int max_depth = 0, depth = 0;
 		Symbol[] children = sign.getDerivationHistory().getInputs();
-		if (children != null && sign.getWords().size() > 1)
+		if (children != null && sign.getAssociations().size() > 1)
 			for (int i = 0; i < children.length; i++) {
 				depth = getTreeDepth(children[i], level + 1);
 				if (depth > max_depth)
@@ -97,7 +97,7 @@ public class Visualizer {
 	private int numberOfLeaves(Symbol results) {
 		int totalLeaves = 0;
 		Symbol[] children = results.getDerivationHistory().getInputs();
-		if (children == null || results.getWords().size() == 1)
+		if (children == null || results.getAssociations().size() == 1)
 			return 1;
 		for (int i = 0; i < children.length; i++)
 			totalLeaves += numberOfLeaves(children[i]);
@@ -110,7 +110,7 @@ public class Visualizer {
 		int depth = getTreeDepth(results, 0);
 		TeXSign ts = new TeXSign();
 		int offset = 0;
-		if (children != null && results.getWords().size() > 1)
+		if (children != null && results.getAssociations().size() > 1)
 			for (int i = 0; i < children.length; i++) {
 				if (i > 0)
 					offset += numberOfLeaves(children[i - 1]);
@@ -292,20 +292,20 @@ public class Visualizer {
 			TeXSign texSign = null;
 			bw = new java.io.BufferedWriter(new FileWriter(fileName, true));
 			signList = sortList(processSign(results, 0, 0));
-			numDerivs = results.getWords().size();
+			numDerivs = results.getAssociations().size();
 			Tokenizer tokenizer = Grammar.theGrammar.lexicon.tokenizer;
 			bw.write("\\deriv{" + Integer.toString(numDerivs) + "}{\n");
-			for (i = 0; i < results.getWords().size(); i++) {
+			for (i = 0; i < results.getAssociations().size(); i++) {
 				if (i != 0)
 					bw.write(" & ");
-				String orth = tokenizer.getOrthography((Association) results.getWords().get(i),
+				String orth = tokenizer.getOrthography((Association) results.getAssociations().get(i),
 						false);
 				orth = orth.replaceAll("_", "\\\\_");
 				orth = orth.replaceAll("%", "\\\\%");
 				bw.write("\\gf{" + orth + "}");
 			}
 			bw.write(" \\\\\n\\uline{1}");
-			for (i = 1; i < results.getWords().size(); i++)
+			for (i = 1; i < results.getAssociations().size(); i++)
 				bw.write(" & \\uline{1}");
 			bw.write(" \\\\\n");
 			texSign = (TeXSign) signList.get(0);
@@ -320,11 +320,11 @@ public class Visualizer {
 				String ruleStr = null;
 				texSign = (TeXSign) signList.get(i);
 				ruleStr = ruleToTeX(texSign.sign.getDerivationHistory().getRule().name(),
-						texSign.identation, texSign.sign.getWords().size());
+						texSign.identation, texSign.sign.getAssociations().size());
 				bw.write(ruleStr);
 				for (int j = 0; j < texSign.identation; j++)
 					bw.write("&");
-				bw.write(" \\mc{" + texSign.sign.getWords().size() + "}{\\cf{"
+				bw.write(" \\mc{" + texSign.sign.getAssociations().size() + "}{\\cf{"
 						+ texSign.sign.getCategory().toTeX() + "}} \\\\\n");
 			}
 			// Originally 1in, but that's too much when displayed onscreen

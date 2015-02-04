@@ -143,11 +143,11 @@ public class Symbol implements EntityRealizer, Serializable {
 	 * coarticulation one.
 	 */
 	public final static Symbol createCoartSign(Category cat, Symbol lexSign, Symbol coartSign) {
-		List<Association> words = lexSign.getWords();
+		List<Association> words = lexSign.getAssociations();
 		if (words.size() > 1)
 			throw new RuntimeException("Can't create coarticulation sign from multiple words.");
 		Association word = words.get(0);
-		Association coartWord = coartSign.getWords().get(0);
+		Association coartWord = coartSign.getAssociations().get(0);
 		Association wordPlus = AssociationPool.createAssociation(word, coartWord);
 		Rule coartRule = new Rule() {
 			public String name() {
@@ -217,7 +217,7 @@ public class Symbol implements EntityRealizer, Serializable {
 	}
 
 	/** Returns the words of the sign. */
-	public final List<Association> getWords() {
+	public final List<Association> getAssociations() {
 		return associations;
 	}
 

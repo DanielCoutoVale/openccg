@@ -205,7 +205,7 @@ public class Testbed {
 
 						// Add parsed words as a separate LF element
 						Element fullWordsElt = new Element("full-words");
-						fullWordsElt.addContent(tokenizer.format(sign.getWords()));
+						fullWordsElt.addContent(tokenizer.format(sign.getAssociations()));
 
 						// Add info about LF lexical preds as a separate element
 						Element predInfoElt = new Element("pred-info");
@@ -225,14 +225,14 @@ public class Testbed {
 							String textsc = "";
 							// Note sem class replacement works only for NE
 							// classes spec in the grammar file
-							textsc = tokenizer.getOrthography((List<Association>) sign.getWords(),
+							textsc = tokenizer.getOrthography((List<Association>) sign.getAssociations(),
 									true);
 							textscPW.println(textsc);
 							textscPW.flush();
 						}
 
 						if (factorsPW != null)
-							factorsPW.println(tokenizer.format(sign.getWords()));
+							factorsPW.println(tokenizer.format(sign.getAssociations()));
 						// append new combos to combos file
 						if (combosPW != null) {
 							for (String combo : newCombos())
@@ -556,7 +556,7 @@ public class Testbed {
 				for (Iterator<Symbol> it = lexSigns.asSymbolSet().iterator(); it.hasNext();) {
 					Symbol s = it.next();
 
-					Association wTemp = s.getWords().get(0);
+					Association wTemp = s.getAssociations().get(0);
 					String morphClass = wTemp.getEntityClass();
 					if (morphClass == null || morphClass.length() == 0)
 						morphClass = "NoClass";
@@ -582,7 +582,7 @@ public class Testbed {
 				if (matchPOS > 0) {
 					for (Iterator<Symbol> it = lexSigns.asSymbolSet().iterator(); it.hasNext();) {
 						Symbol s = it.next();
-						Association wTemp = s.getWords().get(0);
+						Association wTemp = s.getAssociations().get(0);
 						if (!wTemp.getFunctions().equals(pos)) {
 							it.remove();
 							continue;
