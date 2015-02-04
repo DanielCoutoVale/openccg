@@ -192,7 +192,7 @@ public class Parser {
 	 *                string
 	 */
 	public final ParseProduct parse(String string) throws ParseException {
-		List<Association> musters = lexicon.tokenizer.tokenize(string); 
+		List<Association> musters = lexicon.tokenizer.tokenize(string);
 		return parse(musters);
 	}
 
@@ -220,6 +220,11 @@ public class Parser {
 		try {
 			ParseProduct product = new ParseProduct();
 			product.setLexTime(lexTime);
+			ChartCompleterConfig ccc = new ChartCompleterConfig(config);
+			ChartCompleter chartCompleter = new ChartCompleterImp(rules, chart, ccc);
+			long startTime = System.currentTimeMillis();
+			product.setChartCompleter(chartCompleter);
+			parse(product.getChartCompleter(), product, startTime);
 			return product;
 		} catch (Exception e) {
 			throw new ParseException("There was an error while parsing the chart.");
@@ -438,7 +443,8 @@ public class Parser {
 	 * @param product TODO
 	 * @throws ParseException
 	 */
-	private final void parse(ChartCompleter chartCompleter, ParseProduct product, long startTime) throws ParseException {
+	private final void parse(ChartCompleter chartCompleter, ParseProduct product, long startTime)
+			throws ParseException {
 		int size = chartCompleter.getSize();
 
 		// Annotate index forms with unary rules
@@ -548,6 +554,7 @@ public class Parser {
 	 * the gold LF was found (as indicated by an f-score of 1.0). NB: It would
 	 * be better to return the forest oracle, but the nominal conversion would
 	 * be tricky to do correctly.
+	 * 
 	 * @param product TODO
 	 */
 	public final Pair<Symbol, Boolean> oracleBest(LF goldLF, ParseProduct product) {
