@@ -538,8 +538,13 @@ public class Lexicon {
 		for (Iterator<Association> it = words.iterator(); it.hasNext();) {
 			Association w = it.next();
 			try {
-				SymbolHash signs = analyzeArticulatee(w, specialTokenConst, pred, targetRel);
-				retval.addAll(signs.asSymbolSet());
+				SymbolHash symbols;
+				if (specialTokenConst == null) {
+					symbols = recognizeArticulatee(w);
+				} else {
+					symbols = analyzeArticulatee(w, specialTokenConst, pred, targetRel);
+				}
+				retval.addAll(symbols.asSymbolSet());
 			}
 			// shouldn't happen
 			catch (LexException exc) {
