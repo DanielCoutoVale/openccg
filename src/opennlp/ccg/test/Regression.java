@@ -1652,14 +1652,14 @@ public class Regression {
 				if (reverse) {
 					List<Association> tmp = words;
 					words = new ArrayList<Association>(words.size());
-					words.add(AssociationPool.createWord("<s>"));
+					words.add(AssociationPool.createMuster("<s>"));
 					for (int j = tmp.size() - 1; j >= 0; j--) {
 						Association w = tmp.get(j);
 						if (w.getForm() == "<s>" || w.getForm() == "</s>")
 							continue; // skip <s> or </s>
 						words.add(w);
 					}
-					words.add(AssociationPool.createWord("</s>"));
+					words.add(AssociationPool.createMuster("</s>"));
 				}
 				// write str, add to unique set
 				String str = (!withFactors) ? tokenizer.getOrthography(words, semClassReplacement)

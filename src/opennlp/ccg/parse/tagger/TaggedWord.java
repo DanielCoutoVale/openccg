@@ -61,7 +61,7 @@ public class TaggedWord {
 
 	/** Constructor with a Word. */
 	public TaggedWord(Association wd) {
-		oldWord = AssociationPool.createFullWord(wd, wd.getForm(), wd.getFunctions(), wd.getSupertag(),
+		oldWord = AssociationPool.createContainer(wd, wd.getForm(), wd.getFunctions(), wd.getSupertag(),
 				wd.getEntityClass());
 	}
 
@@ -76,7 +76,7 @@ public class TaggedWord {
 	 */
 	public void setPOSTagging(List<Pair<Double, String>> postagging) {
 		this.postagging = postagging;
-		oldWord = AssociationPool.createFullWord(oldWord, oldWord.getForm(), this.postagging.get(0).b,
+		oldWord = AssociationPool.createContainer(oldWord, oldWord.getForm(), this.postagging.get(0).b,
 				oldWord.getSupertag(), oldWord.getEntityClass());
 	}
 

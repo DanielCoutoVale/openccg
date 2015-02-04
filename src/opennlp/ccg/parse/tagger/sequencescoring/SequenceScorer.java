@@ -143,7 +143,7 @@ public class SequenceScorer extends StandardNgramModel {
 				// needed.
 				scrs.add((tagging.a > 0) ? Math.log(tagging.a) : tagging.a);
 				fscs.add(null);
-				sLabs.add(words.intern(AssociationPool.createWord(tagging.b, null, null, null, null, null,
+				sLabs.add(words.intern(AssociationPool.createAssociation(tagging.b, null, null, null, null, null,
 						null)));
 				bpts.add(null);
 			}
@@ -242,7 +242,7 @@ public class SequenceScorer extends StandardNgramModel {
 					if (u == (size - 1)) { // right-hand end of sequence.
 
 						bestHist = getBestHist(u, v, order - 1);
-						bestHist.add(words.intern(AssociationPool.createWord("</s>", null, null, null,
+						bestHist.add(words.intern(AssociationPool.createAssociation("</s>", null, null, null,
 								null, null, null)));
 						double bsc = fbScores.getCoord(u, v) + obsScore;
 						normTot += Math.exp(bsc);
@@ -255,7 +255,7 @@ public class SequenceScorer extends StandardNgramModel {
 								.get(u + 1);
 						double backwardSum = 0.0;
 						for (int z = 0; z < followingTaggedWd.size(); z++) {
-							Association followingTag = words.intern(AssociationPool.createWord(
+							Association followingTag = words.intern(AssociationPool.createAssociation(
 									followingTaggedWd.get(z).b.intern(), null, null, null, null,
 									null, null));
 							if (z > 0) {
@@ -323,7 +323,7 @@ public class SequenceScorer extends StandardNgramModel {
 		if (i == -1) {
 			// base case (off of the end of the sequence).
 			retVal = new ArrayList<Association>(size);
-			retVal.add(words.intern(AssociationPool.createWord("<s>", null, null, null, null, null, null)));
+			retVal.add(words.intern(AssociationPool.createAssociation("<s>", null, null, null, null, null, null)));
 			return retVal;
 		} else if (i == 0) {
 			// base case (at beginning of sequence)

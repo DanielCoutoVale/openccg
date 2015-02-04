@@ -880,7 +880,7 @@ public class Lexicon {
 
 			// merge stem, pos, sem class from morph item, plus supertag from
 			// cat
-			Association word = AssociationPool.createFullWord(w, mi.getWord(), cat.getSupertag());
+			Association word = AssociationPool.createContainer(w, mi.getWord(), cat.getSupertag());
 
 			// set origin and lexprob
 			Symbol sign = new Symbol(new SingletonList<Association>(word), cat);

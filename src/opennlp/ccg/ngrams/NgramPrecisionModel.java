@@ -144,7 +144,7 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
 	 */
 	protected Association reduceToMuster(Association association) {
 		if (useEntityClasses && isSubstituteEntityClass(association.getEntityClass()))
-			return AssociationPool.createMusterWithEntityClass(association);
+			return AssociationPool.createMuster(association, association.getEntityClass().toUpperCase());
 		else
 			return AssociationPool.createMuster(association);
 	}

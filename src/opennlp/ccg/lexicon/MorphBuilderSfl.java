@@ -84,7 +84,7 @@ public class MorphBuilderSfl implements MorphBuilder {
 		String functions = element.getAttributeValue("functions");
 		String supertag = null;
 		String entityClass = element.getAttributeValue("entity-class");
-		Association word = AssociationPool.createFullWord(surfaceWord, term, functions, supertag,
+		Association word = AssociationPool.createContainer(surfaceWord, term, functions, supertag,
 				entityClass);
 		String featuresString = element.getAttributeValue("features");
 		String[] features = empty;

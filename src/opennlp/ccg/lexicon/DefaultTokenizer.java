@@ -237,7 +237,7 @@ public class DefaultTokenizer implements Tokenizer {
 		if (specialTokenClass != null)
 			semClass = specialTokenClass;
 		// done
-		return AssociationPool.createWord(form, pitchAccent, stem, POS, supertag, semClass, attrValPairs);
+		return AssociationPool.createAssociation(form, pitchAccent, stem, POS, supertag, semClass, attrValPairs);
 	}
 
 	/**

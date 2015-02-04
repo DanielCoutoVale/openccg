@@ -438,7 +438,7 @@ public class WordAndPOSDictionaryLabellingStrategy implements LabellingStrategy,
 			// get the next word.
 			w = wds.next();
 			if (w.getFunctions() == null) {
-				w = AssociationPool.createFullWord(w, w.getForm(), tagging.get(cursor).getPOSTagging()
+				w = AssociationPool.createContainer(w, w.getForm(), tagging.get(cursor).getPOSTagging()
 						.get(0).b, w.getSupertag(), w.getEntityClass());
 			}
 			context = ctxts.next();

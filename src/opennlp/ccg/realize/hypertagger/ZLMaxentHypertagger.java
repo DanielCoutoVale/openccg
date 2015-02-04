@@ -235,7 +235,7 @@ public class ZLMaxentHypertagger extends TagExtractor implements Hypertagger {
 		}
 		// prior features
 		if (priorModel != null) {
-			Association w = AssociationPool.createWord(n.getPredicateName(), null, n.getPredicateName(),
+			Association w = AssociationPool.createAssociation(n.getPredicateName(), null, n.getPredicateName(),
 					getPOS(n), null, null, null);
 			priorModel.computePriors(w);
 			List<Pair<String, Double>> tags = priorModel.getBetaBestPriors(w, priorBeta);
@@ -863,13 +863,13 @@ public class ZLMaxentHypertagger extends TagExtractor implements Hypertagger {
 
 	public Association getPredAsWord(int idx) {
 		LfGraphNode n = findNode(idx);
-		Association w = AssociationPool.createWord(n.getPredicateName(), null, n.getPredicateName(), getPOS(n),
+		Association w = AssociationPool.createAssociation(n.getPredicateName(), null, n.getPredicateName(), getPOS(n),
 				getGoldSupertag(n), null, null);
 		return w;
 	}
 
 	private Association getPredAsWord() {
-		Association w = AssociationPool.createWord(currentPred.getPredicateName(), null, currentPred.getPredicateName(),
+		Association w = AssociationPool.createAssociation(currentPred.getPredicateName(), null, currentPred.getPredicateName(),
 				getPOS(currentPred), getGoldSupertag(currentPred), null,
 				null);
 		return w;

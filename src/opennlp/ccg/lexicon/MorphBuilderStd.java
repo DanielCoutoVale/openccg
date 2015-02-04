@@ -83,7 +83,7 @@ public class MorphBuilderStd implements MorphBuilder {
 		String supertag = null; // supertag comes later from syn cat
 		String semClass = element.getAttributeValue("class");
 
-		Association word = AssociationPool.createFullWord(surfaceWord, stem, POS, supertag, semClass);
+		Association word = AssociationPool.createContainer(surfaceWord, stem, POS, supertag, semClass);
 
 		String macrosString = element.getAttributeValue("macros");
 		String[] macros = empty;

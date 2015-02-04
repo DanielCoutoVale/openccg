@@ -78,6 +78,6 @@ public class PipedTokenizer extends DefaultTokenizer {
 					+ "form|lemma|POS|(Supertag) ... form|lemma|POS(Supertag).");
 		}
 		// done
-		return AssociationPool.createWord(form, pitchAccent, stem, POS, supertag, semClass, attrValPairs);
+		return AssociationPool.createAssociation(form, pitchAccent, stem, POS, supertag, semClass, attrValPairs);
 	}
 }
