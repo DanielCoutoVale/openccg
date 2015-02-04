@@ -9,7 +9,7 @@ import opennlp.ccg.util.Pair;
  * 
  * @author Daniel Couto-Vale
  */
-public interface WordFactory {
+public interface AssociationFactory {
 
 	/**
 	 * Creates an association with a single associate: namely, the form.

@@ -57,7 +57,7 @@ import opennlp.ccg.util.Pair;
  */
 public class STPriorModel extends ConditionalProbabilityTable {
 
-    public static final String WORD = DefaultTokenizer.WORD_ASSOCIATE;
+    public static final String WORD = DefaultTokenizer.FORM_ASSOCIATE;
     public static final String POS_TAG = DefaultTokenizer.FUNCTIONS_ASSOCIATE;
     public static final String SUPERTAG = DefaultTokenizer.SUPERTAG_ASSOCIATE;
     private Interner<Pair<String, String>> pairs = new Interner<Pair<String, String>>();

@@ -5,7 +5,7 @@ import java.util.List;
 import opennlp.ccg.util.Pair;
 import opennlp.ccg.util.TrieMap;
 
-public class AssociateChainFactory implements WordFactory {
+public class AssociateChainFactory implements AssociationFactory {
 
 	/** Trie map for canonical instances. */
 	protected TrieMap<Object, AssociateChain> factorChainRoot = new TrieMap<Object, AssociateChain>(

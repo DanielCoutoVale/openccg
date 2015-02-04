@@ -11,7 +11,7 @@ import opennlp.ccg.util.Pair;
  * 
  * @author Daniel Couto-Vale
  */
-public class AssociateCanonFactory implements WordFactory {
+public class AssociateCanonFactory implements AssociationFactory {
 
 	// reusable word, for looking up already interned ones
 	private final AssociateCanon association = new AssociateCanon(null, null, null, null, null,

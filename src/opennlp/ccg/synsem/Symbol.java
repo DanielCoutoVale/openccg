@@ -356,7 +356,7 @@ public class Symbol implements EntityRealizer, Serializable {
 		for (int i = 0; i < words.size(); i++) {
 			Association word = words.get(i);
 			Association signWord = (Association) sign.words.get(i);
-			if (!word.surfaceWordEquals(signWord))
+			if (!word.formallyEquals(signWord))
 				return false;
 		}
 		return (ignoreLF) ? category.equalsNoLF(sign.category) : category.equals(sign.category);
@@ -487,7 +487,7 @@ public class Symbol implements EntityRealizer, Serializable {
 			}
 			child = multiwordElt;
 		}
-		for (Pair<String, String> pair : word.getFormalAttributesProtected()) {
+		for (Pair<String, String> pair : word.getNonCanonicalAssociates()) {
 			String attr = pair.a;
 			String val = pair.b;
 			child.setAttribute(attr, val);
