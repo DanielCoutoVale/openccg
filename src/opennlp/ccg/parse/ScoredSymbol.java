@@ -115,10 +115,10 @@ public class ScoredSymbol implements Serializable {
 	}
 
 	/** Constructor with score. */
-	public ScoredSymbol(Symbol sign, double score) {
-		this.symbol = sign;
+	public ScoredSymbol(Symbol symbol, double score) {
+		this.symbol = symbol;
 		this.score = score;
-		sign.addData(new ScoredSymbolHolder(this));
+		symbol.addData(new ScoredSymbolHolder(this));
 	}
 
 	/** Returns the sign. */

@@ -32,7 +32,7 @@ import java.io.*;
 import java.util.*;
 
 /**
- * A CCG symbol, consisting of a list of words paired with a category. Symbols
+ * A CCG symbol, consisting of a list of associations paired with a category. Symbols
  * may contain arbitrary data objects which are ignored in equality checking.
  * 
  * WARNING: Non-serializable data objects are filtered during serialization.
@@ -44,12 +44,15 @@ import java.util.*;
  */
 public class Symbol implements EntityRealizer, Serializable {
 
+	/**
+	 * Generated serial version uid
+	 */
 	private static final long serialVersionUID = 1072712272514007274L;
 
 	/**
-	 * The words
+	 * The associations
 	 */
-	private List<Association> words;
+	private List<Association> associations;
 
 	/**
 	 * The grammatical category
@@ -74,15 +77,15 @@ public class Symbol implements EntityRealizer, Serializable {
 	/**
 	 * Constructor
 	 * 
-	 * @param words the words
+	 * @param associations the associations
 	 * @param category the category
 	 * @param history the history
 	 * @param indexedHead the indexed head
 	 */
 	@SuppressWarnings("unchecked")
-	private Symbol(List<Association> words, Category category, DerivationHistory history,
+	private Symbol(List<Association> associations, Category category, DerivationHistory history,
 			Symbol indexedHead) {
-		this.words = (List<Association>) Interner.globalIntern(words);
+		this.associations = (List<Association>) Interner.globalIntern(associations);
 		this.category = category;
 		this.history = history != null ? history : new DerivationHistory(this);
 		this.indexedHead = indexedHead != null ? indexedHead : this;
@@ -91,18 +94,18 @@ public class Symbol implements EntityRealizer, Serializable {
 	/**
 	 * Constructor (no history)
 	 * 
-	 * @param words the words
+	 * @param associations the associations
 	 * @param category the category
 	 */
-	public Symbol(List<Association> words, Category category) {
-		this(words, category, null, null);
+	public Symbol(List<Association> associations, Category category) {
+		this(associations, category, null, null);
 	}
 
 	/**
 	 * Constructor with words and derivation history formed from the given
 	 * inputs, rule and lex head.
 	 */
-	private Symbol(Category category, Symbol[] inputs, Rule rule, Symbol indexedHead) {
+	public Symbol(Category category, Symbol[] inputs, Rule rule, Symbol indexedHead) {
 		this(getRemainingWords(inputs, 0), category, null, indexedHead);
 		this.history = new DerivationHistory(inputs, this, rule);
 	}
@@ -112,7 +115,7 @@ public class Symbol implements EntityRealizer, Serializable {
 	private final void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
 		in.defaultReadObject();
-		words = (List<Association>) Interner.globalIntern(words);
+		associations = (List<Association>) Interner.globalIntern(associations);
 	}
 
 	// during serialization, skips non-serializable data objects
@@ -179,15 +182,6 @@ public class Symbol implements EntityRealizer, Serializable {
 	}
 
 	/**
-	 * Factory method for creating derived signs with the given cat from the
-	 * given inputs, rule and lex head.
-	 */
-	public final static Symbol createDerivedSign(Category cat, Symbol[] inputs, Rule rule,
-			Symbol lexHead) {
-		return new Symbol(cat, inputs, rule, lexHead);
-	}
-
-	/**
 	 * Factory method for creating derived signs from the given result cat,
 	 * inputs, rule and lex head, with a new LF constructed from the inputs.
 	 * Note that unlike with rule applications, the result LF is constructed
@@ -217,14 +211,14 @@ public class Symbol implements EntityRealizer, Serializable {
 		// if (inputs.length == 0) throw new
 		// RuntimeException("Error: can't make sign from zero inputs");
 		if (index == (inputs.length - 1))
-			return inputs[index].words;
-		return new StructureSharingList<Association>(inputs[index].words, getRemainingWords(inputs,
+			return inputs[index].associations;
+		return new StructureSharingList<Association>(inputs[index].associations, getRemainingWords(inputs,
 				index + 1));
 	}
 
 	/** Returns the words of the sign. */
 	public final List<Association> getWords() {
-		return words;
+		return associations;
 	}
 
 	/**
@@ -232,7 +226,7 @@ public class Symbol implements EntityRealizer, Serializable {
 	 * getOrthography method.
 	 */
 	public final String getOrthography() {
-		return Grammar.theGrammar.lexicon.tokenizer.getOrthography(words);
+		return Grammar.theGrammar.lexicon.tokenizer.getOrthography(associations);
 	}
 
 	/** Returns the sign's category. */
@@ -283,7 +277,7 @@ public class Symbol implements EntityRealizer, Serializable {
 
 	/** Returns a hash code for this sign. */
 	public final int hashCode() {
-		return System.identityHashCode(words) + category.hashCode();
+		return System.identityHashCode(associations) + category.hashCode();
 	}
 
 	/** Returns whether this sign equals the given object. */
@@ -293,7 +287,7 @@ public class Symbol implements EntityRealizer, Serializable {
 		if (!(obj instanceof Symbol))
 			return false;
 		Symbol sign = (Symbol) obj;
-		return words == sign.words && category.equals(sign.category);
+		return associations == sign.associations && category.equals(sign.category);
 	}
 
 	/**
@@ -319,8 +313,8 @@ public class Symbol implements EntityRealizer, Serializable {
 			return hashCode();
 		// otherwise use surface words
 		int hc = 1;
-		for (int i = 0; i < words.size(); i++) {
-			Association word = words.get(i);
+		for (int i = 0; i < associations.size(); i++) {
+			Association word = associations.get(i);
 			hc = 31 * hc + word.surfaceWordHashCode();
 		}
 		hc += (ignoreLF) ? category.hashCodeNoLF() : category.hashCode();
@@ -354,11 +348,11 @@ public class Symbol implements EntityRealizer, Serializable {
 		if (history.getInputs() == null || sign.history.getInputs() == null)
 			return equals(sign);
 		// otherwise use surface words
-		if (words.size() != sign.words.size())
+		if (associations.size() != sign.associations.size())
 			return false;
-		for (int i = 0; i < words.size(); i++) {
-			Association word = words.get(i);
-			Association signWord = (Association) sign.words.get(i);
+		for (int i = 0; i < associations.size(); i++) {
+			Association word = associations.get(i);
+			Association signWord = (Association) sign.associations.get(i);
 			if (!word.formallyEquals(signWord))
 				return false;
 		}
@@ -439,7 +433,7 @@ public class Symbol implements EntityRealizer, Serializable {
 		Symbol[] inputs = history.getInputs();
 		if (inputs == null) {
 			// in leaf case, word list must be a singleton
-			Association word = words.get(0);
+			Association word = associations.get(0);
 			// check for boundary tone
 			if (Grammar.isBoundaryTone(word.getForm())) {
 				// add element for boundary tone
@@ -531,14 +525,14 @@ public class Symbol implements EntityRealizer, Serializable {
 	 * Returns the word form of the first word.
 	 */
 	public final String getWordForm() {
-		return words.get(0).getForm();
+		return associations.get(0).getForm();
 	}
 
 	/**
 	 * Returns the POS tag of the first word.
 	 */
 	public final String getPOS() {
-		return words.get(0).getFunctions();
+		return associations.get(0).getFunctions();
 	}
 
 	/**
@@ -555,7 +549,7 @@ public class Symbol implements EntityRealizer, Serializable {
 		if (this == lexSign)
 			return offset[0];
 		if (isIndexed()) {
-			offset[0] += words.size();
+			offset[0] += associations.size();
 			return -1;
 		}
 		Symbol[] inputs = history.getInputs();

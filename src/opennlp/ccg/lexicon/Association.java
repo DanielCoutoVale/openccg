@@ -268,15 +268,26 @@ abstract public class Association implements Serializable, Comparable<Associatio
 	}
 
 	/**
-	 * Returns whether this word's surface attributes intersect with the given
-	 * ones.
+	 * Checks whether the morpho-(phono-/grapho-)logical associate keys of the current association
+	 * intersect with the given associate keys.
+	 * 
+	 * WARNING: The current implementation only garantees matches for morphological associates.
+	 * However, non morphological associates might exist among the associate keys, what is not
+	 * checked against. In addition, the form is not checked for, but only the coarticulated
+	 * associates as long as the form is not accidentally specified among the non canonical
+	 * associates.
+	 * 
+	 * @param associateKeys the associate keys to check for intersection
+	 * @return <code>true</code> if there is intersection and <code>false</code> otherwise.
 	 */
-	public final boolean attrsIntersect(Set<String> attrsSet) {
-		if (getTone() != null && attrsSet.contains(Tokenizer.TONE_ASSOCIATE))
+	public final boolean intersectsAssociateKeys(Set<String> associateKeys) {
+		if (getTone() != null && associateKeys.contains(Tokenizer.TONE_ASSOCIATE)) {
 			return true;
-		for (Pair<String, String> pair : getNonCanonicalAssociates()) {
-			if (attrsSet.contains(pair.a))
+		}
+		for (Pair<String, String> nonCanonicalAssociate : getNonCanonicalAssociates()) {
+			if (associateKeys.contains(nonCanonicalAssociate.a)) {
 				return true;
+			}
 		}
 		return false;
 	}

@@ -544,7 +544,7 @@ public class Testbed {
 				// the word-cat pair is observed
 				lexicon.setSupertagger(supertaggerStandIn);
 				supertaggerStandIn.setTag(simpleCat);
-				SymbolHash lexSigns = lexicon.getSymbolsForWord(w);
+				SymbolHash lexSigns = lexicon.recognizePhenomenon(w);
 
 				if (semClass == null || semClass.length() == 0)
 					semClass = "NoClass";

@@ -233,7 +233,7 @@ public class Parser {
 			// get entries for each word
 			List<SymbolHash> entries = new ArrayList<SymbolHash>(words.size());
 			for (Association w : words) {
-				entries.add(lexicon.getSymbolsForWord(w));
+				entries.add(lexicon.recognizePhenomenon(w));
 			}
 			product.setLexTime((int) (System.currentTimeMillis() - lexStartTime));
 			// do parsing
@@ -322,7 +322,7 @@ public class Parser {
 				for (int i = 0; i < words.size(); i++) {
 					supertagger.setWord(i);
 					Association word = words.get(i);
-					entries.add(lexicon.getSymbolsForWord(word));
+					entries.add(lexicon.recognizePhenomenon(word));
 				}
 				product.setLexTime((int) (System.currentTimeMillis() - lexStartTime));
 				;

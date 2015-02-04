@@ -73,7 +73,7 @@ public class MorphBuilderStd implements MorphBuilder {
 										// with coart items
 		Association tokenizedWord = Grammar.theGrammar.lexicon.tokenizer.parseToken(wordString,
 				strictFactors);
-		Association surfaceWord = AssociationPool.createSurfaceWord(tokenizedWord);
+		Association surfaceWord = AssociationPool.createMuster(tokenizedWord);
 
 		String stem = element.getAttributeValue("stem");
 		if (stem == null)

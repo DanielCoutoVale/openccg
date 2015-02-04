@@ -233,7 +233,7 @@ public class DefaultTokenizer implements Tokenizer {
 		if (!"null".equals(form))
 			form = unescape(form);
 		// check for special token
-		String specialTokenClass = isSpecialToken(form);
+		String specialTokenClass = inferEntityClass(form);
 		if (specialTokenClass != null)
 			semClass = specialTokenClass;
 		// done
@@ -245,7 +245,7 @@ public class DefaultTokenizer implements Tokenizer {
 	 * of special token, if the given token is recognized as a special token;
 	 * otherwise returns null.
 	 */
-	public String isSpecialToken(String token) {
+	public String inferEntityClass(String token) {
 		if (token == null)
 			return null;
 		if (isDate(token))
@@ -267,7 +267,7 @@ public class DefaultTokenizer implements Tokenizer {
 	 * Returns the special token constant for the given special token class, or
 	 * null if none.
 	 */
-	public String getSpecialTokenConstant(String semClass) {
+	public String getSubstituteForm(String semClass) {
 		if (semClass == null)
 			return null;
 		return specialTokenMap.get(semClass);

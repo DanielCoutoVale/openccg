@@ -128,13 +128,13 @@ public interface Tokenizer {
 	 * of special token, if the given token is recognized as a special token;
 	 * otherwise returns null.
 	 */
-	public String isSpecialToken(String token);
+	public String inferEntityClass(String token);
 
 	/**
 	 * Returns the special token constant for the given special token class, or
 	 * null if none.
 	 */
-	public String getSpecialTokenConstant(String semClass);
+	public String getSubstituteForm(String semClass);
 
 	/**
 	 * Returns true iff the given string is a special token constant (eg

@@ -18,14 +18,22 @@ public class AssociationPool {
 	 * Creates a core surface word from the given one, removing all attrs in the
 	 * given set.
 	 */
-	public static synchronized Association createCoreSurfaceWord(Association association,
+
+	/**
+	 * Reduces a muster by removing the specified nonassociates (coarticulated associates).
+	 * 
+	 * @param muster the muster to reduce
+	 * @param nonassociateKeys the nonassociates to remove
+	 * @return the reduced association
+	 */
+	public static synchronized Association reduceMuster(Association muster,
 			Set<String> nonassociateKeys) {
-		String form = association.getForm();
-		String tone = association.getTone();
+		String form = muster.getForm();
+		String tone = muster.getTone();
 		if (tone != null && nonassociateKeys.contains(Tokenizer.TONE_ASSOCIATE)) {
 			tone = null;
 		}
-		List<Pair<String, String>> associates = association.getAssociates();
+		List<Pair<String, String>> associates = muster.getAssociates();
 		if (associates != null) {
 			associates = new ArrayList<Pair<String, String>>(associates);
 			Iterator<Pair<String, String>> associateIterator = associates.iterator();
@@ -51,8 +59,8 @@ public class AssociationPool {
 		POS = (POS != null) ? POS.intern() : null;
 		supertag = (supertag != null) ? supertag.intern() : null;
 		semClass = (semClass != null) ? semClass.intern() : null;
-		return factory.create(word.getForm(), word.getTone(), stem, POS, supertag,
-				semClass, word.getAssociates());
+		return factory.create(word.getForm(), word.getTone(), stem, POS, supertag, semClass,
+				word.getAssociates());
 	}
 
 	/**
@@ -77,12 +85,12 @@ public class AssociationPool {
 			}
 		}
 		if (mixedAttrs) {
-			return createWord(word.getForm(), word.getTone(), word2.getTerm(), word2.getFunctions(),
-					supertag, word2.getEntityClass(), pairs);
+			return createWord(word.getForm(), word.getTone(), word2.getTerm(),
+					word2.getFunctions(), supertag, word2.getEntityClass(), pairs);
 		} else {
 			supertag = (supertag != null) ? supertag.intern() : null;
-			return factory.create(word.getForm(), word.getTone(), word2.getTerm(), word2.getFunctions(),
-					supertag, word2.getEntityClass(), pairs);
+			return factory.create(word.getForm(), word.getTone(), word2.getTerm(),
+					word2.getFunctions(), supertag, word2.getEntityClass(), pairs);
 		}
 	}
 
@@ -90,19 +98,18 @@ public class AssociationPool {
 	 * Creates a surface word from the given one, removing the stem, POS,
 	 * supertag and semantic class.
 	 */
-	public static synchronized Association createSurfaceWord(Association word) {
-		return factory.create(word.getForm(), word.getTone(), null, null, null,
-				null, word.getAssociates());
+	public static synchronized Association createMuster(Association word) {
+		return factory.create(word.getForm(), word.getTone(), null, null, null, null,
+				word.getAssociates());
 	}
 
 	/**
 	 * Creates a surface word from the given one, removing the stem, POS,
 	 * supertag and semantic class, and replacing the form with the given one.
 	 */
-	public static synchronized Association createSurfaceWord(Association word, String form) {
+	public static synchronized Association createMuster(Association word, String form) {
 		form = (form != null) ? form.intern() : null;
-		return factory.create(form, word.getTone(), null, null, null, null,
-				word.getAssociates());
+		return factory.create(form, word.getTone(), null, null, null, null, word.getAssociates());
 	}
 
 	/**
@@ -112,8 +119,7 @@ public class AssociationPool {
 	 */
 	public static synchronized Association createSurfaceWordUsingSemClass(Association word) {
 		String form = word.getEntityClass().toUpperCase().intern();
-		return factory.create(form, word.getTone(), null, null, null, null,
-				word.getAssociates());
+		return factory.create(form, word.getTone(), null, null, null, null, word.getAssociates());
 	}
 
 	// NB: could try different factory methods for concrete words, but
@@ -138,8 +144,8 @@ public class AssociationPool {
 	}
 
 	/** Creates a (surface or full) word. */
-	public static synchronized Association createWord(String form, String tone,
-			String term, String functions, String supertag, String entityClass,
+	public static synchronized Association createWord(String form, String tone, String term,
+			String functions, String supertag, String entityClass,
 			List<Pair<String, String>> attrValPairs) {
 		// normalize factors
 		form = (form != null) ? form.intern() : null;
@@ -183,8 +189,8 @@ public class AssociationPool {
 	public static synchronized Association createWordUsingSemClass(Association word) {
 		String form = word.getEntityClass().toUpperCase().intern();
 		String stem = form;
-		return factory.create(form, word.getTone(), stem, word.getFunctions(),
-				word.getSupertag(), word.getEntityClass(), word.getAssociates());
+		return factory.create(form, word.getTone(), stem, word.getFunctions(), word.getSupertag(),
+				word.getEntityClass(), word.getAssociates());
 	}
 
 	/**

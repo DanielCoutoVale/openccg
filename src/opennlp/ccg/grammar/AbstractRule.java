@@ -79,7 +79,7 @@ public abstract class AbstractRule implements Rule, Serializable {
 					if (inputs[j].getCategory() == headCat)
 						lexHead = inputs[j].getLexHead();
 				}
-				Symbol sign = Symbol.createDerivedSign(catResult, inputs, this, lexHead);
+				Symbol sign = new Symbol(catResult, inputs, this, lexHead);
 				results.add(sign);
 			}
 		} catch (UnifyFailure uf) {

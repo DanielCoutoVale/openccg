@@ -76,7 +76,7 @@ public class MorphBuilderSfl implements MorphBuilder {
 		boolean modal = "graphic".equals(modeString) || "phonetic".equals(modeString);
 		String form = element.getAttributeValue("form");
 		Association tokenizedWord = Grammar.theGrammar.lexicon.tokenizer.parseToken(form, modal);
-		Association surfaceWord = AssociationPool.createSurfaceWord(tokenizedWord);
+		Association surfaceWord = AssociationPool.createMuster(tokenizedWord);
 		String term = element.getAttributeValue("term");
 		if (term == null) {
 			term = surfaceWord.getForm();

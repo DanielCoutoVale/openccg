@@ -55,7 +55,7 @@ public class Lexicon {
 	private SupertaggerAdapter _supertagger = null;
 
 	// various maps
-	private GroupMap<Association, MorphItem> _words;
+	private GroupMap<Association, MorphItem> associationMap;
 	private GroupMap<String, Object> _stems;
 	private GroupMap<String, FeatureStructure> _macros;
 	private HashMap<String, MacroItem> _macroItems;
@@ -67,7 +67,7 @@ public class Lexicon {
 	private GroupMap<String, String> _coartRelsToPreds;
 
 	// coarticulation attrs
-	private Set<String> _coartAttrs;
+	private Set<String> coarticulateeKeys;
 	private Set<String> _indexedCoartAttrs;
 
 	// attrs per atomic category type, across all entries
@@ -147,21 +147,21 @@ public class Lexicon {
 		// term -> set(morph-item)
 		// set(formal-attributes)
 		// set(indexed-formal-attributes)
-		_words = new GroupMap<Association, MorphItem>();
+		associationMap = new GroupMap<Association, MorphItem>();
 		_predToWords = new GroupMap<String, Association>();
-		_coartAttrs = new HashSet<String>();
+		coarticulateeKeys = new HashSet<String>();
 		_indexedCoartAttrs = new HashSet<String>();
 		for (MorphItem morphItem : morphItems) {
 			Association surfaceWord = morphItem.getSurfaceWord();
-			_words.put(surfaceWord, morphItem);
+			associationMap.put(surfaceWord, morphItem);
 			_predToWords.put(morphItem.getWord().getTerm(), surfaceWord);
 			if (morphItem.isCoart()) {
 				Association indexingWord = morphItem.getCoartIndexingWord();
-				_words.put(indexingWord, morphItem);
+				associationMap.put(indexingWord, morphItem);
 				Pair<String, String> first = indexingWord.getToneAndNonCanonicalAssociates().get(0);
 				_indexedCoartAttrs.add(first.a);
 				for (Pair<String, String> p : surfaceWord.getToneAndNonCanonicalAssociates()) {
-					_coartAttrs.add(p.a);
+					coarticulateeKeys.add(p.a);
 				}
 			}
 		}
@@ -489,6 +489,7 @@ public class Lexicon {
 	}
 
 	// get signs using an additional arg for a target rel
+	// TODO
 	private Collection<Symbol> getSignsFromPredAndTargetRel(String pred, String targetRel) {
 
 		Collection<Association> words = (Collection<Association>) _predToWords.get(pred);
@@ -516,7 +517,7 @@ public class Lexicon {
 		}
 
 		if (words == null) {
-			specialTokenConst = tokenizer.getSpecialTokenConstant(tokenizer.isSpecialToken(pred));
+			specialTokenConst = tokenizer.getSubstituteForm(tokenizer.inferEntityClass(pred));
 			if (specialTokenConst == null)
 				return null;
 			// lookup words with pred = special token const
@@ -528,7 +529,7 @@ public class Lexicon {
 			words = new ArrayList<Association>(specialTokenWords.size());
 			for (Iterator<Association> it = specialTokenWords.iterator(); it.hasNext();) {
 				Association stw = it.next();
-				Association w = AssociationPool.createSurfaceWord(stw, pred);
+				Association w = AssociationPool.createMuster(stw, pred);
 				words.add(w);
 			}
 		}
@@ -537,7 +538,7 @@ public class Lexicon {
 		for (Iterator<Association> it = words.iterator(); it.hasNext();) {
 			Association w = it.next();
 			try {
-				SymbolHash signs = getSymbolsFromWord(w, specialTokenConst, pred, targetRel);
+				SymbolHash signs = analyzeArticulatee(w, specialTokenConst, pred, targetRel);
 				retval.addAll(signs.asSymbolSet());
 			}
 			// shouldn't happen
@@ -581,48 +582,65 @@ public class Lexicon {
 	}
 
 	/**
-	 * For a given word, return all of its surface word's lexical entries. If
-	 * the word is not listed in the lexicon, the tokenizer is consulted to see
-	 * if it is a special token (date, time, etc.); otherwise an exception is
-	 * thrown. If the word has coarticulations, all applicable coarticulation
-	 * entries are applied to the base word, in an arbitrary order.
+	 * Gets all associations that are indexed by a given
+	 * morpho-(phono-/grapho-)logical association (form, tone, caps). If the
+	 * morphological muster is not an association index, the muster is sent to
+	 * another component for linguistic analysis.
+	 * 
+	 * In case the input character sequence is segmented on space and
+	 * punctuation characters (what is a grammatically and semantically
+	 * arbitrary process), segments may realise composite grammatical and
+	 * semantic structures such as date, time, and so on. These associations are
+	 * not indexed by they are also returned.
+	 * 
+	 * If the muster cannot be associated to any lexicogrammatical symbol
+	 * (bricks) and, consequently, if it cannot be associated to any
+	 * rhetoricosemantic entity, either an exception is thrown for holistic
+	 * analyses or no exception is thrown for non-holistic ones.
+	 * 
+	 * If the muster is an association of coarticulated associates, all
+	 * applicable coarticulated associates are "applied to" the "base word" in
+	 * an arbitrary order.
 	 *
-	 * @param w the word
+	 * @param phenomenon the perceived linguistic phenomenon
 	 * @return a sign hash
 	 * @exception LexException thrown if word not found
 	 */
-	public SymbolHash getSymbolsForWord(Association w) throws LexException {
-		// reduce word to its core, removing coart attrs if any
-		Association surfaceWord = AssociationPool.createSurfaceWord(w);
-		Association coreWord = (surfaceWord.attrsIntersect(_coartAttrs)) ? AssociationPool
-				.createCoreSurfaceWord(surfaceWord, _coartAttrs) : surfaceWord;
-		// lookup core word
-		SymbolHash result = getSymbolsFromWord(coreWord, null, null, null);
-		if (result.size() == 0) {
-			throw new LexException(coreWord + " not found in lexicon");
+	public final SymbolHash recognizePhenomenon(Association phenomenon) throws LexException {
+		Association muster = AssociationPool.createMuster(phenomenon);
+
+		// Reduces a muster by removing the coarticulated associate keys
+		Association articulatee = muster.intersectsAssociateKeys(coarticulateeKeys) ? AssociationPool
+				.reduceMuster(muster, coarticulateeKeys) : muster;
+
+		// Lookup articulatee
+		SymbolHash recognita = recognizeArticulatee(articulatee);
+		if (recognita.size() == 0) {
+			throw new LexException(articulatee + " not recognized.");
 		}
-		// return signs if no coart attrs
-		if (coreWord == surfaceWord)
-			return result;
-		// otherwise apply coarts for word
-		applyCoarts(surfaceWord, result);
-		return result;
+
+		// "Applies" coarticulatees to the reconised articulatee
+		if (articulatee != muster) {
+			applyCoarticulatees(muster, recognita);
+		}
+		return recognita;
 	}
 
 	// look up and apply coarts for w to each sign in result
-	private void applyCoarts(Association word, SymbolHash symbolHash) throws LexException {
-		List<Symbol> inputSymbols = new ArrayList<Symbol>(symbolHash.asSymbolSet());
+	private void applyCoarticulatees(Association articulatee, SymbolHash recognita)
+			throws LexException {
+		List<Symbol> inputSymbols = new ArrayList<Symbol>(recognita.asSymbolSet());
 		List<Symbol> outputSymbols = new ArrayList<Symbol>(inputSymbols.size());
-		symbolHash.clear();
+		recognita.clear();
 		// for each surface attr, lookup coarts and apply to input signs,
 		// storing results in output signs
-		for (Pair<String, String> pair : word.getToneAndNonCanonicalAssociates()) {
+		for (Pair<String, String> pair : articulatee.getToneAndNonCanonicalAssociates()) {
 			String attributeName = (String) pair.a;
 			if (!_indexedCoartAttrs.contains(attributeName))
 				continue;
 			String attributeValue = (String) pair.b;
 			Association coartWord = AssociationPool.createWord(attributeName, attributeValue);
-			SymbolHash coartSymbolHash = getSymbolsFromWord(coartWord, null, null, null);
+			SymbolHash coartSymbolHash = recognizeArticulatee(coartWord);
 			for (Symbol coartSymbol : coartSymbolHash.asSymbolSet()) {
 				// apply to each input
 				for (int j = 0; j < inputSymbols.size(); j++) {
@@ -636,44 +654,80 @@ public class Lexicon {
 			outputSymbols.clear();
 		}
 		// add results back
-		symbolHash.addAll(inputSymbols);
+		recognita.addAll(inputSymbols);
 	}
 
-	// get signs with additional args for a known special token const, target
-	// pred and target rel
-	private SymbolHash getSymbolsFromWord(Association w, String specialTokenConst,
-			String targetPred, String targetRel) throws LexException {
-
-		Collection<MorphItem> morphItems = (specialTokenConst == null) ? (Collection<MorphItem>) _words
-				.get(w) : null;
-
+	/**
+	 * Recognize the articulatee and, if it is not recognizable, analyze it. 
+	 * 
+	 * @param articulatee the articulatee
+	 * @return the recognized symbols
+	 * @throws LexException whenever the articulatee is neither recognizable nor analyzable
+	 */
+	private final SymbolHash recognizeArticulatee(Association articulatee) throws LexException {
+		Collection<MorphItem> morphItems = (Collection<MorphItem>) associationMap.get(articulatee);
 		if (morphItems == null) {
-			// check for special tokens
-			if (specialTokenConst == null) {
-				specialTokenConst = tokenizer.getSpecialTokenConstant(tokenizer.isSpecialToken(w
+			String substituteForm = tokenizer.getSubstituteForm(tokenizer.inferEntityClass(articulatee
 						.getForm()));
-				targetPred = w.getForm();
-			}
-			if (specialTokenConst != null) {
-				Association key = AssociationPool.createSurfaceWord(w, specialTokenConst);
-				morphItems = (Collection<MorphItem>) _words.get(key);
-			}
-			// otherwise throw lex exception
-			if (morphItems == null)
-				throw new LexException(w + " not in lexicon");
+			String substituedForm = articulatee.getForm();
+			return analyzeArticulatee(articulatee, substituteForm, substituedForm, null);
 		}
+		return createRecognizedSymbols(articulatee, morphItems, null, null);
+	}
 
+	/**
+	 * Analyze the articulatee and, if it is not recognizable nor analyzable.
+	 * 
+	 * @param articulatee the articulatee
+	 * @param substituteForm the substituteForm
+	 * @param substituedForm the substituedForm
+	 * @param targetRel the target relation
+	 * @return the recognized symbols
+	 * @throws LexException whenever the articulatee is not analyzable
+	 */
+	private final SymbolHash analyzeArticulatee(Association articulatee, String substituteForm,
+			String substituedForm, String targetRel) throws LexException {
+		// Search
+		Collection<MorphItem> morphItems = null;
+		if (substituteForm != null) {
+			Association substituteArticulatee = AssociationPool.createMuster(articulatee,
+					substituteForm);
+			morphItems = (Collection<MorphItem>) associationMap.get(substituteArticulatee);
+		}
+		// otherwise throw lex exception
+		if (morphItems == null) {
+			throw new LexException(articulatee
+					+ " is not recognizable nor analyzable.");
+		}
+		return createRecognizedSymbols(articulatee, morphItems, substituedForm, targetRel);
+	}
+
+	/**
+	 * Creates the recognized symbols
+	 * 
+	 * @param articulatee the articulatee
+	 * @param morphItems the morph items
+	 * @param substituedForm the substituted form
+	 * @param targetRel the target relation
+	 * @return the recognized symbols
+	 * @throws LexException
+	 */
+	private SymbolHash createRecognizedSymbols(Association articulatee, Collection<MorphItem> morphItems, String substituedForm,
+			String targetRel) throws LexException {
 		SymbolHash symbolHash = new SymbolHash();
 		for (MorphItem morphItem : morphItems) {
-			fillSymbolHash(w, morphItem, targetPred, targetRel, symbolHash);
+			fillSymbolHash(symbolHash, articulatee, morphItem, substituedForm, targetRel);
 		}
 		return symbolHash;
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	// FACTORY OF SYMBOLS
+	
 	// given MorphItem
 	// TODO Understand and generalize construction of symbol hashes
-	private final void fillSymbolHash(Association w, MorphItem mi, String targetPred,
-			String targetRel, SymbolHash symbolHash) throws LexException {
+	private final void fillSymbolHash(SymbolHash symbolHash, Association articulatee,
+			MorphItem morphItem, String targetPred, String targetRel) throws LexException {
 		// get supertags for filtering, if a supertagger is installed
 		Map<String, Double> supertags = null;
 		Set<String> supertagsFound = null;
@@ -684,11 +738,11 @@ public class Lexicon {
 		}
 
 		// get macro adder
-		MacroAdder macAdder = getMacAdder(mi);
+		MacroAdder macAdder = getMacAdder(morphItem);
 
 		// if we have this stem in our lexicon
-		String stem = mi.getWord().getTerm();
-		String pos = mi.getWord().getFunctions();
+		String stem = morphItem.getWord().getTerm();
+		String pos = morphItem.getWord().getFunctions();
 		Set<EntriesItem[]> explicitEntries = null; // for storing entries from
 													// explicitly listed family
 													// members
@@ -701,8 +755,8 @@ public class Lexicon {
 				if (item instanceof EntriesItem) {
 					EntriesItem entry = (EntriesItem) item;
 					// do lookup
-					getWithEntriesItem(w, mi, stem, stem, targetPred, targetRel, entry, macAdder,
-							supertags, supertagsFound, symbolHash);
+					getWithEntriesItem(articulatee, morphItem, stem, stem, targetPred, targetRel,
+							entry, macAdder, supertags, supertagsFound, symbolHash);
 				}
 				// otherwise it has to be a Pair containing a DataItem and
 				// an EntriesItem[]
@@ -714,8 +768,8 @@ public class Lexicon {
 					// store entries
 					explicitEntries.add(entries);
 					// do lookup
-					getWithDataItem(w, mi, dItem, entries, targetPred, targetRel, macAdder,
-							supertags, supertagsFound, symbolHash);
+					getWithDataItem(articulatee, morphItem, dItem, entries, targetPred, targetRel,
+							macAdder, supertags, supertagsFound, symbolHash);
 				}
 			}
 		}
@@ -732,8 +786,8 @@ public class Lexicon {
 					continue;
 				// otherwise get entries with pred = targetPred, or stem if null
 				String pred = (targetPred != null) ? targetPred : stem;
-				getWithDataItem(w, mi, new DataItem(stem, pred), entries, targetPred, targetRel,
-						macAdder, supertags, supertagsFound, symbolHash);
+				getWithDataItem(articulatee, morphItem, new DataItem(stem, pred), entries,
+						targetPred, targetRel, macAdder, supertags, supertagsFound, symbolHash);
 			}
 		}
 
@@ -750,8 +804,8 @@ public class Lexicon {
 				for (EntriesItem entry : entries) {
 					if (!entry.getStem().equals(DEFAULT_VAL))
 						continue;
-					getWithEntriesItem(w, mi, stem, pred, targetPred, targetRel, entry, macAdder,
-							supertags, supertagsFound, symbolHash);
+					getWithEntriesItem(articulatee, morphItem, stem, pred, targetPred, targetRel,
+							entry, macAdder, supertags, supertagsFound, symbolHash);
 				}
 			}
 		}
@@ -1220,6 +1274,6 @@ public class Lexicon {
 	 * Accessor for words map
 	 */
 	public GroupMap<Association, MorphItem> getWords() {
-		return _words;
+		return associationMap;
 	}
 }
