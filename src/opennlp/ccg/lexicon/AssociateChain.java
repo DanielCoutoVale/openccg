@@ -55,7 +55,7 @@ public class AssociateChain extends Association {
 
 	/** Returns the surface form. */
 	public String getForm() {
-		return getValFromInterned(Tokenizer.WORD_ASSOCIATE);
+		return getValFromInterned(Tokenizer.FORM_ASSOCIATE);
 	}
 
 	/** Returns the pitch accent. */
@@ -70,7 +70,7 @@ public class AssociateChain extends Association {
 		while (current != null) {
 			if (current.key instanceof FactorKey) {
 				FactorKey fkey = (FactorKey) current.key;
-				if (!isKnownAttr(fkey.factor)) {
+				if (!checkAssociateKeyKnown(fkey.factor)) {
 					if (retval == null)
 						retval = new ArrayList<Pair<String, String>>(5);
 					retval.add(0, new Pair<String, String>(fkey.factor, fkey.val));
@@ -115,7 +115,7 @@ public class AssociateChain extends Association {
 	protected String getValFromInterned(String attr) {
 		AssociateChain current = this;
 		while (current != null) {
-			if (attr == Tokenizer.WORD_ASSOCIATE) {
+			if (attr == Tokenizer.FORM_ASSOCIATE) {
 				if (current.key instanceof String)
 					return (String) current.key;
 			} else if (current.key instanceof FactorKey) {

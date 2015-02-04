@@ -46,7 +46,7 @@ public class ListPairWord extends Association {
 
 	/** Returns the surface form. */
 	public String getForm() {
-		return getValFromInterned(Tokenizer.WORD_ASSOCIATE);
+		return getValFromInterned(Tokenizer.FORM_ASSOCIATE);
 	}
 
 	/** Returns the pitch accent. */
@@ -58,7 +58,7 @@ public class ListPairWord extends Association {
 	protected List<Pair<String, String>> getAssociates() {
 		List<Pair<String, String>> retval = null;
 		for (Pair<String, String> pair : pairsList) {
-			if (!isKnownAttr(pair.a)) {
+			if (!checkAssociateKeyKnown(pair.a)) {
 				if (retval == null)
 					retval = new ArrayList<Pair<String, String>>(5);
 				retval.add(pair);

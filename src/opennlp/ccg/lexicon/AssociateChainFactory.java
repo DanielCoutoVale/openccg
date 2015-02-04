@@ -13,7 +13,7 @@ public class AssociateChainFactory implements WordFactory {
 
 	/** Creates a surface word with the given interned form. */
 	public synchronized Association create(String form) {
-		return create(factorChainRoot, Tokenizer.WORD_ASSOCIATE, form);
+		return create(factorChainRoot, Tokenizer.FORM_ASSOCIATE, form);
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class AssociateChainFactory implements WordFactory {
 		if (stem != null)
 			currentNode = findChild(currentNode, Tokenizer.TERM_ASSOCIATE, stem);
 		if (form != null)
-			currentNode = findChild(currentNode, Tokenizer.WORD_ASSOCIATE, form);
+			currentNode = findChild(currentNode, Tokenizer.FORM_ASSOCIATE, form);
 		if (pitchAccent != null)
 			currentNode = findChild(currentNode, Tokenizer.TONE_ASSOCIATE, pitchAccent);
 		if (attrValPairs != null) {

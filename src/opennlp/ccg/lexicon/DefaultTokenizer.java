@@ -191,7 +191,7 @@ public class DefaultTokenizer implements Tokenizer {
 					suffix = null;
 				attr = unescape(attr);
 				val = unescape(val);
-				if (attr.equals(Tokenizer.WORD_ASSOCIATE)) {
+				if (attr.equals(Tokenizer.FORM_ASSOCIATE)) {
 					form = val;
 					continue;
 				}
@@ -417,7 +417,7 @@ public class DefaultTokenizer implements Tokenizer {
 			sb.append(w.getForm());
 		if (w.getTone() != null)
 			sb.append("_").append(w.getTone());
-		for (Pair<String, String> pair : w.getFormalAttributesProtected()) {
+		for (Pair<String, String> pair : w.getNonCanonicalAssociates()) {
 			sb.append("_").append(pair.b);
 		}
 		return sb.toString();
@@ -484,7 +484,7 @@ public class DefaultTokenizer implements Tokenizer {
 		if (pitchAccent != null)
 			sb.append(":").append(Tokenizer.TONE_ASSOCIATE).append("-")
 					.append(escape(pitchAccent));
-		for (Pair<String, String> pair : w.getFormalAttributesProtected()) {
+		for (Pair<String, String> pair : w.getNonCanonicalAssociates()) {
 			String attr = pair.a;
 			String val = pair.b;
 			if (val != null)

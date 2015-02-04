@@ -33,7 +33,7 @@ import java.util.*;
 public interface Tokenizer {
 
 	/** Name used to tokenize form associate (usually left implicit). */
-	public static final String WORD_ASSOCIATE = "W";
+	public static final String FORM_ASSOCIATE = "W";
 
 	/** Name used to tokenize tone associate. */
 	public static final String TONE_ASSOCIATE = "A";

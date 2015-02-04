@@ -55,7 +55,7 @@ import gnu.trove.*;
  */
 abstract public class Association implements Serializable, Comparable<Association> {
 
-	private static final List<Pair<String, String>> EMPTY_PAIR_LIST = new ArrayList<Pair<String, String>>();
+	private static final List<Pair<String, String>> NO_ASSOCIATES = new ArrayList<Pair<String, String>>();
 	private static final long serialVersionUID = 1L;
 
 	/** Returns the surface form. */
@@ -86,88 +86,88 @@ abstract public class Association implements Serializable, Comparable<Associatio
 	/** Returns the semantic class. */
 	abstract public String getEntityClass();
 
-	// empty iterator
-	private final static List<Pair<String, String>> emptyPairs = new ArrayList<Pair<String, String>>(
-			0);
-
-	/** Returns an iterator over the extra attribute-value pairs. */
-	public final List<Pair<String, String>> getFormalAttributesProtected() {
-		List<Pair<String, String>> pairs = getAssociates();
-		return pairs != null ? pairs : emptyPairs;
+	/**
+	 * @return non-canonical associates
+	 */
+	public final List<Pair<String, String>> getNonCanonicalAssociates() {
+		List<Pair<String, String>> associates = getAssociates();
+		return associates != null ? associates : NO_ASSOCIATES;
 	}
 
 	/**
-	 * Returns an iterator over the surface attribute-value pairs, including the
-	 * pitch accent (if any).
+	 * @return tone and non-canonical associates
 	 */
-	public List<Pair<String, String>> getSurfaceAttrValPairs() {
-		List<Pair<String, String>> pairs = getAssociates();
-		String pitchAccent = getTone();
-		if (pairs == null && pitchAccent == null)
-			return EMPTY_PAIR_LIST;
-		else if (pairs == null) {
-			List<Pair<String, String>> retval = new ArrayList<Pair<String, String>>(1);
-			retval.add(new Pair<String, String>(Tokenizer.TONE_ASSOCIATE, pitchAccent));
-			return retval;
-		} else if (pitchAccent == null)
-			return pairs;
-		else {
-			List<Pair<String, String>> retval = new ArrayList<Pair<String, String>>(pairs);
-			retval.add(new Pair<String, String>(Tokenizer.TONE_ASSOCIATE, pitchAccent));
-			return retval;
+	public final List<Pair<String, String>> getToneAndNonCanonicalAssociates() {
+		List<Pair<String, String>> associates = getAssociates();
+		String tone = getTone();
+		if (associates == null && tone == null) {
+			return NO_ASSOCIATES;
+		} else if (associates == null) {
+			associates = new ArrayList<Pair<String, String>>(1);
+			associates.add(new Pair<String, String>(Tokenizer.TONE_ASSOCIATE, tone));
+			return associates;
+		} else if (tone == null) {
+			return associates;
+		} else {
+			associates = new ArrayList<Pair<String, String>>(associates);
+			associates.add(new Pair<String, String>(Tokenizer.TONE_ASSOCIATE, tone));
+			return associates;
 		}
 	}
 
-	// the known attr names
-	private static Set<String> knownAttrs = initKnownAttrs();
+	/**
+	 * The known associate keys
+	 */
+	private final static Set<String> knownAssociateKeys = initKnownAssciateKeys();
 
 	@SuppressWarnings("unchecked")
-	private static Set<String> initKnownAttrs() {
-		Set<String> knownAttrs = new THashSet(new TObjectIdentityHashingStrategy());
-		String[] names = { Tokenizer.WORD_ASSOCIATE, Tokenizer.TONE_ASSOCIATE,
-				Tokenizer.TERM_ASSOCIATE, Tokenizer.FUNCTIONS_ASSOCIATE,
-				Tokenizer.SUPERTAG_ASSOCIATE, Tokenizer.ENTITY_CLASS_ASSOCIATE };
+	private final static Set<String> initKnownAssciateKeys() {
+		Set<String> knownAssociateKeys = new THashSet(new TObjectIdentityHashingStrategy());
+		String[] names = { Tokenizer.FORM_ASSOCIATE, Tokenizer.TONE_ASSOCIATE,
+				Tokenizer.CAPS_ASSOCIATE, Tokenizer.TERM_ASSOCIATE, Tokenizer.FUNCTIONS_ASSOCIATE,
+				Tokenizer.SUPERTAG_ASSOCIATE, Tokenizer.ENTITY_CLASS_ASSOCIATE,
+				Tokenizer.ENTITY_ASSOCIATE };
 		for (int i = 0; i < names.length; i++) {
-			knownAttrs.add(names[i]);
+			knownAssociateKeys.add(names[i]);
 		}
-		return knownAttrs;
-	}
-
-	/** Returns whether the given attr is a known one (vs an extra one). */
-	public static boolean isKnownAttr(String attr) {
-		return knownAttrs.contains(attr.intern());
+		return knownAssociateKeys;
 	}
 
 	/**
-	 * Returns true if the form is non-null, while the stem, part of speech,
-	 * supertag and semantic class are null.
+	 * Checks whether an associate key is known
+	 * 
+	 * @param associateKey the associate key
+	 * @return <code>true</code> if the associate key is known and <code>false</code> otherwise
 	 */
-	public boolean isMuster() {
+	public final static boolean checkAssociateKeyKnown(String associateKey) {
+		return knownAssociateKeys.contains(associateKey.intern());
+	}
+
+	/**
+	 * @return <code>true</code> if all associates are formal and <code>false</code> otherwise
+	 */
+	public final boolean isFormal() {
 		return getForm() != null && getTerm() == null && getFunctions() == null
 				&& getSupertag() == null && getEntityClass() == null;
 	}
 
-	// NB: could try different factory methods for concrete words, but
-	// it's unclear whether it makes much difference
-	// protected static WordFactory wordFactory = new FactorChainWord.Factory();
-
 	// comparator for attr-val pairs
-	private static Comparator<Pair<String, String>> attrValComparator = new Comparator<Pair<String, String>>() {
+	private final static Comparator<Pair<String, String>> attrValComparator = new Comparator<Pair<String, String>>() {
 		public int compare(Pair<String, String> p1, Pair<String, String> p2) {
 			return p1.a.compareTo(p2.a);
 		}
 	};
 
 	/** Sorts attr-val pairs by attr name. */
-	public static void sortAttrValPairs(List<Pair<String, String>> pairs) {
+	public final static void sortAttrValPairs(List<Pair<String, String>> pairs) {
 		Collections.sort(pairs, attrValComparator);
 	}
 
 	/** Returns a hash code for this word. */
-	public int hashCode() {
+	public final int hashCode() {
 		int hc = System.identityHashCode(getForm());
 		hc = 31 * hc + System.identityHashCode(getTone());
-		for (Pair<String, String> pair : getFormalAttributesProtected()) {
+		for (Pair<String, String> pair : getNonCanonicalAssociates()) {
 			hc = 31 * hc + System.identityHashCode(pair.a);
 			hc = 31 * hc + System.identityHashCode(pair.b);
 		}
@@ -179,13 +179,13 @@ abstract public class Association implements Serializable, Comparable<Associatio
 	}
 
 	/** Returns whether this word equals the given object. */
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public final boolean equals(Object o) {
+		if (this == o)
 			return true;
 		// nb: can use ==, since constructor interns all factors
-		if (!(obj instanceof Association))
+		if (!(o instanceof Association))
 			return false;
-		Association word = (Association) obj;
+		Association word = (Association) o;
 		boolean sameFields = getForm() == word.getForm() && getTone() == word.getTone()
 				&& getTerm() == word.getTerm() && getFunctions() == word.getFunctions()
 				&& getSupertag() == word.getSupertag() && getEntityClass() == word.getEntityClass();
@@ -207,30 +207,30 @@ abstract public class Association implements Serializable, Comparable<Associatio
 	}
 
 	/** Returns an int representing lexicographic sorting. */
-	public int compareTo(Association word) {
-		if (this == word)
+	public final int compareTo(Association association) {
+		if (this == association)
 			return 0;
 		int cmp = 0;
-		cmp = compare(getForm(), word.getForm());
+		cmp = compare(getForm(), association.getForm());
 		if (cmp != 0)
 			return cmp;
-		cmp = compare(getTone(), word.getTone());
+		cmp = compare(getTone(), association.getTone());
 		if (cmp != 0)
 			return cmp;
-		cmp = compare(getTerm(), word.getTerm());
+		cmp = compare(getTerm(), association.getTerm());
 		if (cmp != 0)
 			return cmp;
-		cmp = compare(getFunctions(), word.getFunctions());
+		cmp = compare(getFunctions(), association.getFunctions());
 		if (cmp != 0)
 			return cmp;
-		cmp = compare(getSupertag(), word.getSupertag());
+		cmp = compare(getSupertag(), association.getSupertag());
 		if (cmp != 0)
 			return cmp;
-		cmp = compare(getEntityClass(), word.getEntityClass());
+		cmp = compare(getEntityClass(), association.getEntityClass());
 		if (cmp != 0)
 			return cmp;
 		List<Pair<String, String>> pairs = getAssociates();
-		List<Pair<String, String>> wordPairs = word.getAssociates();
+		List<Pair<String, String>> wordPairs = association.getAssociates();
 		if (pairs == null && wordPairs == null)
 			return 0;
 		if (pairs == null)
@@ -255,7 +255,7 @@ abstract public class Association implements Serializable, Comparable<Associatio
 	}
 
 	// compares strings, accounting for nulls
-	private int compare(String s1, String s2) {
+	private final int compare(String s1, String s2) {
 		if (s1 == null && s2 == null)
 			return 0;
 		if (s1 == null)
@@ -269,10 +269,10 @@ abstract public class Association implements Serializable, Comparable<Associatio
 	 * Returns whether this word's surface attributes intersect with the given
 	 * ones.
 	 */
-	public boolean attrsIntersect(Set<String> attrsSet) {
+	public final boolean attrsIntersect(Set<String> attrsSet) {
 		if (getTone() != null && attrsSet.contains(Tokenizer.TONE_ASSOCIATE))
 			return true;
-		for (Pair<String, String> pair : getFormalAttributesProtected()) {
+		for (Pair<String, String> pair : getNonCanonicalAssociates()) {
 			if (attrsSet.contains(pair.a))
 				return true;
 		}
@@ -283,7 +283,7 @@ abstract public class Association implements Serializable, Comparable<Associatio
 	public int surfaceWordHashCode() {
 		int hc = System.identityHashCode(getForm());
 		hc = 31 * hc + System.identityHashCode(getTone());
-		for (Pair<String, String> pair : getFormalAttributesProtected()) {
+		for (Pair<String, String> pair : getNonCanonicalAssociates()) {
 			hc = 31 * hc + System.identityHashCode(pair.a);
 			hc = 31 * hc + System.identityHashCode(pair.b);
 		}
@@ -294,7 +294,7 @@ abstract public class Association implements Serializable, Comparable<Associatio
 	 * Returns whether this word and the given object have equal restrictions to
 	 * surface words.
 	 */
-	public boolean surfaceWordEquals(Object obj) {
+	public final boolean formallyEquals(Object obj) {
 		if (this == obj)
 			return true;
 		// nb: can use ==, since constructor interns all factors
@@ -320,19 +320,19 @@ abstract public class Association implements Serializable, Comparable<Associatio
 	}
 
 	/** Returns canonical version of deserialized word. */
-	public Object readResolve() throws ObjectStreamException {
+	public final Object readResolve() throws ObjectStreamException {
 		return WordPool.createWord(getForm(), getTone(), getAssociates(), getTerm(),
 				getFunctions(), getSupertag(), getEntityClass());
 	}
 
-	/** Shows non-trivial fields separated by underscores. */
-	public String toString() {
+	@Override
+	public final String toString() {
 		StringBuffer sb = new StringBuffer();
 		if (getForm() != null)
 			sb.append(getForm());
 		if (getTone() != null)
 			sb.append('_').append(getTone());
-		for (Pair<String, String> pair : getFormalAttributesProtected()) {
+		for (Pair<String, String> pair : getNonCanonicalAssociates()) {
 			sb.append('_').append(pair.b);
 		}
 		if (getTerm() != null && getTerm() != getForm())
@@ -349,7 +349,7 @@ abstract public class Association implements Serializable, Comparable<Associatio
 	}
 
 	/** Tests serialization. */
-	public static void main(String[] argv) throws IOException, ClassNotFoundException {
+	public final static void main(String[] argv) throws IOException, ClassNotFoundException {
 		// create words
 		Association w = WordPool.createWord("ran");
 		Association fw = WordPool.createFullWord(w, "run", "VBD", "s\\np", "MOTION");

@@ -58,7 +58,7 @@ public class FormAssociate extends Association {
 	@Override
 	public final String getAssociateValue(String associateKey) {
 		associateKey = associateKey.intern();
-		if (associateKey == Tokenizer.WORD_ASSOCIATE)
+		if (associateKey == Tokenizer.FORM_ASSOCIATE)
 			return getForm();
 		if (associateKey == Tokenizer.TONE_ASSOCIATE)
 			return getTone();

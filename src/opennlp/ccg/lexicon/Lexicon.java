@@ -158,9 +158,9 @@ public class Lexicon {
 			if (morphItem.isCoart()) {
 				Association indexingWord = morphItem.getCoartIndexingWord();
 				_words.put(indexingWord, morphItem);
-				Pair<String, String> first = indexingWord.getSurfaceAttrValPairs().get(0);
+				Pair<String, String> first = indexingWord.getToneAndNonCanonicalAssociates().get(0);
 				_indexedCoartAttrs.add(first.a);
-				for (Pair<String, String> p : surfaceWord.getSurfaceAttrValPairs()) {
+				for (Pair<String, String> p : surfaceWord.getToneAndNonCanonicalAssociates()) {
 					_coartAttrs.add(p.a);
 				}
 			}
@@ -614,7 +614,7 @@ public class Lexicon {
 		symbolHash.clear();
 		// for each surface attr, lookup coarts and apply to input signs,
 		// storing results in output signs
-		for (Pair<String, String> pair : word.getSurfaceAttrValPairs()) {
+		for (Pair<String, String> pair : word.getToneAndNonCanonicalAssociates()) {
 			String attributeName = (String) pair.a;
 			if (!_indexedCoartAttrs.contains(attributeName))
 				continue;

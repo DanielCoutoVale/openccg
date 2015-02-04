@@ -52,7 +52,7 @@ public class AssociateCanonFactory implements WordFactory {
 		if (intern != null) {
 			return intern;
 		}
-		if (association.isMuster() && association.associates == null) {
+		if (association.isFormal() && association.associates == null) {
 			if (association.tone != null) {
 				intern = new FormToneAssociates(association.form, association.tone);
 			} else {
@@ -80,7 +80,7 @@ public class AssociateCanonFactory implements WordFactory {
 		String supertag = null;
 		String entityClass = null;
 		List<Pair<String, String>> associates = null;
-		if (attributeName == Tokenizer.WORD_ASSOCIATE) {
+		if (attributeName == Tokenizer.FORM_ASSOCIATE) {
 			form = attributeValue;
 		} else if (attributeName == Tokenizer.TONE_ASSOCIATE) {
 			tone = attributeValue;
