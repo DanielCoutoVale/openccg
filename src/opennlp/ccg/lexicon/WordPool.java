@@ -12,7 +12,7 @@ public class WordPool {
 	// factory methods
 
 	/** The word factory to use. */
-	protected static AssociationFactory wordFactory = new AssociateCanonFactory();
+	protected static AssociationFactory factory = new AssociateCanonFactory();
 
 	/**
 	 * Creates a core surface word from the given one, removing all attrs in the
@@ -36,7 +36,7 @@ public class WordPool {
 			}
 			return createWord(form, accent, pairs, null, null, null, null);
 		} else {
-			return createWordDirectly(form, accent, null, null, null, null, null);
+			return factory.create(form, accent, null, null, null, null, null);
 		}
 	}
 
@@ -50,8 +50,8 @@ public class WordPool {
 		POS = (POS != null) ? POS.intern() : null;
 		supertag = (supertag != null) ? supertag.intern() : null;
 		semClass = (semClass != null) ? semClass.intern() : null;
-		return createWordDirectly(word.getForm(), word.getTone(), word.getAssociates(), stem, POS,
-				supertag, semClass);
+		return factory.create(word.getForm(), word.getTone(), stem, POS, supertag,
+				semClass, word.getAssociates());
 	}
 
 	/**
@@ -80,8 +80,8 @@ public class WordPool {
 					word2.getFunctions(), supertag, word2.getEntityClass());
 		} else {
 			supertag = (supertag != null) ? supertag.intern() : null;
-			return createWordDirectly(word.getForm(), word.getTone(), pairs, word2.getTerm(),
-					word2.getFunctions(), supertag, word2.getEntityClass());
+			return factory.create(word.getForm(), word.getTone(), word2.getTerm(), word2.getFunctions(),
+					supertag, word2.getEntityClass(), pairs);
 		}
 	}
 
@@ -90,8 +90,8 @@ public class WordPool {
 	 * supertag and semantic class.
 	 */
 	public static synchronized Association createSurfaceWord(Association word) {
-		return createWordDirectly(word.getForm(), word.getTone(), word.getAssociates(), null, null,
-				null, null);
+		return factory.create(word.getForm(), word.getTone(), null, null, null,
+				null, word.getAssociates());
 	}
 
 	/**
@@ -100,8 +100,8 @@ public class WordPool {
 	 */
 	public static synchronized Association createSurfaceWord(Association word, String form) {
 		form = (form != null) ? form.intern() : null;
-		return createWordDirectly(form, word.getTone(), word.getAssociates(), null, null, null,
-				null);
+		return factory.create(form, word.getTone(), null, null, null, null,
+				word.getAssociates());
 	}
 
 	/**
@@ -111,8 +111,8 @@ public class WordPool {
 	 */
 	public static synchronized Association createSurfaceWordUsingSemClass(Association word) {
 		String form = word.getEntityClass().toUpperCase().intern();
-		return createWordDirectly(form, word.getTone(), word.getAssociates(), null, null, null,
-				null);
+		return factory.create(form, word.getTone(), null, null, null, null,
+				word.getAssociates());
 	}
 
 	// NB: could try different factory methods for concrete words, but
@@ -122,7 +122,7 @@ public class WordPool {
 	/** Creates a surface word with the given form. */
 	public static synchronized Association createWord(String form) {
 		form = (form != null) ? form.intern() : null;
-		return wordFactory.create(form);
+		return factory.create(form);
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class WordPool {
 	public static synchronized Association createWord(String attributeName, String attributeValue) {
 		attributeName = attributeName.intern();
 		attributeValue = (attributeValue != null) ? attributeValue.intern() : null;
-		return wordFactory.create(attributeName, attributeValue);
+		return factory.create(attributeName, attributeValue);
 	}
 
 	/** Creates a (surface or full) word. */
@@ -162,7 +162,7 @@ public class WordPool {
 		supertag = (supertag != null) ? supertag.intern() : null;
 		semClass = (semClass != null) ? semClass.intern() : null;
 		// create word
-		return createWordDirectly(form, pitchAccent, attrValPairs, stem, POS, supertag, semClass);
+		return factory.create(form, pitchAccent, stem, POS, supertag, semClass, attrValPairs);
 	}
 
 	/**
@@ -172,18 +172,8 @@ public class WordPool {
 	public static synchronized Association createWord(Association word, String form) {
 		if (form != null)
 			form = form.intern();
-		return createWordDirectly(form, word.getTone(), word.getAssociates(), word.getTerm(),
-				word.getFunctions(), word.getSupertag(), word.getEntityClass());
-	}
-
-	/**
-	 * Creates a (surface or full) word directly, from the given canonical
-	 * factors.
-	 */
-	public static synchronized Association createWordDirectly(String form, String pitchAccent,
-			List<Pair<String, String>> attrValPairs, String stem, String POS, String supertag,
-			String semClass) {
-		return wordFactory.create(form, pitchAccent, stem, POS, supertag, semClass, attrValPairs);
+		return factory.create(form, word.getTone(), word.getTerm(), word.getFunctions(),
+				word.getSupertag(), word.getEntityClass(), word.getAssociates());
 	}
 
 	/**
@@ -193,8 +183,8 @@ public class WordPool {
 	public static synchronized Association createWordUsingSemClass(Association word) {
 		String form = word.getEntityClass().toUpperCase().intern();
 		String stem = form;
-		return createWordDirectly(form, word.getTone(), word.getAssociates(), stem,
-				word.getFunctions(), word.getSupertag(), word.getEntityClass());
+		return factory.create(form, word.getTone(), stem, word.getFunctions(),
+				word.getSupertag(), word.getEntityClass(), word.getAssociates());
 	}
 
 	/**
@@ -231,7 +221,7 @@ public class WordPool {
 		if (mixedAttrs)
 			return createWord(form, accent, pairs, stem, POS, supertag, semClass);
 		else
-			return createWordDirectly(form, accent, pairs, stem, POS, supertag, semClass);
+			return factory.create(form, accent, stem, POS, supertag, semClass, pairs);
 	}
 
 }
