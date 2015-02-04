@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import opennlp.ccg.lexicon.Tokenizer;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.parse.supertagger.util.PipedTokenizer;
 
 /**
@@ -40,7 +40,7 @@ import opennlp.ccg.parse.supertagger.util.PipedTokenizer;
  * @author Dennis N. Mehay
  * @version $Revision: 1.2 $, $Date: 2010/09/26 05:50:15 $
  */
-public class PipeDelimitedFactoredBundleCorpusIterator implements CorpusIterator, Iterator<List<Word>>, Iterable<List<Word>> {
+public class PipeDelimitedFactoredBundleCorpusIterator implements CorpusIterator, Iterator<List<Association>>, Iterable<List<Association>> {
 
     private BufferedReader reader;
     private String nextLine,  nextID;
@@ -75,8 +75,8 @@ public class PipeDelimitedFactoredBundleCorpusIterator implements CorpusIterator
      *         file.
      * @throws <code>java.io.IOException</code>. 
      */
-    public List<Word> next() {
-        List<Word> currentSent = null;
+    public List<Association> next() {
+        List<Association> currentSent = null;
         try {
             if (this.hasNext()) {
                 String line = this.reader.readLine();
@@ -140,5 +140,5 @@ public class PipeDelimitedFactoredBundleCorpusIterator implements CorpusIterator
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    public Iterator<List<Word>> iterator() { return this; }
+    public Iterator<List<Association>> iterator() { return this; }
 }

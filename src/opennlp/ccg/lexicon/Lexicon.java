@@ -55,14 +55,14 @@ public class Lexicon {
 	private SupertaggerAdapter _supertagger = null;
 
 	// various maps
-	private GroupMap<Word, MorphItem> _words;
+	private GroupMap<Association, MorphItem> _words;
 	private GroupMap<String, Object> _stems;
 	private GroupMap<String, FeatureStructure> _macros;
 	private HashMap<String, MacroItem> _macroItems;
 
 	private GroupMap<String, EntriesItem[]> _posToEntries;
 	private GroupMap<String, EntriesItem> _stagToEntries;
-	private GroupMap<String, Word> _predToWords;
+	private GroupMap<String, Association> _predToWords;
 	private GroupMap<String, String> _relsToPreds;
 	private GroupMap<String, String> _coartRelsToPreds;
 
@@ -147,16 +147,16 @@ public class Lexicon {
 		// term -> set(morph-item)
 		// set(formal-attributes)
 		// set(indexed-formal-attributes)
-		_words = new GroupMap<Word, MorphItem>();
-		_predToWords = new GroupMap<String, Word>();
+		_words = new GroupMap<Association, MorphItem>();
+		_predToWords = new GroupMap<String, Association>();
 		_coartAttrs = new HashSet<String>();
 		_indexedCoartAttrs = new HashSet<String>();
 		for (MorphItem morphItem : morphItems) {
-			Word surfaceWord = morphItem.getSurfaceWord();
+			Association surfaceWord = morphItem.getSurfaceWord();
 			_words.put(surfaceWord, morphItem);
 			_predToWords.put(morphItem.getWord().getTerm(), surfaceWord);
 			if (morphItem.isCoart()) {
-				Word indexingWord = morphItem.getCoartIndexingWord();
+				Association indexingWord = morphItem.getCoartIndexingWord();
 				_words.put(indexingWord, morphItem);
 				Pair<String, String> first = indexingWord.getSurfaceAttrValPairs().get(0);
 				_indexedCoartAttrs.add(first.a);
@@ -220,7 +220,7 @@ public class Lexicon {
 						dItem, entries));
 				// index non-default preds to words
 				if (!dItem.getStem().equals(dItem.getPred())) {
-					Collection<Word> words = (Collection<Word>) _predToWords.get(dItem.getStem());
+					Collection<Association> words = (Collection<Association>) _predToWords.get(dItem.getStem());
 					if (words == null) {
 						if (!openlex) {
 							System.out.print("Warning: couldn't find words for pred '");
@@ -228,7 +228,7 @@ public class Lexicon {
 									+ "'");
 						}
 					} else {
-						for (Iterator<Word> it = words.iterator(); it.hasNext();) {
+						for (Iterator<Association> it = words.iterator(); it.hasNext();) {
 							_predToWords.put(dItem.getPred(), it.next());
 						}
 					}
@@ -287,7 +287,7 @@ public class Lexicon {
 
 		// with morph items, check POS, macro names, excluded list for xref
 		for (MorphItem morphItem : morphItems) {
-			Word w = morphItem.getWord();
+			Association w = morphItem.getWord();
 			if (!openlex && !_stems.containsKey(w.getTerm() + w.getFunctions())
 					&& !_posToEntries.containsKey(w.getFunctions())) {
 				System.err.println("Warning: no entries for stem '" + w.getTerm() + "' and POS '"
@@ -490,7 +490,7 @@ public class Lexicon {
 	// get signs using an additional arg for a target rel
 	private Collection<Symbol> getSignsFromPredAndTargetRel(String pred, String targetRel) {
 
-		Collection<Word> words = (Collection<Word>) _predToWords.get(pred);
+		Collection<Association> words = (Collection<Association>) _predToWords.get(pred);
 		String specialTokenConst = null;
 
 		// for robustness, when using supertagger, add words for pred sans sense
@@ -503,11 +503,11 @@ public class Lexicon {
 														// Mr._Smith
 		{
 			String barePred = pred.substring(0, dotIndex);
-			Collection<Word> barePredWords = (Collection<Word>) _predToWords.get(barePred);
+			Collection<Association> barePredWords = (Collection<Association>) _predToWords.get(barePred);
 			if (words == null)
 				words = barePredWords;
 			else if (barePredWords != null) {
-				Set<Word> unionWords = new HashSet<Word>(words);
+				Set<Association> unionWords = new HashSet<Association>(words);
 				unionWords.addAll(barePredWords);
 				words = unionWords;
 			}
@@ -518,22 +518,22 @@ public class Lexicon {
 			if (specialTokenConst == null)
 				return null;
 			// lookup words with pred = special token const
-			Collection<Word> specialTokenWords = (Collection<Word>) _predToWords
+			Collection<Association> specialTokenWords = (Collection<Association>) _predToWords
 					.get(specialTokenConst);
 			// replace special token const with pred
 			if (specialTokenWords == null)
 				return null;
-			words = new ArrayList<Word>(specialTokenWords.size());
-			for (Iterator<Word> it = specialTokenWords.iterator(); it.hasNext();) {
-				Word stw = it.next();
-				Word w = WordPool.createSurfaceWord(stw, pred);
+			words = new ArrayList<Association>(specialTokenWords.size());
+			for (Iterator<Association> it = specialTokenWords.iterator(); it.hasNext();) {
+				Association stw = it.next();
+				Association w = WordPool.createSurfaceWord(stw, pred);
 				words.add(w);
 			}
 		}
 
 		List<Symbol> retval = new ArrayList<Symbol>();
-		for (Iterator<Word> it = words.iterator(); it.hasNext();) {
-			Word w = it.next();
+		for (Iterator<Association> it = words.iterator(); it.hasNext();) {
+			Association w = it.next();
 			try {
 				SymbolHash signs = getSymbolsFromWord(w, specialTokenConst, pred, targetRel);
 				retval.addAll(signs.asSymbolSet());
@@ -589,10 +589,10 @@ public class Lexicon {
 	 * @return a sign hash
 	 * @exception LexException thrown if word not found
 	 */
-	public SymbolHash getSymbolsForWord(Word w) throws LexException {
+	public SymbolHash getSymbolsForWord(Association w) throws LexException {
 		// reduce word to its core, removing coart attrs if any
-		Word surfaceWord = WordPool.createSurfaceWord(w);
-		Word coreWord = (surfaceWord.attrsIntersect(_coartAttrs)) ? WordPool.createCoreSurfaceWord(
+		Association surfaceWord = WordPool.createSurfaceWord(w);
+		Association coreWord = (surfaceWord.attrsIntersect(_coartAttrs)) ? WordPool.createCoreSurfaceWord(
 				surfaceWord, _coartAttrs) : surfaceWord;
 		// lookup core word
 		SymbolHash result = getSymbolsFromWord(coreWord, null, null, null);
@@ -608,7 +608,7 @@ public class Lexicon {
 	}
 
 	// look up and apply coarts for w to each sign in result
-	private void applyCoarts(Word word, SymbolHash symbolHash) throws LexException {
+	private void applyCoarts(Association word, SymbolHash symbolHash) throws LexException {
 		List<Symbol> inputSymbols = new ArrayList<Symbol>(symbolHash.asSymbolSet());
 		List<Symbol> outputSymbols = new ArrayList<Symbol>(inputSymbols.size());
 		symbolHash.clear();
@@ -619,7 +619,7 @@ public class Lexicon {
 			if (!_indexedCoartAttrs.contains(attributeName))
 				continue;
 			String attributeValue = (String) pair.b;
-			Word coartWord = WordPool.createWord(attributeName, attributeValue);
+			Association coartWord = WordPool.createWord(attributeName, attributeValue);
 			SymbolHash coartSymbolHash = getSymbolsFromWord(coartWord, null, null, null);
 			for (Symbol coartSymbol : coartSymbolHash.asSymbolSet()) {
 				// apply to each input
@@ -639,7 +639,7 @@ public class Lexicon {
 
 	// get signs with additional args for a known special token const, target
 	// pred and target rel
-	private SymbolHash getSymbolsFromWord(Word w, String specialTokenConst, String targetPred,
+	private SymbolHash getSymbolsFromWord(Association w, String specialTokenConst, String targetPred,
 			String targetRel) throws LexException {
 
 		Collection<MorphItem> morphItems = (specialTokenConst == null) ? (Collection<MorphItem>) _words
@@ -653,7 +653,7 @@ public class Lexicon {
 				targetPred = w.getForm();
 			}
 			if (specialTokenConst != null) {
-				Word key = WordPool.createSurfaceWord(w, specialTokenConst);
+				Association key = WordPool.createSurfaceWord(w, specialTokenConst);
 				morphItems = (Collection<MorphItem>) _words.get(key);
 			}
 			// otherwise throw lex exception
@@ -670,7 +670,7 @@ public class Lexicon {
 
 	// given MorphItem
 	// TODO Understand and generalize construction of symbol hashes
-	private final void fillSymbolHash(Word w, MorphItem mi, String targetPred, String targetRel,
+	private final void fillSymbolHash(Association w, MorphItem mi, String targetPred, String targetRel,
 			SymbolHash symbolHash) throws LexException {
 		// get supertags for filtering, if a supertagger is installed
 		Map<String, Double> supertags = null;
@@ -756,7 +756,7 @@ public class Lexicon {
 	}
 
 	// given DataItem
-	private void getWithDataItem(Word w, MorphItem mi, DataItem item, EntriesItem[] entries,
+	private void getWithDataItem(Association w, MorphItem mi, DataItem item, EntriesItem[] entries,
 			String targetPred, String targetRel, MacroAdder macAdder,
 			Map<String, Double> supertags, Set<String> supertagsFound, SymbolHash result) {
 		for (int i = 0; i < entries.length; i++) {
@@ -769,7 +769,7 @@ public class Lexicon {
 	}
 
 	// given EntriesItem
-	private void getWithEntriesItem(Word w, MorphItem mi, String stem, String pred,
+	private void getWithEntriesItem(Association w, MorphItem mi, String stem, String pred,
 			String targetPred, String targetRel, EntriesItem item, MacroAdder macAdder,
 			Map<String, Double> supertags, Set<String> supertagsFound, SymbolHash result) {
 		// ensure apropos
@@ -819,10 +819,10 @@ public class Lexicon {
 
 			// merge stem, pos, sem class from morph item, plus supertag from
 			// cat
-			Word word = WordPool.createFullWord(w, mi.getWord(), cat.getSupertag());
+			Association word = WordPool.createFullWord(w, mi.getWord(), cat.getSupertag());
 
 			// set origin and lexprob
-			Symbol sign = new Symbol(new SingletonList<Word>(word), cat);
+			Symbol sign = new Symbol(new SingletonList<Association>(word), cat);
 			HyloHelper.getInstance().setEntityRealizer(sign.getCategory().getLF(), sign);
 			// if (lexprob != null) {
 			// sign.addData(new SupertaggerAdapter.LexLogProb((float)
@@ -1218,7 +1218,7 @@ public class Lexicon {
 	/*
 	 * Accessor for words map
 	 */
-	public GroupMap<Word, MorphItem> getWords() {
+	public GroupMap<Association, MorphItem> getWords() {
 		return _words;
 	}
 }

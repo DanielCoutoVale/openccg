@@ -42,7 +42,7 @@ import gnu.trove.*;
 public class AAnFilter implements NgramFilter, Reversible
 {
     // exceptions
-    private Set<List<Word>> exceptions = null;
+    private Set<List<Association>> exceptions = null;
     
     
     /** Constructor. */
@@ -65,19 +65,19 @@ public class AAnFilter implements NgramFilter, Reversible
     
 
     /** Returns whether to filter out the given word sequence. */
-    public boolean filterOut(List<Word> words) {
+    public boolean filterOut(List<Association> words) {
         for (int i = 0; i < words.size()-1; i++) {
-            Word w1 = words.get(i);
-            Word w2 = words.get(i+1);
+            Association w1 = words.get(i);
+            Association w2 = words.get(i+1);
             if (filterOut(w1, w2)) return true;
         }
         return false; 
     }
     
     /** Returns whether to filter out the given word bigram (reversed if apropos). */
-    public boolean filterOut(Word w1, Word w2) {
+    public boolean filterOut(Association w1, Association w2) {
         if (reverse) {
-            Word tmp = w1; w1 = w2; w2 = tmp;
+            Association tmp = w1; w1 = w2; w2 = tmp;
         }
         String f1 = w1.getForm(); 
         if (f1 != "a" && f1 != "an") return false;
@@ -104,11 +104,11 @@ public class AAnFilter implements NgramFilter, Reversible
     }
     
     // words for a/an
-    private static final Word A_WORD = WordPool.createWord("a");
-    private static final Word AN_WORD = WordPool.createWord("an");
+    private static final Association A_WORD = WordPool.createWord("a");
+    private static final Association AN_WORD = WordPool.createWord("an");
     
     // reusable list for lookup
-    private List<Word> keyList = new ArrayListWithIdentityEquals<Word>(2);
+    private List<Association> keyList = new ArrayListWithIdentityEquals<Association>(2);
     
     // looks up whether the bigram is an exception
     private boolean isException(String w1, String w2) {
@@ -121,9 +121,9 @@ public class AAnFilter implements NgramFilter, Reversible
     
     // singletons for a/an
     @SuppressWarnings("unchecked")
-	private static final List<Word> A_SINGLETON = (List<Word>) Interner.globalIntern(new SingletonList<Word>(A_WORD));
+	private static final List<Association> A_SINGLETON = (List<Association>) Interner.globalIntern(new SingletonList<Association>(A_WORD));
     @SuppressWarnings("unchecked")
-    private static final List<Word> AN_SINGLETON = (List<Word>) Interner.globalIntern(new SingletonList<Word>(AN_WORD));
+    private static final List<Association> AN_SINGLETON = (List<Association>) Interner.globalIntern(new SingletonList<Association>(AN_WORD));
     
     /** Adds an a/an bigram as an exception. */
     @SuppressWarnings("unchecked")
@@ -137,9 +137,9 @@ public class AAnFilter implements NgramFilter, Reversible
         // ensure exceptions initialized
         if (exceptions == null) exceptions = new THashSet();
         // intern and add bigram
-        List<Word> w1Singleton = (w1 == "a") ? A_SINGLETON : AN_SINGLETON;
-        List<Word> w2Singleton = (List<Word>) Interner.globalIntern(new SingletonList<Word>(WordPool.createWord(w2)));
-        List<Word> excBigram = (List<Word>) Interner.globalIntern(new StructureSharingList<Word>(w1Singleton, w2Singleton));
+        List<Association> w1Singleton = (w1 == "a") ? A_SINGLETON : AN_SINGLETON;
+        List<Association> w2Singleton = (List<Association>) Interner.globalIntern(new SingletonList<Association>(WordPool.createWord(w2)));
+        List<Association> excBigram = (List<Association>) Interner.globalIntern(new StructureSharingList<Association>(w1Singleton, w2Singleton));
         exceptions.add(excBigram);
     }
 
@@ -222,7 +222,7 @@ public class AAnFilter implements NgramFilter, Reversible
         
         // then filter given tokens
         Tokenizer tokenizer = new DefaultTokenizer();
-        List<Word> words = tokenizer.tokenize(tokens); //, true);
+        List<Association> words = tokenizer.tokenize(tokens); //, true);
         System.out.println("filtering: " + tokens);
         System.out.println("filter out: " + aanFilter.filterOut(words));
     }

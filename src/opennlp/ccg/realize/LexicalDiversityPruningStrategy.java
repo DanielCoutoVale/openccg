@@ -18,7 +18,7 @@
 
 package opennlp.ccg.realize;
 
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.synsem.Symbol;
 
 import gnu.trove.THashSet;
@@ -60,10 +60,10 @@ public class LexicalDiversityPruningStrategy extends DiversityPruningStrategy
         In particular, returns true iff the set of relevant open class stems are the same. */
     public boolean notCompellinglyDifferent(Symbol sign1, Symbol sign2) {
     	stemsSeen.clear();
-    	for (Word w : sign1.getWords()) {
+    	for (Association w : sign1.getWords()) {
     		if (posValsToUse.contains(w.getFunctions())) stemsSeen.add(w.getTerm());
     	}
-    	for (Word w : sign2.getWords()) {
+    	for (Association w : sign2.getWords()) {
     		if (posValsToUse.contains(w.getFunctions()) && !stemsSeen.contains(w.getTerm()))
     			return false;
     	}

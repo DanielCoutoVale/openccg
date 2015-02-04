@@ -20,7 +20,7 @@ package opennlp.ccg.ngrams;
 
 import opennlp.ccg.synsem.Symbol;
 import opennlp.ccg.synsem.SymbolScorer;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 
 import java.util.*;
 import gnu.trove.*;
@@ -103,7 +103,7 @@ public class RepetitionScorer implements SymbolScorer
         List words = sign.getWords(); 
         if (words == null) return;
         for (int i = 0; i < words.size(); i++) {
-            Word word = (Word) words.get(i);
+            Association word = (Association) words.get(i);
             updateItems(word, contextItems);
         }
     }
@@ -112,7 +112,7 @@ public class RepetitionScorer implements SymbolScorer
      * Adds the items (eg stems) from the given word to the given set.
      * By default, adds the relevant stems, per the relevantStem method.
      */
-    protected void updateItems(Word word, Set set) {
+    protected void updateItems(Association word, Set set) {
         String stem = relevantStem(word);
         if (stem != null) set.add(stem);
     }
@@ -121,7 +121,7 @@ public class RepetitionScorer implements SymbolScorer
      * Returns the stem of the given word if its POS is in posValsToUse, 
      * unless the stem is in stemsToIgnore; otherwise returns null.
      */
-    protected String relevantStem(Word word) {
+    protected String relevantStem(Association word) {
         if (!(posValsToUse.contains(word.getFunctions()))) return null;
         String stem = word.getTerm();
         if (!(stemsToIgnore.contains(stem))) return stem;
@@ -151,7 +151,7 @@ public class RepetitionScorer implements SymbolScorer
         previousItems.clear();
         double retval = 0;
         for (int i = 0; i < words.size(); i++) {
-            Word word = (Word) words.get(i);
+            Association word = (Association) words.get(i);
             retval += repeatedItems(word);
             updateItems(word, previousItems);
         }
@@ -164,7 +164,7 @@ public class RepetitionScorer implements SymbolScorer
      * By default, returns 1 (or a fractional count) if the stem is relevant, 
      * per the relevantStem method. 
      */
-    protected double repeatedItems(Word word) {
+    protected double repeatedItems(Association word) {
         String stem = relevantStem(word);
         if (stem == null) return 0;
         if (contextItems.contains(stem) || previousItems.contains(stem)) return 1;

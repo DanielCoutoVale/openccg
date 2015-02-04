@@ -22,7 +22,7 @@ import java.util.*;
 
 import opennlp.ccg.perceptron.*;
 import opennlp.ccg.synsem.Symbol;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 
 /**
  * Linear combination of n-gram probability models, 
@@ -75,7 +75,7 @@ public class LinearNgramScorerCombo extends NgramScorer implements FeatureExtrac
     }
     
     /** Sets wordsToScore to the given list, for sharing purposes. */
-    protected void shareWordsToScore(List<Word> wordsToScore) {
+    protected void shareWordsToScore(List<Association> wordsToScore) {
         this.wordsToScore = wordsToScore;
         for (int i = 0; i < models.length; i++) {
             models[i].shareWordsToScore(wordsToScore);

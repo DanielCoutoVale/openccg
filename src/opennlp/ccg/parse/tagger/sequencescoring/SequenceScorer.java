@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.lexicon.WordPool;
 import opennlp.ccg.ngrams.StandardNgramModel;
 import opennlp.ccg.util.Interner;
@@ -50,7 +50,7 @@ public class SequenceScorer extends StandardNgramModel {
      * A Trellis to hold sequence labels (wrapped in Word classes)
      * functionality. 
      */
-    private Trellis<Word> seqLabs;
+    private Trellis<Association> seqLabs;
     /** Trellis for initial observation model scores. */
     private Trellis<Double> initScores;
     /** Trellis for forward-backward re-estimated scores. */
@@ -62,10 +62,10 @@ public class SequenceScorer extends StandardNgramModel {
     /** Re-usable private data structures. */
     private List<List<Double>> tmpInitScores = new ArrayList<List<Double>>(500);
     private List<List<Double>> tmpFwdScores = new ArrayList<List<Double>>(500);
-    private List<List<Word>> tmpSeqLabs = new ArrayList<List<Word>>(500);
+    private List<List<Association>> tmpSeqLabs = new ArrayList<List<Association>>(500);
     private List<List<Backpointer>> tmpBkpointers = new ArrayList<List<Backpointer>>(500);
     /** For interning Word's */
-    private Interner<Word> words = new Interner<Word>();
+    private Interner<Association> words = new Interner<Association>();
     private Constants.TaggingAlgorithm alg = Constants.TaggingAlgorithm.FORWARDBACKWARD;
 
     /** Create a ForwardScorer with a sequence model (over supertags, POSs tags, words, etc.) */
@@ -127,7 +127,7 @@ public class SequenceScorer extends StandardNgramModel {
         for (List<Pair<Double, String>> tw : observationSequence) {
             ArrayList<Double> scrs = new ArrayList<Double>(tw.size());
             ArrayList<Double> fscs = new ArrayList<Double>(tw.size());
-            ArrayList<Word> sLabs = new ArrayList<Word>(tw.size());
+            ArrayList<Association> sLabs = new ArrayList<Association>(tw.size());
             ArrayList<Backpointer> bpts = new ArrayList<Backpointer>(tw.size());
             for (Pair<Double, String> tagging : tw) {
                 // add observation score, and convert to log-prob domain, if needed.
@@ -146,7 +146,7 @@ public class SequenceScorer extends StandardNgramModel {
         fbScores = new Trellis<Double>(tmpFwdScores);
         // these are too.
         backPointers = new Trellis<Backpointer>(tmpBkpointers);
-        seqLabs = new Trellis<Word>(tmpSeqLabs);
+        seqLabs = new Trellis<Association>(tmpSeqLabs);
 
         // forward loop.
         // for each word...
@@ -155,8 +155,8 @@ public class SequenceScorer extends StandardNgramModel {
             double normTot = 0.0;
             // for each of its tags within the search beam.
             for (int v = 0; v < tw.size(); v++) {
-                Word currTag = seqLabs.getCoord(u, v);
-                List<Word> bestHist = null;
+                Association currTag = seqLabs.getCoord(u, v);
+                List<Association> bestHist = null;
                 Double seqScore = null;
 
                 Double obsScore = initScores.getCoord(u, v);
@@ -223,7 +223,7 @@ public class SequenceScorer extends StandardNgramModel {
                 double normTot = 0.0;
                 // for each of its tags...
                 for (int v = 0; v < tw.size(); v++) {
-                    List<Word> bestHist = null;
+                    List<Association> bestHist = null;
                     
                     Double obsScore = initScores.getCoord(u, v);
                     
@@ -240,7 +240,7 @@ public class SequenceScorer extends StandardNgramModel {
                         List<Pair<Double, String>> followingTaggedWd = observationSequence.get(u + 1);
                         double backwardSum = 0.0;
                         for (int z = 0; z < followingTaggedWd.size(); z++) {
-                            Word followingTag = words.intern(WordPool.createWord(followingTaggedWd.get(z).b.intern(), null, null, null, null, null, null));
+                            Association followingTag = words.intern(WordPool.createWord(followingTaggedWd.get(z).b.intern(), null, null, null, null, null, null));
                             if (z > 0) {
                                 bestHist.remove(bestHist.size() - 1);
                             }
@@ -286,20 +286,20 @@ public class SequenceScorer extends StandardNgramModel {
     /** 
      * Use the LM to score a sequence of words.
      */
-    private double lmScore(List<Word> seq) {
+    private double lmScore(List<Association> seq) {
         setWordsToScore(seq, false);
         prepareToScoreWords();
         return logprob();
     }
 
     /** Follow the back-pointers to get the best sequence of up to length 'order' leading up to cell (i,j). */
-    private List<Word> getBestHist(int i, int j, int order) {
+    private List<Association> getBestHist(int i, int j, int order) {
         int size = Math.max(order, 0);
-        List<Word> retVal = null;
+        List<Association> retVal = null;
         Backpointer bp = backPointers.getCoord(i, j);
         if (i == -1) {
             // base case (off of the end of the sequence).            
-            retVal = new ArrayList<Word>(size);
+            retVal = new ArrayList<Association>(size);
             retVal.add(words.intern(WordPool.createWord("<s>", null, null, null, null, null, null)));
             return retVal;
         } else if (i == 0) {
@@ -309,7 +309,7 @@ public class SequenceScorer extends StandardNgramModel {
             return retVal;
         } else if (order == 0) {
             // base case (reached back as far as the n-gram model will need to see).
-            retVal = new ArrayList<Word>(size);
+            retVal = new ArrayList<Association>(size);
             return retVal;
         } else {
             // recursive case.            

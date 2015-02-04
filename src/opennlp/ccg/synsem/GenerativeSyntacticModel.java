@@ -213,7 +213,7 @@ public class GenerativeSyntacticModel implements FeatureExtractor, SymbolScorer 
 	/** Derivation handler for getting the factors for each derivation step as a list of words. */
 	public static class FactorsGetter extends DerivationHandler<Void> {
 		/** The factors. */
-		public List<Word> factors = new ArrayList<Word>();
+		public List<Association> factors = new ArrayList<Association>();
 		// reusable list of pairs
 		private List<Pair<String,String>> pairs = null;
 		// new pairs
@@ -254,7 +254,7 @@ public class GenerativeSyntacticModel implements FeatureExtractor, SymbolScorer 
 	}
 	
 	/** Returns the factors from the derivation of the given sign (assumed to be complete). */
-	public static List<Word> getFactors(Symbol sign) {
+	public static List<Association> getFactors(Symbol sign) {
 		FactorsGetter fgetter = new FactorsGetter();
 		fgetter.handleCompleteDerivation(sign);
 		return fgetter.factors;

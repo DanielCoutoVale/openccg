@@ -41,7 +41,7 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
 {
     // n-grams in the target phrases
     @SuppressWarnings("unchecked")
-	private Set<List<Word>> targetNgrams = new THashSet();
+	private Set<List<Association>> targetNgrams = new THashSet();
     
     // weights
     private double[] weights = null;
@@ -50,10 +50,10 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
     private boolean exactMatches = false;
     
     /** Reusable list of reduced words. */
-    protected List<Word> reducedWords = new ArrayList<Word>();
+    protected List<Association> reducedWords = new ArrayList<Association>();
     
     /** Reusable word list, with identity equals. */
-    protected List<Word> wordList = new ArrayListWithIdentityEquals<Word>();
+    protected List<Association> wordList = new ArrayListWithIdentityEquals<Association>();
 
     
     /**
@@ -129,13 +129,13 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
     protected void prepareToScoreWords() {
         reducedWords.clear();
         for (int i = 0; i < wordsToScore.size(); i++) {
-            Word w = wordsToScore.get(i);
+            Association w = wordsToScore.get(i);
             reducedWords.add(reduceWord(w));
         }
     }
     
     /** Returns the given word reduced to a surface word, using the sem class, if apropos. */
-    protected Word reduceWord(Word w) {
+    protected Association reduceWord(Association w) {
         if (useSemClasses && isReplacementSemClass(w.getEntityClass())) 
             return WordPool.createSurfaceWordUsingSemClass(w);
         else return WordPool.createSurfaceWord(w);
@@ -160,7 +160,7 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
      */
     public synchronized double score(Symbol sign, boolean complete) {
     	// setup
-        List<Word> words = sign.getWords(); 
+        List<Association> words = sign.getWords(); 
         if (words == null) return 0;
         signToScore = sign;
         setWordsToScore(words, complete);
@@ -222,7 +222,7 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
     }
 
     /** Sets wordList to be the n-gram of the given order using words starting at pos i. */
-    protected synchronized void setNgram(List<Word> words, int i, int order) {
+    protected synchronized void setNgram(List<Association> words, int i, int order) {
         wordList.clear();
         for (int j = 0; j < order; j++) {
             wordList.add(words.get(i+j)); 
@@ -246,19 +246,19 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
     /** Makes a canonical n-gram of the given order using words starting at pos i. 
         Sublists are shared, a la a trie data structure. */
     @SuppressWarnings("unchecked")
-	protected List<Word> makeNgram(List<Word> words, int i, int order) {
+	protected List<Association> makeNgram(List<Association> words, int i, int order) {
         // check for one already interned
         setNgram(words, i, order);
-        List<Word> alreadyInterned = (List<Word>) Interner.getGlobalInterned(wordList);
+        List<Association> alreadyInterned = (List<Association>) Interner.getGlobalInterned(wordList);
         if (alreadyInterned != null) return alreadyInterned;
         // if order is 1, intern new singleton list
         if (order == 1) {
-            return (List<Word>) Interner.globalIntern(new SingletonList<Word>(words.get(i)));
+            return (List<Association>) Interner.globalIntern(new SingletonList<Association>(words.get(i)));
         }
         // otherwise, extend list for the first word with suffix list
-        List<Word> firstOneList = makeNgram(words, i, 1);
-        List<Word> suffixList = makeNgram(words, i+1, order-1); 
-        return (List<Word>) Interner.globalIntern(new StructureSharingList<Word>(firstOneList, suffixList));
+        List<Association> firstOneList = makeNgram(words, i, 1);
+        List<Association> suffixList = makeNgram(words, i+1, order-1); 
+        return (List<Association>) Interner.globalIntern(new StructureSharingList<Association>(firstOneList, suffixList));
     }
     
 
@@ -267,7 +267,7 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
         for (int j = 0; j < targets.length; j++) {
         	if (targets[j].length() == 0) continue;
             // parse or tokenize target phrase into words
-            List<Word> words;
+            List<Association> words;
             if (useSemClasses) // use parsed words to get sem classes
                 words = Grammar.theGrammar.getParsedWords(targets[j]);
             else
@@ -277,7 +277,7 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
             // reduce each word to a surface word, using the sem class if apropos
             int numWords = wordsToScore.size();
             for (int i = 0; i < numWords; i++) {
-                Word w = wordsToScore.get(i);
+                Association w = wordsToScore.get(i);
                 wordsToScore.set(i, reduceWord(w));
             }
             // make and store target n-grams

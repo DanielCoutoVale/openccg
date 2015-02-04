@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.util.Pair;
 
 
@@ -51,7 +51,7 @@ abstract class AbstractStandardNgramModel extends NgramScorer {
     protected void prepareToScoreWords() {
         stringsToScore.clear();
         for (int i = 0; i < wordsToScore.size(); i++) {
-            Word w = wordsToScore.get(i);
+            Association w = wordsToScore.get(i);
             String s = w.getForm();
             // check for sem class replacement
             String scr = semClassReplacement(w);

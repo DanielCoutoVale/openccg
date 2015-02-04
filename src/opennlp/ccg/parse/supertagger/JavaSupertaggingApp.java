@@ -28,7 +28,7 @@ import java.io.*;
 import java.util.*;
 import static java.util.Arrays.*;
 import joptsimple.*;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.parse.supertagger.io.*;
 import opennlp.ccg.parse.supertagger.ml.*;
 import opennlp.ccg.parse.supertagger.util.*;
@@ -141,8 +141,8 @@ public class JavaSupertaggingApp {
               tagger.setMaxSearchBeam(fbWidth);
               maxentModel.verbose = true;
               
-              Iterator<List<Word>> corpus = null;
-              Iterator<List<Word>> goldCorpus = null;
+              Iterator<List<Association>> corpus = null;
+              Iterator<List<Association>> goldCorpus = null;
               
               if(options.valueOf(tokenisation).equalsIgnoreCase("srilm")) {
                   corpus = new SRILMFactoredBundleCorpusIterator(new BufferedReader(new FileReader(options.valueOf(inputspec))));
@@ -166,20 +166,20 @@ public class JavaSupertaggingApp {
               
               while(corpus.hasNext()) {
                   sentCnt++;
-                  List<Word> sent = corpus.next();
+                  List<Association> sent = corpus.next();
                   
                   List<List<Pair<Double,String>>> taggings = tagger.multitag(sent, beta); 
                   
                   if(test) {
-                      List<Word> goldsent = goldCorpus.next();
+                      List<Association> goldsent = goldCorpus.next();
                       results.addSent(taggings, goldsent);
                   }                  
                   
-                  Iterator<Word> sentiter = sent.iterator(); 
+                  Iterator<Association> sentiter = sent.iterator(); 
                   // output file format = word goldtag tag1 ... tagK                  
                   outf.write("<s>"+System.getProperty("line.separator"));
                   for(List<Pair<Double,String>> tagging : taggings) {                      
-                      Word nextw = sentiter.next();
+                      Association nextw = sentiter.next();
                       outf.write(nextw.getForm() + "\t1\t" + nextw.getFunctions() + "\t1.0\t" + tagging.size() + "\t");// + nextw.getSupertag() + " ");
                       //outf.write(nextw.getForm() + "|||"+ nextw.getStem() + "|||" + nextw.getPOS() + "|||");
                       String tags = "";

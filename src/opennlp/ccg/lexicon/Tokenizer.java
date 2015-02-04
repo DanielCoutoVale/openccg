@@ -100,7 +100,7 @@ public interface Tokenizer {
 	 * given factors, and the semantic class of special tokens. Tokens are
 	 * parsed into words using parseToken.
 	 */
-	public List<Word> tokenize(String s);
+	public List<Association> tokenize(String s);
 
 	/**
 	 * Parses an input string into a list of words, including any explicitly
@@ -108,20 +108,20 @@ public interface Tokenizer {
 	 * parsed into words using parseToken, according to the given flag for
 	 * whether to parse factors strictly.
 	 */
-	public List<Word> tokenize(String s, boolean strictFactors);
+	public List<Association> tokenize(String s, boolean strictFactors);
 
 	/**
 	 * Parses a token into a word, including any explicitly given factors and
 	 * the semantic class of special tokens.
 	 */
-	public Word parseToken(String token);
+	public Association parseToken(String token);
 
 	/**
 	 * Parses a token into a word, including any explicitly given factors and
 	 * the semantic class of special tokens, according to the given flag for
 	 * whether to parse factors strictly.
 	 */
-	public Word parseToken(String token, boolean strictFactors);
+	public Association parseToken(String token, boolean strictFactors);
 
 	/**
 	 * Returns a string (eg Tokenizer.DATE_CLASS) indicating the semantic class
@@ -174,52 +174,52 @@ public interface Tokenizer {
 	/**
 	 * Returns a string for the given list of words.
 	 */
-	public String getOrthography(List<Word> words);
+	public String getOrthography(List<Association> words);
 
 	/**
 	 * Returns a string for the given list of words, optionally with semantic
 	 * class replacement.
 	 */
-	public String getOrthography(List<Word> words, boolean semClassReplacement);
+	public String getOrthography(List<Association> words, boolean semClassReplacement);
 
 	/**
 	 * Returns a string for the given word, optionally with semantic class
 	 * replacement.
 	 */
-	public String getOrthography(Word w, boolean semClassReplacement);
+	public String getOrthography(Association w, boolean semClassReplacement);
 
 	/**
 	 * Returns a string for the given list of words, in the format expected by
 	 * the SRILM tool for factored language models.
 	 */
-	public String format(List<Word> words);
+	public String format(List<Association> words);
 
 	/**
 	 * Returns a string for the given word, in the format expected by the SRILM
 	 * tool for factored language models.
 	 */
-	public String format(Word word);
+	public String format(Association word);
 
 	/**
 	 * Returns a string for the given list of words, in the format expected by
 	 * the SRILM tool for factored language models, optionally with semantic
 	 * class replacement.
 	 */
-	public String format(List<Word> words, boolean semClassReplacement);
+	public String format(List<Association> words, boolean semClassReplacement);
 
 	/**
 	 * Returns a string for the given word, in the format expected by the SRILM
 	 * tool for factored language models, optionally with semantic class
 	 * replacement.
 	 */
-	public String format(Word word, boolean semClassReplacement);
+	public String format(Association word, boolean semClassReplacement);
 
 	/**
 	 * Returns one or more orthographic words for the given word. This method is
 	 * called from within Sign.getWordsInXml as part of producing the textual
 	 * output of realization.
 	 */
-	public List<String> expandWord(Word word);
+	public List<String> expandWord(Association word);
 
 	/**
 	 * Returns one or more orthographic words for the given date token.

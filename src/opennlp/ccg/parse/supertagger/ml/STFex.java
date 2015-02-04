@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.parse.tagger.TaggedWord;
 import opennlp.ccg.parse.tagger.Constants;
 import java.util.ArrayList;
@@ -235,11 +235,11 @@ public class STFex implements FeatureExtractor {
         
         if(posT != null) { fexer.useMultiPOS(true); } else { fexer.useMultiPOS(false); }
         
-        for(List<Word> sentence : corp) {
+        for(List<Association> sentence : corp) {
             Map<Integer, TaggedWord> sent = new HashMap<Integer, TaggedWord>(sentence.size());
             int index = 0;                
             if(posT == null) {                
-                for(Word w : sentence) { sent.put(index++, new TaggedWord(w)); }            
+                for(Association w : sentence) { sent.put(index++, new TaggedWord(w)); }            
             } else {
                 List<TaggedWord> posTagging = posT.tagSentence(sentence);
                 for(TaggedWord tw : posTagging) { sent.put(index++, tw); }

@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import opennlp.ccg.parse.tagger.TaggedWord;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.parse.postagger.ml.POSPriorModel;
 import opennlp.ccg.parse.postagger.ml.POSTagFex;
 import opennlp.ccg.parse.tagger.ml.MaxentModel;
@@ -49,7 +49,7 @@ public abstract class POSTagger {
     protected boolean includeGold = false;
 
     /** In goes a list of {@code Word}s; out comes a list of {@code TaggedWord}s*/
-    public abstract List<TaggedWord> tagSentence(List<Word> sentence);
+    public abstract List<TaggedWord> tagSentence(List<Association> sentence);
 
     /** Set the tagging algorithm. */    
     public void setTaggingAlgorithm(TaggingAlgorithm newAlg) { 
@@ -73,7 +73,7 @@ public abstract class POSTagger {
     public List<TaggedWord> betaBestFilter(List<TaggedWord> sentence) {
         List<TaggedWord> res = new ArrayList<TaggedWord>(sentence.size());
         for (TaggedWord tw : sentence) {
-            Word w = tw.getWord();
+            Association w = tw.getWord();
             double best = tw.getPOSTagging().get(0).a;
             int endIndex = 0;
             for (Pair<Double, String> tagging : tw.getPOSTagging()) {

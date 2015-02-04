@@ -28,7 +28,7 @@ import java.util.*;
  * @author Michael White
  * @version $Revision: 1.4 $, $Date: 2009/07/17 04:23:30 $
  */
-public class FormAssociate extends Word {
+public class FormAssociate extends Association {
 
 	private static final long serialVersionUID = 181491057498517717L;
 

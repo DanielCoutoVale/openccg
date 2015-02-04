@@ -22,7 +22,7 @@ import java.util.*;
 
 import opennlp.ccg.perceptron.*;
 import opennlp.ccg.util.TrieMap;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 
 /** 
  * A class for extracting generic features from derivations,
@@ -63,7 +63,7 @@ public class SyntacticFeatureExtractor implements FeatureExtractor {
 	protected Symbol currentSibling = null;
 	
 	/** Current words (for extracting features). */
-	protected List<Word> currentWords = null;
+	protected List<Association> currentWords = null;
 	
 	/** Current head index (for extracting features). */
 	protected int currentHeadIndex = -1;
@@ -197,14 +197,14 @@ public class SyntacticFeatureExtractor implements FeatureExtractor {
 	protected void setCurrentWords() {
 		if (currentWords != null) return;
 		currentWords = currentSign.getWords();
-		Word head = currentSign.getLexHead().getWords().get(0);
-		Word sibHead = currentSibling.getLexHead().getWords().get(0);
+		Association head = currentSign.getLexHead().getWords().get(0);
+		Association sibHead = currentSibling.getLexHead().getWords().get(0);
 		currentHeadIndex = find(currentWords, head);
 		currentSibHeadIndex = find(currentWords, sibHead);
 	}
 	
 	/** Returns the index of the given word in the list, or -1 if not found. */
-	protected int find(List<Word> words, Word word) {
+	protected int find(List<Association> words, Association word) {
 		int len = words.size();
 		for (int i=0; i < len; i++) {
 			if (words.get(i) == word) return i;
@@ -233,7 +233,7 @@ public class SyntacticFeatureExtractor implements FeatureExtractor {
 		int max = Math.max(currentHeadIndex, currentSibHeadIndex);
 		int count = 0;
 		for (int i=min+1; i < max; i++) {
-			Word w = currentWords.get(i); 
+			Association w = currentWords.get(i); 
 			if (isPunct(w)) count++;
 		}
 		switch (count) {
@@ -248,7 +248,7 @@ public class SyntacticFeatureExtractor implements FeatureExtractor {
 	 * Returns whether a word is a punctuation mark that typically signals sentence-internal complexity.
 	 * The default implementation tests for commas, dashes (--), semi-colons and colons.
 	 */
-	protected boolean isPunct(Word word) {
+	protected boolean isPunct(Association word) {
 		// NB: in principle could use POS, but sometimes punctuation marks seem to end up with IN as the POS tag
 		String form = word.getForm();
 		return (form == "," || form == "--" || form == ";" || form == ":");
@@ -262,7 +262,7 @@ public class SyntacticFeatureExtractor implements FeatureExtractor {
 		int max = Math.max(currentHeadIndex, currentSibHeadIndex);
 		int count = 0;
 		for (int i=min+1; i < max; i++) {
-			Word w = currentWords.get(i); 
+			Association w = currentWords.get(i); 
 			if (isVerb(w)) count++;
 		}
 		switch (count) {
@@ -276,7 +276,7 @@ public class SyntacticFeatureExtractor implements FeatureExtractor {
 	 * Returns whether a word is a verb.
 	 * The default implementation tests for a POS tag beginning with V.
 	 */
-	protected boolean isVerb(Word word) {
+	protected boolean isVerb(Association word) {
 		String pos = word.getFunctions();
 		return (pos.startsWith("V"));
 	}

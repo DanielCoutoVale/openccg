@@ -22,7 +22,7 @@ package opennlp.ccg.synsem;
 import gnu.trove.*;
 import java.util.*;
 
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 
 /**
  * A set of signs, unique up to surface words.
@@ -117,8 +117,8 @@ public class SymbolHash extends THashSet {
     	int cmp = 0;
     	cmp = sign1.getDerivationHistory().compareTo(sign2.getDerivationHistory());
     	if (cmp != 0) return cmp;
-    	List<Word> words1 = sign1.getWords(); 
-    	List<Word> words2 = sign2.getWords();
+    	List<Association> words1 = sign1.getWords(); 
+    	List<Association> words2 = sign2.getWords();
     	cmp = compareTo(words1, words2);
     	if (cmp != 0) return cmp;
     	// TODO: implement compareTo method on categories
@@ -130,12 +130,12 @@ public class SymbolHash extends THashSet {
     }
     
     /** Compares lists of words lexicographically. */
-    public static int compareTo(List<Word> words1, List<Word> words2) {
+    public static int compareTo(List<Association> words1, List<Association> words2) {
     	int i=0;
     	while (i < words1.size() || i < words2.size()) {
     		if (i == words1.size()) return -1;
     		if (i == words2.size()) return 1;
-    		Word w1 = words1.get(i); Word w2 = words2.get(i);
+    		Association w1 = words1.get(i); Association w2 = words2.get(i);
     		int cmp = w1.compareTo(w2);
     		if (cmp != 0) return cmp;
     		i++;

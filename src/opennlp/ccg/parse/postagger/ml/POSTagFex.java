@@ -37,7 +37,7 @@ import opennlp.ccg.parse.supertagger.ml.FeatureExtractor;
 import opennlp.ccg.parse.tagger.TaggedWord;
 import opennlp.ccg.util.Pair;
 import opennlp.ccg.parse.tagger.io.SRILMFactoredBundleCorpusIterator;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 
 /**
  * Feature extractor for POS taggers.
@@ -239,10 +239,10 @@ public class POSTagFex implements FeatureExtractor {
             posPriorMod = new POSPriorModel(priorModF, priorVocab);
         }
         POSTagFex fexer = new POSTagFex(posPriorMod);        
-        for(List<Word> sentence : corp) {
+        for(List<Association> sentence : corp) {
             Map<Integer, TaggedWord> sent = new HashMap<Integer, TaggedWord>(sentence.size());
             int index = 0;
-            for(Word w : sentence) { sent.put(index++, new TaggedWord(w)); }
+            for(Association w : sentence) { sent.put(index++, new TaggedWord(w)); }
             
             List<Collection<Pair<String,Double>>> ftss = fexer.getSentenceFeatures(sent, true);
             

@@ -18,7 +18,7 @@
 
 package opennlp.ccg.ngrams;
 
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 
 import java.util.*;
 
@@ -31,6 +31,6 @@ import java.util.*;
 public interface NgramFilter
 {
     /** Returns whether to filter out the given list of words. */
-    public boolean filterOut(List<Word> words);
+    public boolean filterOut(List<Association> words);
 }
 

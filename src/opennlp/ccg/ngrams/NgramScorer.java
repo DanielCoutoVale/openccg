@@ -120,13 +120,13 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
     
     
     /** Weak hash map for cached log probs, keyed from a sign's words. */
-    protected Map<List<Word>,Float> cachedLogProbs = null;
+    protected Map<List<Association>,Float> cachedLogProbs = null;
     
     /** Reference to current sign to score. */
     protected Symbol signToScore = null;
     
     /** Reusable list of words to score. */
-    protected List<Word> wordsToScore = new ArrayList<Word>();
+    protected List<Association> wordsToScore = new ArrayList<Association>();
 
     /** Flag for whether start/end tags were added with the current words. */
     protected boolean tagsAdded = false;
@@ -139,14 +139,14 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
     
     
     /** Gets a cached log prob for the given list of words (or null if none). */
-    protected Float getCachedLogProb(List<Word> words) {
+    protected Float getCachedLogProb(List<Association> words) {
         if (cachedLogProbs == null) return null;
         return cachedLogProbs.get(words);
     }
     
     /** Caches a log prob for the given list of words. */
-    protected void putCachedLogProb(List<Word> words, Float logprob) {
-        if (cachedLogProbs == null) cachedLogProbs = new WeakHashMap<List<Word>,Float>();
+    protected void putCachedLogProb(List<Association> words, Float logprob) {
+        if (cachedLogProbs == null) cachedLogProbs = new WeakHashMap<List<Association>,Float>();
         cachedLogProbs.put(words, logprob);
     }
 
@@ -176,7 +176,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
      * and then returns the result of <code>logProb()</code>.
      */
     public synchronized double logprob(Symbol sign, boolean complete) {
-        List<Word> words = sign.getWords(); 
+        List<Association> words = sign.getWords(); 
         if (words == null) return 0;
         if (!complete) { // check cache
             Float logprob = getCachedLogProb(words);
@@ -200,7 +200,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
      * Returns an n-gram probability from the given list of words, 
      * by converting the result of the <code>logprob</code> method.
      */
-    public synchronized double score(List<Word> words) {
+    public synchronized double score(List<Association> words) {
     	return convertToProb(logprob(words));
     }
     
@@ -210,14 +210,14 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
      * that does not cache results, filter n-grams or ever add 
      * sentence delimiters.
      */
-    public synchronized double logprob(List<Word> words) {
+    public synchronized double logprob(List<Association> words) {
         setWordsToScore(words, false);
         prepareToScoreWords();
         return logprob();
     }
     
     /** Sets wordsToScore to the given list, for sharing purposes. */
-    protected void shareWordsToScore(List<Word> wordsToScore) {
+    protected void shareWordsToScore(List<Association> wordsToScore) {
         this.wordsToScore = wordsToScore;
     }
     
@@ -226,7 +226,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
 	 * flag is true, and adding sentence delimiters if not already present, when
 	 * the completeness flag is true. Also sets the tagsAdded flag.
 	 */
-    protected void setWordsToScore(List<Word> words, boolean complete) {
+    protected void setWordsToScore(List<Association> words, boolean complete) {
         wordsToScore.clear();
         tagsAdded = false; 
         if (complete && (reverse || words.get(0).getForm() != "<s>")) { 
@@ -235,7 +235,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
         }
         if (reverse) {
             for (int j = words.size()-1; j >= 0; j--) {
-                Word w = words.get(j);
+                Association w = words.get(j);
                 if (w.getForm() == "<s>" || w.getForm() == "</s>") continue; // skip <s> or </s>
                 wordsToScore.add(w);
             }
@@ -256,7 +256,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
     public FeatureMap extractFeatureMap(Symbol sign, boolean complete) {
     	FeatureMap featmap = new FeatureMap();
     	// do setup as with scoring
-        List<Word> words = sign.getWords(); 
+        List<Association> words = sign.getWords(); 
         if (words == null) return featmap;
         signToScore = sign;
         setWordsToScore(words, complete);
@@ -354,7 +354,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
             Symbol[] inputs = signToScore.getDerivationHistory().getInputs();
             if (inputs != null) {
                 Symbol initialSign = (!reverse) ? inputs[0] : inputs[inputs.length-1];
-                List<Word> initialWords = initialSign.getWords();
+                List<Association> initialWords = initialSign.getWords();
                 Float logprob = getCachedLogProb(initialWords);
                 if (logprob != null) {
                     logProbTotal = logprob.floatValue();
@@ -426,7 +426,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
 	 * Returns the semantic class replacement value (the semantic class
 	 * uppercased and interned) for the given word, if apropos, otherwise null.
 	 */
-    protected String semClassReplacement(Word w) {
+    protected String semClassReplacement(Association w) {
         if (useSemClasses) {
             String semClass = w.getEntityClass();
             if (isReplacementSemClass(semClass)) 

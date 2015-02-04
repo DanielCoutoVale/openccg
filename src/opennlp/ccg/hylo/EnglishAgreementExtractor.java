@@ -18,7 +18,7 @@ package opennlp.ccg.hylo;
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //////////////////////////////////////////////////////////////////////////////
 
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.perceptron.Alphabet;
 import opennlp.ccg.perceptron.FeatureExtractor;
 import opennlp.ccg.perceptron.FeatureMap;
@@ -321,7 +321,7 @@ public class EnglishAgreementExtractor implements FeatureExtractor{
 					//Left child has unbalanced punct feature
 					SignProps lchildProps=(SignProps)inputs[0].getData(SignProps.class);
 					if(lchildProps!=null && lchildProps.getUnbalancedPunct()!=null){
-						Word nextWord = inputs[1].getWords().get(0);
+						Association nextWord = inputs[1].getWords().get(0);
 						//Check whether right child begins with a punctuation mark; else fire feature
 						if (!isPunct(nextWord)){
 							inc(punctExtractor);
@@ -390,7 +390,7 @@ public class EnglishAgreementExtractor implements FeatureExtractor{
 	}
 	
 	//checks for punct
-	private boolean isPunct(Word w) {
+	private boolean isPunct(Association w) {
 		String pos = w.getFunctions();
 		boolean retval = pos.startsWith("PUNCT");
 		retval = retval || pos.equals(".") || pos.equals(",") || pos.equals(";") || pos.equals(":") || pos.equals("LRB") || pos.equals("RRB");

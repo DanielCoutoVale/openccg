@@ -47,8 +47,8 @@ public class AssociateCanonFactory implements WordFactory {
 	 * 
 	 * @return the interned association
 	 */
-	private Word internAssociation() {
-		Word intern = (Word) Interner.getGlobalInterned(association);
+	private Association internAssociation() {
+		Association intern = (Association) Interner.getGlobalInterned(association);
 		if (intern != null) {
 			return intern;
 		}
@@ -63,16 +63,16 @@ public class AssociateCanonFactory implements WordFactory {
 					association.functions, association.supertag, association.entityClass,
 					association.associates);
 		}
-		return (Word) Interner.globalIntern(intern);
+		return (Association) Interner.globalIntern(intern);
 	}
 
 	@Override
-	public final synchronized Word create(String form) {
+	public final synchronized Association create(String form) {
 		return create(form, null, null, null, null, null, null);
 	}
 
 	@Override
-	public final synchronized Word create(String attributeName, String attributeValue) {
+	public final synchronized Association create(String attributeName, String attributeValue) {
 		String form = null;
 		String tone = null;
 		String term = null;
@@ -100,7 +100,7 @@ public class AssociateCanonFactory implements WordFactory {
 	}
 
 	@Override
-	public final synchronized Word create(String form, String tone, String term, String functions,
+	public final synchronized Association create(String form, String tone, String term, String functions,
 			String supertag, String entityClass, List<Pair<String, String>> associates) {
 		updateAssociates(form, tone, term, functions, supertag, entityClass, associates);
 		return internAssociation();

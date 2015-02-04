@@ -280,7 +280,7 @@ public class Visualizer {
             bw.write("\\deriv{" + Integer.toString(numDerivs)  +  "}{\n");
             for (i=0; i < results.getWords().size(); i++) {
                 if (i != 0) bw.write(" & ");
-                String orth = tokenizer.getOrthography((Word)results.getWords().get(i), false);
+                String orth = tokenizer.getOrthography((Association)results.getWords().get(i), false);
                 orth = orth.replaceAll("_", "\\\\_");
                 orth = orth.replaceAll("%", "\\\\%");
                 bw.write("\\gf{" + orth + "}");

@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.parse.tagger.TaggedWord;
 import opennlp.ccg.parse.tagger.ml.MaxentModel;
 import opennlp.ccg.parse.supertagger.ml.FeatureExtractor;
@@ -79,7 +79,7 @@ public class BasicPOSTagger extends POSTagger {
         }
     }
         
-    public List<TaggedWord> tagSentence(List<Word> sentence) { 
+    public List<TaggedWord> tagSentence(List<Association> sentence) { 
         List<TaggedWord> result = new ArrayList<TaggedWord>(sentence.size());
         
         // the prob-string taggings (to be filtered, etc. before adding them to the taggings of the TaggedWord list).        
@@ -87,7 +87,7 @@ public class BasicPOSTagger extends POSTagger {
         
         Map<Integer, TaggedWord> sentMap = new HashMap<Integer, TaggedWord>(sentence.size());
         int ind = 0; 
-        for(Word w : sentence) {        
+        for(Association w : sentence) {        
             sentMap.put(ind++, new TaggedWord(w)); 
         }
         List<Collection<Pair<String,Double>>> ftss = posFex.getSentenceFeatures(sentMap);
@@ -183,7 +183,7 @@ public class BasicPOSTagger extends POSTagger {
 
             POSTagger post = POSTagger.posTaggerFactory(configFile);
             
-            for (List<Word> inLine : inp) {
+            for (List<Association> inLine : inp) {
                 List<TaggedWord> taggedSent = post.tagSentence(inLine);
                 List<List<Pair<Double,String>>> sentTagging = new ArrayList<List<Pair<Double,String>>>(taggedSent.size());
                 for(TaggedWord tw : taggedSent) { sentTagging.add(tw.getPOSTagging()); }

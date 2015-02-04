@@ -25,7 +25,7 @@ package opennlp.ccg.parse.tagger;
 
 import java.util.List;
 
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.lexicon.WordPool;
 import opennlp.ccg.util.Pair;
 
@@ -38,7 +38,7 @@ public class TaggedWord {
     private List<Pair<Double,String>> stagging;    
     
     // old-timey Word that holds the word form (and potentially gold POS and supertag).
-    private Word oldWord;
+    private Association oldWord;
     
     /** Decorators for the core functionality of the underlying word. */
     public String getSupertag() { return oldWord.getSupertag(); }
@@ -46,10 +46,10 @@ public class TaggedWord {
     public String getPOS() { return oldWord.getFunctions(); }
     
     /** Accessor for the underlying vanilla Word. */
-    public Word getWord() { return oldWord; }
+    public Association getWord() { return oldWord; }
     
     /** Constructor with a Word. */
-    public TaggedWord(Word wd) { 
+    public TaggedWord(Association wd) { 
         oldWord = WordPool.createFullWord(wd, wd.getForm(), wd.getFunctions(), wd.getSupertag(), wd.getEntityClass()); 
     }
         

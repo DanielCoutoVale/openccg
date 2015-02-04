@@ -29,7 +29,7 @@ import java.util.*;
  * @author Michael White
  * @version $Revision: 1.6 $, $Date: 2009/07/17 04:23:30 $
  */
-public class AssociateCanon extends Word {
+public class AssociateCanon extends Association {
 
 	private static final long serialVersionUID = -3115687437782457735L;
 

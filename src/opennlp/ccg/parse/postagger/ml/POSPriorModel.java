@@ -38,7 +38,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import opennlp.ccg.lexicon.DefaultTokenizer;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.ngrams.ConditionalProbabilityTable;
 import opennlp.ccg.parse.tagger.io.SRILMFactoredBundleCorpusIterator;
 import opennlp.ccg.util.Interner;
@@ -126,7 +126,7 @@ public class POSPriorModel extends ConditionalProbabilityTable {
     }
 
     /** Get the POS-dict restricted prior distribution (sorted descending by prob.) */
-    public List<Pair<Double, String>> getPriors(Word w) {
+    public List<Pair<Double, String>> getPriors(Association w) {
         List<Pair<Double, String>> sortedTags = new ArrayList<Pair<Double, String>>(posVocab.length);
         for (String postag : posVocab) {
             sortedTags.add(new Pair<Double, String>(getPriorOf(postag, w.getForm()), postag));
@@ -195,8 +195,8 @@ public class POSPriorModel extends ConditionalProbabilityTable {
             }
 
             Map<String, Integer> vocab = new HashMap<String, Integer>();
-            for (List<Word> inLine : in) {
-                for (Word w : inLine) {
+            for (List<Association> inLine : in) {
+                for (Association w : inLine) {
                     String pos = POS_TAG + "-" + DefaultTokenizer.escape(w.getFunctions()),
                         wform = WORD + "-" + DefaultTokenizer.escape(w.getForm());
 

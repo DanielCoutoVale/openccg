@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 import opennlp.ccg.lexicon.DefaultTokenizer;
 import opennlp.ccg.lexicon.Tokenizer;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.lexicon.WordPool;
 
 public class KenNgramModel extends AbstractStandardNgramModel {
@@ -93,12 +93,12 @@ public class KenNgramModel extends AbstractStandardNgramModel {
      * Lowercase each token, if desired, and split each token into a list of tokens
      * (splitting on NE delim token), if desired.
      */
-    protected List<Word> splitAndLowercase(List<Word> words) {
-	List<Word> tmp = new ArrayList<Word>(words.size());
+    protected List<Association> splitAndLowercase(List<Association> words) {
+	List<Association> tmp = new ArrayList<Association>(words.size());
 	if(!(lowercaseText || splitNEs)) {
 	    return words;
 	} else {
-	    for(Word w : words) {
+	    for(Association w : words) {
 		String wdString = w.getForm();
 		String[] parts = wdString.replace(neDelim,' ').split("\\s+");
 //		ArrayList<String> subTmp = new ArrayList<String>(parts.length);
@@ -118,10 +118,10 @@ public class KenNgramModel extends AbstractStandardNgramModel {
       * the completeness flag is true. Delegates to the superclass 
       */
     @Override
-    protected void setWordsToScore(List<Word> words, boolean complete) {
+    protected void setWordsToScore(List<Association> words, boolean complete) {
         wordsToScore.clear();
         tagsAdded = false; 
-	List<Word> tmp = splitAndLowercase(words);
+	List<Association> tmp = splitAndLowercase(words);
 	words = tmp;
 	super.setWordsToScore(words, complete);
     }
@@ -202,7 +202,7 @@ public class KenNgramModel extends AbstractStandardNgramModel {
         System.out.println("secs: " + secs);
         System.out.println();
         Tokenizer tokenizer = new DefaultTokenizer();
-        List<Word> words = tokenizer.tokenize(tokens);
+        List<Association> words = tokenizer.tokenize(tokens);
         System.out.println("scoring: " + tokens);
         System.out.println();
         lm.setWordsToScore(words, true);

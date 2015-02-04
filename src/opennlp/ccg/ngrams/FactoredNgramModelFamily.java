@@ -99,7 +99,7 @@ public class FactoredNgramModelFamily extends NgramScorer
             }
         }
         /** Propagates wordsToScore to the given list, for sharing purposes. */
-        protected void shareWordsToScore(List<Word> wordsToScore) {
+        protected void shareWordsToScore(List<Association> wordsToScore) {
             primaryModel.shareWordsToScore(wordsToScore);
             if (secondaryModels == null) return;
             for (int i = 0; i < secondaryModels.length; i++) {
@@ -169,7 +169,7 @@ public class FactoredNgramModelFamily extends NgramScorer
     
 
     /** Sets wordsToScore to the given list, for sharing purposes. */
-    protected void shareWordsToScore(List<Word> wordsToScore) {
+    protected void shareWordsToScore(List<Association> wordsToScore) {
         this.wordsToScore = wordsToScore;
         primaryGroup.shareWordsToScore(wordsToScore);
         if (furtherGroups == null) return;
@@ -365,7 +365,7 @@ public class FactoredNgramModelFamily extends NgramScorer
         System.out.println();
         
         Tokenizer tokenizer = new DefaultTokenizer();
-        List<Word> words = tokenizer.tokenize(tokens, true);
+        List<Association> words = tokenizer.tokenize(tokens, true);
         System.out.println("scoring: ");
         for (int i = 0; i < words.size(); i++) {
             System.out.println(words.get(i).toString());

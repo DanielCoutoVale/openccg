@@ -111,7 +111,7 @@ public class DefaultTokenizer implements Tokenizer {
 	 * parsed into words using parseToken with the strictFactors flag set to
 	 * false.
 	 */
-	public List<Word> tokenize(String s) {
+	public List<Association> tokenize(String s) {
 		return tokenize(s, false);
 	}
 
@@ -122,8 +122,8 @@ public class DefaultTokenizer implements Tokenizer {
 	 * whether to parse factors strictly. The string is assumed to have
 	 * white-space delimited tokens.
 	 */
-	public List<Word> tokenize(String s, boolean strictFactors) {
-		List<Word> retval = new ArrayList<Word>();
+	public List<Association> tokenize(String s, boolean strictFactors) {
+		List<Association> retval = new ArrayList<Association>();
 		StringTokenizer st = new StringTokenizer(s);
 		while (st.hasMoreTokens()) {
 			retval.add(parseToken(st.nextToken(), strictFactors));
@@ -136,7 +136,7 @@ public class DefaultTokenizer implements Tokenizer {
 	 * the semantic class of special tokens. Parsing is performed using
 	 * parseToken with the strictFactors flag set to false.
 	 */
-	public Word parseToken(String token) {
+	public Association parseToken(String token) {
 		return parseToken(token, false);
 	}
 
@@ -154,7 +154,7 @@ public class DefaultTokenizer implements Tokenizer {
 	 * otherwise, colons or hyphens on their own may appear without escaping in
 	 * the word form. After splitting the token into factors, it is unescaped.
 	 */
-	public Word parseToken(String token, boolean strictFactors) {
+	public Association parseToken(String token, boolean strictFactors) {
 		// init
 		String form = token;
 		String pitchAccent = null;
@@ -379,7 +379,7 @@ public class DefaultTokenizer implements Tokenizer {
 	 * Returns a string for the given list of words. A space separates the
 	 * string for each word, as determined by getOrthography(Word,false).
 	 */
-	public String getOrthography(List<Word> words) {
+	public String getOrthography(List<Association> words) {
 		return getOrthography(words, false);
 	}
 
@@ -388,10 +388,10 @@ public class DefaultTokenizer implements Tokenizer {
 	 * class replacement. A space separates the string for each word, as
 	 * determined by getOrthography(Word,semClassReplacement).
 	 */
-	public String getOrthography(List<Word> words, boolean semClassReplacement) {
+	public String getOrthography(List<Association> words, boolean semClassReplacement) {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < words.size(); i++) {
-			Word w = (Word) words.get(i);
+			Association w = (Association) words.get(i);
 			sb.append(getOrthography(w, semClassReplacement));
 			if (i < words.size() - 1)
 				sb.append(" ");
@@ -408,7 +408,7 @@ public class DefaultTokenizer implements Tokenizer {
 	 * option, the word form is replaced with the semantic class, uppercased, if
 	 * the class is listed as one to replace words with for language models.
 	 */
-	public String getOrthography(Word w, boolean semClassReplacement) {
+	public String getOrthography(Association w, boolean semClassReplacement) {
 		StringBuffer sb = new StringBuffer();
 		String semClass = w.getEntityClass();
 		if (semClassReplacement && semClass != null && replacementSemClasses.contains(semClass))
@@ -428,7 +428,7 @@ public class DefaultTokenizer implements Tokenizer {
 	 * the SRILM tool for factored language models. A space separates the string
 	 * for each word, determined by format(Word).
 	 */
-	public String format(List<Word> words) {
+	public String format(List<Association> words) {
 		return format(words, false);
 	}
 
@@ -438,11 +438,11 @@ public class DefaultTokenizer implements Tokenizer {
 	 * class replacement. A space separates the string for each word, determined
 	 * by format(Word,boolean).
 	 */
-	public String format(List<Word> words, boolean semClassReplacement) {
+	public String format(List<Association> words, boolean semClassReplacement) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<s> ");
 		for (int i = 0; i < words.size(); i++) {
-			Word w = words.get(i);
+			Association w = words.get(i);
 			if (w.getForm() == "<s>" || w.getForm() == "</s>")
 				continue; // skip <s> or </s>
 			sb.append(format(w, semClassReplacement));
@@ -456,7 +456,7 @@ public class DefaultTokenizer implements Tokenizer {
 	 * Returns a string for the given word, in the format expected by the SRILM
 	 * tool for factored language models. All factors are escaped.
 	 */
-	public String format(Word w) {
+	public String format(Association w) {
 		return format(w, false);
 	}
 
@@ -468,7 +468,7 @@ public class DefaultTokenizer implements Tokenizer {
 	 * uppercased, if the class is listed as one to replace words with for
 	 * language models.
 	 */
-	public String format(Word w, boolean semClassReplacement) {
+	public String format(Association w, boolean semClassReplacement) {
 		StringBuffer sb = new StringBuffer();
 		String form = w.getForm();
 		String pitchAccent = w.getTone();
@@ -634,7 +634,7 @@ public class DefaultTokenizer implements Tokenizer {
 	 * isNamedEntity method returns true. Otherwise, it splits the word form
 	 * using underscore as a delimiter.
 	 */
-	public List<String> expandWord(Word word) {
+	public List<String> expandWord(Association word) {
 		String token = word.getForm();
 		String sc = word.getEntityClass();
 		if (sc == Tokenizer.DATE_CLASS && isDate(token))
@@ -755,11 +755,11 @@ public class DefaultTokenizer implements Tokenizer {
 	public static void main(String[] args) {
 		Tokenizer tk = new DefaultTokenizer();
 		String s = args[0];
-		List<Word> words = tk.tokenize(s);
+		List<Association> words = tk.tokenize(s);
 		String expw = "";
 		System.out.println("words: ");
 		for (int i = 0; i < words.size(); i++) {
-			Word word = words.get(i);
+			Association word = words.get(i);
 			System.out.print(word + " ");
 			List<String> orthWords = tk.expandWord(word);
 			for (int j = 0; j < orthWords.size(); j++) {
@@ -771,7 +771,7 @@ public class DefaultTokenizer implements Tokenizer {
 		System.out.println("formatted: " + tk.format(words));
 		if (args.length > 1) {
 			System.out.println();
-			Word strictlyParsed = tk.parseToken(args[1], true);
+			Association strictlyParsed = tk.parseToken(args[1], true);
 			System.out.println("strictly parsed word: " + strictlyParsed);
 			System.out.println("formatted: " + tk.format(strictlyParsed));
 		}

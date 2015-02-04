@@ -12,7 +12,7 @@ public class AssociateChainFactory implements WordFactory {
 			null);
 
 	/** Creates a surface word with the given interned form. */
-	public synchronized Word create(String form) {
+	public synchronized Association create(String form) {
 		return create(factorChainRoot, Tokenizer.WORD_ASSOCIATE, form);
 	}
 
@@ -21,7 +21,7 @@ public class AssociateChainFactory implements WordFactory {
 	 * and value. The attribute names Tokenizer.WORD_ATTR, ...,
 	 * Tokenizer.SEM_CLASS_ATTR may be used for the form, ..., semantic class.
 	 */
-	public synchronized Word create(String attr, String val) {
+	public synchronized Association create(String attr, String val) {
 		return create(factorChainRoot, attr, val);
 	}
 
@@ -29,7 +29,7 @@ public class AssociateChainFactory implements WordFactory {
 	 * Creates a (surface or full) word from the given normalized factors.
 	 * Returns null if no non-null vals.
 	 */
-	public synchronized Word create(String form, String pitchAccent,
+	public synchronized Association create(String form, String pitchAccent,
 			String stem, String POS, String supertag, String semClass,
 			List<Pair<String, String>> attrValPairs) {
 		// adds non-null vals from the root, in a rough specificity order
@@ -61,7 +61,7 @@ public class AssociateChainFactory implements WordFactory {
 	 * Creates a word from the given node, adding the given interned attr and
 	 * non-null val.
 	 */
-	protected Word create(TrieMap<Object, AssociateChain> currentNode, String attr, String val) {
+	protected Association create(TrieMap<Object, AssociateChain> currentNode, String attr, String val) {
 		TrieMap<Object, AssociateChain> child = findChild(currentNode, attr, val);
 		return child.data;
 	}

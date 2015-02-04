@@ -197,7 +197,7 @@ public class Parser {
 	 *                string
 	 */
 	public final ParseProduct parse(String string) throws ParseException {
-		List<Word> words = lexicon.tokenizer.tokenize(string);
+		List<Association> words = lexicon.tokenizer.tokenize(string);
 		return parse(words);
 	}
 
@@ -208,7 +208,7 @@ public class Parser {
 	 * @return 
 	 * @throws ParseException
 	 */
-	public final ParseProduct parse(List<Word> words) throws ParseException {
+	public final ParseProduct parse(List<Association> words) throws ParseException {
 		if (supertagger != null) {
 			return parseIterativeBetaBest(words);
 		} else {
@@ -223,7 +223,7 @@ public class Parser {
 	 * @return 
 	 * @throws ParseException
 	 */
-	private final ParseProduct parseOnce(List<Word> words) throws ParseException {
+	private final ParseProduct parseOnce(List<Association> words) throws ParseException {
 		
 		try {
 			product = new ParseProduct();
@@ -232,7 +232,7 @@ public class Parser {
 			UnifyControl.startUnifySequence();
 			// get entries for each word
 			List<SymbolHash> entries = new ArrayList<SymbolHash>(words.size());
-			for (Word w : words) {
+			for (Association w : words) {
 				entries.add(lexicon.getSymbolsForWord(w));
 			}
 			product.setLexTime((int) (System.currentTimeMillis() - lexStartTime));
@@ -297,7 +297,7 @@ public class Parser {
 	}
 
 	// iterative beta-best parsing
-	private final ParseProduct parseIterativeBetaBest(List<Word> words) throws ParseException {
+	private final ParseProduct parseIterativeBetaBest(List<Association> words) throws ParseException {
 		// set supertagger in lexicon
 		product = new ParseProduct();
 		grammar.lexicon.setSupertagger(supertagger);
@@ -320,7 +320,7 @@ public class Parser {
 				supertagger.mapWords(words);
 				for (int i = 0; i < words.size(); i++) {
 					supertagger.setWord(i);
-					Word word = words.get(i);
+					Association word = words.get(i);
 					entries.add(lexicon.getSymbolsForWord(word));
 				}
 				product.setLexTime((int) (System.currentTimeMillis() - lexStartTime));
@@ -506,7 +506,7 @@ public class Parser {
 	 * parse.
 	 */
 	public final void addSupertaggerLogProbs(Symbol gold) {
-		List<Word> words = gold.getWords();
+		List<Association> words = gold.getWords();
 		supertagger.mapWords(words);
 		addSupertaggerLogProbs(gold, gold);
 		for (int i = 0; i < words.size(); i++) {

@@ -891,7 +891,7 @@ public class EdgeFactory
     // return null if LF doesn't unify with preds
     private List<Edge> createInitialEdges(Symbol sign, int predIndex) {
         // get parts of sign 
-        List<Word> words = sign.getWords();
+        List<Association> words = sign.getWords();
         Category cat = sign.getCategory();
         // instantiate
         List<Pair<Substitution,BitSet>> instantiations = instantiate(cat, null, predIndex);

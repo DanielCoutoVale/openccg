@@ -222,7 +222,7 @@ public class Testbed {
                              textscPW.flush();
                              String textsc="";
                              //Note sem class replacement works only for NE classes spec in the grammar file
-                             textsc=tokenizer.getOrthography((List<Word>)sign.getWords(),true);
+                             textsc=tokenizer.getOrthography((List<Association>)sign.getWords(),true);
                              textscPW.println(textsc);
                              textscPW.flush();
 						 }
@@ -517,7 +517,7 @@ public class Testbed {
 		else if (eltName.equals("Leafnode")) {
 			try {
 				String lex = derivElt.getAttributeValue("lexeme");
-				Word w = lexicon.tokenizer.parseToken(lex);
+				Association w = lexicon.tokenizer.parseToken(lex);
 				str += w.getForm() + " ";
 				String cat = derivElt.getAttributeValue("cat");
 				String simpleCat = derivElt.getAttributeValue("stag");
@@ -547,7 +547,7 @@ public class Testbed {
 				for (Iterator<Symbol> it = lexSigns.asSymbolSet().iterator(); it.hasNext();) {
 					Symbol s = it.next();
 
-					Word wTemp = s.getWords().get(0);
+					Association wTemp = s.getWords().get(0);
 					String morphClass = wTemp.getEntityClass();
 					if (morphClass == null || morphClass.length() == 0)
 						morphClass = "NoClass";
@@ -575,7 +575,7 @@ public class Testbed {
 				if (matchPOS > 0) {
 					for (Iterator<Symbol> it = lexSigns.asSymbolSet().iterator(); it.hasNext();) {
 						Symbol s = it.next();
-						Word wTemp = s.getWords().get(0);
+						Association wTemp = s.getWords().get(0);
 						if (!wTemp.getFunctions().equals(pos)) {
 							it.remove(); continue;
 						}

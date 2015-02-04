@@ -49,7 +49,7 @@ public class Symbol implements EntityRealizer, Serializable {
 	/**
 	 * The words
 	 */
-	private List<Word> words;
+	private List<Association> words;
 
 	/**
 	 * The grammatical category
@@ -80,8 +80,8 @@ public class Symbol implements EntityRealizer, Serializable {
 	 * @param indexedHead the indexed head
 	 */
 	@SuppressWarnings("unchecked")
-	private Symbol(List<Word> words, Category category, DerivationHistory history, Symbol indexedHead) {
-		this.words = (List<Word>) Interner.globalIntern(words);
+	private Symbol(List<Association> words, Category category, DerivationHistory history, Symbol indexedHead) {
+		this.words = (List<Association>) Interner.globalIntern(words);
 		this.category = category;
 		this.history = history != null ? history : new DerivationHistory(this);
 		this.indexedHead = indexedHead != null ? indexedHead : this;
@@ -93,7 +93,7 @@ public class Symbol implements EntityRealizer, Serializable {
 	 * @param words the words
 	 * @param category the category
 	 */
-	public Symbol(List<Word> words, Category category) {
+	public Symbol(List<Association> words, Category category) {
 		this(words, category, null, null);
 	}
 
@@ -111,7 +111,7 @@ public class Symbol implements EntityRealizer, Serializable {
 	private final void readObject(java.io.ObjectInputStream in) throws IOException,
 			ClassNotFoundException {
 		in.defaultReadObject();
-		words = (List<Word>) Interner.globalIntern(words);
+		words = (List<Association>) Interner.globalIntern(words);
 	}
 
 	// during serialization, skips non-serializable data objects
@@ -139,12 +139,12 @@ public class Symbol implements EntityRealizer, Serializable {
 	 * coarticulation one.
 	 */
 	public final static Symbol createCoartSign(Category cat, Symbol lexSign, Symbol coartSign) {
-		List<Word> words = lexSign.getWords();
+		List<Association> words = lexSign.getWords();
 		if (words.size() > 1)
 			throw new RuntimeException("Can't create coarticulation sign from multiple words.");
-		Word word = words.get(0);
-		Word coartWord = coartSign.getWords().get(0);
-		Word wordPlus = WordPool.createWordWithAttrs(word, coartWord);
+		Association word = words.get(0);
+		Association coartWord = coartSign.getWords().get(0);
+		Association wordPlus = WordPool.createWordWithAttrs(word, coartWord);
 		Rule coartRule = new Rule() {
 			public String name() {
 				return "coart";
@@ -170,7 +170,7 @@ public class Symbol implements EntityRealizer, Serializable {
 				throw new RuntimeException("Not supported.");
 			}
 		};
-		Symbol retval = new Symbol(new SingletonList<Word>(wordPlus), cat, null, null);
+		Symbol retval = new Symbol(new SingletonList<Association>(wordPlus), cat, null, null);
 		DerivationHistory history = new DerivationHistory(new Symbol[] { lexSign, coartSign },
 				retval, coartRule);
 		retval.history = history;
@@ -211,17 +211,17 @@ public class Symbol implements EntityRealizer, Serializable {
 	}
 
 	// returns the remaining words in a structure sharing way
-	private final static List<Word> getRemainingWords(Symbol[] inputs, int index) {
+	private final static List<Association> getRemainingWords(Symbol[] inputs, int index) {
 		// if (inputs.length == 0) throw new
 		// RuntimeException("Error: can't make sign from zero inputs");
 		if (index == (inputs.length - 1))
 			return inputs[index].words;
-		return new StructureSharingList<Word>(inputs[index].words, getRemainingWords(inputs,
+		return new StructureSharingList<Association>(inputs[index].words, getRemainingWords(inputs,
 				index + 1));
 	}
 
 	/** Returns the words of the sign. */
-	public final List<Word> getWords() {
+	public final List<Association> getWords() {
 		return words;
 	}
 
@@ -317,7 +317,7 @@ public class Symbol implements EntityRealizer, Serializable {
 		// otherwise use surface words
 		int hc = 1;
 		for (int i = 0; i < words.size(); i++) {
-			Word word = words.get(i);
+			Association word = words.get(i);
 			hc = 31 * hc + word.surfaceWordHashCode();
 		}
 		hc += (ignoreLF) ? category.hashCodeNoLF() : category.hashCode();
@@ -354,8 +354,8 @@ public class Symbol implements EntityRealizer, Serializable {
 		if (words.size() != sign.words.size())
 			return false;
 		for (int i = 0; i < words.size(); i++) {
-			Word word = words.get(i);
-			Word signWord = (Word) sign.words.get(i);
+			Association word = words.get(i);
+			Association signWord = (Association) sign.words.get(i);
 			if (!word.surfaceWordEquals(signWord))
 				return false;
 		}
@@ -436,7 +436,7 @@ public class Symbol implements EntityRealizer, Serializable {
 		Symbol[] inputs = history.getInputs();
 		if (inputs == null) {
 			// in leaf case, word list must be a singleton
-			Word word = words.get(0);
+			Association word = words.get(0);
 			// check for boundary tone
 			if (Grammar.isBoundaryTone(word.getForm())) {
 				// add element for boundary tone
@@ -471,7 +471,7 @@ public class Symbol implements EntityRealizer, Serializable {
 	// adds one or more word elements after expanding surface form;
 	// multiwords are enclosed within a multiword element;
 	// any attribute-value pairs are added to the word or multiword element
-	private final void addWords(Element parent, Word word) {
+	private final void addWords(Element parent, Association word) {
 		List<String> orthWords = Grammar.theGrammar.lexicon.tokenizer.expandWord(word);
 		Element child;
 		if (orthWords.size() == 1) {

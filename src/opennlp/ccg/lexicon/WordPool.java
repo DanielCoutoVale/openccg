@@ -15,7 +15,7 @@ public class WordPool {
 	protected static WordFactory wordFactory = new AssociateCanonFactory();
 
 	/** Creates a core surface word from the given one, removing all attrs in the given set. */
-	public static synchronized Word createCoreSurfaceWord(Word word, Set<String> attrsSet) {
+	public static synchronized Association createCoreSurfaceWord(Association word, Set<String> attrsSet) {
 	    String form = word.getForm();
 	    String accent = word.getTone();
 	    if (accent != null && attrsSet.contains(Tokenizer.TONE_ASSOCIATE)) accent = null;
@@ -35,7 +35,7 @@ public class WordPool {
 	}
 
 	/** Creates a full word from the given surface one, adding the given stem, POS and semantic class. */
-	public static synchronized Word createFullWord(Word word, String stem, String POS, String supertag, String semClass) {
+	public static synchronized Association createFullWord(Association word, String stem, String POS, String supertag, String semClass) {
 	    stem = (stem != null) ? stem.intern() : null; 
 	    POS = (POS != null) ? POS.intern() : null;
 	    supertag = (supertag != null) ? supertag.intern() : null;
@@ -47,7 +47,7 @@ public class WordPool {
 	    adding the second (full) given word's stem, POS and semantic class, 
 	    as well as the second word's additional attr-val pairs, 
 	    plus the given supertag. */
-	public static synchronized Word createFullWord(Word word, Word word2, String supertag) {
+	public static synchronized Association createFullWord(Association word, Association word2, String supertag) {
 	    boolean mixedAttrs = false;
 	    List<Pair<String,String>> pairs = word.getAssociates(); 
 	    List<Pair<String,String>> pairs2 = word2.getAssociates(); 
@@ -77,20 +77,20 @@ public class WordPool {
 	}
 
 	/** Creates a surface word from the given one, removing the stem, POS, supertag and semantic class. */
-	public static synchronized Word createSurfaceWord(Word word) {
+	public static synchronized Association createSurfaceWord(Association word) {
 	    return createWordDirectly(word.getForm(), word.getTone(), word.getAssociates(), null, null, null, null);
 	}
 
 	/** Creates a surface word from the given one, removing the stem, POS, supertag and semantic class, 
 	    and replacing the form with the given one. */
-	public static synchronized Word createSurfaceWord(Word word, String form) {
+	public static synchronized Association createSurfaceWord(Association word, String form) {
 	    form = (form != null) ? form.intern() : null; 
 	    return createWordDirectly(form, word.getTone(), word.getAssociates(), null, null, null, null);
 	}
 
 	/** Creates a surface word from the given one, removing the stem, POS, supertag and semantic class, 
 	    and replacing the form with the semantic class, uppercased. */
-	public static synchronized Word createSurfaceWordUsingSemClass(Word word) {
+	public static synchronized Association createSurfaceWordUsingSemClass(Association word) {
 	    String form = word.getEntityClass().toUpperCase().intern();
 	    return createWordDirectly(form, word.getTone(), word.getAssociates(), null, null, null, null);
 	}
@@ -100,7 +100,7 @@ public class WordPool {
 	// protected static WordFactory wordFactory = new FactorChainWord.Factory();
 	
 	/** Creates a surface word with the given form. */
-	public static synchronized Word createWord(String form) { 
+	public static synchronized Association createWord(String form) { 
 	    form = (form != null) ? form.intern() : null; 
 	    return wordFactory.create(form);
 	}
@@ -108,14 +108,14 @@ public class WordPool {
 	/** Creates a (surface or full) word with the given attribute name and value.
 	    The attribute names Tokenizer.WORD_ATTR, ..., Tokenizer.SEM_CLASS_ATTR 
 	    may be used for the form, ..., semantic class. */
-	public static synchronized Word createWord(String attributeName, String attributeValue) {
+	public static synchronized Association createWord(String attributeName, String attributeValue) {
 	    attributeName = attributeName.intern();
 	    attributeValue = (attributeValue != null) ? attributeValue.intern() : null; 
 	    return wordFactory.create(attributeName, attributeValue);
 	}
 
 	/** Creates a (surface or full) word. */
-	public static synchronized Word createWord(
+	public static synchronized Association createWord(
 	    String form, String pitchAccent, List<Pair<String,String>> attrValPairs, 
 	    String stem, String POS, String supertag, String semClass 
 	) {
@@ -126,7 +126,7 @@ public class WordPool {
 	        if (attrValPairs.isEmpty()) attrValPairs = null;
 	        else {
 	            attrValPairs = new ArrayList<Pair<String,String>>(attrValPairs);
-	            Word.sortAttrValPairs(attrValPairs);
+	            Association.sortAttrValPairs(attrValPairs);
 	            for (int i = 0; i < attrValPairs.size(); i++) {
 	                Pair<String,String> p = attrValPairs.get(i);
 	                String attr = p.a.intern();
@@ -144,7 +144,7 @@ public class WordPool {
 	}
 
 	/** Creates a (surface or full) word from the given one, replacing the word form with the given one. */
-	public static synchronized Word createWord(Word word, String form) {
+	public static synchronized Association createWord(Association word, String form) {
 	    if (form != null) form = form.intern();
 	    return createWordDirectly(
 	        form, word.getTone(), word.getAssociates(), 
@@ -153,7 +153,7 @@ public class WordPool {
 	}
 
 	/** Creates a (surface or full) word directly, from the given canonical factors. */
-	public static synchronized Word createWordDirectly(
+	public static synchronized Association createWordDirectly(
 	    String form, String pitchAccent, List<Pair<String,String>> attrValPairs, 
 	    String stem, String POS, String supertag, String semClass 
 	) {
@@ -162,7 +162,7 @@ public class WordPool {
 
 	/** Creates a (surface or full) word from the given one, 
 	    replacing the form and stem with the semantic class, uppercased. */
-	public static synchronized Word createWordUsingSemClass(Word word) {
+	public static synchronized Association createWordUsingSemClass(Association word) {
 	    String form = word.getEntityClass().toUpperCase().intern();
 	    String stem = form;
 	    return createWordDirectly(
@@ -173,7 +173,7 @@ public class WordPool {
 
 	/** Creates a (surface or full) word from the given surface one, adding the 
 	    second word's additional attr-val pairs. */
-	public static synchronized Word createWordWithAttrs(Word word, Word word2) {
+	public static synchronized Association createWordWithAttrs(Association word, Association word2) {
 	    // get accent
 	    String accent = word.getTone();
 	    if (accent == null) accent = word2.getTone();

@@ -69,7 +69,7 @@ public class ConditionalProbabilityTable {
 	 * defined by the factored n-gram model family specification.
 	 */
 	public double logprob(List<Pair<String,String>> attrValList) {
-		return model.logprob(new SingletonList<Word>(new ListPairWord(attrValList)));
+		return model.logprob(new SingletonList<Association>(new ListPairWord(attrValList)));
 	}
 	
     /** Tests loading and scoring. */

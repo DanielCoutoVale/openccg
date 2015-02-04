@@ -75,8 +75,8 @@ public class MorphBuilderSfl implements MorphBuilder {
 		String modeString = element.getAttributeValue("mode");
 		boolean modal = "graphic".equals(modeString) || "phonetic".equals(modeString);
 		String form = element.getAttributeValue("form");
-		Word tokenizedWord = Grammar.theGrammar.lexicon.tokenizer.parseToken(form, modal);
-		Word surfaceWord = WordPool.createSurfaceWord(tokenizedWord);
+		Association tokenizedWord = Grammar.theGrammar.lexicon.tokenizer.parseToken(form, modal);
+		Association surfaceWord = WordPool.createSurfaceWord(tokenizedWord);
 		String term = element.getAttributeValue("term");
 		if (term == null) {
 			term = surfaceWord.getForm();
@@ -84,7 +84,7 @@ public class MorphBuilderSfl implements MorphBuilder {
 		String functions = element.getAttributeValue("functions");
 		String supertag = null;
 		String entityClass = element.getAttributeValue("entity-class");
-		Word word = WordPool.createFullWord(surfaceWord, term, functions, supertag, entityClass);
+		Association word = WordPool.createFullWord(surfaceWord, term, functions, supertag, entityClass);
 		String featuresString = element.getAttributeValue("features");
 		String[] features = empty;
 		if (featuresString != null) {
@@ -97,7 +97,7 @@ public class MorphBuilderSfl implements MorphBuilder {
 			excluded = excludedString.split("\\s+");
 		}
 		// FIXME use more transparent nomenclature
-		Word coartIndexingWord = null;
+		Association coartIndexingWord = null;
 		if (modal) {
 			String indexAttribute = form.substring(0, form.indexOf("-"));
 			String indexValue = surfaceWord.getAssociateValue(indexAttribute);

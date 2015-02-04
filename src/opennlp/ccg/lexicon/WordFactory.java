@@ -17,7 +17,7 @@ public interface WordFactory {
 	 * @param form the form of the association
 	 * @return the association
 	 */
-	public Word create(String form);
+	public Association create(String form);
 
 	/**
 	 * Creates an association with a single associate. The canonical associate
@@ -29,7 +29,7 @@ public interface WordFactory {
 	 * @param associateValue the associate value
 	 * @return the association
 	 */
-	public Word create(String associateKey, String associateValue);
+	public Association create(String associateKey, String associateValue);
 
 	/**
 	 * Creates an association.
@@ -43,7 +43,7 @@ public interface WordFactory {
 	 * @param associates the associates
 	 * @return the association
 	 */
-	public Word create(String form, String tone, String term, String functions, String supertag,
+	public Association create(String form, String tone, String term, String functions, String supertag,
 			String entityClass, List<Pair<String, String>> associates);
 
 }

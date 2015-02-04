@@ -36,7 +36,7 @@ package opennlp.ccg.lexicon;
 import java.util.*;
 import java.io.*;
 import java.nio.charset.Charset;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.lexicon.DefaultTokenizer;
 import java.util.zip.GZIPInputStream;
 
@@ -178,7 +178,7 @@ public class TrueCaser {
 		return (numCased / ((words.length < 10) ? (words.length + 0.0) : 10.0) >= titleCaseThreshold);
     }
 
-    public String tcWordToString(String newWordForm, Word oldWord) {
+    public String tcWordToString(String newWordForm, Association oldWord) {
         StringBuffer sb = new StringBuffer();
         sb.append(newWordForm);
         if (oldWord.getFunctions() != null) sb.append(":P-").append(DefaultTokenizer.escape(oldWord.getFunctions()));

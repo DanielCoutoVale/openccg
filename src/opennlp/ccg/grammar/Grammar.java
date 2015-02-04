@@ -594,7 +594,7 @@ public class Grammar {
 	 * or an empty list, if it cannot be parsed.
 	 */
 	// NB: Could try to extend this to find the parse with the intended LF.
-	public List<Word> getParsedWords(String s) {
+	public List<Association> getParsedWords(String s) {
 		// ensure parser instantiated
 		if (parser == null)
 			parser = new Parser(this);
@@ -605,7 +605,7 @@ public class Grammar {
 			parses = product.getSymbols();
 			parser.parse(s);
 		} catch (ParseException pe) {
-			return new ArrayList<Word>(0);
+			return new ArrayList<Association>(0);
 		}
 		// return words of first parse
 		Symbol sign = parses.get(0);
@@ -624,14 +624,14 @@ public class Grammar {
 	 * 
 	 * @throws IOException
 	 */
-	public void toMorphXml(List<Word> words, String filename) throws IOException {
+	public void toMorphXml(List<Association> words, String filename) throws IOException {
 		Collections.sort(words);
 		XMLOutputter xout = new XMLOutputter();
 		xout.setFormat(Format.getPrettyFormat());
 		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(filename)));
 		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		out.println("<morph name=\"" + grammarName + "\">");
-		for (Word w : words) {
+		for (Association w : words) {
 			Element e = new Element("entry");
 			e.setAttribute("word", w.getForm());
 			if (w.getForm() != w.getTerm() && w.getTerm() != null)

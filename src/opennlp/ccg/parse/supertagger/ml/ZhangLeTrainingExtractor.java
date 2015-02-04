@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.parse.tagger.io.PipeDelimitedFactoredBundleCorpusIterator;
 import opennlp.ccg.parse.tagger.io.SRILMFactoredBundleCorpusIterator;
 import opennlp.ccg.parse.supertagger.ml.FeatureExtractor;
@@ -46,7 +46,7 @@ import opennlp.ccg.util.Pair;
 public class ZhangLeTrainingExtractor {
 
     private File outputF;
-    private Iterator<List<Word>> incorp;
+    private Iterator<List<Association>> incorp;
     private FeatureExtractor fexer = new STFex();
 
     /**
@@ -88,10 +88,10 @@ public class ZhangLeTrainingExtractor {
                 Logger.getLogger(ZhangLeTrainingExtractor.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (bw != null || this.incorp != null) {
-                List<Word> sent = null;
+                List<Association> sent = null;
                 Map<Integer, TaggedWord> snt = null;
 
-                Iterator<List<Word>> sents = this.incorp;
+                Iterator<List<Association>> sents = this.incorp;
                 while (sents.hasNext()) {
                     //for (Iterator<List<Word>> sents = this.incorp; sents.hasNext();) {
                     sent = sents.next();
@@ -99,7 +99,7 @@ public class ZhangLeTrainingExtractor {
                     // turn the sent into a map from integer string indices to Words.
                     int index = 0;
                     snt = new TreeMap<Integer, TaggedWord>();
-                    for (Word w : sent) {
+                    for (Association w : sent) {
                         snt.put(index++, new TaggedWord(w));
                     }
 

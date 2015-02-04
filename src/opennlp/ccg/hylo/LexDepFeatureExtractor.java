@@ -20,7 +20,7 @@ package opennlp.ccg.hylo;
 
 import java.util.*;
 
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.perceptron.*;
 import opennlp.ccg.synsem.*;
 import opennlp.ccg.util.TrieMap;
@@ -538,7 +538,7 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 		int wordlen = 0, punctlen = 0, verblen = 0;
 		// lex case
 		if (sign.isIndexed()) {
-			for (Word w: sign.getWords()) {
+			for (Association w: sign.getWords()) {
 				wordlen++;
 				if (isPunct(w)) punctlen++;
 				if (isVerb(w)) verblen++;
@@ -562,7 +562,7 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 	 * Returns whether a word is a punctuation mark that typically signals sentence-internal complexity.
 	 * The default implementation tests for commas, dashes (--), semi-colons and colons.
 	 */
-	protected boolean isPunct(Word word) {
+	protected boolean isPunct(Association word) {
 		// NB: in principle could use POS, but sometimes punctuation marks seem to end up with IN as the POS tag
 		String form = word.getForm();
 		return (form == "," || form == "--" || form == ";" || form == ":");
@@ -572,7 +572,7 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 	 * Returns whether a word is a verb that indicates a substantial clause.
 	 * The default implementation tests for the finite verb POS tags VBD, VBP and VBZ.
 	 */
-	protected boolean isVerb(Word word) {
+	protected boolean isVerb(Association word) {
 		String pos = word.getFunctions();
 		return (pos == "VBD" || pos == "VBP" || pos == "VBZ");
 	}
@@ -614,12 +614,12 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 	 * punctuation (as determined by isPunct), and doesn't count each word in a collapsed NE separately.  
 	 */ 
 	protected int depLen() {
-		List<Word> words = currentSign.getWords();
+		List<Association> words = currentSign.getWords();
 		int min = Math.min(currentHeadIndex, currentDepIndex);
 		int max = Math.max(currentHeadIndex, currentDepIndex);
 		int count = 0;
 		for (int i=min+1; i < max; i++) {
-			Word w = words.get(i); 
+			Association w = words.get(i); 
 			if (!isPunct(w)) count++;
 		}
 		return count;
@@ -641,7 +641,7 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 	 * or CLASS_NIL, otherwise. 
 	 * The word class is cached using cachedWordClasses. 
 	 */
-	protected String getWordClass(Word word) {
+	protected String getWordClass(Association word) {
 		String retval = cachedWordClasses.get(word);
 		if (retval != null) return retval;
 		String wClass = word.getEntityClass();
@@ -660,7 +660,7 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 	 * Returns whether a word is a pronoun.
 	 * The default implementation returns whether the POS tag starts with "PR".
 	 */
-	protected boolean isPro(Word word) { return word.getFunctions().startsWith("PR"); }
+	protected boolean isPro(Association word) { return word.getFunctions().startsWith("PR"); }
 	
 	/**
 	 * The set of color words to check for in determining the word class.
@@ -721,12 +721,12 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 	/**
 	 * Cache of word classes, using a weak hash map.
 	 */
-	protected WeakHashMap<Word,String> cachedWordClasses = new WeakHashMap<Word,String>();
+	protected WeakHashMap<Association,String> cachedWordClasses = new WeakHashMap<Association,String>();
 	
 	/**
 	 * Updates the cached word classes with the given word and word class, and returns the word class.
 	 */
-	protected String updateCachedWordClasses(Word word, String wordClass) {
+	protected String updateCachedWordClasses(Association word, String wordClass) {
 		cachedWordClasses.put(word, wordClass); return wordClass;
 	}
 	

@@ -39,7 +39,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import opennlp.ccg.lexicon.DefaultTokenizer;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.ngrams.ConditionalProbabilityTable;
 import opennlp.ccg.parse.tagger.io.SRILMFactoredBundleCorpusIterator;
 import opennlp.ccg.parse.tagger.ProbIndexPair;
@@ -156,7 +156,7 @@ public class STPriorModel extends ConditionalProbabilityTable {
     }
 
     /** Get the beta-best tags for this word, under the prior model. */
-    public List<Pair<String, Double>> getBetaBestPriors(Word w, double beta) {
+    public List<Pair<String, Double>> getBetaBestPriors(Association w, double beta) {
         List<Pair<String, Double>> allPriors = getAllPriors(w);
         List<Pair<String, Double>> betaBestPriors = new ArrayList<Pair<String, Double>>(100);
         double best = allPriors.get(0).b;
@@ -171,14 +171,14 @@ public class STPriorModel extends ConditionalProbabilityTable {
     }
 
     /** Compute all priors, subject to the POS dict constraints. */
-    public void computePriors(Word w) {
+    public void computePriors(Association w) {
         if (posDict != null) {
             priors = getPOSRestrictedPriors(w);
         }
     }
 
     /** Get the POS-dict restricted prior distribution (sorted descending by prob.) */
-    protected List<Pair<Double, String>> getPOSRestrictedPriors(Word w) {
+    protected List<Pair<Double, String>> getPOSRestrictedPriors(Association w) {
         Collection<String> tagsAllowed = posDict.getEntry(w.getFunctions());
         if (tagsAllowed == null || tagsAllowed.size() == 0) {
             return priors;
@@ -196,7 +196,7 @@ public class STPriorModel extends ConditionalProbabilityTable {
      * Get the beta-best tags (using the prior model) only from among the POS-dictionary-allowed possibilities. 
      * beta-best (def'n): {t | p(t) >= beta * p(best-tag) }
      */
-    public List<Pair<String, Double>> getRestrictedBetaBestPriors(Word w, double beta) {
+    public List<Pair<String, Double>> getRestrictedBetaBestPriors(Association w, double beta) {
         if (posDict == null) {
             return getBetaBestPriors(w, beta);
         } else {
@@ -218,7 +218,7 @@ public class STPriorModel extends ConditionalProbabilityTable {
      *  beta-best (def'n): {t | p(t) >= beta * p(best-tag) }
      *  beta-worst (def'n): {t | p(t) * beta <= p(worst-tag)}
      */
-    public List<Pair<String, Double>> getRestrictedBetaWorstPriors(Word w, double beta) {
+    public List<Pair<String, Double>> getRestrictedBetaWorstPriors(Association w, double beta) {
         if (posDict == null) {
             throw new UnsupportedOperationException("Cannot get beta-worst without a pos-keyed tagging dict.\nNot yet implemented.");
         } else {
@@ -237,12 +237,12 @@ public class STPriorModel extends ConditionalProbabilityTable {
         }
     }
 
-    public List<Pair<String, Double>> getAllPriors(Word w) {
+    public List<Pair<String, Double>> getAllPriors(Association w) {
         return getNBestPriors(w, stagVocab.length);
     }
 
     /** Get the n-best supertags on the prior model, given this word (with POS). */
-    public List<Pair<String, Double>> getNBestPriors(Word w, int n) {
+    public List<Pair<String, Double>> getNBestPriors(Association w, int n) {
         attrVals.clear();
         Pair<String, String> surfaceForm = pairs.intern(new Pair<String, String>(WORD, DefaultTokenizer.escape(w.getForm()).intern()));
         attrVals.add(surfaceForm);
@@ -329,8 +329,8 @@ public class STPriorModel extends ConditionalProbabilityTable {
             }
 
             Map<String, Integer> vocab = new HashMap<String, Integer>();
-            for (List<Word> inLine : in) {
-                for (Word w : inLine) {
+            for (List<Association> inLine : in) {
+                for (Association w : inLine) {
                     String st = SUPERTAG + "-" + DefaultTokenizer.escape(w.getSupertag()),
                             pos = POS_TAG + "-" + DefaultTokenizer.escape(w.getFunctions()),
                             wform = WORD + "-" + DefaultTokenizer.escape(w.getForm());
@@ -352,8 +352,8 @@ public class STPriorModel extends ConditionalProbabilityTable {
                 System.exit(
                         -1);
             }
-            for (List<Word> inLine : in) {
-                for (Word w : inLine) {
+            for (List<Association> inLine : in) {
+                for (Association w : inLine) {
                     String st = SUPERTAG + "-" + DefaultTokenizer.escape(w.getSupertag()),
                             pos = POS_TAG + "-" + DefaultTokenizer.escape(w.getFunctions()),
                             wform = WORD + "-" + DefaultTokenizer.escape(w.getForm());

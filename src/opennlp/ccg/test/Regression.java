@@ -28,7 +28,7 @@ import opennlp.ccg.grammar.Grammar;
 import opennlp.ccg.hylo.*;
 import opennlp.ccg.lexicon.ParseProduct;
 import opennlp.ccg.lexicon.Tokenizer;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.lexicon.WordPool;
 import opennlp.ccg.ngrams.*;
 import opennlp.ccg.parse.ParseException;
@@ -487,7 +487,7 @@ public class Regression {
         		ParseProduct product = null;
                 try {
             		// use full-words or words from stored sign if possible
-            		List<Word> words = null;
+            		List<Association> words = null;
             		if (testItem.fullWords != null) {
                 		words = grammar.lexicon.tokenizer.tokenize(testItem.fullWords, true);
                 		// strip <s> and </s>
@@ -1424,7 +1424,7 @@ public class Regression {
 	        	if (testItem.numOfParses == 0) continue;
 	            String s = testItem.sentence;
 	            // get parsed words if doing more than just text
-	            List<Word> words = null;
+	            List<Association> words = null;
 	            if (semClassReplacement || withFactors) {
 	                // use words from sign or pre-parsed full words if available
 	            	if (testItem.sign != null) 
@@ -1437,11 +1437,11 @@ public class Regression {
 	            else words = tokenizer.tokenize(s);
 	            // reverse, if apropos
 	            if (reverse) {
-	                List<Word> tmp = words;
-	                words = new ArrayList<Word>(words.size());
+	                List<Association> tmp = words;
+	                words = new ArrayList<Association>(words.size());
 	                words.add(WordPool.createWord("<s>"));
 	                for (int j = tmp.size()-1; j >= 0; j--) {
-	                    Word w = tmp.get(j);
+	                    Association w = tmp.get(j);
 	                    if (w.getForm() == "<s>" || w.getForm() == "</s>") continue; // skip <s> or </s>
 	                    words.add(w);
 	                }
@@ -1480,8 +1480,8 @@ public class Regression {
 	            RegressionInfo.TestItem testItem = tbInfo.getItem(i); 
 	        	if (testItem.numOfParses == 0) continue; // check grammatical
 	        	Symbol sign = testItem.sign;
-	        	List<Word> factors = GenerativeSyntacticModel.getFactors(sign);
-	        	for (Word w : factors) {
+	        	List<Association> factors = GenerativeSyntacticModel.getFactors(sign);
+	        	for (Association w : factors) {
 	        		tOut.print(tokenizer.format(w));
 	        		tOut.print(" ");
 	        	}

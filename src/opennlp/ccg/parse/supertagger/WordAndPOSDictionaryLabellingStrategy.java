@@ -197,7 +197,7 @@ public class WordAndPOSDictionaryLabellingStrategy implements LabellingStrategy,
      * @param beta A <code>double</code> specifying how close in probability all returned outcomes must be.
      * @return An <code>ArrayList<String></code> of labels that meet the above constraints.
      */
-    public List<String> multitag(Word w, Collection<Pair<String, Double>> context, double beta) {
+    public List<String> multitag(Association w, Collection<Pair<String, Double>> context, double beta) {
         List<Pair<Double, String>> temp = this.multitagWithScores(w, context, beta);
         ArrayList<String> res = new ArrayList<String>(temp.size());
         for (Pair<Double, String> t : temp) {
@@ -220,7 +220,7 @@ public class WordAndPOSDictionaryLabellingStrategy implements LabellingStrategy,
      * @return An <code>ArrayList<Pair<Double,String>></code> of the outcomes
      *         {o: score(o)>=[beta * score(bestLabel)]}.
      */
-    public List<Pair<Double, String>> multitagWithScores(Word thisWord, Collection<Pair<String, Double>> context, double beta) {
+    public List<Pair<Double, String>> multitagWithScores(Association thisWord, Collection<Pair<String, Double>> context, double beta) {
         // All the scores of the outcomes (the index of each double score
         // is the key which allows us to retrieve the outcome from the model).
         double[] ocs = mo.eval(context);
@@ -376,7 +376,7 @@ public class WordAndPOSDictionaryLabellingStrategy implements LabellingStrategy,
     // set the current tagging (now only used to set the current POS tagging).
     public void setCurrentTagging(List<TaggedWord> tgging) { tagging = tgging; }
     
-    public List<List<Pair<Double, String>>> multitag(List<Word> sentence, double beta) {
+    public List<List<Pair<Double, String>>> multitag(List<Association> sentence, double beta) {
         List<List<Pair<Double, String>>> results = new ArrayList<List<Pair<Double, String>>>(sentence.size());
         Map<Integer, TaggedWord> sent = new TreeMap<Integer, TaggedWord>();
         int cnt = 0;
@@ -391,8 +391,8 @@ public class WordAndPOSDictionaryLabellingStrategy implements LabellingStrategy,
         List<Collection<Pair<String, Double>>> contexts = fexer.getSentenceFeatures(sent);
 
         // Iterate simultaneously through both the words and the contextual features.
-        Iterator<Word> wds = sentence.iterator();
-        Word w = null;
+        Iterator<Association> wds = sentence.iterator();
+        Association w = null;
         Iterator<Collection<Pair<String, Double>>> ctxts = contexts.iterator();
         Collection<Pair<String, Double>> context = null;
 
@@ -426,13 +426,13 @@ public class WordAndPOSDictionaryLabellingStrategy implements LabellingStrategy,
     /** 
      * Return a beta-best filtered subset of the tags in each multitagging list (each multitagging list is assumed to be non-empty). 
      */
-    private List<List<Pair<Double, String>>> betaBestFilter(List<List<Pair<Double, String>>> multitaggings, double beta, List<Word> inputSentence) {
+    private List<List<Pair<Double, String>>> betaBestFilter(List<List<Pair<Double, String>>> multitaggings, double beta, List<Association> inputSentence) {
         List<List<Pair<Double, String>>> res = new ArrayList<List<Pair<Double, String>>>(multitaggings.size());
 
         int wordIndex = 0;
         for (List<Pair<Double, String>> mtagging : multitaggings) {
             List<Pair<Double, String>> tempTagging = new ArrayList<Pair<Double, String>>(mtagging.size());            
-            Word thisWord = inputSentence.get(wordIndex);
+            Association thisWord = inputSentence.get(wordIndex);
             // set to a (possibly different, possibly less restrictive?) beta if this POS has a beta multiplier set.
             Double bmult = betaMultipliers.get(thisWord.getFunctions());
             double possiblyNewBeta = Math.min(1.0, (bmult != null) ? (bmult * beta) : beta);
@@ -554,7 +554,7 @@ public class WordAndPOSDictionaryLabellingStrategy implements LabellingStrategy,
      * so that the beta-best categories can be returned by calls to setWord
      * and getSupertags.
      */
-    public void mapWords(List<Word> words) {
+    public void mapWords(List<Association> words) {
         if(hasMoreBetas()) {
             K = usualK;
         } else {
@@ -739,7 +739,7 @@ public class WordAndPOSDictionaryLabellingStrategy implements LabellingStrategy,
             // ...
             // wN   <numPOSTags>    <posTag1>   ... <posTagM>   <numSupertags>  <supertag1> ... <supertagU>
             // </s>
-            for (List<Word> inLine : in) {
+            for (List<Association> inLine : in) {
                 
                 List<List<Pair<Double,String>>> taggedSent = stgger.multitag(inLine, beta);
                 if(test) { rs.addSent(taggedSent, inLine); }
@@ -748,7 +748,7 @@ public class WordAndPOSDictionaryLabellingStrategy implements LabellingStrategy,
                 List<TaggedWord> posTagging = stgger.getCurrentTagging();
                 int cursor = -1;
                 while(++cursor < taggedSent.size()) {
-                    Word wdIn = inLine.get(cursor);
+                    Association wdIn = inLine.get(cursor);
                     // word form...
                     out.write(wdIn.getForm());
                     TaggedWord posT = posTagging.get(cursor);

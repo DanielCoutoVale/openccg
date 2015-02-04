@@ -18,7 +18,7 @@
 
 package opennlp.ccg.realize;
 
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.synsem.Symbol;
 
 import java.util.*;
@@ -47,8 +47,8 @@ public class StemPruningStrategy extends DiversityPruningStrategy
         In particular, returns true iff the signs have the same
         sequence of stems. */
     public boolean notCompellinglyDifferent(Symbol sign1, Symbol sign2) {
-	List<Word> words1 = sign1.getWords();
-	List<Word> words2 = sign2.getWords();
+	List<Association> words1 = sign1.getWords();
+	List<Association> words2 = sign2.getWords();
 	if (words1.size() != words2.size()) return false;
     	for (int i=0; i < words1.size(); i++) {
 	    if (words1.get(i).getTerm() != words2.get(i).getTerm())

@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.parse.tagger.io.PipeDelimitedFactoredBundleCorpusIterator;
 import opennlp.ccg.parse.tagger.io.SRILMFactoredBundleCorpusIterator;
 import opennlp.ccg.util.Pair;
@@ -63,7 +63,7 @@ public class TaggingDictionaryExtractor {
     private Map<String, Pair<Integer, Set<String>>> wdmap = new HashMap<String, Pair<Integer, Set<String>>>();
     // mapping from POS tags to the lexical categories they were seen with.
     private Map<String, Set<String>> posmap = new HashMap<String, Set<String>>();
-    private Iterator<List<Word>> incorp = null;
+    private Iterator<List<Association>> incorp = null;
     // writers for dict files.
     private BufferedWriter wbr = null,  pbr = null;
 
@@ -139,7 +139,7 @@ public class TaggingDictionaryExtractor {
     @SuppressWarnings("unchecked")
 	public void extract() {
         try {
-            List<Word> currsent = null;
+            List<Association> currsent = null;
             String currForm = null, currPOS = null;
             //Set<String> currFormSTs = null, curPOSSTs = null;
             //Integer currWdCnt = null;
@@ -152,7 +152,7 @@ public class TaggingDictionaryExtractor {
                 // for every word in every sentence, update the counts, and add to the word- and POS-based
                 // allowable tags.
                 currsent = incorp.next();
-                for (Word w : currsent) {
+                for (Association w : currsent) {
                     currForm = w.getForm();
                     currPOS = w.getFunctions();
                     Object wfetch = wdmap.get(currForm);

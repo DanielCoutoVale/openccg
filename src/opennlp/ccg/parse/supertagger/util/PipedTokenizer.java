@@ -20,7 +20,7 @@ package opennlp.ccg.parse.supertagger.util;
 import java.util.List;
 
 import opennlp.ccg.lexicon.DefaultTokenizer;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.lexicon.WordPool;
 import opennlp.ccg.util.Pair;
 
@@ -35,7 +35,7 @@ public class PipedTokenizer extends DefaultTokenizer {
     }
 
     @Override
-    public Word parseToken(String token, boolean strictFactors) {
+    public Association parseToken(String token, boolean strictFactors) {
         // init
         String form = token;
         String stem = null;

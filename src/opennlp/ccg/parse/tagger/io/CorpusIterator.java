@@ -20,7 +20,7 @@ package opennlp.ccg.parse.tagger.io;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 
 /**
  * An interface that all file iterators must (should?) implement.
@@ -30,12 +30,12 @@ import opennlp.ccg.lexicon.Word;
  */
 public interface CorpusIterator {
     
-    public List<Word> next() throws IOException;
+    public List<Association> next() throws IOException;
     
     public boolean hasNext();
     
     public void close();
     
-    public Iterator<List<Word>> iterator();
+    public Iterator<List<Association>> iterator();
     
 }

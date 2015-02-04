@@ -31,9 +31,9 @@ public class MorphItem {
 
 	private static final String[] empty = new String[0];
 
-	private final Word surfaceWord;
-	private final Word word;
-	private final Word coartIndexingWord;
+	private final Association surfaceWord;
+	private final Association word;
+	private final Association coartIndexingWord;
 	private final String[] macros;
 	private final String[] excluded;
 	private final boolean coart;
@@ -49,7 +49,7 @@ public class MorphItem {
 	};
 
 	/** Constructor from XML element. */
-	public MorphItem(Word surfaceWord, Word word, Word coartIndexingWord, String[] macros,
+	public MorphItem(Association surfaceWord, Association word, Association coartIndexingWord, String[] macros,
 			String[] excluded, boolean coart) {
 		this.surfaceWord = surfaceWord;
 		this.word = word;
@@ -78,12 +78,12 @@ public class MorphItem {
 	}
 
 	/** Returns the full word. */
-	public Word getWord() {
+	public Association getWord() {
 		return word;
 	}
 
 	/** Returns the surface word (without the stem, POS and semantic class). */
-	public Word getSurfaceWord() {
+	public Association getSurfaceWord() {
 		return surfaceWord;
 	}
 
@@ -106,7 +106,7 @@ public class MorphItem {
 	 * Returns the word for indexing this coarticulation (or null if not a
 	 * coarticulation).
 	 */
-	public Word getCoartIndexingWord() {
+	public Association getCoartIndexingWord() {
 		return coartIndexingWord;
 	}
 

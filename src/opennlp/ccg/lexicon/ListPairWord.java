@@ -30,7 +30,7 @@ import opennlp.ccg.util.Pair;
  * @author Michael White
  * @version $Revision: 1.1 $, $Date: 2010/01/17 04:49:24 $
  */
-public class ListPairWord extends Word {
+public class ListPairWord extends Association {
 
 	private static final long serialVersionUID = 1L;
 

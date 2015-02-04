@@ -10,7 +10,7 @@ import java.util.ListIterator;
 
 import opennlp.ccg.lexicon.DefaultTokenizer;
 import opennlp.ccg.lexicon.Tokenizer;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 
 
 /**
@@ -193,7 +193,7 @@ public class SRILMNgramModel extends AbstractStandardNgramModel {
         // System.out.println();
         
         Tokenizer tokenizer = new DefaultTokenizer();
-        List<Word> words = tokenizer.tokenize(tokens);
+        List<Association> words = tokenizer.tokenize(tokens);
         System.out.println("scoring: " + tokens);
         System.out.println();
         lm.debugScore = true;

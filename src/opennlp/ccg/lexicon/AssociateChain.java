@@ -37,7 +37,7 @@ import java.util.*;
  * @author Daniel Couto-Vale
  * @version $Revision: 1.3 $, $Date: 2009/07/17 04:23:30 $
  */
-public class AssociateChain extends Word {
+public class AssociateChain extends Association {
 
 	private static final long serialVersionUID = 952665894357382685L;
 

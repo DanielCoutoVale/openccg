@@ -147,7 +147,7 @@ public class FactoredNgramModel extends NgramScorer
     // then determines log prob from the list of factor keys
     protected float logProbFromNgram(int i, int order) {
         // skip initial start tag
-        if (i == 0 && order == 1 && ((Word)wordsToScore.get(0)).getForm() == "<s>") return 0;
+        if (i == 0 && order == 1 && ((Association)wordsToScore.get(0)).getForm() == "<s>") return 0;
         // set up factor keys
         keysList.clear();
         int i0 = i + order-1; // index of current word
@@ -163,11 +163,11 @@ public class FactoredNgramModel extends NgramScorer
         for (int j = lastParentIndex; j >= 0; j--) {
             int pos_j = i0 - parents[j].position;
             if (pos_j < i) continue; // skip if pos_j past i
-            Word w = (Word) wordsToScore.get(pos_j);
+            Association w = (Association) wordsToScore.get(pos_j);
             keysList.add(makeFactorKey(w, parents[j].name));
         }
         // add factor key for child
-        Word current = (Word) wordsToScore.get(i0);
+        Association current = (Association) wordsToScore.get(i0);
         keysList.add(makeFactorKey(current, child.name));
         if (debugScore) {
             System.out.print("logp( " + keysList.get(keysList.size()-1) + " | ");
@@ -190,7 +190,7 @@ public class FactoredNgramModel extends NgramScorer
     // the attribute with the given name, where
     // the delimiter tokens are treated as a special case,  
     // and the attr val is adjusted if using sem classes
-    private Object makeFactorKey(Word w, String attr) {
+    private Object makeFactorKey(Association w, String attr) {
         // special cases for <s> and </s>: just return 
         // a word with this form, regardless of the attr
         String form = w.getForm();
@@ -384,7 +384,7 @@ public class FactoredNgramModel extends NgramScorer
         // System.out.println();
         
         Tokenizer tokenizer = new DefaultTokenizer();
-        List<Word> words = tokenizer.tokenize(tokens, true);
+        List<Association> words = tokenizer.tokenize(tokens, true);
         System.out.println("scoring: ");
         for (int i = 0; i < words.size(); i++) {
             System.out.println(words.get(i).toString());

@@ -26,7 +26,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.parse.tagger.io.SRILMFactoredBundleCorpusIterator;
 
 /**
@@ -51,9 +51,9 @@ public class SupertagSequenceGetter {
         BufferedWriter out = new BufferedWriter(new FileWriter(new File(output)));
         
         
-        for(List<Word> sent : corp) {
+        for(List<Association> sent : corp) {
             out.write("<s> ");
-            for(Word w : sent) {
+            for(Association w : sent) {
                 out.write(w.getSupertag()+" ");
             }
             out.write("</s>"+System.getProperty("line.separator"));

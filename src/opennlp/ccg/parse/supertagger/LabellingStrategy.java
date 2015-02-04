@@ -19,7 +19,7 @@ package opennlp.ccg.parse.supertagger;
 
 import java.util.Collection;
 import java.util.List;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.util.Pair;
 //import ml.MaxentModel;
 
@@ -37,9 +37,9 @@ public interface LabellingStrategy {
     public void setK(int newK);
     
     /** Multitag a TaggedWord and throw away the probabilities. */
-    public List<String> multitag(Word thisword, Collection<Pair<String,Double>> context, double beta);
+    public List<String> multitag(Association thisword, Collection<Pair<String,Double>> context, double beta);
     
     /** Multitag a TaggedWord and retain the probabilities. */
-    public List<Pair<Double,String>> multitagWithScores(Word thisword, Collection<Pair<String,Double>>contex, double beta);
+    public List<Pair<Double,String>> multitagWithScores(Association thisword, Collection<Pair<String,Double>>contex, double beta);
     
 }

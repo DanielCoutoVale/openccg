@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import opennlp.ccg.lexicon.DefaultTokenizer;
 import opennlp.ccg.lexicon.Tokenizer;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 
 /**
  * Assuming an input file of n different sentences of the form:
@@ -40,7 +40,7 @@ import opennlp.ccg.lexicon.Word;
  * @author Dennis N. Mehay
  * @version $Revision: 1.2 $, $Date: 2010/09/26 05:50:15 $
  */
-public class SRILMFactoredBundleCorpusIterator implements CorpusIterator, Iterator<List<Word>>, Iterable<List<Word>> {
+public class SRILMFactoredBundleCorpusIterator implements CorpusIterator, Iterator<List<Association>>, Iterable<List<Association>> {
 
     private BufferedReader reader;
     private String nextLine,  nextID;
@@ -72,8 +72,8 @@ public class SRILMFactoredBundleCorpusIterator implements CorpusIterator, Iterat
      *         file.
      * @throws <code>java.io.IOException</code>. 
      */
-    public List<Word> next() {
-        List<Word> currentSent = null;
+    public List<Association> next() {
+        List<Association> currentSent = null;
         try {
             if (this.hasNext()) {
                 String line = this.reader.readLine();
@@ -137,7 +137,7 @@ public class SRILMFactoredBundleCorpusIterator implements CorpusIterator, Iterat
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Iterator<List<Word>> iterator() {
+    public Iterator<List<Association>> iterator() {
         return this;
     }
 }

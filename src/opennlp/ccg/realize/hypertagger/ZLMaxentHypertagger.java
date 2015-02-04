@@ -26,7 +26,7 @@ import joptsimple.OptionSpec;
 import opennlp.ccg.hylo.Nominal;
 import opennlp.ccg.hylo.SatOp;
 import opennlp.ccg.lexicon.DefaultTokenizer;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.lexicon.WordPool;
 import opennlp.ccg.parse.supertagger.io.XMLPOSDictionaryReader;
 import opennlp.ccg.parse.supertagger.io.XMLWordDictionaryReader;
@@ -243,7 +243,7 @@ public class ZLMaxentHypertagger extends TagExtractor implements Hypertagger {
 		}
 		// prior features
 		if(priorModel != null) {
-			Word w = WordPool.createWord(n.getPredicateName(), null, null, n.getPredicateName(),
+			Association w = WordPool.createWord(n.getPredicateName(), null, null, n.getPredicateName(),
 					getPOS(n), null, null);
 			priorModel.computePriors(w);
 			List<Pair<String, Double>> tags = priorModel.getBetaBestPriors(w, priorBeta);
@@ -832,14 +832,14 @@ public class ZLMaxentHypertagger extends TagExtractor implements Hypertagger {
 		return out.toString();
 	}
 
-	public Word getPredAsWord(int idx) {
+	public Association getPredAsWord(int idx) {
 		LfGraphNode n = findNode(idx);
-		Word w = WordPool.createWord(n.getPredicateName(), null, null, n.getPredicateName(),
+		Association w = WordPool.createWord(n.getPredicateName(), null, null, n.getPredicateName(),
 				getPOS(n), getGoldSupertag(n), null);
 		return w;
 	}
-	private Word getPredAsWord() {
-		Word w = WordPool.createWord(currentPred.getPredicateName(), null, null, currentPred.getPredicateName(), getPOS(currentPred), getGoldSupertag(currentPred), null);
+	private Association getPredAsWord() {
+		Association w = WordPool.createWord(currentPred.getPredicateName(), null, null, currentPred.getPredicateName(), getPOS(currentPred), getGoldSupertag(currentPred), null);
 		return w;
 	}
 
@@ -916,11 +916,11 @@ public class ZLMaxentHypertagger extends TagExtractor implements Hypertagger {
 				e.printStackTrace();
 			}
 			List<List<Pair<Double,String>>> lfTagging = new ArrayList<List<Pair<Double,String>>>();
-			List<Word> gsTagging = new ArrayList<Word>();
+			List<Association> gsTagging = new ArrayList<Association>();
 			List<Pair<Double,String>> tags;
-			Word w;
+			Association w;
 			for(int bi = 0; bi < ht.betas.length; bi++) {
-				gsTagging = new ArrayList<Word>();
+				gsTagging = new ArrayList<Association>();
 				lfTagging = new ArrayList<List<Pair<Double,String>>>();
 				ht.setBetaIndex(bi);
 				ht.tdErr = errFiles.get(bi); 

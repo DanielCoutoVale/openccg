@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import opennlp.ccg.lexicon.Word;
+import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.util.Pair;
 
 /**
@@ -68,10 +68,10 @@ public class ResultSink {
      * Add and store a sentence of tagged words (<code>List<List<Pair<Double,String>>></code>)
      * wrt a gold-standard tagged word. 
      */
-    public void addSent(List<List<Pair<Double, String>>> sent, List<Word> goldTagging) {
+    public void addSent(List<List<Pair<Double, String>>> sent, List<Association> goldTagging) {
         sentNum++;
         allCorrect = true;
-        Iterator<Word> gold = goldTagging.iterator();
+        Iterator<Association> gold = goldTagging.iterator();
         for (List<Pair<Double, String>> tgging : sent) {
             addResult(tgging, gold.next());
         }
@@ -85,7 +85,7 @@ public class ResultSink {
      * Compare and log whether the gold-standard tag is in the beta-best (also
      * log pos-specific error stats).
      */
-    public void addResult(List<Pair<Double, String>> tagging, Word goldTagging) {
+    public void addResult(List<Pair<Double, String>> tagging, Association goldTagging) {
         String goldTag = (whatType == ResultSinkType.SUPERTAG) ? goldTagging.getSupertag() : goldTagging.getFunctions();
         totalTags += tagging.size();
         totalWords++;

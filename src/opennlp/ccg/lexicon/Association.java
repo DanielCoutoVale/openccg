@@ -53,7 +53,7 @@ import gnu.trove.*;
  * @author Daniel Couto-Vale
  * @version $Revision: 1.21 $, $Date: 2009/12/16 22:39:20 $
  */
-abstract public class Word implements Serializable, Comparable<Word> {
+abstract public class Association implements Serializable, Comparable<Association> {
 
 	private static final List<Pair<String, String>> EMPTY_PAIR_LIST = new ArrayList<Pair<String, String>>();
 	private static final long serialVersionUID = 1L;
@@ -183,9 +183,9 @@ abstract public class Word implements Serializable, Comparable<Word> {
 		if (this == obj)
 			return true;
 		// nb: can use ==, since constructor interns all factors
-		if (!(obj instanceof Word))
+		if (!(obj instanceof Association))
 			return false;
-		Word word = (Word) obj;
+		Association word = (Association) obj;
 		boolean sameFields = getForm() == word.getForm() && getTone() == word.getTone()
 				&& getTerm() == word.getTerm() && getFunctions() == word.getFunctions()
 				&& getSupertag() == word.getSupertag() && getEntityClass() == word.getEntityClass();
@@ -207,7 +207,7 @@ abstract public class Word implements Serializable, Comparable<Word> {
 	}
 
 	/** Returns an int representing lexicographic sorting. */
-	public int compareTo(Word word) {
+	public int compareTo(Association word) {
 		if (this == word)
 			return 0;
 		int cmp = 0;
@@ -298,9 +298,9 @@ abstract public class Word implements Serializable, Comparable<Word> {
 		if (this == obj)
 			return true;
 		// nb: can use ==, since constructor interns all factors
-		if (!(obj instanceof Word))
+		if (!(obj instanceof Association))
 			return false;
-		Word word = (Word) obj;
+		Association word = (Association) obj;
 		boolean sameFields = getForm() == word.getForm() && getTone() == word.getTone();
 		if (!sameFields)
 			return false;
@@ -351,9 +351,9 @@ abstract public class Word implements Serializable, Comparable<Word> {
 	/** Tests serialization. */
 	public static void main(String[] argv) throws IOException, ClassNotFoundException {
 		// create words
-		Word w = WordPool.createWord("ran");
-		Word fw = WordPool.createFullWord(w, "run", "VBD", "s\\np", "MOTION");
-		Word wb = WordPool.createWordWithAttrs(w, WordPool.createWord("B", "L"));
+		Association w = WordPool.createWord("ran");
+		Association fw = WordPool.createFullWord(w, "run", "VBD", "s\\np", "MOTION");
+		Association wb = WordPool.createWordWithAttrs(w, WordPool.createWord("B", "L"));
 		// write to tmp.out
 		String filename = "tmp.ser";
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename));
@@ -367,13 +367,13 @@ abstract public class Word implements Serializable, Comparable<Word> {
 		// read from tmp.out
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename));
 		System.out.print("Reading w2: ");
-		Word w2 = (Word) in.readObject();
+		Association w2 = (Association) in.readObject();
 		System.out.println(w2);
 		System.out.print("Reading fw2: ");
-		Word fw2 = (Word) in.readObject();
+		Association fw2 = (Association) in.readObject();
 		System.out.println(fw2);
 		System.out.print("Reading wb2: ");
-		Word wb2 = (Word) in.readObject();
+		Association wb2 = (Association) in.readObject();
 		System.out.println(wb2);
 		in.close();
 		// test identity (and thus readResolve)

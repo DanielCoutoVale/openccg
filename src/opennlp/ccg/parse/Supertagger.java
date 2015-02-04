@@ -37,7 +37,7 @@ public interface Supertagger extends SupertaggerAdapter {
 	 * so that the beta-best categories can be returned by calls to setWord
 	 * and getSupertags.
 	 */
-	public void mapWords(List<Word> words);
+	public void mapWords(List<Association> words);
 	
 	/**
 	 * Sets the current word to the one with the given index, 
