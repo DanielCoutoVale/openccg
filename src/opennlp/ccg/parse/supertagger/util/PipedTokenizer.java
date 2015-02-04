@@ -21,7 +21,7 @@ import java.util.List;
 
 import opennlp.ccg.lexicon.DefaultTokenizer;
 import opennlp.ccg.lexicon.Association;
-import opennlp.ccg.lexicon.WordPool;
+import opennlp.ccg.lexicon.AssociationPool;
 import opennlp.ccg.util.Pair;
 
 /**
@@ -78,6 +78,6 @@ public class PipedTokenizer extends DefaultTokenizer {
 					+ "form|lemma|POS|(Supertag) ... form|lemma|POS(Supertag).");
 		}
 		// done
-		return WordPool.createWord(form, pitchAccent, attrValPairs, stem, POS, supertag, semClass);
+		return AssociationPool.createWord(form, pitchAccent, stem, POS, supertag, semClass, attrValPairs);
 	}
 }

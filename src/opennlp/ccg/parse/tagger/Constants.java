@@ -18,7 +18,7 @@
 
 package opennlp.ccg.parse.tagger;
 
-import opennlp.ccg.lexicon.WordPool;
+import opennlp.ccg.lexicon.AssociationPool;
 
 /**
  * @author Dennis N. Mehay
@@ -26,8 +26,8 @@ import opennlp.ccg.lexicon.WordPool;
 public final class Constants {
 	public static final Double one = new Double(1.0);
 	public static final Double zero = new Double(0.0);
-	public static final TaggedWord OOB = new TaggedWord(WordPool.createWord("OOS", null, null,
-			"OOS", "OOS", "OOS", null));
+	public static final TaggedWord OOB = new TaggedWord(AssociationPool.createWord("OOS", null, "OOS",
+			"OOS", "OOS", null, null));
 
 	public static enum Domain {
 		PROB, LOGPROB

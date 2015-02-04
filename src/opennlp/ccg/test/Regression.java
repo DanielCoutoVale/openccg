@@ -29,7 +29,7 @@ import opennlp.ccg.hylo.*;
 import opennlp.ccg.lexicon.ParseProduct;
 import opennlp.ccg.lexicon.Tokenizer;
 import opennlp.ccg.lexicon.Association;
-import opennlp.ccg.lexicon.WordPool;
+import opennlp.ccg.lexicon.AssociationPool;
 import opennlp.ccg.ngrams.*;
 import opennlp.ccg.parse.ParseException;
 import opennlp.ccg.parse.Parser;
@@ -1652,14 +1652,14 @@ public class Regression {
 				if (reverse) {
 					List<Association> tmp = words;
 					words = new ArrayList<Association>(words.size());
-					words.add(WordPool.createWord("<s>"));
+					words.add(AssociationPool.createWord("<s>"));
 					for (int j = tmp.size() - 1; j >= 0; j--) {
 						Association w = tmp.get(j);
 						if (w.getForm() == "<s>" || w.getForm() == "</s>")
 							continue; // skip <s> or </s>
 						words.add(w);
 					}
-					words.add(WordPool.createWord("</s>"));
+					words.add(AssociationPool.createWord("</s>"));
 				}
 				// write str, add to unique set
 				String str = (!withFactors) ? tokenizer.getOrthography(words, semClassReplacement)

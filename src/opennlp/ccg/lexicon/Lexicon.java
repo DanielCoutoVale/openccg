@@ -528,7 +528,7 @@ public class Lexicon {
 			words = new ArrayList<Association>(specialTokenWords.size());
 			for (Iterator<Association> it = specialTokenWords.iterator(); it.hasNext();) {
 				Association stw = it.next();
-				Association w = WordPool.createSurfaceWord(stw, pred);
+				Association w = AssociationPool.createSurfaceWord(stw, pred);
 				words.add(w);
 			}
 		}
@@ -593,8 +593,8 @@ public class Lexicon {
 	 */
 	public SymbolHash getSymbolsForWord(Association w) throws LexException {
 		// reduce word to its core, removing coart attrs if any
-		Association surfaceWord = WordPool.createSurfaceWord(w);
-		Association coreWord = (surfaceWord.attrsIntersect(_coartAttrs)) ? WordPool
+		Association surfaceWord = AssociationPool.createSurfaceWord(w);
+		Association coreWord = (surfaceWord.attrsIntersect(_coartAttrs)) ? AssociationPool
 				.createCoreSurfaceWord(surfaceWord, _coartAttrs) : surfaceWord;
 		// lookup core word
 		SymbolHash result = getSymbolsFromWord(coreWord, null, null, null);
@@ -621,7 +621,7 @@ public class Lexicon {
 			if (!_indexedCoartAttrs.contains(attributeName))
 				continue;
 			String attributeValue = (String) pair.b;
-			Association coartWord = WordPool.createWord(attributeName, attributeValue);
+			Association coartWord = AssociationPool.createWord(attributeName, attributeValue);
 			SymbolHash coartSymbolHash = getSymbolsFromWord(coartWord, null, null, null);
 			for (Symbol coartSymbol : coartSymbolHash.asSymbolSet()) {
 				// apply to each input
@@ -655,7 +655,7 @@ public class Lexicon {
 				targetPred = w.getForm();
 			}
 			if (specialTokenConst != null) {
-				Association key = WordPool.createSurfaceWord(w, specialTokenConst);
+				Association key = AssociationPool.createSurfaceWord(w, specialTokenConst);
 				morphItems = (Collection<MorphItem>) _words.get(key);
 			}
 			// otherwise throw lex exception
@@ -821,7 +821,7 @@ public class Lexicon {
 
 			// merge stem, pos, sem class from morph item, plus supertag from
 			// cat
-			Association word = WordPool.createFullWord(w, mi.getWord(), cat.getSupertag());
+			Association word = AssociationPool.createFullWord(w, mi.getWord(), cat.getSupertag());
 
 			// set origin and lexprob
 			Symbol sign = new Symbol(new SingletonList<Association>(word), cat);

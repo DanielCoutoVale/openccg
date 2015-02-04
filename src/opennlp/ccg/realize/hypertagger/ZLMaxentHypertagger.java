@@ -27,7 +27,7 @@ import opennlp.ccg.hylo.Nominal;
 import opennlp.ccg.hylo.SatOp;
 import opennlp.ccg.lexicon.DefaultTokenizer;
 import opennlp.ccg.lexicon.Association;
-import opennlp.ccg.lexicon.WordPool;
+import opennlp.ccg.lexicon.AssociationPool;
 import opennlp.ccg.parse.supertagger.io.XMLPOSDictionaryReader;
 import opennlp.ccg.parse.supertagger.io.XMLWordDictionaryReader;
 import opennlp.ccg.parse.supertagger.ml.STPriorModel;
@@ -235,8 +235,8 @@ public class ZLMaxentHypertagger extends TagExtractor implements Hypertagger {
 		}
 		// prior features
 		if (priorModel != null) {
-			Association w = WordPool.createWord(n.getPredicateName(), null, null,
-					n.getPredicateName(), getPOS(n), null, null);
+			Association w = AssociationPool.createWord(n.getPredicateName(), null, n.getPredicateName(),
+					getPOS(n), null, null, null);
 			priorModel.computePriors(w);
 			List<Pair<String, Double>> tags = priorModel.getBetaBestPriors(w, priorBeta);
 			for (Pair<String, Double> t : tags) {
@@ -863,14 +863,14 @@ public class ZLMaxentHypertagger extends TagExtractor implements Hypertagger {
 
 	public Association getPredAsWord(int idx) {
 		LfGraphNode n = findNode(idx);
-		Association w = WordPool.createWord(n.getPredicateName(), null, null, n.getPredicateName(),
-				getPOS(n), getGoldSupertag(n), null);
+		Association w = AssociationPool.createWord(n.getPredicateName(), null, n.getPredicateName(), getPOS(n),
+				getGoldSupertag(n), null, null);
 		return w;
 	}
 
 	private Association getPredAsWord() {
-		Association w = WordPool.createWord(currentPred.getPredicateName(), null, null,
-				currentPred.getPredicateName(), getPOS(currentPred), getGoldSupertag(currentPred),
+		Association w = AssociationPool.createWord(currentPred.getPredicateName(), null, currentPred.getPredicateName(),
+				getPOS(currentPred), getGoldSupertag(currentPred), null,
 				null);
 		return w;
 	}

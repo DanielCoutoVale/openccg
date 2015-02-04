@@ -12,7 +12,7 @@ import java.util.HashMap;
 import opennlp.ccg.lexicon.DefaultTokenizer;
 import opennlp.ccg.lexicon.Tokenizer;
 import opennlp.ccg.lexicon.Association;
-import opennlp.ccg.lexicon.WordPool;
+import opennlp.ccg.lexicon.AssociationPool;
 
 public class KenNgramModel extends AbstractStandardNgramModel {
 
@@ -115,8 +115,8 @@ public class KenNgramModel extends AbstractStandardNgramModel {
 				for (String part : parts) {
 					String newWdForm = (lowercaseText) ? part.toLowerCase() : part;
 					// add null attr/val list, since it is not accessible.
-					tmp.add(WordPool.createWord(newWdForm, w.getTone(), null, newWdForm,
-							w.getFunctions(), w.getSupertag(), w.getEntityClass()));
+					tmp.add(AssociationPool.createWord(newWdForm, w.getTone(), newWdForm, w.getFunctions(),
+							w.getSupertag(), w.getEntityClass(), null));
 				}
 			}
 			return tmp;

@@ -323,8 +323,8 @@ abstract public class Association implements Serializable, Comparable<Associatio
 
 	/** Returns canonical version of deserialized word. */
 	public final Object readResolve() throws ObjectStreamException {
-		return WordPool.createWord(getForm(), getTone(), getAssociates(), getTerm(),
-				getFunctions(), getSupertag(), getEntityClass());
+		return AssociationPool.createWord(getForm(), getTone(), getTerm(), getFunctions(),
+				getSupertag(), getEntityClass(), getAssociates());
 	}
 
 	@Override
@@ -353,9 +353,9 @@ abstract public class Association implements Serializable, Comparable<Associatio
 	/** Tests serialization. */
 	public final static void main(String[] argv) throws IOException, ClassNotFoundException {
 		// create words
-		Association w = WordPool.createWord("ran");
-		Association fw = WordPool.createFullWord(w, "run", "VBD", "s\\np", "MOTION");
-		Association wb = WordPool.createWordWithAttrs(w, WordPool.createWord("B", "L"));
+		Association w = AssociationPool.createWord("ran");
+		Association fw = AssociationPool.createFullWord(w, "run", "VBD", "s\\np", "MOTION");
+		Association wb = AssociationPool.createWordWithAttrs(w, AssociationPool.createWord("B", "L"));
 		// write to tmp.out
 		String filename = "tmp.ser";
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename));

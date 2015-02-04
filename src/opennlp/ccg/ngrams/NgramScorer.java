@@ -250,7 +250,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
 		wordsToScore.clear();
 		tagsAdded = false;
 		if (complete && (reverse || words.get(0).getForm() != "<s>")) {
-			wordsToScore.add(WordPool.createWord("<s>"));
+			wordsToScore.add(AssociationPool.createWord("<s>"));
 			tagsAdded = true;
 		}
 		if (reverse) {
@@ -263,7 +263,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
 		} else
 			wordsToScore.addAll(words);
 		if (complete && (reverse || words.get(words.size() - 1).getForm() != "</s>")) {
-			wordsToScore.add(WordPool.createWord("</s>"));
+			wordsToScore.add(AssociationPool.createWord("</s>"));
 			tagsAdded = true;
 		}
 	}

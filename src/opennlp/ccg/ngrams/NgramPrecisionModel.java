@@ -144,9 +144,9 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
 	 */
 	protected Association reduceWord(Association w) {
 		if (useSemClasses && isReplacementSemClass(w.getEntityClass()))
-			return WordPool.createSurfaceWordUsingSemClass(w);
+			return AssociationPool.createSurfaceWordUsingSemClass(w);
 		else
-			return WordPool.createSurfaceWord(w);
+			return AssociationPool.createSurfaceWord(w);
 	}
 
 	/**

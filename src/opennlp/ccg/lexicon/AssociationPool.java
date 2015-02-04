@@ -7,7 +7,7 @@ import java.util.Set;
 
 import opennlp.ccg.util.Pair;
 
-public class WordPool {
+public class AssociationPool {
 
 	// factory methods
 
@@ -18,25 +18,26 @@ public class WordPool {
 	 * Creates a core surface word from the given one, removing all attrs in the
 	 * given set.
 	 */
-	public static synchronized Association createCoreSurfaceWord(Association word,
-			Set<String> attrsSet) {
-		String form = word.getForm();
-		String accent = word.getTone();
-		if (accent != null && attrsSet.contains(Tokenizer.TONE_ASSOCIATE))
-			accent = null;
-		List<Pair<String, String>> pairs = word.getAssociates();
-		if (pairs != null) {
-			pairs = new ArrayList<Pair<String, String>>(pairs);
-			Iterator<Pair<String, String>> pairsIt = pairs.iterator();
-			while (pairsIt.hasNext()) {
-				Pair<String, String> pair = pairsIt.next();
-				if (attrsSet.contains(pair.a)) {
-					pairsIt.remove();
+	public static synchronized Association createCoreSurfaceWord(Association association,
+			Set<String> nonassociateKeys) {
+		String form = association.getForm();
+		String tone = association.getTone();
+		if (tone != null && nonassociateKeys.contains(Tokenizer.TONE_ASSOCIATE)) {
+			tone = null;
+		}
+		List<Pair<String, String>> associates = association.getAssociates();
+		if (associates != null) {
+			associates = new ArrayList<Pair<String, String>>(associates);
+			Iterator<Pair<String, String>> associateIterator = associates.iterator();
+			while (associateIterator.hasNext()) {
+				Pair<String, String> associate = associateIterator.next();
+				if (nonassociateKeys.contains(associate.a)) {
+					associateIterator.remove();
 				}
 			}
-			return createWord(form, accent, pairs, null, null, null, null);
+			return createWord(form, tone, null, null, null, null, associates);
 		} else {
-			return factory.create(form, accent, null, null, null, null, null);
+			return factory.create(form, tone, null, null, null, null, null);
 		}
 	}
 
@@ -76,8 +77,8 @@ public class WordPool {
 			}
 		}
 		if (mixedAttrs) {
-			return createWord(word.getForm(), word.getTone(), pairs, word2.getTerm(),
-					word2.getFunctions(), supertag, word2.getEntityClass());
+			return createWord(word.getForm(), word.getTone(), word2.getTerm(), word2.getFunctions(),
+					supertag, word2.getEntityClass(), pairs);
 		} else {
 			supertag = (supertag != null) ? supertag.intern() : null;
 			return factory.create(word.getForm(), word.getTone(), word2.getTerm(), word2.getFunctions(),
@@ -137,12 +138,12 @@ public class WordPool {
 	}
 
 	/** Creates a (surface or full) word. */
-	public static synchronized Association createWord(String form, String pitchAccent,
-			List<Pair<String, String>> attrValPairs, String stem, String POS, String supertag,
-			String semClass) {
+	public static synchronized Association createWord(String form, String tone,
+			String term, String functions, String supertag, String entityClass,
+			List<Pair<String, String>> attrValPairs) {
 		// normalize factors
 		form = (form != null) ? form.intern() : null;
-		pitchAccent = (pitchAccent != null) ? pitchAccent.intern() : null;
+		tone = (tone != null) ? tone.intern() : null;
 		if (attrValPairs != null) {
 			if (attrValPairs.isEmpty())
 				attrValPairs = null;
@@ -157,12 +158,11 @@ public class WordPool {
 				}
 			}
 		}
-		stem = (stem != null) ? stem.intern() : null;
-		POS = (POS != null) ? POS.intern() : null;
+		term = (term != null) ? term.intern() : null;
+		functions = (functions != null) ? functions.intern() : null;
 		supertag = (supertag != null) ? supertag.intern() : null;
-		semClass = (semClass != null) ? semClass.intern() : null;
-		// create word
-		return factory.create(form, pitchAccent, stem, POS, supertag, semClass, attrValPairs);
+		entityClass = (entityClass != null) ? entityClass.intern() : null;
+		return factory.create(form, tone, term, functions, supertag, entityClass, attrValPairs);
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class WordPool {
 		String semClass = word.getEntityClass();
 		// with mixed attrs, need to normalize
 		if (mixedAttrs)
-			return createWord(form, accent, pairs, stem, POS, supertag, semClass);
+			return createWord(form, accent, stem, POS, supertag, semClass, pairs);
 		else
 			return factory.create(form, accent, stem, POS, supertag, semClass, pairs);
 	}
