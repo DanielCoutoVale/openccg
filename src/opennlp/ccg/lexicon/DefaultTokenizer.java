@@ -154,20 +154,21 @@ public class DefaultTokenizer implements Tokenizer {
 	 * otherwise, colons or hyphens on their own may appear without escaping in
 	 * the word form. After splitting the token into factors, it is unescaped.
 	 */
-	public Association parseToken(String token, boolean strictFactors) {
-		// init
+	public Association parseToken(String token, boolean strictAssociates) {
 		String form = token;
-		String pitchAccent = null;
-		List<Pair<String, String>> attrValPairs = null;
-		String stem = null;
-		String POS = null;
+		String tone = null;
+		List<Pair<String, String>> associates = null;
+		String term = null;
+		String functions = null;
 		String supertag = null;
-		String semClass = null;
-		// handle colon-separated attr-val pairs
+		String entityClass = null;
+
+		// Collect token parts
 		int colonPos = token.indexOf(':');
 		int hyphenPos = token.indexOf('-');
-		if (strictFactors || (colonPos > 0 && hyphenPos > 0)) {
-			// deal with special cases before first colon, if any
+		if (strictAssociates || (colonPos > 0 && hyphenPos > 0)) {
+
+			// Treat the first associate before first colon, if any
 			String suffix;
 			if (colonPos > 0 && hyphenPos > colonPos) {
 				form = token.substring(0, colonPos);
@@ -179,65 +180,72 @@ public class DefaultTokenizer implements Tokenizer {
 				form = null;
 				suffix = token;
 			}
+
+			// Treat associates
 			while (suffix != null) {
 				hyphenPos = suffix.indexOf('-');
-				String attr = suffix.substring(0, hyphenPos);
-				String val = suffix.substring(hyphenPos + 1);
+				String associateKey = suffix.substring(0, hyphenPos);
+				String associateValue = suffix.substring(hyphenPos + 1);
 				colonPos = suffix.indexOf(':');
 				if (colonPos > 0) {
-					val = suffix.substring(hyphenPos + 1, colonPos);
+					associateValue = suffix.substring(hyphenPos + 1, colonPos);
 					suffix = suffix.substring(colonPos + 1);
 				} else
 					suffix = null;
-				attr = unescape(attr);
-				val = unescape(val);
-				if (attr.equals(Tokenizer.FORM_ASSOCIATE)) {
-					form = val;
+				associateKey = unescape(associateKey);
+				associateValue = unescape(associateValue);
+				if (associateKey.equals(Tokenizer.FORM_ASSOCIATE)) {
+					form = associateValue;
 					continue;
 				}
-				if (attr.equals(Tokenizer.TERM_ASSOCIATE)) {
-					stem = val;
+				if (associateKey.equals(Tokenizer.TERM_ASSOCIATE)) {
+					term = associateValue;
 					continue;
 				}
-				if (attr.equals(Tokenizer.FUNCTIONS_ASSOCIATE)) {
-					POS = val;
+				if (associateKey.equals(Tokenizer.FUNCTIONS_ASSOCIATE)) {
+					functions = associateValue;
 					continue;
 				}
-				if (attr.equals(Tokenizer.SUPERTAG_ASSOCIATE)) {
-					supertag = val;
+				if (associateKey.equals(Tokenizer.SUPERTAG_ASSOCIATE)) {
+					supertag = associateValue;
 					continue;
 				}
-				if (attr.equals(Tokenizer.ENTITY_CLASS_ASSOCIATE)) {
-					semClass = val;
+				if (associateKey.equals(Tokenizer.ENTITY_CLASS_ASSOCIATE)) {
+					entityClass = associateValue;
 					continue;
 				}
-				if (attr.equals(Tokenizer.TONE_ASSOCIATE)) {
-					pitchAccent = val;
+				if (associateKey.equals(Tokenizer.TONE_ASSOCIATE)) {
+					tone = associateValue;
 					continue;
 				}
-				if (attrValPairs == null)
-					attrValPairs = new ArrayList<Pair<String, String>>(5);
-				attrValPairs.add(new Pair<String, String>(attr, val));
+				if (associates == null)
+					associates = new ArrayList<Pair<String, String>>(5);
+				associates.add(new Pair<String, String>(associateKey, associateValue));
 			}
 		}
-		// check for pitch accent preceded by an underscore
+
+		// Check for tone preceded by an underscore
 		int pos = (form != null) ? form.lastIndexOf("_") : -1;
 		if (pos > 0) {
 			String suffix = form.substring(pos + 1);
-			if (Grammar.isPitchAccent(suffix)) {
-				pitchAccent = suffix;
+			if (Grammar.isTone(suffix)) {
+				tone = suffix;
 				form = form.substring(0, pos);
 			}
 		}
-		// unescape form (unless it happens to be "null")
-		if (!"null".equals(form))
+
+		// Unescape form (unless it happens to be "null")
+		if (!"null".equals(form)) {
 			form = unescape(form);
-		// check for special token
-		String specialTokenClass = inferEntityClass(form);
-		if (specialTokenClass != null)
-			semClass = specialTokenClass;
-		// done
-		return AssociationPool.createAssociation(form, pitchAccent, stem, POS, supertag, semClass, attrValPairs);
+		}
+
+		// Check whether form has an inferrable entity class
+		String inferredEntityClass = inferEntityClass(form);
+		if (inferredEntityClass != null)
+			entityClass = inferredEntityClass;
+
+		// Create association
+		return AssociationPool.createAssociation(form, tone, term, functions, supertag, entityClass, associates);
 	}
 
 	/**
