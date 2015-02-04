@@ -5,7 +5,7 @@ public class FeatureExtractionException extends Exception {
 	public FeatureExtractionException(String string) {
 		super(string);
 	}
-	
+
 	public FeatureExtractionException() {
 		super();
 	}
@@ -14,5 +14,5 @@ public class FeatureExtractionException extends Exception {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 }

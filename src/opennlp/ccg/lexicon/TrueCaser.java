@@ -42,85 +42,90 @@ import java.util.zip.GZIPInputStream;
 
 public class TrueCaser {
 
-    /** Flag for skipping words already in lower case (enabled by default). */
-    public boolean skipAlreadyLower = true;
-    
-    /**
-     * A map from lower-cased keys to the true-cased forms (from the list passed in during construction).
-     */
-    private Map<String,String> caseMap = new HashMap<String,String>();
+	/** Flag for skipping words already in lower case (enabled by default). */
+	public boolean skipAlreadyLower = true;
 
-    /**
-     * For the heuristics that determine whether something is in title case: what percentage of the sentence must be
-     * cased to make the title-case detector go off?
-     */
-    private double titleCaseThreshold;
+	/**
+	 * A map from lower-cased keys to the true-cased forms (from the list passed
+	 * in during construction).
+	 */
+	private Map<String, String> caseMap = new HashMap<String, String>();
 
-    /**
-     * Constructor that just takes a path to a list of words that are only upper-case (title-case is default = 0.9).
-     */
-    public TrueCaser(String pathToOnlyUCWords) {
-    	this(pathToOnlyUCWords, 0.5);
-    }
+	/**
+	 * For the heuristics that determine whether something is in title case:
+	 * what percentage of the sentence must be cased to make the title-case
+	 * detector go off?
+	 */
+	private double titleCaseThreshold;
 
-    /**
-     * Constructor that takes a path to a list of words that are only upper-case and a title-case threshold.
-     */
-    public TrueCaser(String pathToOnlyUCWords, double titleCaseThreshold) {
+	/**
+	 * Constructor that just takes a path to a list of words that are only
+	 * upper-case (title-case is default = 0.9).
+	 */
+	public TrueCaser(String pathToOnlyUCWords) {
+		this(pathToOnlyUCWords, 0.5);
+	}
+
+	/**
+	 * Constructor that takes a path to a list of words that are only upper-case
+	 * and a title-case threshold.
+	 */
+	public TrueCaser(String pathToOnlyUCWords, double titleCaseThreshold) {
 		this.titleCaseThreshold = titleCaseThreshold;
 		this.caseMap = TrueCaser.readInCaseMap(pathToOnlyUCWords);
 		if (this.caseMap == null) {
-		    System.err.println("Something went wrong."+System.getProperty("line.separator")+
-				       "Make sure you passed in a file of true-cased words, etc.");
-		    System.exit(-1);
+			System.err.println("Something went wrong." + System.getProperty("line.separator")
+					+ "Make sure you passed in a file of true-cased words, etc.");
+			System.exit(-1);
 		} else {
-		    //System.err.println("Reading in list of true-cased words: "+pathToOnlyUCWords+System.getProperty("line.separator")+
-		    //		       " at a title-case heursitic detection threshold of: "+titleCaseThreshold);
+			// System.err.println("Reading in list of true-cased words: "+pathToOnlyUCWords+System.getProperty("line.separator")+
+			// " at a title-case heursitic detection threshold of: "+titleCaseThreshold);
 		}
-    }
+	}
 
-    /**
-     * Static method to read in the list of words.
-     */ 
-    public static Map<String,String> readInCaseMap(String pathToOnlyUCWords) {
-		Map<String,String> caseMap = new HashMap<String,String>();
+	/**
+	 * Static method to read in the list of words.
+	 */
+	public static Map<String, String> readInCaseMap(String pathToOnlyUCWords) {
+		Map<String, String> caseMap = new HashMap<String, String>();
 		BufferedReader inRead = null;
 		try {
-		    Charset utf8 = Charset.availableCharsets().get("UTF-8");
-	
-		    inRead = new BufferedReader(
-						(pathToOnlyUCWords.toLowerCase().endsWith(".gz")) ?
-						(new InputStreamReader(new GZIPInputStream(new FileInputStream(new File(pathToOnlyUCWords))), utf8)) :
-						(new InputStreamReader(new FileInputStream(new File(pathToOnlyUCWords)), utf8))
-						);
-	
-		    String ln = inRead.readLine();
-		    while(ln != null) {
-			ln = ln.trim();
-			if(!ln.startsWith("#")) {
-			    caseMap.put(ln.toLowerCase(), ln);
-			}
+			Charset utf8 = Charset.availableCharsets().get("UTF-8");
+
+			inRead = new BufferedReader(
+					(pathToOnlyUCWords.toLowerCase().endsWith(".gz")) ? (new InputStreamReader(
+							new GZIPInputStream(new FileInputStream(new File(pathToOnlyUCWords))),
+							utf8)) : (new InputStreamReader(new FileInputStream(new File(
+							pathToOnlyUCWords)), utf8)));
+
+			String ln = inRead.readLine();
+			while (ln != null) {
+				ln = ln.trim();
+				if (!ln.startsWith("#")) {
+					caseMap.put(ln.toLowerCase(), ln);
+				}
 				ln = inRead.readLine();
-		    }
-		} catch (IOException ioe) { 
-		    return null;
+			}
+		} catch (IOException ioe) {
+			return null;
 		} finally {
-		    try {
-		    	inRead.close();
-		    } catch (Exception e) {
-		    	// do nothing.
-		    }
+			try {
+				inRead.close();
+			} catch (Exception e) {
+				// do nothing.
+			}
 		}
 		return caseMap;
-    }
+	}
 
-    /**
-     * Truecase a candidate word. If the word is in the list of more commonly
-     * cased words, then return this cased form.  If not, normalize to lowercase if
-     * this is the first word or the sentence is in titlecase. Else return the word as-is.
-     * If skipAlreadyLower is enabled, skip the word if it is already in lower case.
-     */ 
-    public String trueCase(String theWord, boolean isTitle, boolean isFirstWord) {
+	/**
+	 * Truecase a candidate word. If the word is in the list of more commonly
+	 * cased words, then return this cased form. If not, normalize to lowercase
+	 * if this is the first word or the sentence is in titlecase. Else return
+	 * the word as-is. If skipAlreadyLower is enabled, skip the word if it is
+	 * already in lower case.
+	 */
+	public String trueCase(String theWord, boolean isTitle, boolean isFirstWord) {
 		String loweredWord = theWord.toLowerCase();
 		// skip word in lower case per flag
 		if (skipAlreadyLower && theWord.equals(loweredWord))
@@ -133,18 +138,21 @@ public class TrueCaser {
 		} else {
 			return (isTitle || isFirstWord) ? loweredWord : theWord;
 		}
-    }
+	}
 
-    /**
-     * Truecase a whole sentence.  If the sentence appears to be in title-case (as determined by a heuristic
-     * that is triggered by there being greater than 0.X of the first 10 words, if there are that many,
-     * being cased) normalize any word that is not in the true-case list to lower-case.  Otherwise, leave all
-     * words that are not in the true-case list alone, except the first word (which is normalized to lower-case)
-     * The title-case threshold is a creation-time parameter. 
-     * As always, if skipAlreadyLower is enabled, the word is skipped if it is already in lower case.  Note that 
-     * the second word is counted as the first word if the first token is a left quote (single or double).
-     */
-    public String trueCaseSentence(String sentence) { 
+	/**
+	 * Truecase a whole sentence. If the sentence appears to be in title-case
+	 * (as determined by a heuristic that is triggered by there being greater
+	 * than 0.X of the first 10 words, if there are that many, being cased)
+	 * normalize any word that is not in the true-case list to lower-case.
+	 * Otherwise, leave all words that are not in the true-case list alone,
+	 * except the first word (which is normalized to lower-case) The title-case
+	 * threshold is a creation-time parameter. As always, if skipAlreadyLower is
+	 * enabled, the word is skipped if it is already in lower case. Note that
+	 * the second word is counted as the first word if the first token is a left
+	 * quote (single or double).
+	 */
+	public String trueCaseSentence(String sentence) {
 		String[] parts = sentence.split("\\s+");
 		StringBuffer res = new StringBuffer(parts.length);
 
@@ -153,18 +161,20 @@ public class TrueCaser {
 		// titlecase detector went off).
 		int i = 0;
 		for (String prt : parts) {
-			boolean isFirstWord = (i == 0 || (i == 1 && (parts[0].equals("``") || parts[0].equals("`"))));
+			boolean isFirstWord = (i == 0 || (i == 1 && (parts[0].equals("``") || parts[0]
+					.equals("`"))));
 			res.append(" " + trueCase(prt, isTitle, isFirstWord));
 			i++;
 		}
 		return res.toString().trim();
-    }
+	}
 
-    /**
-     * Returns true iff the percentage of the first 10 words (or the whole sentence if it's less than 10 words) 
-     * that have a case distinction is greater than or equal to 'titleCaseThreshold'.
-     */
-    public boolean isTitleCased(String[] words) {
+	/**
+	 * Returns true iff the percentage of the first 10 words (or the whole
+	 * sentence if it's less than 10 words) that have a case distinction is
+	 * greater than or equal to 'titleCaseThreshold'.
+	 */
+	public boolean isTitleCased(String[] words) {
 		int numCased = 0, cursor = 0;
 		for (String wd : words) {
 			if (cursor >= 10) {
@@ -176,28 +186,31 @@ public class TrueCaser {
 			cursor++;
 		}
 		return (numCased / ((words.length < 10) ? (words.length + 0.0) : 10.0) >= titleCaseThreshold);
-    }
+	}
 
-    public String tcWordToString(String newWordForm, Association oldWord) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(newWordForm);
-        if (oldWord.getFunctions() != null) sb.append(":P-").append(DefaultTokenizer.escape(oldWord.getFunctions()));
-        if (oldWord.getSupertag() != null) sb.append(":T-").append(DefaultTokenizer.escape(oldWord.getSupertag()));
-        if (oldWord.getEntityClass() != null) sb.append(":C-").append(DefaultTokenizer.escape(oldWord.getEntityClass()));
-        if (sb.length() == 0) sb.append((String) null);
-        return sb.toString();
-    }
+	public String tcWordToString(String newWordForm, Association oldWord) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(newWordForm);
+		if (oldWord.getFunctions() != null)
+			sb.append(":P-").append(DefaultTokenizer.escape(oldWord.getFunctions()));
+		if (oldWord.getSupertag() != null)
+			sb.append(":T-").append(DefaultTokenizer.escape(oldWord.getSupertag()));
+		if (oldWord.getEntityClass() != null)
+			sb.append(":C-").append(DefaultTokenizer.escape(oldWord.getEntityClass()));
+		if (sb.length() == 0)
+			sb.append((String) null);
+		return sb.toString();
+	}
 
-    public static void main(String[] args) throws IOException {
-    	String newline = System.getProperty("line.separator");
-    	String usage = 
-    			newline + 
-    			"java TrueCaser -t <truecase-file> -r <title-threshold> -i <input [default=stdin]> -o <output [default=stdout]>" 
-    			+ newline;
-    	if(args.length == 0 || args[0] .equals("h") || args[0] .equals("-h") || args[0] .equals("--h") 
-    			|| args[0] .equals("--help") || args[0] .equals("-help")) {
-		    System.err.println(usage);
-		    System.exit(0);
+	public static void main(String[] args) throws IOException {
+		String newline = System.getProperty("line.separator");
+		String usage = newline
+				+ "java TrueCaser -t <truecase-file> -r <title-threshold> -i <input [default=stdin]> -o <output [default=stdout]>"
+				+ newline;
+		if (args.length == 0 || args[0].equals("h") || args[0].equals("-h")
+				|| args[0].equals("--h") || args[0].equals("--help") || args[0].equals("-help")) {
+			System.err.println(usage);
+			System.exit(0);
 		}
 
 		String truecasefile = null, inputfile = null, outputfile = null;
@@ -223,19 +236,19 @@ public class TrueCaser {
 			System.err.println("unrecognized option " + args[a] + ".");
 			System.err.println(usage);
 			System.exit(0);
-		}    
-		
+		}
+
 		Charset utf8 = Charset.availableCharsets().get("UTF-8");
 
 		// input of text (assumed to be tokenized utf-8-encoded text).
 		BufferedReader in = new BufferedReader(new InputStreamReader(
-				((inputfile == null) ? System.in : (new FileInputStream(
-						new File(inputfile)))), utf8));
+				((inputfile == null) ? System.in : (new FileInputStream(new File(inputfile)))),
+				utf8));
 
 		// output stream (back to tokenized utf-8-encoded text).
 		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-				((outputfile == null) ? System.out : (new FileOutputStream(
-						new File(outputfile)))), utf8));
+				((outputfile == null) ? System.out : (new FileOutputStream(new File(outputfile)))),
+				utf8));
 
 		// file of true-cased words is arg0.
 		TrueCaser tc = new TrueCaser(truecasefile, tcThresh);

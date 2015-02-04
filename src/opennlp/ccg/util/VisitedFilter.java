@@ -21,12 +21,13 @@ package opennlp.ccg.util;
 import java.util.HashSet;
 
 /**
- * A filter that tracks which elements have already been visited by some process or iteration, allowing only
- * those that have not yet been visited. An element is considered visited when this filter's 
- * {@link #allows(Object)} method has been called with it as an argument.
+ * A filter that tracks which elements have already been visited by some process
+ * or iteration, allowing only those that have not yet been visited. An element
+ * is considered visited when this filter's {@link #allows(Object)} method has
+ * been called with it as an argument.
  * <p>
  * Internally, the visited elements are tracked by using a
- * {@link MembershipFilter} based on a {@link HashSet}.  
+ * {@link MembershipFilter} based on a {@link HashSet}.
  * 
  * @author <a href="http://www.ling.ohio-state.edu/~scott/">Scott Martin</a>
  */
@@ -38,10 +39,11 @@ public class VisitedFilter<E> extends MembershipFilter<E> {
 	public VisitedFilter() {
 		super(new HashSet<E>());
 	}
-	
+
 	/**
-	 * Tests whether this filter allows <tt>e</tt> by testing whether or not it has been visited. An element
-	 * has been visited if this method has been previously called with it as an argument.
+	 * Tests whether this filter allows <tt>e</tt> by testing whether or not it
+	 * has been visited. An element has been visited if this method has been
+	 * previously called with it as an argument.
 	 * 
 	 * @param e The element to test whether it has been visited or not.
 	 * @return <tt>true</tt> if <tt>e</tt> has not yet been visited.
@@ -50,18 +52,20 @@ public class VisitedFilter<E> extends MembershipFilter<E> {
 	 */
 	@Override
 	public boolean allows(E e) {
-		if(!hasVisited(e)) {
+		if (!hasVisited(e)) {
 			members.add(e);
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Tests whether the specified element has been visited or not.
+	 * 
 	 * @param e The element to test for visitation.
-	 * @return <tt>true</tt> if <tt>e</tt> is among the elements that have been previously visited.
+	 * @return <tt>true</tt> if <tt>e</tt> is among the elements that have been
+	 *         previously visited.
 	 * 
 	 * @see #allows(Object)
 	 * @see MembershipFilter#allows(Object)

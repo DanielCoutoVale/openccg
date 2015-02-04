@@ -42,55 +42,54 @@ import opennlp.ccgbank.extract.ExtractGrammar.ExtractionProperties;
 //import org.jdom.JDOMException;
 //import org.xml.sax.SAXException;
 
+public class FreqTally {
 
-public class FreqTally{
+	// Frequency cutoff for including an extracted cat
+	public static int CAT_FREQ_CUTOFF = 1;
 
-	// Frequency cutoff for including an extracted cat 
-	public static int CAT_FREQ_CUTOFF = 1;  
-
-	// Frequency cutoff for including an extracted lex, cat, pos triple 
-	public static int LEX_FREQ_CUTOFF = 1; 
+	// Frequency cutoff for including an extracted lex, cat, pos triple
+	public static int LEX_FREQ_CUTOFF = 1;
 
 	// Frequency cutoff for making a family (ie, cat & pos) open
-	public static int OPEN_FREQ_CUTOFF = 100; 
+	public static int OPEN_FREQ_CUTOFF = 100;
 
+	// The object where lexical info of each category has been stored
+	private static Map<String, CatNode> catInfo = new HashMap<String, CatNode>();
 
-	//The object where lexical info of each category has been stored
-	private static Map<String,CatNode> catInfo = new HashMap<String,CatNode>();
+	// Freq of cat specs
+	private static Map<String, Integer> catFreq = new HashMap<String, Integer>();
 
-	//Freq of cat specs
-	private static Map<String,Integer> catFreq = new HashMap<String,Integer>();
-
-	//Sentence id
-	private static String id="";
+	// Sentence id
+	private static String id = "";
 
 	// Observed lex combos
 	private static Set<String> observedLexCombos = new HashSet<String>();
 
 	/** Resets the statically held tallies. */
 	public static void reset() {
-		catInfo = new HashMap<String,CatNode>();
-		catFreq = new HashMap<String,Integer>();
-		id="";
+		catInfo = new HashMap<String, CatNode>();
+		catFreq = new HashMap<String, Integer>();
+		id = "";
 		observedLexCombos = new HashSet<String>();
 	}
-	
-	//Proc which traps and stores id of each sentence
+
+	// Proc which traps and stores id of each sentence
 	public String storeId(String x) {
-		if(x.length()>0){
+		if (x.length() > 0) {
 			id = x;
 			int posEquals = x.indexOf('=');
 			if (posEquals > 0) {
-				id = x.substring(posEquals+1);
+				id = x.substring(posEquals + 1);
 			}
 		}
 		return id;
 	}
 
-	//Changes case of proper nouns
-	public String changeCase(String lex,String pos){
+	// Changes case of proper nouns
+	public String changeCase(String lex, String pos) {
 
-		//if(!pos.equals("NNP") && !pos.equals("NNPS") && !lex.equals("I"))lex=lex.toLowerCase();
+		// if(!pos.equals("NNP") && !pos.equals("NNPS") &&
+		// !lex.equals("I"))lex=lex.toLowerCase();
 		return lex;
 
 	}
@@ -103,56 +102,55 @@ public class FreqTally{
 		CatNode cn;
 		boolean retval;
 
-		//First occurence of cat+pos. Entry made
-		if(!catFreq.containsKey(key)){
+		// First occurence of cat+pos. Entry made
+		if (!catFreq.containsKey(key)) {
 			cn = new CatNode(cat, pos);
 			catInfo.put(key, cn);
-			catFreq.put(key,1);
+			catFreq.put(key, 1);
 			retval = true;
-		}
-		else { // otherwise inc count
+		} else { // otherwise inc count
 			cn = catInfo.get(key);
-			catFreq.put(key, catFreq.get(key)+1);
+			catFreq.put(key, catFreq.get(key) + 1);
 			retval = false;
 		}
 
-		// store lex info 
-		cn.lexInsert(lex,id);
+		// store lex info
+		cn.lexInsert(lex, id);
 
 		return retval;
 	}
 
-
 	/** Returns a string key for a cat and pos. */
 	public static String catPosKey(String cat, String pos) {
-		return cat+"-"+pos;
+		return cat + "-" + pos;
 	}
 
-
-	//Proc which outputs list of map keys in descending order of frequencies
-	public static List<String> sortTally(Map<String,Integer> x) { 
+	// Proc which outputs list of map keys in descending order of frequencies
+	public static List<String> sortTally(Map<String, Integer> x) {
 
 		// retval
 		List<String> sortedList = new ArrayList<String>();
 
-		//Sorting by freq
+		// Sorting by freq
 		ArrayList<Integer> vals1 = new ArrayList<Integer>(x.values());
 		Collections.sort(vals1);
 
-		//Removing unique frequencies to a new arraylist
+		// Removing unique frequencies to a new arraylist
 		ArrayList<Integer> vals = new ArrayList<Integer>(vals1.size());
 		int prev = -1;
 		for (Integer freq : vals1) {
-			if (freq != prev) vals.add(freq);
+			if (freq != prev)
+				vals.add(freq);
 			prev = freq;
 		}
 
-		//Finding all the keys corresponding to a particular freq
-		for (int i=vals.size()-1; i >=0; i--) {
+		// Finding all the keys corresponding to a particular freq
+		for (int i = vals.size() - 1; i >= 0; i--) {
 			int sortedFreq = vals.get(i);
 			for (String key : x.keySet()) {
 				int freq = x.get(key);
-				if(freq==sortedFreq) sortedList.add(key);
+				if (freq == sortedFreq)
+					sortedList.add(key);
 			}
 		}
 
@@ -163,17 +161,16 @@ public class FreqTally{
 		FreqTally.printTally(new File(extractProps.tempDir));
 	}
 
-
 	public static void printTally(File directory) throws FileNotFoundException {
 
 		System.out.println("Generating CorpFreq.html");
 
-		//Freq Output file
+		// Freq Output file
 		File freqFile = new File(directory, "CorpFreq.html");
-		PrintWriter output=new PrintWriter(new FileOutputStream(freqFile));
+		PrintWriter output = new PrintWriter(new FileOutputStream(freqFile));
 		List<String> sortedCatKeys = sortTally(catFreq);
 
-		//Printing the final ouput in html form
+		// Printing the final ouput in html form
 		output.println("<html>");
 		output.println("<head>");
 		output.println("<title>");
@@ -183,7 +180,7 @@ public class FreqTally{
 		output.println("<body>");
 		output.flush();
 
-		for (int i=0; i < sortedCatKeys.size(); i++) {
+		for (int i = 0; i < sortedCatKeys.size(); i++) {
 
 			String key = sortedCatKeys.get(i);
 			CatNode cn = catInfo.get(key);
@@ -192,7 +189,7 @@ public class FreqTally{
 			int freq = catFreq.get(key);
 
 			output.println("<p>");
-			output.println(i+1+" Category: "+cat+" POS: "+pos+" Freq: "+freq);
+			output.println(i + 1 + " Category: " + cat + " POS: " + pos + " Freq: " + freq);
 			output.println("</p>");
 
 			output.println();
@@ -204,17 +201,17 @@ public class FreqTally{
 		output.println("</html>");
 	}
 
-
 	/** Returns whether this lex combo has been seen for the first time. */
-	public boolean firstLexCombo(String lex, String stem, String rel, String cat, String pos,String semClass) {
+	public boolean firstLexCombo(String lex, String stem, String rel, String cat, String pos,
+			String semClass) {
 		String key = lex + "_" + stem + "_" + rel + "_" + cat + "_" + pos + "_" + semClass;
-		//String key = lex + "_" + stem + "_" + rel + "_" + cat + "_" + pos;
+		// String key = lex + "_" + stem + "_" + rel + "_" + cat + "_" + pos;
 
-		if (observedLexCombos.contains(key)) return false;
+		if (observedLexCombos.contains(key))
+			return false;
 		observedLexCombos.add(key);
 		return true;
 	}
-
 
 	// returns the freq for the given key, or 0 if not present
 	private int getFreq(String key) {
@@ -225,32 +222,36 @@ public class FreqTally{
 	/** Returns the frequency of the cat and pos. */
 	public int getFreq(String cat, String pos) {
 		String key = catPosKey(cat, pos);
-		return getFreq(key); 
+		return getFreq(key);
 	}
 
 	/** Returns whether the cat and pos pass the frequency cutoff. */
 	public boolean checkFreqStatus(String cat, String pos) {
 
-		/*if(cat.contains("Arg") || cat.startsWith("pp["))
-				return true;*/
+		/*
+		 * if(cat.contains("Arg") || cat.startsWith("pp[")) return true;
+		 */
 
-		/*if(id.contains("wsj_00"))
-				return true;*/
+		/*
+		 * if(id.contains("wsj_00")) return true;
+		 */
 
-		return getFreq(cat, pos) >= CAT_FREQ_CUTOFF; 
+		return getFreq(cat, pos) >= CAT_FREQ_CUTOFF;
 	}
 
 	/** Returns whether the lex, cat and pos pass the frequency cutoffs. */
 	public boolean checkFreqStatus(String lex, String cat, String pos) {
 		String key = catPosKey(cat, pos);
-		//System.out.println(cat);
-		if(cat.contains("pp["))
+		// System.out.println(cat);
+		if (cat.contains("pp["))
 			return true;
 
-		/*if(id.contains("wsj_00"))
-			return true;*/
+		/*
+		 * if(id.contains("wsj_00")) return true;
+		 */
 
-		if (getFreq(key) < CAT_FREQ_CUTOFF) return false; 
+		if (getFreq(key) < CAT_FREQ_CUTOFF)
+			return false;
 		CatNode cn = catInfo.get(key);
 		return cn.getLexFreq(lex) >= LEX_FREQ_CUTOFF;
 	}
@@ -258,9 +259,13 @@ public class FreqTally{
 	/** Returns whether the cat and pos are for an open family. */
 	public boolean isOpen(String cat, String pos) {
 
-		if (getFreq(cat, pos) < OPEN_FREQ_CUTOFF) return false;
-		if (pos.startsWith("NN") || pos.equals("CD")) return true;
-		else if (pos.startsWith("JJ") && (cat.equals("n_~1/n_1") || cat.equals("s[adj]_1\np_2"))) return true;
-		else return false;
+		if (getFreq(cat, pos) < OPEN_FREQ_CUTOFF)
+			return false;
+		if (pos.startsWith("NN") || pos.equals("CD"))
+			return true;
+		else if (pos.startsWith("JJ") && (cat.equals("n_~1/n_1") || cat.equals("s[adj]_1\np_2")))
+			return true;
+		else
+			return false;
 	}
 }

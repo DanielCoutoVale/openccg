@@ -30,52 +30,54 @@ import opennlp.ccg.util.Pair;
  */
 public class PipedTokenizer extends DefaultTokenizer {
 
-    public PipedTokenizer() {
-        super();
-    }
+	public PipedTokenizer() {
+		super();
+	}
 
-    @Override
-    public Association parseToken(String token, boolean strictFactors) {
-        // init
-        String form = token;
-        String stem = null;
-        String POS = null;
-        String pitchAccent = null;
-        String supertag = null;
-        String semClass = null;
-        List<Pair<String,String>> attrValPairs = null;
-        
-        // handle pipe-separated attr-val pairs
-        int pipePos = token.indexOf('|');
-        String suffix = null;
-        if (pipePos > 0) {
-            // get word form
-            form = token.substring(0, pipePos);
-            // shave off word form
-            suffix = token.substring(pipePos + 1);
-            // get next | position
-            pipePos = suffix.indexOf('|');            
-            // get stem [or lemma]. could be null.
-            stem = suffix.substring(0,pipePos);
-            if (stem.equals("")) { stem = null;}
-            // shave off stem/lemma
-            suffix = suffix.substring(pipePos + 1);
-            // get next | position
-            pipePos = suffix.indexOf('|');
-            // get POS
-            POS = suffix.substring(0,pipePos);
-            // shave off POS
-            suffix = suffix.substring(pipePos + 1);
-            // see whether there is a supertag
-            if (suffix != null && !suffix.equals("")) {
-                // get supertag
-                supertag = suffix.trim();
-            }
-        } else {
-            throw new RuntimeException("This file is not in the right format: \n"+
-                    "form|lemma|POS|(Supertag) ... form|lemma|POS(Supertag).");
-        }
-        // done
-        return WordPool.createWord(form, pitchAccent, attrValPairs, stem, POS, supertag, semClass);
-    }
+	@Override
+	public Association parseToken(String token, boolean strictFactors) {
+		// init
+		String form = token;
+		String stem = null;
+		String POS = null;
+		String pitchAccent = null;
+		String supertag = null;
+		String semClass = null;
+		List<Pair<String, String>> attrValPairs = null;
+
+		// handle pipe-separated attr-val pairs
+		int pipePos = token.indexOf('|');
+		String suffix = null;
+		if (pipePos > 0) {
+			// get word form
+			form = token.substring(0, pipePos);
+			// shave off word form
+			suffix = token.substring(pipePos + 1);
+			// get next | position
+			pipePos = suffix.indexOf('|');
+			// get stem [or lemma]. could be null.
+			stem = suffix.substring(0, pipePos);
+			if (stem.equals("")) {
+				stem = null;
+			}
+			// shave off stem/lemma
+			suffix = suffix.substring(pipePos + 1);
+			// get next | position
+			pipePos = suffix.indexOf('|');
+			// get POS
+			POS = suffix.substring(0, pipePos);
+			// shave off POS
+			suffix = suffix.substring(pipePos + 1);
+			// see whether there is a supertag
+			if (suffix != null && !suffix.equals("")) {
+				// get supertag
+				supertag = suffix.trim();
+			}
+		} else {
+			throw new RuntimeException("This file is not in the right format: \n"
+					+ "form|lemma|POS|(Supertag) ... form|lemma|POS(Supertag).");
+		}
+		// done
+		return WordPool.createWord(form, pitchAccent, attrValPairs, stem, POS, supertag, semClass);
+	}
 }

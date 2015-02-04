@@ -22,11 +22,11 @@ package opennlp.ccg.parse.tagger.ml;
  * @author Dennis N. Mehay
  */
 public class TaggerFeature {
-    public String name;
-    public Double activation;
-    
-    public TaggerFeature(String name, Double activation) {
-        this.name = name.intern();
-        this.activation = activation;
-    }
+	public String name;
+	public Double activation;
+
+	public TaggerFeature(String name, Double activation) {
+		this.name = name.intern();
+		this.activation = activation;
+	}
 }

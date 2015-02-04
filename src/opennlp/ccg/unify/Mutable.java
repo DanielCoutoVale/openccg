@@ -22,17 +22,17 @@ package opennlp.ccg.unify;
  * Interface for objects which might contain recursive structure and are
  * mutable.
  *
- * @author      Jason Baldridge
- * @version     $Revision: 1.1.1.1 $, $Date: 2003/02/28 18:02:13 $
+ * @author Jason Baldridge
+ * @version $Revision: 1.1.1.1 $, $Date: 2003/02/28 18:02:13 $
  */
 public interface Mutable {
 
-    /**
-     * Applies a ModFcn to this Mutable and then applies it to all fields
-     * which are themselves Mutables.
-     *
-     * @param mf a function to be applied
-     **/
-    public void deepMap (ModFcn mf);
+	/**
+	 * Applies a ModFcn to this Mutable and then applies it to all fields which
+	 * are themselves Mutables.
+	 *
+	 * @param mf a function to be applied
+	 **/
+	public void deepMap(ModFcn mf);
 
 }

@@ -41,8 +41,8 @@ import java.util.*;
 public class ChartCompleterImp implements ChartCompleter {
 
 	/**
-	 * Compares scoredSymbols based on their relative score, in descending order, then
-	 * their signs.
+	 * Compares scoredSymbols based on their relative score, in descending
+	 * order, then their signs.
 	 */
 	public static final Comparator<ScoredSymbol> scoredSymbolComparator = new Comparator<ScoredSymbol>() {
 		public int compare(ScoredSymbol scoredSymbol1, ScoredSymbol scoredSymbol2) {
@@ -147,7 +147,8 @@ public class ChartCompleterImp implements ChartCompleter {
 		}
 		// otherwise add as an alternative
 		else {
-			Form.insertScoredSymbol(scoredSymbol, rep.alternatives, null, config.pruneLimit, scoredSymbolComparator);
+			Form.insertScoredSymbol(scoredSymbol, rep.alternatives, null, config.pruneLimit,
+					scoredSymbolComparator);
 		}
 		// update scoredSymbol count, max form size
 		scoredSymbolCount++;
@@ -206,8 +207,7 @@ public class ChartCompleterImp implements ChartCompleter {
 	}
 
 	@Override
-	public void glueForms(int x1, int y1, int x2, int y2, int x3, int y3)
-			throws ParseException {
+	public void glueForms(int x1, int y1, int x2, int y2, int x3, int y3) throws ParseException {
 		if (chart.getForm(x1, y1) == null)
 			return;
 		if (chart.getForm(x2, y2) == null)
@@ -288,12 +288,14 @@ public class ChartCompleterImp implements ChartCompleter {
 	}
 
 	// recursively unpack scoredSymbol, unless already visited
-	private void unpack(ScoredSymbol scoredSymbol, Set<ScoredSymbol> unpacked, Set<ScoredSymbol> startedUnpacking) {
+	private void unpack(ScoredSymbol scoredSymbol, Set<ScoredSymbol> unpacked,
+			Set<ScoredSymbol> startedUnpacking) {
 		// check visited
 		if (unpacked.contains(scoredSymbol))
 			return;
 		if (startedUnpacking.contains(scoredSymbol)) {
-			System.err.println("Warning, revisiting scoredSymbol before unpacking complete: " + scoredSymbol);
+			System.err.println("Warning, revisiting scoredSymbol before unpacking complete: "
+					+ scoredSymbol);
 			System.err.println(scoredSymbol.symbol.getDerivationHistory().toString());
 			return;
 		}
@@ -325,7 +327,8 @@ public class ChartCompleterImp implements ChartCompleter {
 	}
 
 	// recursively unpack inputs, make alt combos and add to merged
-	private void unpackAlt(ScoredSymbol alt, Set<ScoredSymbol> unpacked, Set<ScoredSymbol> startedUnpacking, EdgeHash merged) {
+	private void unpackAlt(ScoredSymbol alt, Set<ScoredSymbol> unpacked,
+			Set<ScoredSymbol> startedUnpacking, EdgeHash merged) {
 		// unpack via input signs
 		DerivationHistory history = alt.symbol.getDerivationHistory();
 		Symbol[] inputSigns = history.getInputs();
@@ -340,7 +343,8 @@ public class ChartCompleterImp implements ChartCompleter {
 			inputEdges[i] = ScoredSymbol.recoverScoredSymbol(inputSigns[i]);
 			unpack(inputEdges[i], unpacked, startedUnpacking);
 		}
-		// then make scoredSymbols for new combos, using same rule, and add to merged
+		// then make scoredSymbols for new combos, using same rule, and add to
+		// merged
 		// (if unseen)
 		Rule rule = history.getRule();
 		List<Symbol[]> altCombos = inputCombos(inputEdges, 0);
@@ -363,7 +367,8 @@ public class ChartCompleterImp implements ChartCompleter {
 			if (results.isEmpty())
 				continue; // (rare?)
 			Symbol sign = results.get(0); // assuming single result
-			merged.insert(new ScoredSymbol(sign)); // make scoredSymbol for new alt
+			merged.insert(new ScoredSymbol(sign)); // make scoredSymbol for new
+													// alt
 			nonfinalScoredSymbolCount++;
 		}
 	}
@@ -413,9 +418,10 @@ public class ChartCompleterImp implements ChartCompleter {
 	// Lazy Unpacking
 
 	/**
-	 * Lazily unpacks the scoredSymbols in the given form as an n-best list using a
-	 * variant of "cube pruning". The algorithm essentially follows Algorithm 2
-	 * of Huang and Chiang (2005), with checking for spurious ambiguity.
+	 * Lazily unpacks the scoredSymbols in the given form as an n-best list
+	 * using a variant of "cube pruning". The algorithm essentially follows
+	 * Algorithm 2 of Huang and Chiang (2005), with checking for spurious
+	 * ambiguity.
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ScoredSymbol> lazyUnpack(int x, int y) {
@@ -426,13 +432,15 @@ public class ChartCompleterImp implements ChartCompleter {
 		Form form = makeForm(x, y);
 		// make top-level candidate list and derivs map
 		List<Candidate> topcands = new ArrayList<Candidate>(config.pruneLimit);
-		Map<ScoredSymbol, List<ScoredSymbol>> derivsmap = new THashMap(new TObjectIdentityHashingStrategy());
+		Map<ScoredSymbol, List<ScoredSymbol>> derivsmap = new THashMap(
+				new TObjectIdentityHashingStrategy());
 		for (ScoredSymbol scoredSymbol : form.getScoredSymbols()) {
 			List<Candidate> cands = getCandidates(scoredSymbol, derivsmap);
 			topcands.addAll(cands);
 		}
 		sortAndPrune(topcands);
-		// NB: no single scoredSymbol for top form, so must treat it as a special case
+		// NB: no single scoredSymbol for top form, so must treat it as a
+		// special case
 		// of findKBest
 		List<ScoredSymbol> retval = new ArrayList<ScoredSymbol>(config.pruneLimit);
 		EdgeHash merged = new EdgeHash();
@@ -455,7 +463,8 @@ public class ChartCompleterImp implements ChartCompleter {
 	}
 
 	// lazily find k-best derivations, if scoredSymbol not already visited
-	private void findKBest(ScoredSymbol scoredSymbol, Map<ScoredSymbol, List<ScoredSymbol>> derivsmap) {
+	private void findKBest(ScoredSymbol scoredSymbol,
+			Map<ScoredSymbol, List<ScoredSymbol>> derivsmap) {
 		if (derivsmap.containsKey(scoredSymbol))
 			return;
 		List<Candidate> cands = getCandidates(scoredSymbol, derivsmap);
@@ -470,7 +479,8 @@ public class ChartCompleterImp implements ChartCompleter {
 	}
 
 	// appends next candidate, expands frontier
-	private void appendNext(List<Candidate> cands, EdgeHash merged, Map<ScoredSymbol, List<ScoredSymbol>> derivsmap) {
+	private void appendNext(List<Candidate> cands, EdgeHash merged,
+			Map<ScoredSymbol, List<ScoredSymbol>> derivsmap) {
 		// append next
 		Candidate cand = cands.remove(0);
 		merged.add(cand.scoredSymbol);
@@ -484,7 +494,8 @@ public class ChartCompleterImp implements ChartCompleter {
 			for (int m = 0; m < nextIndices.length; m++)
 				nextIndices[m] = cand.indices[m];
 			nextIndices[i]++;
-			ScoredSymbol next = getEdgeForIndices(cand.scoredSymbol, cand.inputReps, nextIndices, derivsmap);
+			ScoredSymbol next = getEdgeForIndices(cand.scoredSymbol, cand.inputReps, nextIndices,
+					derivsmap);
 			// add next candidate, if any, if not already there
 			if (next != null) {
 				Candidate nextCand = new Candidate(next, cand.inputReps, nextIndices);
@@ -501,7 +512,8 @@ public class ChartCompleterImp implements ChartCompleter {
 		}
 	}
 
-	// candidate is an scoredSymbol plus an array of indices for keeping track of
+	// candidate is an scoredSymbol plus an array of indices for keeping track
+	// of
 	// where to pull candidates from next (or null if lexical),
 	// using the input representatives
 	private static class Candidate implements Comparable<Candidate> {
@@ -559,10 +571,12 @@ public class ChartCompleterImp implements ChartCompleter {
 	}
 
 	// get candidates for unpacking an scoredSymbol
-	private List<Candidate> getCandidates(ScoredSymbol scoredSymbol, Map<ScoredSymbol, List<ScoredSymbol>> derivsmap) {
+	private List<Candidate> getCandidates(ScoredSymbol scoredSymbol,
+			Map<ScoredSymbol, List<ScoredSymbol>> derivsmap) {
 		List<Candidate> retval = new ArrayList<Candidate>(config.pruneLimit);
 		// make initial candidate for each alt
-		// nb: should only get initial candidates for representative scoredSymbols,
+		// nb: should only get initial candidates for representative
+		// scoredSymbols,
 		// but may as well ensure that at least this scoredSymbol is included
 		List<ScoredSymbol> alts = new ArrayList<ScoredSymbol>(scoredSymbol.getAltEdges());
 		if (alts.isEmpty())
@@ -593,8 +607,8 @@ public class ChartCompleterImp implements ChartCompleter {
 	}
 
 	// returns the scoredSymbol for the given input indices, or null if none
-	private ScoredSymbol getEdgeForIndices(ScoredSymbol scoredSymbol, ScoredSymbol[] inputReps, int[] indices,
-			Map<ScoredSymbol, List<ScoredSymbol>> derivsmap) {
+	private ScoredSymbol getEdgeForIndices(ScoredSymbol scoredSymbol, ScoredSymbol[] inputReps,
+			int[] indices, Map<ScoredSymbol, List<ScoredSymbol>> derivsmap) {
 		DerivationHistory history = scoredSymbol.symbol.getDerivationHistory();
 		Symbol[] combo = new Symbol[inputReps.length];
 		for (int i = 0; i < inputReps.length; i++) {
@@ -625,7 +639,8 @@ public class ChartCompleterImp implements ChartCompleter {
 		if (results.isEmpty())
 			return null; // (rare?)
 		Symbol sign = results.get(0); // assuming single result
-		ScoredSymbol retval = new ScoredSymbol(sign); // make scoredSymbol for new combo
+		ScoredSymbol retval = new ScoredSymbol(sign); // make scoredSymbol for
+														// new combo
 		nonfinalScoredSymbolCount++;
 		// score it
 		boolean complete = (sign.getWords().size() == chart.size());

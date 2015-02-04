@@ -25,11 +25,11 @@ import java.util.Hashtable;
 
 public class PunctHelper {
 
-	//The largest current id
+	// The largest current id
 	private int globalId = 0;
 
-	//The store of ids
-	//private Hashtable idTally = new Hashtable();
+	// The store of ids
+	// private Hashtable idTally = new Hashtable();
 
 	private String feat = "";
 
@@ -37,16 +37,16 @@ public class PunctHelper {
 
 	private String balCom = "";
 
-	//The pos-indexRel tally
-	private static Hashtable<String,ArrayList<String>> indexRel = new Hashtable<String,ArrayList<String>>();
+	// The pos-indexRel tally
+	private static Hashtable<String, ArrayList<String>> indexRel = new Hashtable<String, ArrayList<String>>();
 
-	//Calculate & store the indexRel
+	// Calculate & store the indexRel
 	public String calcIndexRel(String cat, String pos) {
 
 		ArrayList<String> temp = new ArrayList<String>();
 		pos = pos.replaceAll("[0-9]", "");
 
-		//System.out.println(cat);
+		// System.out.println(cat);
 
 		if (!pos.equals("PUNCT_LPAREN")) {
 
@@ -57,7 +57,7 @@ public class PunctHelper {
 
 		}
 
-		//System.out.println(cat);
+		// System.out.println(cat);
 
 		if (!indexRel.containsKey(pos)) {
 			temp.add(cat);
@@ -74,14 +74,14 @@ public class PunctHelper {
 
 	}
 
-	//Initialization before start of a new conj rule 
+	// Initialization before start of a new conj rule
 	public String globalInit() {
 		globalId = 0;
-		//idTally.clear();
+		// idTally.clear();
 		return null;
 	}
 
-	//Function invoked by invertedDirSpComma.xsl
+	// Function invoked by invertedDirSpComma.xsl
 	public String getglobalId() {
 		globalId++;
 		return Integer.toString(globalId);
@@ -142,7 +142,7 @@ public class PunctHelper {
 
 	public String removeFeats(String cat) {
 		cat = cat.replaceAll("\\[[a-zA-Z]+\\]", "");
-		//System.out.println("Debug: "+cat);
+		// System.out.println("Debug: "+cat);
 		return cat;
 	}
 
@@ -150,7 +150,7 @@ public class PunctHelper {
 		cat = cat.replaceAll("\\[[a-zA-Z]+\\]", "");
 		cat = cat.replaceAll("~", "");
 		cat = cat.replaceAll("_[0-9]+", "");
-		//System.out.println("Debug: "+cat);
+		// System.out.println("Debug: "+cat);
 		return cat;
 	}
 
@@ -159,11 +159,11 @@ public class PunctHelper {
 		cat = cat.replaceAll("\\[[a-zA-Z]+\\]", "");
 		cat = cat.replaceAll("~", "");
 		cat = cat.replaceAll("_[0-9]+", "");
-		//System.out.println("Debug: "+cat);
+		// System.out.println("Debug: "+cat);
 		return cat;
 	}
 
-	//Replace pp[] by pp
+	// Replace pp[] by pp
 	public String cleanPP(String cat) {
 		cat = cat.replaceAll("pp\\[\\]", "pp");
 		return cat;

@@ -28,7 +28,7 @@ import java.util.*;
  * @author Michael White
  * @version $Revision: 1.6 $, $Date: 2011/03/20 20:11:58 $
  */
-public class TrieMap<KeyType,DataType> {
+public class TrieMap<KeyType, DataType> {
 
 	/** Interface for methods returning an interned key. */
 	public interface KeyExtractor<KeyType> {
@@ -54,10 +54,10 @@ public class TrieMap<KeyType,DataType> {
 	}
 
 	/** Factory method, for adding empty child nodes. */
-	protected TrieMap<KeyType,DataType> createNode() {
-		return new TrieMap<KeyType,DataType>(null);
+	protected TrieMap<KeyType, DataType> createNode() {
+		return new TrieMap<KeyType, DataType>(null);
 	}
-	
+
 	/** Adds the given child with its key. */
 	@SuppressWarnings("unchecked")
 	public void addChild(KeyType key, TrieMap<KeyType, DataType> child) {
@@ -114,11 +114,14 @@ public class TrieMap<KeyType,DataType> {
 	/** Gets the child for the given key, or null if none. */
 	@SuppressWarnings("unchecked")
 	public TrieMap<KeyType, DataType> getChild(KeyType key) {
-		if (childMap == null) return null;
+		if (childMap == null)
+			return null;
 		if (childMap instanceof Pair) {
 			Pair<KeyType, TrieMap<KeyType, DataType>> pair = (Pair<KeyType, TrieMap<KeyType, DataType>>) childMap;
-			if (pair.a == key) return pair.b;
-			else return null;
+			if (pair.a == key)
+				return pair.b;
+			else
+				return null;
 		}
 		Map<KeyType, TrieMap<KeyType, DataType>> map = (Map<KeyType, TrieMap<KeyType, DataType>>) childMap;
 		return map.get(key);
@@ -129,7 +132,8 @@ public class TrieMap<KeyType,DataType> {
 		TrieMap<KeyType, DataType> next = this;
 		for (int pos = 0; pos < keys.size(); pos++) {
 			next = next.getChild(keys.get(pos));
-			if (next == null) return null;
+			if (next == null)
+				return null;
 		}
 		return next;
 	}
@@ -139,7 +143,8 @@ public class TrieMap<KeyType,DataType> {
 		TrieMap<KeyType, DataType> next = this;
 		for (int pos = 0; pos < keyExtractors.size(); pos++) {
 			next = next.getChild(keyExtractors.get(pos).getKey());
-			if (next == null) return null;
+			if (next == null)
+				return null;
 		}
 		return next;
 	}
@@ -163,7 +168,7 @@ public class TrieMap<KeyType,DataType> {
 	 */
 	public TrieMap<KeyType, DataType> findChildFromList(List<KeyType> keys) {
 		TrieMap<KeyType, DataType> next = this;
-		for (int pos=0; pos < keys.size(); pos++) {
+		for (int pos = 0; pos < keys.size(); pos++) {
 			KeyType key = keys.get(pos);
 			TrieMap<KeyType, DataType> child = next.getChild(key);
 			if (child == null) {
@@ -179,9 +184,10 @@ public class TrieMap<KeyType,DataType> {
 	 * Finds the child for the given list of keys, adding one (with a null data
 	 * object) if necessary, along with any necessary intervening parents.
 	 */
-	public TrieMap<KeyType, DataType> findChildFromLazyList(List<KeyExtractor<KeyType>> keyExtractors) {
+	public TrieMap<KeyType, DataType> findChildFromLazyList(
+			List<KeyExtractor<KeyType>> keyExtractors) {
 		TrieMap<KeyType, DataType> next = this;
-		for (int pos=0; pos < keyExtractors.size(); pos++) {
+		for (int pos = 0; pos < keyExtractors.size(); pos++) {
 			KeyType key = keyExtractors.get(pos).getKey();
 			TrieMap<KeyType, DataType> child = next.getChild(key);
 			if (child == null) {

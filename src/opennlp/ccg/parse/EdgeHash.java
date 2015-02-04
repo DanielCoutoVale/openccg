@@ -22,59 +22,69 @@ import gnu.trove.*;
 import java.util.*;
 
 /**
- * A set of edges, unique up to surface words.
- * Edges whose signs have lower derivational complexity are kept during insertion.
- * NB: This is just like EdgeHash in the realize package, except that 
- *     it deals with parse edges.
+ * A set of edges, unique up to surface words. Edges whose signs have lower
+ * derivational complexity are kept during insertion. NB: This is just like
+ * EdgeHash in the realize package, except that it deals with parse edges.
  *
- * @author      Michael White
- * @version     $Revision: 1.1 $, $Date: 2007/12/20 05:51:10 $
+ * @author Michael White
+ * @version $Revision: 1.1 $, $Date: 2007/12/20 05:51:10 $
  */
 public class EdgeHash extends THashSet {
 
 	private static final long serialVersionUID = 1L;
-	
-	/** Hashing strategy that uses Edge's surfaceWordHashCode and surfaceWordEquals methods. */
-    protected static TObjectHashingStrategy surfaceWordHashingStrategy = new TObjectHashingStrategy() {
+
+	/**
+	 * Hashing strategy that uses Edge's surfaceWordHashCode and
+	 * surfaceWordEquals methods.
+	 */
+	protected static TObjectHashingStrategy surfaceWordHashingStrategy = new TObjectHashingStrategy() {
 		private static final long serialVersionUID = 1L;
+
 		public int computeHashCode(java.lang.Object o) {
-            return ((ScoredSymbol)o).surfaceWordHashCode();
-        }
-        public boolean equals(java.lang.Object o1, java.lang.Object o2) {
-            return ((ScoredSymbol)o1).surfaceWordEquals((ScoredSymbol)o2);
-        }
-    };
+			return ((ScoredSymbol) o).surfaceWordHashCode();
+		}
 
-    /** Default constructor. */
-    public EdgeHash() { super(surfaceWordHashingStrategy); }
+		public boolean equals(java.lang.Object o1, java.lang.Object o2) {
+			return ((ScoredSymbol) o1).surfaceWordEquals((ScoredSymbol) o2);
+		}
+	};
 
-    /**
-     * Returns this as a set of edges.
-     */
-    @SuppressWarnings("unchecked")
-	public Set<ScoredSymbol> asEdgeSet() { return (Set<ScoredSymbol>) this; }
+	/** Default constructor. */
+	public EdgeHash() {
+		super(surfaceWordHashingStrategy);
+	}
 
-    /**
-     * Adds an edge, keeping the one whose sign has lower derivational complexity 
-     * if there is an equivalent one there already; returns the old
-     * edge if it was displaced, the new edge if there was no equivalent 
-     * old edge, or null if the edge was not actually added.
-     * iff the edge is actually inserted.
-     */
-    public ScoredSymbol insert(ScoredSymbol edge) {
-        int pos = index(edge);
-        if (pos >= 0) {
-            ScoredSymbol oldEdge = (ScoredSymbol) _set[pos];
-            if (oldEdge == edge) return null; 
-            int complexity = edge.symbol.getDerivationHistory().complexity();
-            int oldComplexity = oldEdge.symbol.getDerivationHistory().complexity();
-            if (complexity < oldComplexity) {
-            	_set[pos] = edge; return oldEdge;
-            }
-            else return null;
-        }
-        else {
-        	add(edge); return edge;
-        }
-    }
+	/**
+	 * Returns this as a set of edges.
+	 */
+	@SuppressWarnings("unchecked")
+	public Set<ScoredSymbol> asEdgeSet() {
+		return (Set<ScoredSymbol>) this;
+	}
+
+	/**
+	 * Adds an edge, keeping the one whose sign has lower derivational
+	 * complexity if there is an equivalent one there already; returns the old
+	 * edge if it was displaced, the new edge if there was no equivalent old
+	 * edge, or null if the edge was not actually added. iff the edge is
+	 * actually inserted.
+	 */
+	public ScoredSymbol insert(ScoredSymbol edge) {
+		int pos = index(edge);
+		if (pos >= 0) {
+			ScoredSymbol oldEdge = (ScoredSymbol) _set[pos];
+			if (oldEdge == edge)
+				return null;
+			int complexity = edge.symbol.getDerivationHistory().complexity();
+			int oldComplexity = oldEdge.symbol.getDerivationHistory().complexity();
+			if (complexity < oldComplexity) {
+				_set[pos] = edge;
+				return oldEdge;
+			} else
+				return null;
+		} else {
+			add(edge);
+			return edge;
+		}
+	}
 }

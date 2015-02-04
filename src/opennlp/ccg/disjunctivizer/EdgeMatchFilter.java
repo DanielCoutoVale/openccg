@@ -38,15 +38,16 @@ import opennlp.ccg.util.CompositeFilter;
 import opennlp.ccg.util.Filter;
 import opennlp.ccg.util.InverseFilter;
 
-
 /**
- * A filter for LF edges based on a set of {@linkplain #getMatchTypes() match type criteria}. Instances of
- * this class compare a specified {@linkplain #getBasis() basis edge} based on their match type criteria.
- * This class extends {@link CompositeFilter}, and the constructors add various filters as members depending on 
- * the criteria in effect.  
+ * A filter for LF edges based on a set of {@linkplain #getMatchTypes() match
+ * type criteria}. Instances of this class compare a specified
+ * {@linkplain #getBasis() basis edge} based on their match type criteria. This
+ * class extends {@link CompositeFilter}, and the constructors add various
+ * filters as members depending on the criteria in effect.
  * <p>
- * Edge match filters use the following match types as criteria in addition to the ones used by
- * {@link VertexMatchFilter}: {@link MatchType#LABEL_MATCH}, and {@link MatchType#LABEL_MISMATCH}. 
+ * Edge match filters use the following match types as criteria in addition to
+ * the ones used by {@link VertexMatchFilter}: {@link MatchType#LABEL_MATCH},
+ * and {@link MatchType#LABEL_MISMATCH}.
  * 
  * @see VertexMatchFilter
  * @see LabelMatchFilter
@@ -54,66 +55,67 @@ import opennlp.ccg.util.InverseFilter;
  * @author <a href="http://www.ling.ohio-state.edu/~scott/">Scott Martin</a>
  */
 public class EdgeMatchFilter extends CompositeFilter<LFEdge> {
-	
+
 	LFEdge basis;
 	final EnumSet<MatchType> matchTypes;
-	
+
 	/**
 	 * Creates a new edge match filter based on the specified edge and criteria.
+	 * 
 	 * @see #EdgeMatchFilter(LFEdge, Collection)
 	 */
 	public EdgeMatchFilter(LFEdge basis, MatchType... matchTypes) {
 		this(basis, Arrays.asList(matchTypes));
 	}
-	
+
 	/**
-	 * Creates a new edge match filter based on the specified edge, using the specified
-	 * match type criteria. Depending on the criteria, this constructor adds instances of
-	 * {@link VertexMatchFilter} and {@link LabelMatchFilter} (or their inverses) to the
-	 * set of filters composing it.
+	 * Creates a new edge match filter based on the specified edge, using the
+	 * specified match type criteria. Depending on the criteria, this
+	 * constructor adds instances of {@link VertexMatchFilter} and
+	 * {@link LabelMatchFilter} (or their inverses) to the set of filters
+	 * composing it.
 	 * 
 	 * @param basis The LF edge to use for comparison.
-	 * @param matchTypes The comparison criteria, used to populate this composite filter.
+	 * @param matchTypes The comparison criteria, used to populate this
+	 *            composite filter.
 	 * 
 	 * @throws IllegalArgumentException if <tt>basis</tt> is <tt>null</tt>.
 	 */
 	public EdgeMatchFilter(LFEdge basis, Collection<MatchType> matchTypes) {
 		super();
-		
+
 		checkBasis(basis);
 		this.basis = basis;
 		this.matchTypes = EnumSet.copyOf(matchTypes);
-				
-		for(MatchType t : matchTypes) {
+
+		for (MatchType t : matchTypes) {
 			Filter<LFEdge> f = null;
-			
-			if(t == LABEL_MATCH || t == LABEL_MISMATCH) {
+
+			if (t == LABEL_MATCH || t == LABEL_MISMATCH) {
 				f = new LabelMatchFilter(basis.getLabel());
-				if(t == LABEL_MISMATCH) {
+				if (t == LABEL_MISMATCH) {
 					f = new InverseFilter<LFEdge>(f);
 				}
-			}
-			else if(t == SOURCE_MATCH || t == SOURCE_MISMATCH
-					|| t == SOURCE_PREDICATE_MATCH || t == SOURCE_PREDICATE_MISMATCH) {
+			} else if (t == SOURCE_MATCH || t == SOURCE_MISMATCH || t == SOURCE_PREDICATE_MATCH
+					|| t == SOURCE_PREDICATE_MISMATCH) {
 				f = new VertexMatchFilter(basis.getSource(), t);
-			}
-			else if(t == TARGET_MATCH || t == TARGET_MISMATCH
-					|| t == TARGET_PREDICATE_MATCH || t == TARGET_PREDICATE_MISMATCH) {
+			} else if (t == TARGET_MATCH || t == TARGET_MISMATCH || t == TARGET_PREDICATE_MATCH
+					|| t == TARGET_PREDICATE_MISMATCH) {
 				f = new VertexMatchFilter(basis.getTarget(), t);
 			}
-			
-			if(f != null) {
+
+			if (f != null) {
 				addFilter(f);
 			}
 		}
 	}
-	
+
 	private void checkBasis(LFEdge basis) {
-		if(basis == null) {
+		if (basis == null) {
 			throw new IllegalArgumentException("basis is null");
 		}
 	}
-	
+
 	/**
 	 * Gets the edge that comparisons are based on.
 	 */
@@ -123,6 +125,7 @@ public class EdgeMatchFilter extends CompositeFilter<LFEdge> {
 
 	/**
 	 * Sets the edge used for comparisons.
+	 * 
 	 * @throws IllegalArgumentException if <tt>basis</tt> is <tt>null</tt>.
 	 */
 	public void setBasis(LFEdge basis) {

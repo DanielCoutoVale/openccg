@@ -24,30 +24,30 @@ import opennlp.ccg.synsem.*;
  * A sign scorer for a perceptron model.
  * 
  * @author Michael White
- * @version     $Revision: 1.7 $, $Date: 2011/03/21 20:46:43 $
+ * @version $Revision: 1.7 $, $Date: 2011/03/21 20:46:43 $
  */
 public class PerceptronScorer implements SymbolScorer {
 
 	/** The feature extractor. */
 	public final FeatureExtractor featureExtractor;
-	
+
 	/** The model. */
 	public final Model model;
-	
+
 	/** Constructor. */
 	public PerceptronScorer(FeatureExtractor featureExtractor, Model model) {
 		this.featureExtractor = featureExtractor;
 		this.model = model;
 		featureExtractor.setAlphabet(model.getAlphabet());
 	}
-	
-    /** 
-     * Returns a score for the given sign and completeness flag, where higher 
-     * numbers are better than lower numbers.
-     * In particular, returns the score assigned by the model to the features 
-     * extracted from the given sign with the given completeness flag.
-     */
-    public double score(Symbol sign, boolean complete) {
-    	return model.score(featureExtractor.extractFeatures(sign, complete));
-    }
+
+	/**
+	 * Returns a score for the given sign and completeness flag, where higher
+	 * numbers are better than lower numbers. In particular, returns the score
+	 * assigned by the model to the features extracted from the given sign with
+	 * the given completeness flag.
+	 */
+	public double score(Symbol sign, boolean complete) {
+		return model.score(featureExtractor.extractFeatures(sign, complete));
+	}
 }

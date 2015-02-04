@@ -33,32 +33,37 @@ import opennlp.ccg.parse.tagger.io.SRILMFactoredBundleCorpusIterator;
  * @author Dennis N. Mehay
  */
 public class POSTagSequenceGetter {
-    public static void main(String[] args) throws FileNotFoundException, IOException {
-        String usage = "\nPOSTagSequenceGetter -i <inputCorpus> -o <outputLocation>\n";
-        String input = null, output = null;
-        if(args == null || args.length == 0 || args[0].equals("-h")) {
-            System.err.println(usage);
-            System.exit(0);
-        }
-        for(int i = 0; i < args.length; i++) {
-            if(args[i].equals("-i")) { input = args[++i]; continue; }
-            if(args[i].equals("-o")) { output = args[++i]; continue; }
-            System.err.println("unknown command-line option: " + args[i]);
-        }
-        
-        BufferedReader in = new BufferedReader(new FileReader(new File(input)));
-        SRILMFactoredBundleCorpusIterator corp = new SRILMFactoredBundleCorpusIterator(in);
-        BufferedWriter out = new BufferedWriter(new FileWriter(new File(output)));
-        
-        
-        for(List<Association> sent : corp) {
-            out.write("<s> ");
-            for(Association w : sent) {
-                out.write(w.getFunctions()+" ");
-            }
-            out.write("</s>"+System.getProperty("line.separator"));
-        }
-        out.close();
-    }
-    
+	public static void main(String[] args) throws FileNotFoundException, IOException {
+		String usage = "\nPOSTagSequenceGetter -i <inputCorpus> -o <outputLocation>\n";
+		String input = null, output = null;
+		if (args == null || args.length == 0 || args[0].equals("-h")) {
+			System.err.println(usage);
+			System.exit(0);
+		}
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].equals("-i")) {
+				input = args[++i];
+				continue;
+			}
+			if (args[i].equals("-o")) {
+				output = args[++i];
+				continue;
+			}
+			System.err.println("unknown command-line option: " + args[i]);
+		}
+
+		BufferedReader in = new BufferedReader(new FileReader(new File(input)));
+		SRILMFactoredBundleCorpusIterator corp = new SRILMFactoredBundleCorpusIterator(in);
+		BufferedWriter out = new BufferedWriter(new FileWriter(new File(output)));
+
+		for (List<Association> sent : corp) {
+			out.write("<s> ");
+			for (Association w : sent) {
+				out.write(w.getFunctions() + " ");
+			}
+			out.write("</s>" + System.getProperty("line.separator"));
+		}
+		out.close();
+	}
+
 }

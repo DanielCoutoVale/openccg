@@ -22,23 +22,24 @@ package opennlp.ccgbank.convert;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+
 //import java.util.StringTokenizer;
 
 public class GenConjRule {
 
-	//The largest current id
+	// The largest current id
 	private static int globalId = 0;
 
-	//The store of ids
-	private static Hashtable<String,String> idTally = new Hashtable<String,String>();
+	// The store of ids
+	private static Hashtable<String, String> idTally = new Hashtable<String, String>();
 
-	//Dollar status of res, arg1 & arg2
+	// Dollar status of res, arg1 & arg2
 	private static ArrayList<String> dollarStatus = new ArrayList<String>();
 
-	//Final result of dollar status calcs
+	// Final result of dollar status calcs
 	private static String ds = "No_Dollar";
 
-	//Add brackets to complex categories
+	// Add brackets to complex categories
 	public String addParen(String str) {
 
 		if (str.contains("\\") || str.contains("/"))
@@ -47,28 +48,28 @@ public class GenConjRule {
 
 	}
 
-	//Add _conj to the result category
+	// Add _conj to the result category
 	public String modRes(String str) {
-		//StringTokenizer st = new StringTokenizer(str, "[]");
+		// StringTokenizer st = new StringTokenizer(str, "[]");
 		str = str + "_conj";
 		return str;
 	}
 
-	//Procedure which cleans the unary rule result
+	// Procedure which cleans the unary rule result
 	public String getConjRes(String x) {
 		x = x.replaceAll("_conj", "");
 		x = x.replaceAll("_[0-9]", "");
-		//System.out.println(x);
+		// System.out.println(x);
 		return x;
 	}
 
-	//Normalizes id of input category
+	// Normalizes id of input category
 	public String normId(String oldId, String oldInhId, String cat) {
 
 		String newId = "";
-		//int choice = 0;
+		// int choice = 0;
 
-		//Switch for usage between Treenode & Leafnode Id normalization 
+		// Switch for usage between Treenode & Leafnode Id normalization
 		if (oldId.length() > 0)
 			cat = cat + "_" + oldId;
 		if (oldInhId.length() > 0)
@@ -76,7 +77,7 @@ public class GenConjRule {
 
 		cat = cat.trim();
 
-		//Normalization condition
+		// Normalization condition
 		if (!idTally.containsKey(cat)) {
 			globalId++;
 			newId = Integer.toString(globalId);
@@ -88,60 +89,60 @@ public class GenConjRule {
 		return newId;
 	}
 
-	//Initialization of idTally & globalId before start of a new conj rule 
+	// Initialization of idTally & globalId before start of a new conj rule
 	public String globalInit() {
 		globalId = 0;
 		idTally.clear();
 		return null;
 	}
 
-	//Initialization of idTally before each of Result,arg1 & arg2 is added 
+	// Initialization of idTally before each of Result,arg1 & arg2 is added
 	public String localInit() {
 		idTally.clear();
 		return null;
 	}
 
-	//Calculation of dollarStatus before start of a new conj rule 
+	// Calculation of dollarStatus before start of a new conj rule
 
-	//Initialization of dollarStatus before start of a new conj rule 
+	// Initialization of dollarStatus before start of a new conj rule
 	public String dsInit() {
-		//System.out.println(dollarStatus);
+		// System.out.println(dollarStatus);
 		dollarStatus.clear();
 		ds = "No_Dollar";
 		return null;
 	}
 
-	//Store dollar status of res, arg1 & arg2
+	// Store dollar status of res, arg1 & arg2
 	public String storeDollarStatus(String type) {
 		type = type.trim();
 		dollarStatus.add(type);
-		/*System.out.println('\n');
-		 System.out.println("Insertion of: "+type);
-		 System.out.println(dollarStatus);
-		 System.out.println('\n');*/
+		/*
+		 * System.out.println('\n'); System.out.println("Insertion of: "+type);
+		 * System.out.println(dollarStatus); System.out.println('\n');
+		 */
 		return "null";
 	}
 
 	public String dsCalc() {
 
-		//System.out.println(dollarStatus);
+		// System.out.println(dollarStatus);
 		if (dollarStatus.size() == 3)
 			ds = "Dollar";
 
-		/*System.out.println('\n');
-		 System.out.println("Retrieval");
-		 System.out.println(dollarStatus);
-		 System.out.println('\n');*/
+		/*
+		 * System.out.println('\n'); System.out.println("Retrieval");
+		 * System.out.println(dollarStatus); System.out.println('\n');
+		 */
 
 		return null;
 	}
 
-	//Get dollar status of conjunct
+	// Get dollar status of conjunct
 	public String getDollarStatus() {
 		return ds;
 	}
 
-	//Function invoked by invertedDirSpComma.xsl
+	// Function invoked by invertedDirSpComma.xsl
 	public String getglobalId() {
 		globalId++;
 		return Integer.toString(globalId);

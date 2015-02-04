@@ -46,163 +46,179 @@ import opennlp.ccg.test.RegressionInfo;
 import opennlp.ccgbank.extract.Testbed;
 
 /**
- * Creates a testbed file by parsing a text file.
- * Text is assumed to be tokenized, with one sentence per line.
+ * Creates a testbed file by parsing a text file. Text is assumed to be
+ * tokenized, with one sentence per line.
  *
- * @author      Michael White
- * @version     $Revision: 1.2 $, $Date: 2010/10/28 02:46:32 $
+ * @author Michael White
+ * @version $Revision: 1.2 $, $Date: 2010/10/28 02:46:32 $
  */
 public class Parse {
 
 	public static void main(String[] args) throws IOException {
-		
-        String usage = "Usage: java opennlp.ccg.Parse \n" + 
-        	"  (-g <grammarfile>) \n" + 
-        	"  -parsescorer <scorerclass> \n" +
-        	"  (-supertagger <supertaggerclass> | -stconfig <configfile>) \n" +
-	        "  (-nbestListSize <nbestListSize>) \n" +
-        	"  <inputfile> <outputfile>";
-        
-        if (args.length == 0 || args[0].equals("-h")) {
-            System.out.println(usage);
-            System.exit(0);
-        }
-        
-        // args
-        String grammarfile = "grammar.xml";
-        String inputfile = null;
-        String outputfile = null;
-        String parseScorerClass = null;
-        String supertaggerClass = null, stconfig = null;
-	int nbestListSize = 1;
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-g")) { grammarfile = args[++i]; continue; }
-            if (args[i].equals("-parsescorer")) { parseScorerClass = args[++i]; continue; }
-            if (args[i].equals("-supertagger")) { supertaggerClass = args[++i]; continue; }
-            if (args[i].equals("-stconfig")) { stconfig = args[++i]; continue; }
-	    if (args[i].equals("-nbestListSize")) { nbestListSize = Integer.parseInt(args[++i]); continue; }
-            if (inputfile == null) { inputfile = args[i]; continue; }
-            outputfile = args[i];
-        }
-	if (nbestListSize < 1) nbestListSize = 1;
 
-        if (inputfile == null || outputfile == null || 
-        	parseScorerClass == null || (supertaggerClass == null && stconfig == null)) 
-        {
-            System.out.println(usage);
-            System.exit(0);
-        }
-        
+		String usage = "Usage: java opennlp.ccg.Parse \n" + "  (-g <grammarfile>) \n"
+				+ "  -parsescorer <scorerclass> \n"
+				+ "  (-supertagger <supertaggerclass> | -stconfig <configfile>) \n"
+				+ "  (-nbestListSize <nbestListSize>) \n" + "  <inputfile> <outputfile>";
+
+		if (args.length == 0 || args[0].equals("-h")) {
+			System.out.println(usage);
+			System.exit(0);
+		}
+
+		// args
+		String grammarfile = "grammar.xml";
+		String inputfile = null;
+		String outputfile = null;
+		String parseScorerClass = null;
+		String supertaggerClass = null, stconfig = null;
+		int nbestListSize = 1;
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].equals("-g")) {
+				grammarfile = args[++i];
+				continue;
+			}
+			if (args[i].equals("-parsescorer")) {
+				parseScorerClass = args[++i];
+				continue;
+			}
+			if (args[i].equals("-supertagger")) {
+				supertaggerClass = args[++i];
+				continue;
+			}
+			if (args[i].equals("-stconfig")) {
+				stconfig = args[++i];
+				continue;
+			}
+			if (args[i].equals("-nbestListSize")) {
+				nbestListSize = Integer.parseInt(args[++i]);
+				continue;
+			}
+			if (inputfile == null) {
+				inputfile = args[i];
+				continue;
+			}
+			outputfile = args[i];
+		}
+		if (nbestListSize < 1)
+			nbestListSize = 1;
+
+		if (inputfile == null || outputfile == null || parseScorerClass == null
+				|| (supertaggerClass == null && stconfig == null)) {
+			System.out.println(usage);
+			System.exit(0);
+		}
+
 		// make test doc, sign map
 		Document outDoc = new Document();
 		Element outRoot = new Element("regression");
 		outDoc.setRootElement(outRoot);
-		Map<String,Symbol> signMap = new HashMap<String,Symbol>();
+		Map<String, Symbol> signMap = new HashMap<String, Symbol>();
 
-        // load grammar
-        URL grammarURL = new File(grammarfile).toURI().toURL();
-        System.out.println("Loading grammar from URL: " + grammarURL);
-        Grammar grammar = new Grammar(grammarURL);
-        Tokenizer tokenizer = grammar.lexicon.tokenizer;
-        System.out.println();
-        
-        // set up parser
-        Parser parser = new Parser(grammar);
-        // instantiate scorer
-        try {
-            System.out.println("Instantiating parsing sign scorer from class: " + parseScorerClass);
-            SymbolScorer parseScorer = (SymbolScorer) Class.forName(parseScorerClass).newInstance();
-            parser.setSymbolScorer(parseScorer);
-            System.out.println();
-        } catch (Exception exc) {
-            throw (RuntimeException) new RuntimeException().initCause(exc);
-        }
-        // instantiate supertagger
-        try {
-        	Supertagger supertagger;
-        	if (supertaggerClass != null) {
-                System.out.println("Instantiating supertagger from class: " + supertaggerClass);
-                supertagger = (Supertagger) Class.forName(supertaggerClass).newInstance();
-        	}
-        	else {
-        		System.out.println("Instantiating supertagger from config file: " + stconfig);
-        		supertagger = WordAndPOSDictionaryLabellingStrategy.supertaggerFactory(stconfig);
-        	}
-            parser.setSupertagger(supertagger);
-            System.out.println();
-        } catch (Exception exc) {
-            throw (RuntimeException) new RuntimeException().initCause(exc);
-        }
-        
-        // loop through input
-        BufferedReader in = new BufferedReader(new FileReader(inputfile));
-        String line;
-        Map<String,String> predInfoMap = new HashMap<String,String>();
-        System.out.println("Parsing " + inputfile);
-        System.out.println();
-        int count = 1;
-        while ((line = in.readLine()) != null) {
-        	String id = "s" + count;
-        	try {
-        		// parse it
-        		System.out.println(line);
-			ParseProduct product = parser.parse(line);
-			List<Symbol> result = product.getSymbols();
-			int numParses = Math.min(nbestListSize, result.size());
-			for (int i=0; i < numParses; i++) {
-			    Symbol thisParse = result.get(i);
-			    // convert lf
-			    Category cat = thisParse.getCategory();
-			    LF convertedLF = null;
-			    String predInfo = null;
-			    if (cat.getLF() != null) {
-				// convert LF
-				LF flatLF = cat.getLF();
-				cat = cat.copy();
-				Nominal index = cat.getIndexNominal(); 
-				convertedLF = HyloHelper.getInstance().compactAndConvertNominals(flatLF, index, thisParse);
-				// get pred info
-				predInfoMap.clear();
-				Testbed.extractPredInfo(flatLF, predInfoMap);
-				predInfo = Testbed.getPredInfo(predInfoMap);
-			    }
-			    // add test item, sign
-			    Element item = RegressionInfo.makeTestItem(grammar, line, 1, convertedLF);
-			    String actualID = (nbestListSize == 1) ? id : id + "-" + (i+1);
-			    item.setAttribute("info", actualID);
-			    outRoot.addContent(item);
-			    signMap.put(actualID, thisParse);
-			    // Add parsed words as a separate LF element
-			    Element fullWordsElt = new Element("full-words");
-			    fullWordsElt.addContent(tokenizer.format(thisParse.getWords()));
-			    item.addContent(fullWordsElt);
-			    if (predInfo != null) {
-				Element predInfoElt = new Element("pred-info");
-				predInfoElt.setAttribute("data", predInfo);
-				item.addContent(predInfoElt);
-			    }
-			}
-		} catch (ParseException e) {
-		    System.out.println("Unable to parse!");
-		    // add test item with zero parses
-		    Element item = RegressionInfo.makeTestItem(grammar, line, 0, null);
-		    item.setAttribute("info", id);
-		    outRoot.addContent(item);
+		// load grammar
+		URL grammarURL = new File(grammarfile).toURI().toURL();
+		System.out.println("Loading grammar from URL: " + grammarURL);
+		Grammar grammar = new Grammar(grammarURL);
+		Tokenizer tokenizer = grammar.lexicon.tokenizer;
+		System.out.println();
+
+		// set up parser
+		Parser parser = new Parser(grammar);
+		// instantiate scorer
+		try {
+			System.out.println("Instantiating parsing sign scorer from class: " + parseScorerClass);
+			SymbolScorer parseScorer = (SymbolScorer) Class.forName(parseScorerClass).newInstance();
+			parser.setSymbolScorer(parseScorer);
+			System.out.println();
+		} catch (Exception exc) {
+			throw (RuntimeException) new RuntimeException().initCause(exc);
 		}
-		count++;
-        }
-        System.out.println();
-        
+		// instantiate supertagger
+		try {
+			Supertagger supertagger;
+			if (supertaggerClass != null) {
+				System.out.println("Instantiating supertagger from class: " + supertaggerClass);
+				supertagger = (Supertagger) Class.forName(supertaggerClass).newInstance();
+			} else {
+				System.out.println("Instantiating supertagger from config file: " + stconfig);
+				supertagger = WordAndPOSDictionaryLabellingStrategy.supertaggerFactory(stconfig);
+			}
+			parser.setSupertagger(supertagger);
+			System.out.println();
+		} catch (Exception exc) {
+			throw (RuntimeException) new RuntimeException().initCause(exc);
+		}
+
+		// loop through input
+		BufferedReader in = new BufferedReader(new FileReader(inputfile));
+		String line;
+		Map<String, String> predInfoMap = new HashMap<String, String>();
+		System.out.println("Parsing " + inputfile);
+		System.out.println();
+		int count = 1;
+		while ((line = in.readLine()) != null) {
+			String id = "s" + count;
+			try {
+				// parse it
+				System.out.println(line);
+				ParseProduct product = parser.parse(line);
+				List<Symbol> result = product.getSymbols();
+				int numParses = Math.min(nbestListSize, result.size());
+				for (int i = 0; i < numParses; i++) {
+					Symbol thisParse = result.get(i);
+					// convert lf
+					Category cat = thisParse.getCategory();
+					LF convertedLF = null;
+					String predInfo = null;
+					if (cat.getLF() != null) {
+						// convert LF
+						LF flatLF = cat.getLF();
+						cat = cat.copy();
+						Nominal index = cat.getIndexNominal();
+						convertedLF = HyloHelper.getInstance().compactAndConvertNominals(flatLF,
+								index, thisParse);
+						// get pred info
+						predInfoMap.clear();
+						Testbed.extractPredInfo(flatLF, predInfoMap);
+						predInfo = Testbed.getPredInfo(predInfoMap);
+					}
+					// add test item, sign
+					Element item = RegressionInfo.makeTestItem(grammar, line, 1, convertedLF);
+					String actualID = (nbestListSize == 1) ? id : id + "-" + (i + 1);
+					item.setAttribute("info", actualID);
+					outRoot.addContent(item);
+					signMap.put(actualID, thisParse);
+					// Add parsed words as a separate LF element
+					Element fullWordsElt = new Element("full-words");
+					fullWordsElt.addContent(tokenizer.format(thisParse.getWords()));
+					item.addContent(fullWordsElt);
+					if (predInfo != null) {
+						Element predInfoElt = new Element("pred-info");
+						predInfoElt.setAttribute("data", predInfo);
+						item.addContent(predInfoElt);
+					}
+				}
+			} catch (ParseException e) {
+				System.out.println("Unable to parse!");
+				// add test item with zero parses
+				Element item = RegressionInfo.makeTestItem(grammar, line, 0, null);
+				item.setAttribute("info", id);
+				outRoot.addContent(item);
+			}
+			count++;
+		}
+		System.out.println();
+
 		// write test doc, saved signs
-        System.out.println("Writing parses to " + outputfile);
+		System.out.println("Writing parses to " + outputfile);
 		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
 		File regressionFile = new File(outputfile);
 		outputter.output(outDoc, new FileOutputStream(regressionFile));
 		RegressionInfo.writeSerFile(signMap, regressionFile);
-        System.out.println();
-		
-        // done
-        in.close();
-        System.out.println("Done.");
+		System.out.println();
+
+		// done
+		in.close();
+		System.out.println("Done.");
 	}
 }

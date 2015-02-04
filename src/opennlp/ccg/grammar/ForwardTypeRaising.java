@@ -25,27 +25,26 @@ import opennlp.ccg.synsem.*;
 /**
  * Forward type-raising: X => Y/(Y\X).
  *
- * @author  Jason Baldridge
- * @author  Michael White
+ * @author Jason Baldridge
+ * @author Michael White
  * @version $Revision: 1.5 $, $Date: 2009/07/17 04:23:30 $
  */
 public class ForwardTypeRaising extends AbstractTypeRaisingRule {
-    
+
 	private static final long serialVersionUID = 1417585756957436141L;
 
 	/** Creates a forward type raising rule with the given parameters. */
-    public ForwardTypeRaising (boolean useDollar, Category arg, Category result) {
-        super(">T", new Slash('/', new VarModality("i")), new Slash('\\', new VarModality("i")),
-              useDollar, arg, result);
-    }
-    
-    /** Returns an XML element representing the rule. */
-    public Element toXml() {
-    	return super.toXml("forward");
-    }
+	public ForwardTypeRaising(boolean useDollar, Category arg, Category result) {
+		super(">T", new Slash('/', new VarModality("i")), new Slash('\\', new VarModality("i")),
+				useDollar, arg, result);
+	}
 
-    public String toString() {
-        return "X => Y/(Y\\X)";
-    }
+	/** Returns an XML element representing the rule. */
+	public Element toXml() {
+		return super.toXml("forward");
+	}
+
+	public String toString() {
+		return "X => Y/(Y\\X)";
+	}
 }
-

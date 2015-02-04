@@ -26,12 +26,12 @@ import opennlp.ccg.synsem.*;
 import opennlp.ccg.unify.*;
 
 /**
- * Implements a glue rule for combining a sequence of fragments.
- * The rule is frag|cat cat => frag, allowing only the first input 
- * to itself be a fragment, unless the second input has the 
- * frag completion flag set, meaning that it completes a chunk/alt.
+ * Implements a glue rule for combining a sequence of fragments. The rule is
+ * frag|cat cat => frag, allowing only the first input to itself be a fragment,
+ * unless the second input has the frag completion flag set, meaning that it
+ * completes a chunk/alt.
  * 
- * @author  Michael White
+ * @author Michael White
  * @version $Revision: 1.3 $, $Date: 2011/06/07 05:12:01 $
  */
 public class GlueRule extends AbstractRule {
@@ -40,18 +40,24 @@ public class GlueRule extends AbstractRule {
 
 	// empty subst for combining LFs
 	private static final Substitution emptySubst = new SimpleSubstitution();
-	
+
 	/** Fragment result type. */
 	public static final String resultType = "frag";
-	
+
 	/** Constructor. */
-	public GlueRule() { _name = "glue"; }
-	
-    /** Returns an XML element representing the rule (not supported). */
-    public Element toXml() { throw new RuntimeException("toXml not supported for GlueRule rules"); }
+	public GlueRule() {
+		_name = "glue";
+	}
+
+	/** Returns an XML element representing the rule (not supported). */
+	public Element toXml() {
+		throw new RuntimeException("toXml not supported for GlueRule rules");
+	}
 
 	/** Arity. */
-	public int arity() { return 2; }
+	public int arity() {
+		return 2;
+	}
 
 	/** Glues cats into fragments. */
 	public List<Category> applyRule(Category[] inputs) throws UnifyFailure {
@@ -62,36 +68,35 @@ public class GlueRule extends AbstractRule {
 		// check for frag as second input with completion false
 		if (inputs[1] instanceof AtomCat) {
 			AtomCat ac2 = (AtomCat) inputs[1];
-			if (ac2.isFragment() && !ac2.fragCompletion) 
+			if (ac2.isFragment() && !ac2.fragCompletion)
 				throw new UnifyFailure();
 		}
 		// make result cat
-        List<Category> results = new ArrayList<Category>(1);
-        _headCats.clear();
-        AtomCat ac = new AtomCat(resultType);
-        appendLFs(inputs[0], inputs[1], ac, emptySubst);
-        results.add(ac);
-        // guess head, with left as default
-        boolean leftHead = true;
-        boolean leftMod = isModifier(inputs[0]);
-        boolean rightMod = isModifier(inputs[1]);
-        if ((inputs[0] instanceof AtomCat && inputs[1] instanceof ComplexCat && !rightMod) ||
-        	(leftMod && !rightMod)) 
-        {
-        	leftHead = false;
-        }
+		List<Category> results = new ArrayList<Category>(1);
+		_headCats.clear();
+		AtomCat ac = new AtomCat(resultType);
+		appendLFs(inputs[0], inputs[1], ac, emptySubst);
+		results.add(ac);
+		// guess head, with left as default
+		boolean leftHead = true;
+		boolean leftMod = isModifier(inputs[0]);
+		boolean rightMod = isModifier(inputs[1]);
+		if ((inputs[0] instanceof AtomCat && inputs[1] instanceof ComplexCat && !rightMod)
+				|| (leftMod && !rightMod)) {
+			leftHead = false;
+		}
 		// return result cat with guessed head
-        _headCats.add(leftHead ? inputs[0] : inputs[1]);
+		_headCats.add(leftHead ? inputs[0] : inputs[1]);
 		return results;
 	}
-	
+
 	// modifier check
 	private static boolean isModifier(Category cat) {
 		if (cat instanceof ComplexCat) {
 			ComplexCat xyCat = (ComplexCat) cat;
 			Arg arg = xyCat.getOuterArg();
 			if (arg instanceof BasicArg) {
-				return ((BasicArg)arg).getSlash().isModifier();
+				return ((BasicArg) arg).getSlash().isModifier();
 			}
 		}
 		return false;

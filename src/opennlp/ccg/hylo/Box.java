@@ -22,60 +22,58 @@ import opennlp.ccg.synsem.*;
 import opennlp.ccg.unify.*;
 import org.jdom.*;
 
-
 /**
  * A modal box operator, such as [F]q.
  *
- * @author      Jason Baldridge
- * @version     $Revision: 1.5 $, $Date: 2009/07/17 04:23:30 $
+ * @author Jason Baldridge
+ * @version $Revision: 1.5 $, $Date: 2009/07/17 04:23:30 $
  **/
 public final class Box extends ModalOp {
 
 	private static final long serialVersionUID = 1575311851235814524L;
 
 	public Box(Element e) {
-        super(e);
-    }
+		super(e);
+	}
 
-    private Box(Mode mode, LF arg) {
-        super(mode, arg);
-    }
+	private Box(Mode mode, LF arg) {
+		super(mode, arg);
+	}
 
-    public LF copy() {
-        return new Box ((Mode)_mode.copy(), _arg.copy());
-    }
-    
-    public boolean equals(Object o) {
-        if (o instanceof Box) {
-            return super.equals((Box)o);
-        } else {
-            return false;
-        }
-    }
+	public LF copy() {
+		return new Box((Mode) _mode.copy(), _arg.copy());
+	}
 
-    public void unifyCheck(Object u) throws UnifyFailure {
-        if (u instanceof Box) {
-            super.unifyCheck((Box)u);
-        } else {
-            throw new UnifyFailure();
-        }
-    }
+	public boolean equals(Object o) {
+		if (o instanceof Box) {
+			return super.equals((Box) o);
+		} else {
+			return false;
+		}
+	}
 
-    public Object fill(Substitution sub) throws UnifyFailure {
-        return new Box((Mode)_mode.fill(sub), (LF)_arg.fill(sub));
-    }
-    
-    /** Returns the string form of this modal op, without the arg. */
-    public String modalOpString() {
-        return new StringBuffer().append('[').append(_mode.toString()).append(']').toString();
-    }
-    
+	public void unifyCheck(Object u) throws UnifyFailure {
+		if (u instanceof Box) {
+			super.unifyCheck((Box) u);
+		} else {
+			throw new UnifyFailure();
+		}
+	}
 
-    /**
-     * Returns an XML representation of this LF (not currently supported).
-     * Throws a runtime exception.
-     */
-    public Element toXml() {
-        throw new RuntimeException("toXml() not currently supported for Box.");
-    }
+	public Object fill(Substitution sub) throws UnifyFailure {
+		return new Box((Mode) _mode.fill(sub), (LF) _arg.fill(sub));
+	}
+
+	/** Returns the string form of this modal op, without the arg. */
+	public String modalOpString() {
+		return new StringBuffer().append('[').append(_mode.toString()).append(']').toString();
+	}
+
+	/**
+	 * Returns an XML representation of this LF (not currently supported).
+	 * Throws a runtime exception.
+	 */
+	public Element toXml() {
+		throw new RuntimeException("toXml() not currently supported for Box.");
+	}
 }

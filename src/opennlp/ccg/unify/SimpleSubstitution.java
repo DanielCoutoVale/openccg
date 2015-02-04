@@ -26,13 +26,14 @@ import java.util.*;
  * @author Jason Baldridge
  * @version $Revision: 1.3 $, $Date: 2005/10/20 17:30:30 $
  */
-public class SimpleSubstitution extends HashMap<Variable,Object> implements Substitution {
+public class SimpleSubstitution extends HashMap<Variable, Object> implements Substitution {
 
 	private static final long serialVersionUID = 1L;
 
-	public SimpleSubstitution() {}
+	public SimpleSubstitution() {
+	}
 
-	public SimpleSubstitution(Map<Variable,Object> map) {
+	public SimpleSubstitution(Map<Variable, Object> map) {
 		super(map);
 	}
 

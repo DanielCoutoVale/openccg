@@ -14,11 +14,12 @@ import java.util.Map;
  */
 public class DocumenterFactory {
 
-	private static final Map<DocumenterName, Documenter> documenters
-		= new EnumMap<DocumenterName, Documenter>(DocumenterName.class);
+	private static final Map<DocumenterName, Documenter> documenters = new EnumMap<DocumenterName, Documenter>(
+			DocumenterName.class);
 	static final DocumenterFactory documenterFactory = new DocumenterFactory();
 
-	private DocumenterFactory() {}
+	private DocumenterFactory() {
+	}
 
 	/**
 	 * Gets a new documenter factory.
@@ -48,13 +49,11 @@ public class DocumenterFactory {
 	 * @throws DocumenterNotFoundException If no documenter can be created for
 	 *             the specified name.
 	 */
-	public Documenter newDocumenter(String name)
-			throws DocumenterNotFoundException {
+	public Documenter newDocumenter(String name) throws DocumenterNotFoundException {
 		try {
 			DocumenterName nm = DocumenterName.valueOf(name);
 			return newDocumenter(nm);
-		}
-		catch(IllegalArgumentException iae) {
+		} catch (IllegalArgumentException iae) {
 			throw new DocumenterNotFoundException(name);
 		}
 	}
@@ -71,17 +70,15 @@ public class DocumenterFactory {
 			throws DocumenterNotFoundException {
 		Documenter d = documenters.get(name);
 
-		if(d == null) {
+		if (d == null) {
 			try {
 				d = name.documenterClass.newInstance();
-			}
-			catch(InstantiationException ie) {
+			} catch (InstantiationException ie) {
 				throw new DocumenterNotFoundException(name, ie);
-			}
-			catch(IllegalAccessException iae) {
+			} catch (IllegalAccessException iae) {
 				throw new DocumenterNotFoundException(name, iae);
 			}
-			
+
 			documenters.put(name, d);
 		}
 

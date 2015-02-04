@@ -20,17 +20,20 @@ package opennlp.ccg.hylo.graph;
 import org.jgrapht.EdgeFactory;
 
 /**
- * A factory for LF edges that creates edges from specified source and target vertices and an edge label.
- * This interface extends the {@link EdgeFactory} interface for the specialized case of
- * directed, labeled LF edges with LF vertices as their nodes. A default implementation
- * is provided in {@link DefaultLFEdgeFactory}.
+ * A factory for LF edges that creates edges from specified source and target
+ * vertices and an edge label. This interface extends the {@link EdgeFactory}
+ * interface for the specialized case of directed, labeled LF edges with LF
+ * vertices as their nodes. A default implementation is provided in
+ * {@link DefaultLFEdgeFactory}.
  * 
  * @author <a href="http://www.ling.ohio-state.edu/~scott/">Scott Martin</a>
  */
 public interface LFEdgeFactory extends EdgeFactory<LFVertex, LFEdge> {
-	
+
 	/**
-	 * Creates a new labeled, directed edge from a specified vertex pair and edge label.
+	 * Creates a new labeled, directed edge from a specified vertex pair and
+	 * edge label.
+	 * 
 	 * @param sourceVertex The source vertex of the new edge.
 	 * @param targetVertex The target vertex of the new edge.
 	 * @param label The label of the new edge.

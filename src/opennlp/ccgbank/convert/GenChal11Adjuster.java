@@ -21,10 +21,10 @@ package opennlp.ccgbank.convert;
 import java.util.*;
 
 /**
- * Utility class for adjusting Generation Challenges 2011 outputs.
- * Strings are lowercased, named entities and hyphenated words are split, 
- * and dollar sign and numbers are transposed. 
- */ 
+ * Utility class for adjusting Generation Challenges 2011 outputs. Strings are
+ * lowercased, named entities and hyphenated words are split, and dollar sign
+ * and numbers are transposed.
+ */
 public class GenChal11Adjuster {
 
 	/** Returns the adjusted text string . */
@@ -32,34 +32,34 @@ public class GenChal11Adjuster {
 		// lowercase and split
 		String[] tokens = text.toLowerCase().split("\\s+");
 		// swap dollar signs
-		for (int i=0; i < tokens.length-1; i++) {
-			if (tokens[i+1].equals("$")) {
+		for (int i = 0; i < tokens.length - 1; i++) {
+			if (tokens[i + 1].equals("$")) {
 				try {
 					// check for preceding number token
 					Double.parseDouble(tokens[i]);
 					// swap, skip
 					String num = tokens[i];
-					tokens[i] = tokens[i+1];
-					tokens[i+1] = num;
+					tokens[i] = tokens[i + 1];
+					tokens[i + 1] = num;
 					i++;
+				} catch (NumberFormatException e) {
 				}
-				catch (NumberFormatException e) {}
 			}
 		}
 		// split NEs and hyphenated words
-		List<String> splitTokens = new ArrayList<String>(tokens.length*2);
+		List<String> splitTokens = new ArrayList<String>(tokens.length * 2);
 		for (String token : tokens) {
-			String[] tokenSplits = token.replace("-"," - ").split("[_ ]");
+			String[] tokenSplits = token.replace("-", " - ").split("[_ ]");
 			for (String s : tokenSplits)
 				splitTokens.add(s);
 		}
 		// join
 		StringBuffer retval = new StringBuffer();
-		for (int i=0; i < splitTokens.size()-1; i++) {
+		for (int i = 0; i < splitTokens.size() - 1; i++) {
 			retval.append(splitTokens.get(i));
 			retval.append(' ');
 		}
-		retval.append(splitTokens.get(splitTokens.size()-1));
+		retval.append(splitTokens.get(splitTokens.size() - 1));
 		// done
 		return retval.toString();
 	}

@@ -21,44 +21,41 @@ package opennlp.ccg.parse.supertagger.util;
 import java.util.Collection;
 
 /**
- * An interface for supertagger "dictionaries" as described
- * in, e.g., Clark (2002) _Supertagging for CCG_.
+ * An interface for supertagger "dictionaries" as described in, e.g., Clark
+ * (2002) _Supertagging for CCG_.
  * 
  * @author Dennis N. Mehay
  * @version $Revision: 1.1 $, $Date: 2009/08/21 17:20:20 $
  */
 public interface STTaggerDictionary {
 
-    /**
-     * A method for getting the dictionary entry for a particular
-     * <code>String</code> key.  
-     * The key will usually be a word, lemma or a part 
-     * of speech, but you may have other interesting grammatical things 
-     * to associate with supertags.
-     * 
-     * @param key A <code>String</code> representing a particular
-     *            grammatical type.
-     * @return A <code>Collection<String></code> containing supertags (CCG lexical 
-     *         categories) seen with the particular grammatical type `key'.
-     *         Returns <code>null</code> if that word was not seen in the
-     *         corpus or (if the implementing class has a frequency cut-off)
-     *         if that type's token frequency was not high enough.
-     */
-    public Collection<String> getEntry(String key);
-    
-    /**
-     * A method to test whether this <code>STTaggerDictionary</code> contains 
-     * an entry for a particular <code>String</code> key.  
-     * The key will usually be a word, lemma or a part of speech, but 
-     * you may have other interesting grammatical things to associate with 
-     * supertags.
-     * 
-     * @param key A <code>String</code> representing a particular
-     *            grammatical type.
-     * @return A <code>boolean</code> value of <code>true</code> or 
-     *           <code>false</code> answering the question of whether this
-     *           dictionary contains an entry for the specified key.
-     */
-    public boolean containsEntry(String key);
-}
+	/**
+	 * A method for getting the dictionary entry for a particular
+	 * <code>String</code> key. The key will usually be a word, lemma or a part
+	 * of speech, but you may have other interesting grammatical things to
+	 * associate with supertags.
+	 * 
+	 * @param key A <code>String</code> representing a particular grammatical
+	 *            type.
+	 * @return A <code>Collection<String></code> containing supertags (CCG
+	 *         lexical categories) seen with the particular grammatical type
+	 *         `key'. Returns <code>null</code> if that word was not seen in the
+	 *         corpus or (if the implementing class has a frequency cut-off) if
+	 *         that type's token frequency was not high enough.
+	 */
+	public Collection<String> getEntry(String key);
 
+	/**
+	 * A method to test whether this <code>STTaggerDictionary</code> contains an
+	 * entry for a particular <code>String</code> key. The key will usually be a
+	 * word, lemma or a part of speech, but you may have other interesting
+	 * grammatical things to associate with supertags.
+	 * 
+	 * @param key A <code>String</code> representing a particular grammatical
+	 *            type.
+	 * @return A <code>boolean</code> value of <code>true</code> or
+	 *         <code>false</code> answering the question of whether this
+	 *         dictionary contains an entry for the specified key.
+	 */
+	public boolean containsEntry(String key);
+}

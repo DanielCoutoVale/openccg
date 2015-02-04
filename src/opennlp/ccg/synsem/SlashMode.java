@@ -79,27 +79,34 @@ public final class SlashMode implements Modality, Serializable {
 	}
 
 	/** Returns a hash code based on the mode. */
-	public int hashCode() { return 31 * _mode; }
-	
-	/** Returns whether this slash mode equals the given object based on the mode. */
+	public int hashCode() {
+		return 31 * _mode;
+	}
+
+	/**
+	 * Returns whether this slash mode equals the given object based on the
+	 * mode.
+	 */
 	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj.getClass() != this.getClass())
+			return false;
 		SlashMode m = (SlashMode) obj;
 		return _mode == m._mode;
 	}
-	
-//	public boolean equals(SlashMode m) {
-//		return _mode == m._mode;
-//	}
+
+	// public boolean equals(SlashMode m) {
+	// return _mode == m._mode;
+	// }
 
 	public boolean occurs(Variable var) {
 		return false;
 	}
 
 	public void unifyCheck(Object o) throws UnifyFailure {
-		if (!(o instanceof VarModality || (o instanceof SlashMode && modesMatch(
-				_mode, ((SlashMode) o)._mode)))) {
+		if (!(o instanceof VarModality || (o instanceof SlashMode && modesMatch(_mode,
+				((SlashMode) o)._mode)))) {
 			throw new UnifyFailure();
 		}
 	}
@@ -260,8 +267,7 @@ public final class SlashMode implements Modality, Serializable {
 				doMatch = false;
 			}
 		} else if (m1 == APRight) {
-			if (m2 == PermutativeRight || m2 == Permutative
-					|| m2 == Associative) {
+			if (m2 == PermutativeRight || m2 == Permutative || m2 == Associative) {
 				doMatch = true;
 			} else {
 				doMatch = false;
@@ -285,8 +291,7 @@ public final class SlashMode implements Modality, Serializable {
 				doMatch = false;
 			}
 		} else if (m1 == Permutative) {
-			if (m2 == APLeft || m2 == APRight || m2 == PermutativeRight
-					|| m2 == PermutativeLeft) {
+			if (m2 == APLeft || m2 == APRight || m2 == PermutativeRight || m2 == PermutativeLeft) {
 				doMatch = true;
 			} else {
 				doMatch = false;

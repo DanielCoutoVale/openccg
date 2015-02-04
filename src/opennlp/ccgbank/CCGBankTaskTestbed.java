@@ -25,18 +25,16 @@ import java.io.File;
 
 import org.apache.tools.ant.Task;
 
-
 /**
  * @author <a href="http://www.ling.osu.edu/~scott/">Scott Martin</a>
  * @version $Revision: 1.3 $
  *
  */
 public class CCGBankTaskTestbed extends Task {
-	
+
 	boolean debugDerivations = false, showSem = false;
 	File text, factors, combos, preds, treeAuxFile;
-	
-	
+
 	/**
 	 * @return the combos
 	 */
@@ -44,7 +42,6 @@ public class CCGBankTaskTestbed extends Task {
 		return combos;
 	}
 
-	
 	/**
 	 * @return the debugDerivations
 	 */
@@ -52,7 +49,6 @@ public class CCGBankTaskTestbed extends Task {
 		return debugDerivations;
 	}
 
-	
 	/**
 	 * @return the showSem
 	 */
@@ -60,7 +56,6 @@ public class CCGBankTaskTestbed extends Task {
 		return showSem;
 	}
 
-	
 	/**
 	 * @return the factors
 	 */
@@ -68,7 +63,6 @@ public class CCGBankTaskTestbed extends Task {
 		return factors;
 	}
 
-	
 	/**
 	 * @return the preds
 	 */
@@ -76,7 +70,6 @@ public class CCGBankTaskTestbed extends Task {
 		return preds;
 	}
 
-	
 	/**
 	 * @return the text
 	 */
@@ -84,53 +77,53 @@ public class CCGBankTaskTestbed extends Task {
 		return text;
 	}
 
-	//Get the file which stores info about the id info of treenodes
+	// Get the file which stores info about the id info of treenodes
 	public File getTree() {
 		return treeAuxFile;
 	}
-	
+
 	/**
 	 * @param combos the combos to set
 	 */
 	public void setCombos(File combos) {
 		this.combos = combos;
 	}
-	
+
 	/**
 	 * @param debugDerivations the debugDerivations to set
 	 */
 	public void setDebugDerivations(boolean debugDerivations) {
 		this.debugDerivations = debugDerivations;
 	}
-	
+
 	/**
 	 * @param showSem the showSem to set
 	 */
 	public void setShowSem(boolean showSem) {
 		this.showSem = showSem;
 	}
-	
+
 	/**
 	 * @param factors the factors to set
 	 */
 	public void setFactors(File factors) {
 		this.factors = factors;
 	}
-	
+
 	/**
 	 * @param preds the preds to set
 	 */
 	public void setPreds(File preds) {
 		this.preds = preds;
 	}
-	
+
 	/**
 	 * @param text the text to set
 	 */
 	public void setText(File text) {
 		this.text = text;
 	}
-	
+
 	public void setTree(File treeAuxFile) {
 		this.treeAuxFile = treeAuxFile;
 	}

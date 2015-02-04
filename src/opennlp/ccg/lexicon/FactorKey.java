@@ -19,48 +19,60 @@
 package opennlp.ccg.lexicon;
 
 import opennlp.ccg.util.*;
+
 // import java.util.*;
 
-/** 
- * Factor key, with identity equals for the factor and value. 
+/**
+ * Factor key, with identity equals for the factor and value.
  *
- * @author      Michael White
- * @version     $Revision: 1.1 $, $Date: 2005/03/22 20:59:32 $
+ * @author Michael White
+ * @version $Revision: 1.1 $, $Date: 2005/03/22 20:59:32 $
  */
 public class FactorKey {
 
-    /** The factor. */
-    public final String factor;
+	/** The factor. */
+	public final String factor;
 
-    /** The value. */
-    public final String val;
+	/** The value. */
+	public final String val;
 
-    /** Constructor.  Assumes interned components. */
-    private FactorKey(String factor, String val) { this.factor = factor; this.val = val; }
+	/** Constructor. Assumes interned components. */
+	private FactorKey(String factor, String val) {
+		this.factor = factor;
+		this.val = val;
+	}
 
-    /** Makes/retrieves an interned factor key for the given interned attr and val; 
-        for the word form, the string itself is returned. 
-        Null vals are replaced with &lt;NULL&gt;. */
-    public static Object getKey(String attr, String val) {
-        if (val == null) val = "<NULL>";
-        if (attr == Tokenizer.FORM_ASSOCIATE) return val;
-        else return Interner.globalIntern(new FactorKey(attr, val));
-    }
+	/**
+	 * Makes/retrieves an interned factor key for the given interned attr and
+	 * val; for the word form, the string itself is returned. Null vals are
+	 * replaced with &lt;NULL&gt;.
+	 */
+	public static Object getKey(String attr, String val) {
+		if (val == null)
+			val = "<NULL>";
+		if (attr == Tokenizer.FORM_ASSOCIATE)
+			return val;
+		else
+			return Interner.globalIntern(new FactorKey(attr, val));
+	}
 
-    /** Returns a hash code constructed from the component identity hash codes. */
-    public int hashCode() { 
-        return System.identityHashCode(factor) - System.identityHashCode(val);
-    }
+	/** Returns a hash code constructed from the component identity hash codes. */
+	public int hashCode() {
+		return System.identityHashCode(factor) - System.identityHashCode(val);
+	}
 
-    /** Returns true if the given factor key has identical components. */
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof FactorKey)) return false;
-        FactorKey key = (FactorKey) obj;
-        return factor == key.factor && val == key.val;
-    }
+	/** Returns true if the given factor key has identical components. */
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof FactorKey))
+			return false;
+		FactorKey key = (FactorKey) obj;
+		return factor == key.factor && val == key.val;
+	}
 
-    /** Returns "factor-val". */
-    public String toString() { return factor + "-" + val; }
-}    
-
+	/** Returns "factor-val". */
+	public String toString() {
+		return factor + "-" + val;
+	}
+}

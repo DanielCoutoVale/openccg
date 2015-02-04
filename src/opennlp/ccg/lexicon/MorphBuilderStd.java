@@ -28,8 +28,9 @@ import opennlp.ccg.unify.GFeatStruc;
 import org.jdom.Element;
 
 /**
- * A morph builder that reads in a series of realizational chains (realizational associations) as
- * well as a series of feature bundles. The format comes from previous versions of OpenCCG.
+ * A morph builder that reads in a series of realizational chains (realizational
+ * associations) as well as a series of feature bundles. The format comes from
+ * previous versions of OpenCCG.
  *
  * @author Daniel Couto-Vale
  */

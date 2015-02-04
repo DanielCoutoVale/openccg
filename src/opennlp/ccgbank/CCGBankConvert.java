@@ -48,87 +48,85 @@ import org.jdom.Element;
 import org.jdom.transform.JDOMSource;
 import org.xml.sax.InputSource;
 
-
 /**
  * Converts the CCGBank to a modified version for grammar extraction.
  * <p>
  * Within this task, a series of <code>FileList</code>s is specified. These
- * files are the lists of xsltProcessors that should be used to transform the 
+ * files are the lists of xsltProcessors that should be used to transform the
  * CCGBank. These xsltProcessors are processed in the order they occur in the
- * <code>FileList</code> specified within this task. 
+ * <code>FileList</code> specified within this task.
+ * 
  * @author <a href="http://www.ling.osu.edu/~scott/">Scott Martin</a>
  * @author Rajakrishnan Rajkumar
  * @version $Revision: 1.8 $
  * @see CCGBankExtract
  */
 public class CCGBankConvert extends CCGBankTask {
-	
-	/** Flag for whether to keep case-marking preps in PP categories; defaults to false. */
+
+	/**
+	 * Flag for whether to keep case-marking preps in PP categories; defaults to
+	 * false.
+	 */
 	boolean keepPPHeads = false;
 
 	TreeWalker treeWalker = new TreeWalker();
-	
+
 	CCGbankDerivation deriv = null;
-	File auxFileDirectory, bbnAuxDirectory, wordsFile, stemsFile,
-		currentDirectory = null;
-	
-	/* (non-Javadoc)
+	File auxFileDirectory, bbnAuxDirectory, wordsFile, stemsFile, currentDirectory = null;
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see opennlp.ccgbank.CCGBankTask#start()
 	 */
 	@Override
 	protected void start() throws BuildException {
-		
+
 		InfoHelper.init(auxFileDirectory, bbnAuxDirectory);
-		String trueCaseListPath=auxFileDirectory.getAbsolutePath()+"/"+"truecase-list.gz";
+		String trueCaseListPath = auxFileDirectory.getAbsolutePath() + "/" + "truecase-list.gz";
 		XSLTTrueCaser.init(trueCaseListPath);
-		
+
 		try {
 			MorphLookup.init(wordsFile, stemsFile);
-			
+
+		} catch (IOException io) {
+			throw new BuildException("problem loading words or stems", io, getLocation());
 		}
-		catch(IOException io) {
-			throw new BuildException("problem loading words or stems", io,
-					getLocation());
-		}
-		
-		xsltProcessor = useXMLFilter
-			? new XMLFilterProcessor(this, this)
-			: new TemplatesProcessor(this);
-		
+
+		xsltProcessor = useXMLFilter ? new XMLFilterProcessor(this, this) : new TemplatesProcessor(
+				this);
+
 		// "prime" parser
 		// TODO fix this hack!!
 		try {
 			File tmp = File.createTempFile(getClass().getName(), "prime");
 			tmp.deleteOnExit();
-						
+
 			deriv = new CCGbankDerivation(new FileReader(tmp));
-		}
-		catch(IOException e) {
-			throw new BuildException("Problem priming parser: "
-				+ e.getMessage(), e, getLocation());
+		} catch (IOException e) {
+			throw new BuildException("Problem priming parser: " + e.getMessage(), e, getLocation());
 		}
 	}
 
 	/** Read aux files for the next WSJ section **/
 	@Override
 	protected void nextDirectory(File section) throws BuildException {
-		
+
 		currentDirectory = section;
-		
+
 		// only create if a numbered directory
 		File d = new File(target, currentDirectory.getName());
-		if(!d.exists() && !d.mkdirs()) {
+		if (!d.exists() && !d.mkdirs()) {
 			throw new BuildException("unable to create directory " + d);
 		}
-		
-		//Read in aux files
-		try { 
+
+		// Read in aux files
+		try {
 			InfoHelper.readBBNAuxfiles(section.getName());
 			InfoHelper.readQuoteAuxfiles(section.getName());
 			InfoHelper.readPTBAuxfiles(section.getName());
 			InfoHelper.readTreeAuxfiles(section.getName());
-		}
-		catch(NumberFormatException nfe) {
+		} catch (NumberFormatException nfe) {
 			// not a numbered PTB directory
 		}
 	}
@@ -137,49 +135,47 @@ public class CCGBankConvert extends CCGBankTask {
 	protected InputSource nextFile(File file) throws BuildException {
 		try {
 			Reader reader = new BufferedReader(new FileReader(file));
-			
-			if(deriv == null) { 
+
+			if (deriv == null) {
 				deriv = new CCGbankDerivation(reader);
-			}
-			else {
+			} else {
 				CCGbankDerivation.ReInit(reader);
 			}
-			
+
 			SimpleNode root = CCGbankDerivation.start();
 			Element result = new Element("Derivation");
-			
+
 			String fileName = file.getName();
-			int start = fileName.contains(File.separator)
-				? fileName.lastIndexOf(File.separatorChar) : 0;
-			
-			StringBuilder sb = new StringBuilder(
-			    	fileName.substring(start, fileName.lastIndexOf('.')));
-		    sb.append(".xml");
-		    
-		    File targetDir = new File(target, currentDirectory.getName());
-		    File targetFile = new File(targetDir, sb.toString());			        
-		    
-		    xsltProcessor.resetSerializer();
-		    xsltProcessor.setTarget(targetFile);
-		    		    
-		    Document doc = new Document(treeWalker.eval(root, result));
-		    
-		    // TODO attempt to get error reporting for file / line !!
-		    Source s = new JDOMSource(doc);
-		    s.setSystemId(file.toURI().toString());
-		    
-		    return SAXSource.sourceToInputSource(s);
-		}
-		catch(Exception e) {
+			int start = fileName.contains(File.separator) ? fileName
+					.lastIndexOf(File.separatorChar) : 0;
+
+			StringBuilder sb = new StringBuilder(fileName.substring(start,
+					fileName.lastIndexOf('.')));
+			sb.append(".xml");
+
+			File targetDir = new File(target, currentDirectory.getName());
+			File targetFile = new File(targetDir, sb.toString());
+
+			xsltProcessor.resetSerializer();
+			xsltProcessor.setTarget(targetFile);
+
+			Document doc = new Document(treeWalker.eval(root, result));
+
+			// TODO attempt to get error reporting for file / line !!
+			Source s = new JDOMSource(doc);
+			s.setSystemId(file.toURI().toString());
+
+			return SAXSource.sourceToInputSource(s);
+		} catch (Exception e) {
 			throw new BuildException(e, getLocation());
 		}
 	}
-	
-	
+
 	/** @param keepPPHeads the keepPPHeads value to set */
-	public void setKeepPPHeads(boolean keepPPHeads) { this.keepPPHeads = keepPPHeads; }
-	
-	
+	public void setKeepPPHeads(boolean keepPPHeads) {
+		this.keepPPHeads = keepPPHeads;
+	}
+
 	/**
 	 * @param stemsFile the stemsFile to set
 	 */
@@ -187,7 +183,6 @@ public class CCGBankConvert extends CCGBankTask {
 		this.stemsFile = stemsFile;
 	}
 
-	
 	/**
 	 * @param wordsFile the wordsFile to set
 	 */
@@ -200,9 +195,9 @@ public class CCGBankConvert extends CCGBankTask {
 	 */
 	public void setAuxFileDirectory(File auxFileDirectory) {
 		this.auxFileDirectory = auxFileDirectory;
-		
+
 	}
-	
+
 	/**
 	 * @param bbnAuxDirectory the bbnAuxDirectory to set
 	 */
@@ -213,28 +208,28 @@ public class CCGBankConvert extends CCGBankTask {
 	public static void main(String[] args) {
 		File baseDir = new File(System.getProperty("user.dir"));
 		File buildFile = new File(baseDir, "build.xml");
-		
+
 		Project project = new Project();
-		
+
 		project.init();
-		
+
 		project.setBaseDir(baseDir);
-		
+
 		ProjectHelper helper = ProjectHelper.getProjectHelper();
-		
+
 		project.setProjectReference(helper);
-		
+
 		helper.parse(project, buildFile);
-		
+
 		DefaultLogger logger = new DefaultLogger();
 		logger.setErrorPrintStream(System.err);
 		logger.setOutputPrintStream(System.out);
-		
+
 		project.addBuildListener(logger);
-		
-		project.executeTarget("convert-base");		
+
+		project.executeTarget("convert-base");
 	}
-	
+
 	class TreeWalker {
 		// General purpose datastructure to store ccgbank indices of categories.
 		// Refreshed after the lifespan of a node is over.
@@ -242,7 +237,7 @@ public class CCGBankConvert extends CCGBankTask {
 		// flag for whether under a leaf node;
 		// used to control whether to add fs id's
 		private boolean underLeaf = false;
-		
+
 		public Element eval(SimpleNode node, Element root) throws Exception {
 
 			// No:of children of any given node
@@ -270,7 +265,8 @@ public class CCGBankConvert extends CCGBankTask {
 						child.type = "complexcat";
 				}
 
-				// The header node is accessed and the CCGbankId is passed on to the
+				// The header node is accessed and the CCGbankId is passed on to
+				// the
 				// treenode root of the sentence which is processed next
 				if (child.type.equals("Header")) {
 
@@ -288,16 +284,14 @@ public class CCGBankConvert extends CCGBankTask {
 				// Xml element which is going to be generated.
 				Element leaf = new Element(child.type);
 
-				if (child.type.equals("complexcat")
-						|| child.type.equals("Treenode")
+				if (child.type.equals("complexcat") || child.type.equals("Treenode")
 						|| child.type.equals("Leafnode")) {
 
 					// Atomic categories are represented in the javacc tree as
 					// catSpec-aotmcat. So for such cases the catSpec child is
 					// skipped and the next child is accessed.
 
-					if (child.jjtGetNumChildren() == 1
-							&& child.type.equals("complexcat")) {
+					if (child.jjtGetNumChildren() == 1 && child.type.equals("complexcat")) {
 
 						child = (SimpleNode) child.jjtGetChild(0);
 
@@ -323,15 +317,18 @@ public class CCGBankConvert extends CCGBankTask {
 							node.cat = child.print();
 						}
 
-						// Recursive processing of the children of the current node
+						// Recursive processing of the children of the current
+						// node
 						leaf = eval(child, leaf);
 
-						// Sending Leaf,Tree nodes for to a function which inserts
+						// Sending Leaf,Tree nodes for to a function which
+						// inserts
 						// the family (ie normalized cat spec) of its contents.
 						if (!child.type.equals("complexcat"))
 							leaf = catInserter(child, leaf);
 
-						// Adding the current element to its parent in the xml tree.
+						// Adding the current element to its parent in the xml
+						// tree.
 						root.addContent(leaf);
 
 						continue;
@@ -357,7 +354,7 @@ public class CCGBankConvert extends CCGBankTask {
 			return root;
 
 		}
-		
+
 		public Element ccinserter(SimpleNode node, Element leaf) {
 
 			// This function produces complexcat/treenode/leafnode elements.
@@ -384,7 +381,8 @@ public class CCGBankConvert extends CCGBankTask {
 
 			// Leafnode info represented
 			if (name.equals("Leafnode")) {
-				leaf.setAttribute("lexeme", node.lex); // nb: may be truecased later
+				leaf.setAttribute("lexeme", node.lex); // nb: may be truecased
+														// later
 				leaf.setAttribute("lexeme0", node.lex);
 				leaf.setAttribute("pos", node.pos);
 				idList.clear();
@@ -397,13 +395,13 @@ public class CCGBankConvert extends CCGBankTask {
 				for (SimpleNode.LexSenseRole lexSenseRole : node.nodeRoles) {
 					if (lexSenseRole.role.equals("rel")) {
 						leaf.setAttribute("rel", lexSenseRole.lex + "." + lexSenseRole.sense);
-					}
-					else {
+					} else {
 						String role = adjustRole(lexSenseRole.role);
 						roles += lexSenseRole.lex + "." + lexSenseRole.sense + ":" + role + " ";
 					}
 				}
-				if (roles.length() > 0) leaf.setAttribute("roles", roles.trim());
+				if (roles.length() > 0)
+					leaf.setAttribute("roles", roles.trim());
 			}
 			if (node.argRoles != null) {
 				String args = "";
@@ -421,7 +419,8 @@ public class CCGBankConvert extends CCGBankTask {
 
 			// Predicate for atomcat creation.
 			// Flag signifies whether the elem is a single atomcat.
-			// Relevant as if the present cat is an atomcat LF variable can be set
+			// Relevant as if the present cat is an atomcat LF variable can be
+			// set
 			// in the syntax here itself.
 
 			StringTokenizer lex;
@@ -445,9 +444,9 @@ public class CCGBankConvert extends CCGBankTask {
 
 				if (x.length == 2) {
 					// mww: moved this to atomcat
-					//feat.setAttribute("attr", "dep");
-					//feat.setAttribute("val", x[1]);
-					//fs.addContent(feat);
+					// feat.setAttribute("attr", "dep");
+					// feat.setAttribute("val", x[1]);
+					// fs.addContent(feat);
 					atomcat.setAttribute("dep", x[1]);
 				}
 
@@ -519,15 +518,15 @@ public class CCGBankConvert extends CCGBankTask {
 
 			if (idList.size() > 0) {
 				for (i = 0; i < idList.size(); i++)
-					node.cat = node.cat.replaceAll(idList.get(i),
-							Integer.toString(i + 1));
+					node.cat = node.cat.replaceAll(idList.get(i), Integer.toString(i + 1));
 			}
 
 			String l = node.getLeftover();
 			if (l != null)
 				node.cat = node.cat + l;
 
-			// Purging the cat spec of indices outside brackets & colons ie )_2 ,:B
+			// Purging the cat spec of indices outside brackets & colons ie )_2
+			// ,:B
 			int ind = node.cat.indexOf(")_");
 
 			while (ind != -1) {
@@ -572,19 +571,21 @@ public class CCGBankConvert extends CCGBankTask {
 			return leaf;
 		}
 	}
-	
+
 	// strips PP heads if apropos
 	private String stripPPHeads(String cat) {
-		if (keepPPHeads) return cat;
+		if (keepPPHeads)
+			return cat;
 		return cat.replaceAll("pp\\[[a-z]+\\]", "pp");
 	}
-	
+
 	// adjusts role, stripping PP head if apropos
 	private String adjustRole(String role) {
 		role = role.replaceFirst("ARG", "Arg");
 		if (!keepPPHeads) {
 			int hyph = role.indexOf('-');
-			if (hyph > 0) role = role.substring(0, hyph);
+			if (hyph > 0)
+				role = role.substring(0, hyph);
 		}
 		return role;
 	}

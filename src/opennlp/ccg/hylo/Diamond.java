@@ -25,72 +25,72 @@ import org.jdom.*;
 /**
  * A modal diamond operator, such as &lt;P&gt;p.
  *
- * @author      Jason Baldridge
- * @author      Michael White
- * @version     $Revision: 1.6 $, $Date: 2009/07/17 04:23:30 $
+ * @author Jason Baldridge
+ * @author Michael White
+ * @version $Revision: 1.6 $, $Date: 2009/07/17 04:23:30 $
  **/
 public final class Diamond extends ModalOp {
 
 	private static final long serialVersionUID = 543211908001651361L;
 
 	public Diamond(Element e) {
-        super(e);
-    }
+		super(e);
+	}
 
-    public Diamond(Mode mode, LF arg) {
-        super(mode, arg);
-    }
+	public Diamond(Mode mode, LF arg) {
+		super(mode, arg);
+	}
 
-    public LF copy() {
-        return new Diamond ((Mode)_mode.copy(), _arg.copy());
-    }
-    
-    public boolean equals(Object o) {
-        if (o instanceof Diamond) {
-            return super.equals((Diamond)o);
-        } else {
-            return false;
-        }
-    }
+	public LF copy() {
+		return new Diamond((Mode) _mode.copy(), _arg.copy());
+	}
 
-    public void unifyCheck(Object u) throws UnifyFailure {
-        if (u instanceof Diamond) {
-            super.unifyCheck((Diamond)u);
-        } else {
-            throw new UnifyFailure();
-        }
-    }
+	public boolean equals(Object o) {
+		if (o instanceof Diamond) {
+			return super.equals((Diamond) o);
+		} else {
+			return false;
+		}
+	}
 
-    public Object unify(Object u, Substitution sub) throws UnifyFailure {
-        if (u instanceof HyloFormula) {
-            if (u instanceof Diamond) {
-                Mode $mode = (Mode) Unifier.unify(_mode, ((Diamond)u)._mode, sub);
-                LF $arg = (LF) Unifier.unify(_arg,((Diamond)u)._arg, sub);
-                return new Diamond($mode, $arg);
-            }
-            else return super.unify(u,sub);
-        } else {
-            throw new UnifyFailure();
-        }
-    }
+	public void unifyCheck(Object u) throws UnifyFailure {
+		if (u instanceof Diamond) {
+			super.unifyCheck((Diamond) u);
+		} else {
+			throw new UnifyFailure();
+		}
+	}
 
-    public Object fill(Substitution sub) throws UnifyFailure {
-        return new Diamond((Mode)_mode.fill(sub), (LF)_arg.fill(sub));
-    }
-    
-    /** Returns the string form of this modal op, without the arg. */
-    public String modalOpString() {
-        return new StringBuffer().append('<').append(_mode.toString()).append('>').toString();
-    }
-    
-    /**
-     * Returns an XML representation of this LF.
-     */
-    public Element toXml() {
-        Element retval = new Element("diamond");
-        retval.setAttribute("mode", _mode.toString());
-        Element argElt = _arg.toXml();
-        retval.addContent(argElt);
-        return retval;
-    }
+	public Object unify(Object u, Substitution sub) throws UnifyFailure {
+		if (u instanceof HyloFormula) {
+			if (u instanceof Diamond) {
+				Mode $mode = (Mode) Unifier.unify(_mode, ((Diamond) u)._mode, sub);
+				LF $arg = (LF) Unifier.unify(_arg, ((Diamond) u)._arg, sub);
+				return new Diamond($mode, $arg);
+			} else
+				return super.unify(u, sub);
+		} else {
+			throw new UnifyFailure();
+		}
+	}
+
+	public Object fill(Substitution sub) throws UnifyFailure {
+		return new Diamond((Mode) _mode.fill(sub), (LF) _arg.fill(sub));
+	}
+
+	/** Returns the string form of this modal op, without the arg. */
+	public String modalOpString() {
+		return new StringBuffer().append('<').append(_mode.toString()).append('>').toString();
+	}
+
+	/**
+	 * Returns an XML representation of this LF.
+	 */
+	public Element toXml() {
+		Element retval = new Element("diamond");
+		retval.setAttribute("mode", _mode.toString());
+		Element argElt = _arg.toXml();
+		retval.addContent(argElt);
+		return retval;
+	}
 }

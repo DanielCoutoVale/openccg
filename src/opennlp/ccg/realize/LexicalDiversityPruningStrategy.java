@@ -27,46 +27,45 @@ import gnu.trove.TObjectIdentityHashingStrategy;
 import java.util.*;
 
 /**
- * A diversity pruning strategy that defines signs to be 
- * notCompellinglyDifferent if the set of open class stems 
- * is the same.  The POS classes of interest are set in the 
- * constructor.
+ * A diversity pruning strategy that defines signs to be
+ * notCompellinglyDifferent if the set of open class stems is the same. The POS
+ * classes of interest are set in the constructor.
  *
- * @author      Michael White
- * @version     $Revision: 1.1 $, $Date: 2011/04/02 16:32:17 $
+ * @author Michael White
+ * @version $Revision: 1.1 $, $Date: 2011/04/02 16:32:17 $
  */
-public class LexicalDiversityPruningStrategy extends DiversityPruningStrategy
-{
-    /** The interned POS values to use for relevant open class stems. */
-    @SuppressWarnings("unchecked")
+public class LexicalDiversityPruningStrategy extends DiversityPruningStrategy {
+	/** The interned POS values to use for relevant open class stems. */
+	@SuppressWarnings("unchecked")
 	protected Set<String> posValsToUse = new THashSet(new TObjectIdentityHashingStrategy());
-    
-    /** Reusable set of observed interned stems for comparison purposes. */
-    @SuppressWarnings("unchecked")
+
+	/** Reusable set of observed interned stems for comparison purposes. */
+	@SuppressWarnings("unchecked")
 	protected Set<String> stemsSeen = new THashSet(new TObjectIdentityHashingStrategy());
-    
-    /** Constructor, which sets POS classes of interest. */
-    public LexicalDiversityPruningStrategy() {
-    	String[] poslist = {
-    		"JJ", "JJR", "JJS",
-    		"NN", "NNP", "NNS", "NNPS",
-    		"RB", "RBR", "RBS",
-    		"VB", "VBD", "VBG", "VBN", "VBP", "VBZ"
-    	};
-    	for (String pos : poslist) posValsToUse.add(pos);
-    }
-    
-    /** Returns true iff the given signs are not compellingly different.
-        In particular, returns true iff the set of relevant open class stems are the same. */
-    public boolean notCompellinglyDifferent(Symbol sign1, Symbol sign2) {
-    	stemsSeen.clear();
-    	for (Association w : sign1.getWords()) {
-    		if (posValsToUse.contains(w.getFunctions())) stemsSeen.add(w.getTerm());
-    	}
-    	for (Association w : sign2.getWords()) {
-    		if (posValsToUse.contains(w.getFunctions()) && !stemsSeen.contains(w.getTerm()))
-    			return false;
-    	}
-        return true;
-    }
+
+	/** Constructor, which sets POS classes of interest. */
+	public LexicalDiversityPruningStrategy() {
+		String[] poslist = { "JJ", "JJR", "JJS", "NN", "NNP", "NNS", "NNPS", "RB", "RBR", "RBS",
+				"VB", "VBD", "VBG", "VBN", "VBP", "VBZ" };
+		for (String pos : poslist)
+			posValsToUse.add(pos);
+	}
+
+	/**
+	 * Returns true iff the given signs are not compellingly different. In
+	 * particular, returns true iff the set of relevant open class stems are the
+	 * same.
+	 */
+	public boolean notCompellinglyDifferent(Symbol sign1, Symbol sign2) {
+		stemsSeen.clear();
+		for (Association w : sign1.getWords()) {
+			if (posValsToUse.contains(w.getFunctions()))
+				stemsSeen.add(w.getTerm());
+		}
+		for (Association w : sign2.getWords()) {
+			if (posValsToUse.contains(w.getFunctions()) && !stemsSeen.contains(w.getTerm()))
+				return false;
+		}
+		return true;
+	}
 }

@@ -24,45 +24,46 @@ import java.util.Hashtable;
 
 public class OrigPunctRules {
 
-	//Sentence id
+	// Sentence id
 	private String id = "";
 
-	//The largest current id
+	// The largest current id
 	private static int globalId = 0;
 
-	//ccgbank section
-	private String sect="";
+	// ccgbank section
+	private String sect = "";
 
-	//Label for a punct mark
+	// Label for a punct mark
 	private String label = "";
 
-	//The store of ids
-	private static Hashtable<String,String> idTally = new Hashtable<String,String>();
+	// The store of ids
+	private static Hashtable<String, String> idTally = new Hashtable<String, String>();
 
-	//Proc which traps, stores id of each sentence in a global var
+	// Proc which traps, stores id of each sentence in a global var
 	public String storeId(String x) {
 		id = "";
 		sect = "";
-		//System.out.println(x+" "+"Raja");
+		// System.out.println(x+" "+"Raja");
 		String expId[] = x.split("_");
 		id = expId[1];
 		sect = id.substring(0, 2);
-		if (sect.length() < 0) sect += "just avoiding a warning here"; 
-		//System.out.println(sect+" "+"Raja");
+		if (sect.length() < 0)
+			sect += "just avoiding a warning here";
+		// System.out.println(sect+" "+"Raja");
 		return null;
 	}
 
-	//Initialization before start of a new binary rule 
+	// Initialization before start of a new binary rule
 	public String initId() {
 		globalId = 0;
 		idTally.clear();
 		return null;
 	}
 
-	//Id allotment
+	// Id allotment
 	public String allotId(String cat) {
 		String newId = "";
-		//Id allotment
+		// Id allotment
 		if (!idTally.containsKey(cat)) {
 			globalId++;
 			newId = Integer.toString(globalId);

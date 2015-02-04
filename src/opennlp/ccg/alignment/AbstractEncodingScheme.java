@@ -23,56 +23,59 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Abstract class for implementing encoding schemes. This base class provides a constructor taking all the
- * necessary arguments for implementing {@link EncodingScheme}, and gives getter methods for all of them,
- * as required.
+ * Abstract class for implementing encoding schemes. This base class provides a
+ * constructor taking all the necessary arguments for implementing
+ * {@link EncodingScheme}, and gives getter methods for all of them, as
+ * required.
+ * 
  * @author <a href="http://www.ling.osu.edu/~scott/">Scott Martin</a>
  * @see EncodingScheme
  */
 public abstract class AbstractEncodingScheme implements EncodingScheme {
-	
+
 	/**
 	 * Delimits a field within a mapping.
 	 */
 	protected Character fieldDelimiter;
-	
+
 	/**
 	 * Delimits a mapping.
 	 */
 	protected Character mappingDelimiter;
-	
+
 	/**
 	 * Delimits a group of mappings.
 	 */
 	protected Character groupDelimiter;
-	
+
 	/**
 	 * The index base for IDs.
 	 */
 	protected IndexBase phraseNumberBase;
-	
+
 	/**
 	 * The index base for indices.
 	 */
 	protected IndexBase indexBase;
-	
+
 	/**
-	 * The order of the fields in mappings corresponding to this encoding scheme.
+	 * The order of the fields in mappings corresponding to this encoding
+	 * scheme.
 	 */
 	protected List<MappingFormat.Field> order;
-	
+
 	/**
 	 * The set of required fields in this encoding scheme.
 	 */
 	protected Set<MappingFormat.Field> required;
-	
+
 	/**
 	 * The fields that this encoding scheme uses by default.
 	 */
 	protected Set<MappingFormat.Field> defaults;
-	
-	final boolean fieldDelimSep, mappingDelimSep, groupDelimSep;	
-	
+
+	final boolean fieldDelimSep, mappingDelimSep, groupDelimSep;
+
 	protected AbstractEncodingScheme(Character fieldDelimiter, Character mappingDelimiter,
 			Character groupDelimiter, IndexBase phraseNumberBase, IndexBase indexBase,
 			Set<MappingFormat.Field> defaults, Set<MappingFormat.Field> required,
@@ -82,46 +85,56 @@ public abstract class AbstractEncodingScheme implements EncodingScheme {
 		this.groupDelimiter = groupDelimiter;
 		this.phraseNumberBase = phraseNumberBase;
 		this.indexBase = indexBase;
-		
+
 		fieldDelimSep = isLineSeparator(fieldDelimiter);
 		mappingDelimSep = isLineSeparator(mappingDelimiter);
 		groupDelimSep = isLineSeparator(groupDelimiter);
-		
+
 		this.defaults = Collections.unmodifiableSet(defaults);
 		this.required = Collections.unmodifiableSet(required);
 		this.order = Collections.unmodifiableList(Arrays.asList(order));
 	}
-	
+
 	static boolean isLineSeparator(Character c) {
-		// TODO why doesn't Character.getType(c) == Character.LINE_SEPARATOR work?
+		// TODO why doesn't Character.getType(c) == Character.LINE_SEPARATOR
+		// work?
 		return c == '\r' || c == '\n';
 	}
-	
+
 	/**
-	 * Tests whether the supplied character counts as a field delimiter according to this encoding scheme.
-	 * @return true if <code>c</code> is equal to {@link #fieldDelimiter} or both <code>c</code> and 
-	 * {@link #fieldDelimiter} are line separators.
+	 * Tests whether the supplied character counts as a field delimiter
+	 * according to this encoding scheme.
+	 * 
+	 * @return true if <code>c</code> is equal to {@link #fieldDelimiter} or
+	 *         both <code>c</code> and {@link #fieldDelimiter} are line
+	 *         separators.
 	 */
 	public boolean isFieldDelimiter(Character c) {
-		return fieldDelimiter.equals(c) || (fieldDelimSep && isLineSeparator(c)); 
+		return fieldDelimiter.equals(c) || (fieldDelimSep && isLineSeparator(c));
 	}
-	
+
 	/**
-	 * Tests whether the supplied character counts as a mapping delimiter according to this encoding scheme.
-	 * @return true if <code>c</code> is equal to {@link #mappingDelimiter} or both <code>c</code> and 
-	 * {@link #mappingDelimiter} are line separators.
+	 * Tests whether the supplied character counts as a mapping delimiter
+	 * according to this encoding scheme.
+	 * 
+	 * @return true if <code>c</code> is equal to {@link #mappingDelimiter} or
+	 *         both <code>c</code> and {@link #mappingDelimiter} are line
+	 *         separators.
 	 */
 	public boolean isMappingDelimiter(Character c) {
-		return mappingDelimiter.equals(c) || (mappingDelimSep && isLineSeparator(c)); 
+		return mappingDelimiter.equals(c) || (mappingDelimSep && isLineSeparator(c));
 	}
-	
+
 	/**
-	 * Tests whether the supplied character counts as a group delimiter according to this encoding scheme.
-	 * @return true if <code>c</code> is equal to {@link #groupDelimiter} or both <code>c</code> and 
-	 * {@link #groupDelimiter} are line separators.
+	 * Tests whether the supplied character counts as a group delimiter
+	 * according to this encoding scheme.
+	 * 
+	 * @return true if <code>c</code> is equal to {@link #groupDelimiter} or
+	 *         both <code>c</code> and {@link #groupDelimiter} are line
+	 *         separators.
 	 */
 	public boolean isGroupDelimiter(Character c) {
-		return groupDelimiter.equals(c) || (groupDelimSep && isLineSeparator(c)); 
+		return groupDelimiter.equals(c) || (groupDelimSep && isLineSeparator(c));
 	}
 
 	/**
@@ -181,29 +194,32 @@ public abstract class AbstractEncodingScheme implements EncodingScheme {
 	}
 
 	/**
-	 * Gets a hash code for this encoding scheme based on its delimiters, index bases, and fields.
+	 * Gets a hash code for this encoding scheme based on its delimiters, index
+	 * bases, and fields.
 	 */
 	@Override
 	public int hashCode() {
-		return 37 * fieldDelimiter.hashCode() + groupDelimiter.hashCode() + mappingDelimiter.hashCode()
-				+ indexBase.hashCode() + phraseNumberBase.hashCode() + order.hashCode()
-				+ required.hashCode() + defaults.hashCode();
+		return 37 * fieldDelimiter.hashCode() + groupDelimiter.hashCode()
+				+ mappingDelimiter.hashCode() + indexBase.hashCode() + phraseNumberBase.hashCode()
+				+ order.hashCode() + required.hashCode() + defaults.hashCode();
 	}
 
 	/**
-	 * Tests whether this encoding scheme is equal to another based on its delimiters, index bases, and fields.
+	 * Tests whether this encoding scheme is equal to another based on its
+	 * delimiters, index bases, and fields.
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof AbstractEncodingScheme) {
-			AbstractEncodingScheme e = (AbstractEncodingScheme)obj;
-			
-			return fieldDelimiter.equals(e.fieldDelimiter) && groupDelimiter.equals(e.groupDelimiter)
+		if (obj instanceof AbstractEncodingScheme) {
+			AbstractEncodingScheme e = (AbstractEncodingScheme) obj;
+
+			return fieldDelimiter.equals(e.fieldDelimiter)
+					&& groupDelimiter.equals(e.groupDelimiter)
 					&& mappingDelimiter.equals(e.mappingDelimiter) && indexBase.equals(e.indexBase)
 					&& phraseNumberBase.equals(e.phraseNumberBase) && order.equals(e.order)
 					&& required.equals(e.required) && defaults.equals(e.defaults);
 		}
-		
+
 		return false;
 	}
 

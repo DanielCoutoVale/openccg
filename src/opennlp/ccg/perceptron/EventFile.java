@@ -25,29 +25,28 @@ import java.io.*;
 import opennlp.ccg.synsem.Symbol;
 
 /**
- * An abstract representation of an event file, whose syntax is a more readable version 
- * of what's used in the TADM toolkit.  A constructor flag controls whether to keep the 
- * events in memory (defaults to false).
+ * An abstract representation of an event file, whose syntax is a more readable
+ * version of what's used in the TADM toolkit. A constructor flag controls
+ * whether to keep the events in memory (defaults to false).
  * 
- * An event file may be given an alphabet, which allows features to be filtered to 
- * just those present in the alphabet, when it's closed; otherwise, the 
+ * An event file may be given an alphabet, which allows features to be filtered
+ * to just those present in the alphabet, when it's closed; otherwise, the
  * alphabet is constructed dynamically.
  * 
- * The concrete syntax of an event file is as follows.
- * An event file consists of a sequence of blocks.
- * A block starts with the number of events on a line by itself.
- * It is followed by each event, one per line.
- * Each event line has a frequency, followed by the number of feature-value pairs,
- * then the sequence of feature-value pairs, 
- * where the feature name is a string with no white space.
- * Each feature can appear only once in an event, and must have a value greater than zero. 
- * You can have events with a zero frequency -- these are used for dispreferred analyses 
- * in ranking tasks such as parse selection or realization ranking. 
+ * The concrete syntax of an event file is as follows. An event file consists of
+ * a sequence of blocks. A block starts with the number of events on a line by
+ * itself. It is followed by each event, one per line. Each event line has a
+ * frequency, followed by the number of feature-value pairs, then the sequence
+ * of feature-value pairs, where the feature name is a string with no white
+ * space. Each feature can appear only once in an event, and must have a value
+ * greater than zero. You can have events with a zero frequency -- these are
+ * used for dispreferred analyses in ranking tasks such as parse selection or
+ * realization ranking.
  * 
- * An example file appears below.  There are two blocks, corresponding to the 
- * parses of two different senses.  The first block has two possible parses, 
- * the first of which is correct, while the second block has three possible 
- * parses, where the second one is the correct one.
+ * An example file appears below. There are two blocks, corresponding to the
+ * parses of two different senses. The first block has two possible parses, the
+ * first of which is correct, while the second block has three possible parses,
+ * where the second one is the correct one.
  * 
  * <pre>
  * 2
@@ -60,7 +59,7 @@ import opennlp.ccg.synsem.Symbol;
  * </pre>
  * 
  * @author Michael White
- * @version     $Revision: 1.5 $, $Date: 2009/11/01 22:26:29 $
+ * @version $Revision: 1.5 $, $Date: 2009/11/01 22:26:29 $
  */
 public class EventFile {
 
@@ -68,55 +67,66 @@ public class EventFile {
 	public static class Block {
 		/** The list. */
 		public List<Event> events;
+
 		/** Constructor. */
-		public Block(List<Event> events) { this.events = events; }
+		public Block(List<Event> events) {
+			this.events = events;
+		}
+
 		/** The event with the highest count (first tied if ties). */
 		public Event best() {
-			Event retval = null; int max = -1;
+			Event retval = null;
+			int max = -1;
 			for (Event event : events) {
-				if (event.count > max) { retval = event; max = event.count; }
+				if (event.count > max) {
+					retval = event;
+					max = event.count;
+				}
 			}
 			return retval;
 		}
 	}
-	
+
 	/** An event is a feature vector with a count. */
 	public static class Event {
 		/** The count. */
-		public int count; 
+		public int count;
 		/** The feature vector. */
 		public FeatureVector features;
+
 		/** Constructor. */
 		public Event(FeatureVector features, int count) {
 			this.features = features;
 			this.count = count;
 		}
+
 		/** toString. */
-		public String toString() { return "event: count: " + count + " " + features; }
+		public String toString() {
+			return "event: count: " + count + " " + features;
+		}
 	}
-	
-	
+
 	// the alphabet
 	private Alphabet alphabet;
-	
+
 	// the file, which can be reopened
 	private File file;
-	
+
 	// the current reader
 	private Reader reader;
-	
+
 	// the current tokenizer
 	private StreamTokenizer tokenizer;
-	
+
 	// the saved blocks, if kept in memory
 	private List<Block> blocks = null;
-	
+
 	// the iterator over saved blocks
 	private Iterator<Block> blockIt = null;
-	
+
 	// whether the end-of-file has been reached
 	private boolean eofReached = false;
-	
+
 	/** Constructor with filename. */
 	public EventFile(String filename) throws IOException {
 		this(filename, false);
@@ -134,32 +144,36 @@ public class EventFile {
 
 	/** Constructor with filename, alphabet and in-memory flag. */
 	public EventFile(String filename, Alphabet alphabet, boolean inMemory) throws IOException {
-		file = new File(filename); init();
+		file = new File(filename);
+		init();
 		this.alphabet = alphabet;
-		if (inMemory) this.blocks = new ArrayList<Block>(10000);
+		if (inMemory)
+			this.blocks = new ArrayList<Block>(10000);
 	}
 
-	
 	/** Returns the alphabet. */
-	public Alphabet getAlphabet() { return alphabet; }
+	public Alphabet getAlphabet() {
+		return alphabet;
+	}
 
-	
 	/** Closes the reader. */
 	public void close() throws IOException {
 		reader.close();
 	}
-	
+
 	/** Resets the event file for reading again. */
 	public void reset() throws IOException {
-		close(); init();
+		close();
+		init();
 	}
-	
-	// inits the reader and tokenizer, or 
+
+	// inits the reader and tokenizer, or
 	// if keeping blocks in memory, resets the iterator
 	private void init() throws IOException {
 		// in-memory case
 		if (blocks != null && eofReached) {
-			blockIt = blocks.iterator(); return;
+			blockIt = blocks.iterator();
+			return;
 		}
 		// degenerate case: keeping blocks in memory but eof not reached
 		if (blocks != null) {
@@ -170,8 +184,7 @@ public class EventFile {
 		reader = openReader(file);
 		tokenizer = initTokenizer(reader);
 	}
-	
-	
+
 	/** Initializes the given tokenizer to recognize most chars as word chars. */
 	public static StreamTokenizer initTokenizer(Reader reader) throws IOException {
 		StreamTokenizer tokenizer = new StreamTokenizer(reader);
@@ -180,7 +193,7 @@ public class EventFile {
 		tokenizer.whitespaceChars(0, 32);
 		return tokenizer;
 	}
-	
+
 	/** Returns whether EOF has been reached. */
 	public boolean endOfFile() throws IOException {
 		tokenizer.nextToken();
@@ -188,26 +201,26 @@ public class EventFile {
 		tokenizer.pushBack();
 		return eof;
 	}
-	
-	
+
 	/** Reads the next event. Feature are filtered if apropos. */
 	private Event nextEvent() throws IOException {
 		tokenizer.nextToken();
-		int count = Integer.parseInt(tokenizer.sval); 
+		int count = Integer.parseInt(tokenizer.sval);
 		tokenizer.nextToken();
-		int numFeats = Integer.parseInt(tokenizer.sval); 
+		int numFeats = Integer.parseInt(tokenizer.sval);
 		FeatureList fv = new FeatureList(numFeats);
-		for (int i=0; i < numFeats; i++) {
+		for (int i = 0; i < numFeats; i++) {
 			tokenizer.nextToken();
 			String feat = tokenizer.sval;
 			tokenizer.nextToken();
 			float val = Float.parseFloat(tokenizer.sval);
 			Alphabet.Feature f = alphabet.index(feat);
-			if (f != null) fv.add(f, val); 
+			if (f != null)
+				fv.add(f, val);
 		}
 		return new Event(fv, count);
 	}
-	
+
 	/** Reads the next block, or null if none. */
 	public Block nextBlock() throws IOException {
 		// first check block iterator for in-mem case
@@ -216,24 +229,28 @@ public class EventFile {
 		}
 		// otherwise check for eof, noting completion for in-mem case
 		if (endOfFile()) {
-			eofReached = true; return null;
+			eofReached = true;
+			return null;
 		}
 		// otherwise parse next block
 		tokenizer.nextToken();
 		int numEvents = Integer.parseInt(tokenizer.sval);
 		List<Event> events = new ArrayList<Event>(numEvents);
-		for (int i=0; i < numEvents; i++) {
+		for (int i = 0; i < numEvents; i++) {
 			events.add(nextEvent());
 		}
 		Block retval = new Block(events);
 		// save block with in-mem case
-		if (blocks != null) blocks.add(retval);
+		if (blocks != null)
+			blocks.add(retval);
 		// done
 		return retval;
 	}
-	
-	
-	/** Returns a reader for the given file, using gzip inflation if the file's name ends with .gz. */
+
+	/**
+	 * Returns a reader for the given file, using gzip inflation if the file's
+	 * name ends with .gz.
+	 */
 	public static Reader openReader(File file) throws IOException {
 		if (file.getName().endsWith(".gz"))
 			return new InputStreamReader(new GZIPInputStream(new FileInputStream(file)));
@@ -241,29 +258,38 @@ public class EventFile {
 			return new BufferedReader(new FileReader(file));
 	}
 
-	/** Returns a printwriter for the given file, using gzip deflation if the file's name ends with .gz. */
+	/**
+	 * Returns a printwriter for the given file, using gzip deflation if the
+	 * file's name ends with .gz.
+	 */
 	public static PrintWriter openWriter(File file) throws IOException {
 		if (file.getName().endsWith(".gz"))
-			return new PrintWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(file))));
+			return new PrintWriter(new OutputStreamWriter(new GZIPOutputStream(
+					new FileOutputStream(file))));
 		else
 			return new PrintWriter(new BufferedWriter(new FileWriter(file)));
 	}
-	
-	/** Writes the events for a given list of signs according to the feature extractor and best sign. */
-	public static void writeEvents(PrintWriter pw, List<Symbol> signs, Symbol best, FeatureExtractor fe) throws IOException {
-    	Collections.shuffle(signs);
-    	pw.println(Integer.toString(signs.size()));
-    	for (Symbol s : signs) {
-    		int count = 0;
-    		if (s == best) count = 1;
-    		pw.print(count + " ");
-    		FeatureVector fvect = fe.extractFeatures(s, true);
-    		int numfeats = fvect.size();
-    		pw.print(numfeats + " ");
-			for (FeatureVector.Iterator it = fvect.iterator(); it.hasNext(); ) {
-    			pw.print(it.nextFeature().name() + " " + it.nextValue() + " ");
+
+	/**
+	 * Writes the events for a given list of signs according to the feature
+	 * extractor and best sign.
+	 */
+	public static void writeEvents(PrintWriter pw, List<Symbol> signs, Symbol best,
+			FeatureExtractor fe) throws IOException {
+		Collections.shuffle(signs);
+		pw.println(Integer.toString(signs.size()));
+		for (Symbol s : signs) {
+			int count = 0;
+			if (s == best)
+				count = 1;
+			pw.print(count + " ");
+			FeatureVector fvect = fe.extractFeatures(s, true);
+			int numfeats = fvect.size();
+			pw.print(numfeats + " ");
+			for (FeatureVector.Iterator it = fvect.iterator(); it.hasNext();) {
+				pw.print(it.nextFeature().name() + " " + it.nextValue() + " ");
 			}
-    		pw.println();
-    	}
+			pw.println();
+		}
 	}
 }

@@ -26,14 +26,14 @@ import opennlp.ccg.hylo.graph.LFEdge;
 import opennlp.ccg.util.Filter;
 
 /**
- * Abstract class for filters that allow {@link LFEdge}s based on criteria indicated by the set of
- * {@linkplain #getMatchTypes() match types} they use. 
+ * Abstract class for filters that allow {@link LFEdge}s based on criteria
+ * indicated by the set of {@linkplain #getMatchTypes() match types} they use.
  * 
  * @author <a href="http://www.ling.ohio-state.edu/~scott/">Scott Martin</a>
  *
  */
 public abstract class MatchTypeFilter implements Filter<LFEdge> {
-	
+
 	/**
 	 * The set of match types used as criteria by this filter.
 	 */
@@ -41,16 +41,18 @@ public abstract class MatchTypeFilter implements Filter<LFEdge> {
 
 	/**
 	 * Creates a new match type filter based on the specified match types.
+	 * 
 	 * @see #MatchTypeFilter(Collection)
 	 */
 	protected MatchTypeFilter(MatchType... matchTypes) {
 		this(Arrays.asList(matchTypes));
 	}
-	
+
 	/**
 	 * Creates a new match type filter based on the specified match types.
-	 * @param matchTypes The collection of match types to use. The specified collection is 
-	 * copied via {@link EnumSet#copyOf(Collection)}.
+	 * 
+	 * @param matchTypes The collection of match types to use. The specified
+	 *            collection is copied via {@link EnumSet#copyOf(Collection)}.
 	 */
 	protected MatchTypeFilter(Collection<MatchType> matchTypes) {
 		this.matchTypes = EnumSet.copyOf(matchTypes);

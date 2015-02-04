@@ -21,45 +21,59 @@ package opennlp.ccg.util;
 import java.util.*;
 
 /**
- * An array list where equality is checked using == on the list elements, which 
- * are assumed to be canonical.
- * The hashCode method is compatible with SingletonList and StructureSharingList.
+ * An array list where equality is checked using == on the list elements, which
+ * are assumed to be canonical. The hashCode method is compatible with
+ * SingletonList and StructureSharingList.
  *
- * @author      Michael White
- * @version     $Revision: 1.4 $, $Date: 2009/12/21 03:27:18 $
+ * @author Michael White
+ * @version $Revision: 1.4 $, $Date: 2009/12/21 03:27:18 $
  */
 public class ArrayListWithIdentityEquals<T> extends ArrayList<T> {
-    
+
 	private static final long serialVersionUID = 1L;
 
 	/** Default constructor. */
-    public ArrayListWithIdentityEquals() {}
-    
-    /** Constructor with initial collection. */
-    public ArrayListWithIdentityEquals(Collection<T> c) { super(c); }
-    
-    /** Constructor with initial capacity. */
-    public ArrayListWithIdentityEquals(int initialCapacity) { super(initialCapacity); }
-    
-    
-    /** Returns a hash code for this list, using identity hash codes of the list elements. */
-    public int hashCode() {
-        int hc = 1;
-        for (int i = 0; i < size(); i++) {
-            hc = 31*hc + System.identityHashCode(get(i));
-        }
-        return hc;
-    }
-    
-    /** Returns whether this list equals the given object, using identity tests on the list elements. */
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof List<?>)) return false;
-        List<?> list = (List<?>) obj;
-        if (size() != list.size()) return false;
-        for (int i = 0; i < size(); i++) {
-            if (get(i) != list.get(i)) return false;
-        }
-        return true; 
-    }
+	public ArrayListWithIdentityEquals() {
+	}
+
+	/** Constructor with initial collection. */
+	public ArrayListWithIdentityEquals(Collection<T> c) {
+		super(c);
+	}
+
+	/** Constructor with initial capacity. */
+	public ArrayListWithIdentityEquals(int initialCapacity) {
+		super(initialCapacity);
+	}
+
+	/**
+	 * Returns a hash code for this list, using identity hash codes of the list
+	 * elements.
+	 */
+	public int hashCode() {
+		int hc = 1;
+		for (int i = 0; i < size(); i++) {
+			hc = 31 * hc + System.identityHashCode(get(i));
+		}
+		return hc;
+	}
+
+	/**
+	 * Returns whether this list equals the given object, using identity tests
+	 * on the list elements.
+	 */
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof List<?>))
+			return false;
+		List<?> list = (List<?>) obj;
+		if (size() != list.size())
+			return false;
+		for (int i = 0; i < size(); i++) {
+			if (get(i) != list.get(i))
+				return false;
+		}
+		return true;
+	}
 }

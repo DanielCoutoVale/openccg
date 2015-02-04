@@ -16,6 +16,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //////////////////////////////////////////////////////////////////////////////
 package opennlp.ccg.parse.tagger.ml;
+
 import java.io.File;
 import java.util.Collection;
 import opennlp.ccg.util.Pair;
@@ -28,27 +29,29 @@ import opennlp.ccg.parse.tagger.Constants;
  * @version $Revision: 1.2 $, $Date: 2010/09/26 05:50:15 $
  */
 public class ZLMEM extends ZLMaxentModel implements MaxentModel {
-	
-    public ZLMEM(File model) {
-        super(model);
-    }
-    
-    /**
-     * @param context: A collection of String,Double pairs, representing the contextual input
-     * features and their activations.
-     * @return a double[] which represents a probability distribution over output classes, each
-     * retrievable by its index with getOutcome(index);
-     */
-    public double[] eval(Collection<Pair<String, Double>> context) {
-        // Have to turn a collection of pairs into a String[] of feature:activation Strings.
-        // Sloppy and inefficient.  
-        // TODO: A better solution would be to refactor ZLMaxentModel (DNM)
-        String[] inpt = new String[context.size()];
-        int index = -1;
-        for(Pair<String,Double> inp : context) {
-            inpt[++index] = inp.a + ":" + inp.b;
-        }
-        
-        return super.eval(context, true, Constants.Domain.PROB);
-    }
+
+	public ZLMEM(File model) {
+		super(model);
+	}
+
+	/**
+	 * @param context: A collection of String,Double pairs, representing the
+	 *            contextual input features and their activations.
+	 * @return a double[] which represents a probability distribution over
+	 *         output classes, each retrievable by its index with
+	 *         getOutcome(index);
+	 */
+	public double[] eval(Collection<Pair<String, Double>> context) {
+		// Have to turn a collection of pairs into a String[] of
+		// feature:activation Strings.
+		// Sloppy and inefficient.
+		// TODO: A better solution would be to refactor ZLMaxentModel (DNM)
+		String[] inpt = new String[context.size()];
+		int index = -1;
+		for (Pair<String, Double> inp : context) {
+			inpt[++index] = inp.a + ":" + inp.b;
+		}
+
+		return super.eval(context, true, Constants.Domain.PROB);
+	}
 }

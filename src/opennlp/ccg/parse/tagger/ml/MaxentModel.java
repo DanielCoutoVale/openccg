@@ -25,6 +25,7 @@ import opennlp.ccg.util.Pair;
  * @version $Revision: 1.1 $, $Date: 2010/09/21 04:12:41 $
  */
 public interface MaxentModel {
-    public double[] eval(Collection<Pair<String,Double>> context);
-    public String getOutcome(int indexOfOutcome);
+	public double[] eval(Collection<Pair<String, Double>> context);
+
+	public String getOutcome(int indexOfOutcome);
 }

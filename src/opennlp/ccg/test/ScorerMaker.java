@@ -22,38 +22,37 @@ import opennlp.ccg.synsem.SymbolScorer;
 import java.io.*;
 
 /**
- * Interface for making custom scorers for use in cross-validation tests with the realizer.
+ * Interface for making custom scorers for use in cross-validation tests with
+ * the realizer.
  *
- * @author  Michael White
+ * @author Michael White
  * @version $Revision: 1.6 $, $Date: 2007/12/21 05:13:37 $
  */
 public interface ScorerMaker {
 
-    /**
-     * Sets the context for this scorer maker.
-     */
-    public void setCVR(CrossValidateRealizer cvr);
-    
-    /**
-     * Prepares a scoring model from the training data. 
-     * The data can be accessed by creating a RegressionInfo 
-     * object from the given training file.
-     * The test data is also made available to optionally 
-     * compute perplexity or other measures.
-     * The model can be stored in a file in tmpDir, keyed off of foldNum.
-     */
-    public void prepScorer(File tmpDir, int foldNum, File trainFile, File testFile) throws IOException;
-    
-    /**
-     * Optionally summarizes perplexity or other measures 
-     * after all calls to prepScorer.
-     */
-    public void prepScorersSummary(File tmpDir) throws IOException;
-    
-    /**
-     * Loads a scoring model created from the training data. 
-     */
-    public SymbolScorer loadScorer(File tmpDir, int foldNum, File trainFile) throws IOException;
+	/**
+	 * Sets the context for this scorer maker.
+	 */
+	public void setCVR(CrossValidateRealizer cvr);
+
+	/**
+	 * Prepares a scoring model from the training data. The data can be accessed
+	 * by creating a RegressionInfo object from the given training file. The
+	 * test data is also made available to optionally compute perplexity or
+	 * other measures. The model can be stored in a file in tmpDir, keyed off of
+	 * foldNum.
+	 */
+	public void prepScorer(File tmpDir, int foldNum, File trainFile, File testFile)
+			throws IOException;
+
+	/**
+	 * Optionally summarizes perplexity or other measures after all calls to
+	 * prepScorer.
+	 */
+	public void prepScorersSummary(File tmpDir) throws IOException;
+
+	/**
+	 * Loads a scoring model created from the training data.
+	 */
+	public SymbolScorer loadScorer(File tmpDir, int foldNum, File trainFile) throws IOException;
 }
-
-

@@ -482,8 +482,7 @@ public class DefaultTokenizer implements Tokenizer {
 		}
 		sb.append(escape(form));
 		if (pitchAccent != null)
-			sb.append(":").append(Tokenizer.TONE_ASSOCIATE).append("-")
-					.append(escape(pitchAccent));
+			sb.append(":").append(Tokenizer.TONE_ASSOCIATE).append("-").append(escape(pitchAccent));
 		for (Pair<String, String> pair : w.getNonCanonicalAssociates()) {
 			String attr = pair.a;
 			String val = pair.b;
@@ -495,9 +494,11 @@ public class DefaultTokenizer implements Tokenizer {
 		if (POS != null)
 			sb.append(":").append(Tokenizer.FUNCTIONS_ASSOCIATE).append("-").append(escape(POS));
 		if (supertag != null)
-			sb.append(":").append(Tokenizer.SUPERTAG_ASSOCIATE).append("-").append(escape(supertag));
+			sb.append(":").append(Tokenizer.SUPERTAG_ASSOCIATE).append("-")
+					.append(escape(supertag));
 		if (semClass != null)
-			sb.append(":").append(Tokenizer.ENTITY_CLASS_ASSOCIATE).append("-").append(escape(semClass));
+			sb.append(":").append(Tokenizer.ENTITY_CLASS_ASSOCIATE).append("-")
+					.append(escape(semClass));
 		return sb.toString();
 	}
 

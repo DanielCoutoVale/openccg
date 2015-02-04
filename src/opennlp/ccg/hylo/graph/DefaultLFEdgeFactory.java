@@ -18,16 +18,17 @@
 package opennlp.ccg.hylo.graph;
 
 /**
- * A factory for LF edges that creates edges from specified source and target vertices and an edge label.
- * This class provides a default implementation of the {@link LFEdgeFactory} interface for instantiating
- * {@link LFGraph}s.
+ * A factory for LF edges that creates edges from specified source and target
+ * vertices and an edge label. This class provides a default implementation of
+ * the {@link LFEdgeFactory} interface for instantiating {@link LFGraph}s.
  * 
  * @author <a href="http://www.ling.ohio-state.edu/~scott/">Scott Martin</a>
  */
 public class DefaultLFEdgeFactory implements LFEdgeFactory {
-	
+
 	/**
 	 * Creates an edge from a specified source and target vertex.
+	 * 
 	 * @return A new edge with a <tt>null</tt> label.
 	 * @see #createLabeledEdge(LFVertex, LFVertex, LFEdgeLabel)
 	 */
@@ -37,7 +38,9 @@ public class DefaultLFEdgeFactory implements LFEdgeFactory {
 	}
 
 	/**
-	 * Creates a new labeled, directed edge from a specified vertex pair and edge label.
+	 * Creates a new labeled, directed edge from a specified vertex pair and
+	 * edge label.
+	 * 
 	 * @param sourceVertex The source vertex of the new edge.
 	 * @param targetVertex The target vertex of the new edge.
 	 * @param label The label of the new edge.

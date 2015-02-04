@@ -21,16 +21,16 @@ package opennlp.ccg.unify;
 /**
  * Interface for functions which modify Mutable objects.
  *
- * @author      Jason Baldridge
- * @version     $Revision: 1.1.1.1 $, $Date: 2003/02/28 18:02:13 $
+ * @author Jason Baldridge
+ * @version $Revision: 1.1.1.1 $, $Date: 2003/02/28 18:02:13 $
  */
 public interface ModFcn {
 
-    /**
-     * Changes a Mutable object in some way.
-     *
-     * @param mf a function to be applied
-     **/
-    public void modify (Mutable m);
+	/**
+	 * Changes a Mutable object in some way.
+	 *
+	 * @param mf a function to be applied
+	 **/
+	public void modify(Mutable m);
 
 }

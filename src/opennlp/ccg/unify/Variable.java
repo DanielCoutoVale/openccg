@@ -23,27 +23,27 @@ import gnu.trove.TObjectIntHashMap;
 /**
  * A variable that can stand for some class of Unifiable objects.
  *
- * @author      Gann Bierner
- * @author 		Michael White
- * @version     $Revision: 1.2 $, $Date: 2007/12/20 21:30:22 $
+ * @author Gann Bierner
+ * @author Michael White
+ * @version $Revision: 1.2 $, $Date: 2007/12/20 21:30:22 $
  **/
 public interface Variable extends Unifiable {
 
-    /**
-     * Returns the name of this variable.
-     *
-     * @return the variable's name
-     **/        
-    public String name();
+	/**
+	 * Returns the name of this variable.
+	 *
+	 * @return the variable's name
+	 **/
+	public String name();
 
-    /**
+	/**
 	 * Returns a hash code using the given map from vars to ints.
 	 */
 	public int hashCode(TObjectIntHashMap varMap);
-        
-    /**
+
+	/**
 	 * Returns whether this var equals the given object up to variable names,
 	 * using the given maps from vars to ints.
 	 */
-    public boolean equals(Object obj, TObjectIntHashMap varMap, TObjectIntHashMap varMap2);
+	public boolean equals(Object obj, TObjectIntHashMap varMap, TObjectIntHashMap varMap2);
 }

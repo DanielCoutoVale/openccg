@@ -24,7 +24,7 @@ import java.util.List;
  * A morph object representing the contents of a morph file
  * 
  * @author Daniel Couto-Vale
- * @version 
+ * @version
  */
 public class Morph {
 

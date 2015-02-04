@@ -26,56 +26,49 @@ import java.util.prefs.*;
 /**
  * Default, n-best edge pruning strategy.
  *
- * @author      Michael White
- * @version     $Revision: 1.9 $, $Date: 2011/03/27 14:45:32 $
+ * @author Michael White
+ * @version $Revision: 1.9 $, $Date: 2011/03/27 14:45:32 $
  */
-public class NBestPruningStrategy implements PruningStrategy
-{
-    /** The current pruning val. */
-    protected int CAT_PRUNE_VAL;
-    
-    /** Reusable return list. */
-    protected List<Edge> retval = new ArrayList<Edge>();
-    
-    /** Constructor with pruning val. */
-    public NBestPruningStrategy(int pruningVal) {
-        CAT_PRUNE_VAL = pruningVal;
-    }
-    
-    /** Default constructor retrieves pruning val from preferences. */
-    public NBestPruningStrategy() {
-        Preferences prefs = Preferences.userNodeForPackage(TextCCG.class);
-        CAT_PRUNE_VAL = prefs.getInt(Chart.PRUNING_VALUE, Chart.NO_PRUNING);
-    }
-    
-    /**
-     * Returns a (possibly empty) list of edges pruned 
-     * from the given ones, which should be sorted by score, 
-     * from highest to lowest. 
-     * In particular, prunes and returns the edges that follow the N-best 
-     * ones in the given list.
-     */
-    public List<Edge> pruneEdges(List<Edge> catEdges) {
-        // clear reusable return list
-        retval.clear();
-        // ensure pruning enabled
-        if (CAT_PRUNE_VAL == Chart.NO_PRUNING) return retval;
-        // nb: could add an option to prune all egdes with zero score
-        /*
-        for (Iterator it = catEdges.iterator(); it.hasNext(); ) {
-            Edge edge = it.next();
-            if (edge.score == 0) {
-                retval.add(edge);
-                it.remove();
-            }
-        }
-        */
-        // return edges at bottom of list, starting with CAT_PRUNE_VAL (if any)
-        while (CAT_PRUNE_VAL < catEdges.size()) {
-            retval.add(catEdges.remove(CAT_PRUNE_VAL));
-        }
-        // done
-        return retval;
-    }
-}
+public class NBestPruningStrategy implements PruningStrategy {
+	/** The current pruning val. */
+	protected int CAT_PRUNE_VAL;
 
+	/** Reusable return list. */
+	protected List<Edge> retval = new ArrayList<Edge>();
+
+	/** Constructor with pruning val. */
+	public NBestPruningStrategy(int pruningVal) {
+		CAT_PRUNE_VAL = pruningVal;
+	}
+
+	/** Default constructor retrieves pruning val from preferences. */
+	public NBestPruningStrategy() {
+		Preferences prefs = Preferences.userNodeForPackage(TextCCG.class);
+		CAT_PRUNE_VAL = prefs.getInt(Chart.PRUNING_VALUE, Chart.NO_PRUNING);
+	}
+
+	/**
+	 * Returns a (possibly empty) list of edges pruned from the given ones,
+	 * which should be sorted by score, from highest to lowest. In particular,
+	 * prunes and returns the edges that follow the N-best ones in the given
+	 * list.
+	 */
+	public List<Edge> pruneEdges(List<Edge> catEdges) {
+		// clear reusable return list
+		retval.clear();
+		// ensure pruning enabled
+		if (CAT_PRUNE_VAL == Chart.NO_PRUNING)
+			return retval;
+		// nb: could add an option to prune all egdes with zero score
+		/*
+		 * for (Iterator it = catEdges.iterator(); it.hasNext(); ) { Edge edge =
+		 * it.next(); if (edge.score == 0) { retval.add(edge); it.remove(); } }
+		 */
+		// return edges at bottom of list, starting with CAT_PRUNE_VAL (if any)
+		while (CAT_PRUNE_VAL < catEdges.size()) {
+			retval.add(catEdges.remove(CAT_PRUNE_VAL));
+		}
+		// done
+		return retval;
+	}
+}

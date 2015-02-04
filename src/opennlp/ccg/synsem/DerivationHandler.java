@@ -20,51 +20,55 @@ package opennlp.ccg.synsem;
 
 import opennlp.ccg.parse.DerivationHistory;
 
-/** 
+/**
  * A class to simplify implementing a recursive procedure on a derivation.
- * Recursion is handled within the implementation of the abstract methods 
- * by calls to <code>handleDerivation</code>, so that order of traversal 
- * can be flexibly specified.  Results may be optionally cached.
- * Note that the top step is only used with complete derivations.
+ * Recursion is handled within the implementation of the abstract methods by
+ * calls to <code>handleDerivation</code>, so that order of traversal can be
+ * flexibly specified. Results may be optionally cached. Note that the top step
+ * is only used with complete derivations.
  * 
- * @author 	Michael White
- * @version	$Revision: 1.1 $, $Date: 2010/02/21 16:44:59 $
- */ 
+ * @author Michael White
+ * @version $Revision: 1.1 $, $Date: 2010/02/21 16:44:59 $
+ */
 abstract public class DerivationHandler<T> {
-	
+
 	/** Top step. */
 	abstract public T topStep(Symbol sign);
-	
+
 	/** Lexical step. */
 	abstract public T lexStep(Symbol sign);
 
 	/** Unary step. */
 	abstract public T unaryStep(Symbol sign, Symbol headChild);
-	
+
 	/** Binary step. */
 	abstract public T binaryStep(Symbol sign, boolean left, Symbol headChild, Symbol siblingChild);
-	
-	/** Checks for cached value, returning null if none. Defaults to null. */
-	public T checkCache(Symbol sign) { return null; }
 
-	/** Caches the result.  Default no-op. */
-	public void cache(Symbol sign, T result) {}
-	
+	/** Checks for cached value, returning null if none. Defaults to null. */
+	public T checkCache(Symbol sign) {
+		return null;
+	}
+
+	/** Caches the result. Default no-op. */
+	public void cache(Symbol sign, T result) {
+	}
+
 	/** Handles a complete derivation, invoking the top step. */
 	public T handleCompleteDerivation(Symbol sign) {
 		return topStep(sign);
 	}
-	
+
 	/** Handles a sub-derivation, checking and updating cache. */
 	public T handleDerivation(Symbol sign) {
 		// check cache
-		T retval = checkCache(sign); 
-		if (retval != null) return retval;
+		T retval = checkCache(sign);
+		if (retval != null)
+			return retval;
 		// lexical case
 		if (sign.isIndexed()) {
 			retval = lexStep(sign);
-			cache(sign, retval); 
-			return retval; 
+			cache(sign, retval);
+			return retval;
 		}
 		// recursive case
 		DerivationHistory dh = sign.getDerivationHistory();
@@ -73,22 +77,25 @@ abstract public class DerivationHandler<T> {
 		if (inputs.length == 1) {
 			Symbol headChild = inputs[0];
 			retval = unaryStep(sign, headChild);
-			cache(sign, retval); 
-			return retval; 
+			cache(sign, retval);
+			return retval;
 		}
 		// binary case
 		else {
 			boolean left;
 			Symbol headChild, siblingChild;
 			if (sign.getLexHead() == inputs[0].getLexHead()) {
-				left = true; headChild = inputs[0]; siblingChild = inputs[1];
-			}
-			else {
-				left = false; headChild = inputs[1]; siblingChild = inputs[0];
+				left = true;
+				headChild = inputs[0];
+				siblingChild = inputs[1];
+			} else {
+				left = false;
+				headChild = inputs[1];
+				siblingChild = inputs[0];
 			}
 			retval = binaryStep(sign, left, headChild, siblingChild);
-			cache(sign, retval); 
-			return retval; 
+			cache(sign, retval);
+			return retval;
 		}
 	}
 }

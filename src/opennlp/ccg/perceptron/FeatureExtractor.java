@@ -20,17 +20,17 @@ package opennlp.ccg.perceptron;
 
 import opennlp.ccg.synsem.*;
 
-/** 
- * Interface for mappings signs to features. 
+/**
+ * Interface for mappings signs to features.
  * 
  * @author Michael White
- * @version     $Revision: 1.5 $, $Date: 2009/06/22 04:32:50 $
- */ 
+ * @version $Revision: 1.5 $, $Date: 2009/06/22 04:32:50 $
+ */
 public interface FeatureExtractor {
-	
+
 	/** Returns the features for the given sign and completeness flag. */
 	public FeatureVector extractFeatures(Symbol sign, boolean complete);
-	
+
 	/** Sets the alphabet. */
 	public void setAlphabet(Alphabet alphabet);
 }

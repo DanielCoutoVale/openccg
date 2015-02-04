@@ -75,8 +75,8 @@ public class Form implements Serializable {
 	 *         <code>false</code> otherwise
 	 */
 	public static boolean insertScoredSymbol(ScoredSymbol scoredSymbol,
-			List<ScoredSymbol> scoredSymbolList, Map<ScoredSymbol, ScoredSymbol> map, int sizeLimit,
-			Comparator<ScoredSymbol> scoredSymbolComparator) {
+			List<ScoredSymbol> scoredSymbolList, Map<ScoredSymbol, ScoredSymbol> map,
+			int sizeLimit, Comparator<ScoredSymbol> scoredSymbolComparator) {
 		int index = Collections
 				.binarySearch(scoredSymbolList, scoredSymbol, scoredSymbolComparator);
 		int insertPosition = Math.abs(index) - 1;
@@ -140,7 +140,8 @@ public class Form implements Serializable {
 	public final boolean add(ScoredSymbol scoredSymbol) {
 		if (scoredSymbolMap.containsKey(scoredSymbol))
 			return false;
-		return insertScoredSymbol(scoredSymbol, scoredSymbols, scoredSymbolMap, sizeLimit, scoredSymbolComparator);
+		return insertScoredSymbol(scoredSymbol, scoredSymbols, scoredSymbolMap, sizeLimit,
+				scoredSymbolComparator);
 	}
 
 	public final List<Symbol> sortSymbols() {

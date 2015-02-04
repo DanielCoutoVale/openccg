@@ -93,8 +93,7 @@ public class ArgStack implements Serializable {
 					args.add(new BasicArg(s, CatReader.getCat(argEl)));
 				}
 			} else {
-				System.out.println("Invalid element for creating ArgStack: "
-						+ elName);
+				System.out.println("Invalid element for creating ArgStack: " + elName);
 			}
 		}
 		_list = new Arg[args.size()];
@@ -102,7 +101,7 @@ public class ArgStack implements Serializable {
 	}
 
 	public void toXml(Element catElt) {
-		for (Arg arg: _list) {
+		for (Arg arg : _list) {
 			if (arg instanceof SetArg)
 				catElt.addContent(((SetArg) arg).toXml());
 			else if (arg instanceof Dollar) {
@@ -112,15 +111,14 @@ public class ArgStack implements Serializable {
 				Element dollarElt = new Element("dollar");
 				dollarElt.setAttribute("name", dollar.name());
 				catElt.addContent(dollarElt);
-			}
-			else if (arg instanceof BasicArg) {
+			} else if (arg instanceof BasicArg) {
 				BasicArg barg = (BasicArg) arg;
 				catElt.addContent(barg.getSlash().toXml());
 				catElt.addContent(barg.getCat().toXml());
 			}
 		}
 	}
-	
+
 	public void addAt(Arg c, int index) {
 		Arg[] $list = new Arg[_list.length + 1];
 		insert(subList(0, index)._list, $list, 0);
@@ -249,13 +247,13 @@ public class ArgStack implements Serializable {
 		set(_list.length - 1, c);
 	}
 
-    /** Sets the harmonic composition result of each arg's slash. */
-    public void setSlashHarmonicCompositionResult(boolean harmonicResult) {
-    	for (int i=0; i < _list.length; i++) {
-    		_list[i].setSlashHarmonicCompositionResult(harmonicResult);
-    	}
-    }
-    
+	/** Sets the harmonic composition result of each arg's slash. */
+	public void setSlashHarmonicCompositionResult(boolean harmonicResult) {
+		for (int i = 0; i < _list.length; i++) {
+			_list[i].setSlashHarmonicCompositionResult(harmonicResult);
+		}
+	}
+
 	public ArgStack copy() {
 		Arg[] $list = new Arg[_list.length];
 		for (int i = 0; i < $list.length; i++) {
@@ -333,8 +331,7 @@ public class ArgStack implements Serializable {
 			if (_list[i] instanceof BasicArg
 					&& !((BasicArg) _list[i]).getSlash().sameDirAsModality()) {
 				return true;
-			} else if (_list[i] instanceof SetArg
-					&& ((SetArg) _list[i]).containsContrarySlash()) {
+			} else if (_list[i] instanceof SetArg && ((SetArg) _list[i]).containsContrarySlash()) {
 				return true;
 			}
 		}
@@ -361,8 +358,7 @@ public class ArgStack implements Serializable {
 		return unifyPrefix(as, as.size(), sub);
 	}
 
-	public ArgStack unifyPrefix(ArgStack as, int upto, Substitution sub)
-			throws UnifyFailure {
+	public ArgStack unifyPrefix(ArgStack as, int upto, Substitution sub) throws UnifyFailure {
 
 		ArgStack $args;
 		if (containsDollarArg()) {
@@ -382,8 +378,7 @@ public class ArgStack implements Serializable {
 		return $args;
 	}
 
-	private ArgStack unifySimple(ArgStack as, int upto, Substitution sub)
-			throws UnifyFailure {
+	private ArgStack unifySimple(ArgStack as, int upto, Substitution sub) throws UnifyFailure {
 
 		ArgStack $args = new ArgStack();
 		for (int i = upto - 1; i >= 0; i--) {
@@ -392,8 +387,7 @@ public class ArgStack implements Serializable {
 		return $args;
 	}
 
-	private ArgStack unifyComplex(ArgStack as, int upto, Substitution sub)
-			throws UnifyFailure {
+	private ArgStack unifyComplex(ArgStack as, int upto, Substitution sub) throws UnifyFailure {
 
 		ArgStack $args = new ArgStack();
 
@@ -418,12 +412,10 @@ public class ArgStack implements Serializable {
 						if (bArg instanceof BasicArg) {
 							$args.addFront((Arg) aArg.unify(bArg, sub));
 						} else {
-							int idInSet = ((SetArg) bArg)
-									.indexOf((BasicArg) aArg);
+							int idInSet = ((SetArg) bArg).indexOf((BasicArg) aArg);
 							if (idInSet == -1)
 								throw new UnifyFailure();
-							$args.addFront((Arg) aArg.unify(((SetArg) bArg)
-									.get(idInSet), sub));
+							$args.addFront((Arg) aArg.unify(((SetArg) bArg).get(idInSet), sub));
 							aArg = get(aIndex);
 							bArg = ((SetArg) bArg).copyWithout(idInSet);
 						}
@@ -444,8 +436,8 @@ public class ArgStack implements Serializable {
 		return $args;
 	}
 
-	private ArgStack unifyDollarWithNoDollar(int uptoThis, ArgStack otherStack,
-			int uptoOther, Substitution sub) throws UnifyFailure {
+	private ArgStack unifyDollarWithNoDollar(int uptoThis, ArgStack otherStack, int uptoOther,
+			Substitution sub) throws UnifyFailure {
 
 		if ((!(_hasSet || otherStack._hasSet) && uptoThis > uptoOther + 1)
 				|| (uptoThis > 1 && uptoOther < 1)) {
@@ -494,8 +486,8 @@ public class ArgStack implements Serializable {
 		return $args;
 	}
 
-	private ArgStack unifyDollarWithDollar(ArgStack as, int upto,
-			Substitution sub) throws UnifyFailure {
+	private ArgStack unifyDollarWithDollar(ArgStack as, int upto, Substitution sub)
+			throws UnifyFailure {
 
 		ArgStack $args;
 		if (size() == 1) {
@@ -544,17 +536,17 @@ public class ArgStack implements Serializable {
 		return sb.toString();
 	}
 
-// 	private boolean methodExists(Object o, String methodName) {
-// 		java.lang.reflect.Method[] m = o.getClass().getMethods();
-// 		for (int i = 0; i < m.length; i++)
-// 			if (m[i].getName() == methodName) {
-// 				if (m[i].getDeclaringClass().toString().startsWith("class"))
-// 					return true;
-// 				else
-// 					return false;
-// 			}
-// 		return false;
-// 	}
+	// private boolean methodExists(Object o, String methodName) {
+	// java.lang.reflect.Method[] m = o.getClass().getMethods();
+	// for (int i = 0; i < m.length; i++)
+	// if (m[i].getName() == methodName) {
+	// if (m[i].getDeclaringClass().toString().startsWith("class"))
+	// return true;
+	// else
+	// return false;
+	// }
+	// return false;
+	// }
 
 	/**
 	 * Returns the supertag for this arg stack.
@@ -574,7 +566,7 @@ public class ArgStack implements Serializable {
 	public String toTeX() {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < _list.length; i++) {
-		    sb.append(_list[i].toTeX());
+			sb.append(_list[i].toTeX());
 		}
 		return sb.toString();
 	}
@@ -594,8 +586,7 @@ public class ArgStack implements Serializable {
 	 * Returns whether this arg stack equals the given object up to variable
 	 * names, using the given maps from vars to ints.
 	 */
-	public boolean equals(Object obj, TObjectIntHashMap varMap,
-			TObjectIntHashMap varMap2) {
+	public boolean equals(Object obj, TObjectIntHashMap varMap, TObjectIntHashMap varMap2) {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}

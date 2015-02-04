@@ -48,7 +48,6 @@ public class AssociateCanon extends FormToneAssociates {
 	/** The stem. */
 	protected String term;
 
-
 	/**
 	 * Constructor
 	 * 

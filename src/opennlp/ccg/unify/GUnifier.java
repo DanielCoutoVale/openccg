@@ -23,21 +23,21 @@ import opennlp.ccg.synsem.*;
 /**
  * A unifier for CCG categories.
  *
- * @author      Jason Baldridge
- * @version     $Revision: 1.1.1.1 $, $Date: 2003/02/28 18:02:13 $
+ * @author Jason Baldridge
+ * @version $Revision: 1.1.1.1 $, $Date: 2003/02/28 18:02:13 $
  */
-public class GUnifier { 
+public class GUnifier {
 
-    public static Category unify (Category c1, Category c2) throws UnifyFailure {
-        return (Category)unify(c1, c2, new EmptySubstitution());
-    }
+	public static Category unify(Category c1, Category c2) throws UnifyFailure {
+		return (Category) unify(c1, c2, new EmptySubstitution());
+	}
 
-    public static Category unify (Category c1, Category c2, Substitution sub) throws UnifyFailure {
-        if (c1 instanceof AtomCat && c2 instanceof ComplexCat) {
-            c2.unifyCheck(c1);
-            return (Category)c2.unify(c1, sub);
-        }
-        c1.unifyCheck(c2);
-        return (Category)Unifier.unify(c1, c2, sub);
-    }
+	public static Category unify(Category c1, Category c2, Substitution sub) throws UnifyFailure {
+		if (c1 instanceof AtomCat && c2 instanceof ComplexCat) {
+			c2.unifyCheck(c1);
+			return (Category) c2.unify(c1, sub);
+		}
+		c1.unifyCheck(c2);
+		return (Category) Unifier.unify(c1, c2, sub);
+	}
 }

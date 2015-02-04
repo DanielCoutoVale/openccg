@@ -44,7 +44,7 @@ public class DenseChart implements Chart, Serializable {
 	 * @throws IOException when there is a problem with reading the file
 	 * @throws FileNotFoundException when the file is not found
 	 */
-	public DenseChart(File chartFile) throws FileNotFoundException , IOException {
+	public DenseChart(File chartFile) throws FileNotFoundException, IOException {
 		FileInputStream fis = new FileInputStream(chartFile);
 		BufferedInputStream bis = new BufferedInputStream(fis);
 		ObjectInputStream ois = new ObjectInputStream(bis);

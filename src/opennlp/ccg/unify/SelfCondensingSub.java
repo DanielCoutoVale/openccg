@@ -27,7 +27,7 @@ import java.util.*;
  * @author Jason Baldridge
  * @version $Revision: 1.3 $, $Date: 2009/12/21 03:27:19 $
  */
-public class SelfCondensingSub extends HashMap<Variable,Object> implements Substitution {
+public class SelfCondensingSub extends HashMap<Variable, Object> implements Substitution {
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,16 +36,13 @@ public class SelfCondensingSub extends HashMap<Variable,Object> implements Subst
 	 * Automagically condenses the Substitution so that all other values in this
 	 * Substitution get the new value for the variable if they contain it.
 	 * 
-	 * @param var
-	 *            the variable whose value has been determined
-	 * @param o
-	 *            the Object identified with the variable
+	 * @param var the variable whose value has been determined
+	 * @param o the Object identified with the variable
 	 * @return the Object identified with the variable, which has potentially
 	 *         undergone further unifications as a result of making the
 	 *         substitution
-	 * @exception throws
-	 *                UnifyFailure if the Object cannot be unified with a
-	 *                previous value substituted for the Variable.
+	 * @exception throws UnifyFailure if the Object cannot be unified with a
+	 *            previous value substituted for the Variable.
 	 */
 	public Object makeSubstitution(Variable var, Object u) throws UnifyFailure {
 
@@ -87,8 +84,7 @@ public class SelfCondensingSub extends HashMap<Variable,Object> implements Subst
 	 * Try to get the value of a variable from this Substitution. Returns null
 	 * if the variable is unknown to the Substitution.
 	 * 
-	 * @param var
-	 *            the variable whose value after unification is desired
+	 * @param var the variable whose value after unification is desired
 	 * @return the Object which this variable has been unified with
 	 */
 	public Object getValue(Variable var) {

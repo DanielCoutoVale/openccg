@@ -51,48 +51,45 @@ import org.apache.tools.ant.BuildException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-
 /**
  * Extracts a grammar from a converted version of the CCGBank.
+ * 
  * @author <a href="http://www.ling.osu.edu/~scott/">Scott Martin</a>
  * @version $Revision: 1.5 $
  * @see CCGBankConvert
  */
 public class CCGBankExtract extends CCGBankTask implements URIResolver {
-	
+
 	static String pkgPath = null;
-	static final String LEXICON_TEMPLATE = "lexicon-base.xsl",
-		RULES_TEMPLATE = "rules-base.xsl";
-	
+	static final String LEXICON_TEMPLATE = "lexicon-base.xsl", RULES_TEMPLATE = "rules-base.xsl";
+
 	String grammarName = "ccgbankextract";
 	boolean pPheads = true, skipUnmatched = false;
-	int catFreqCutoff = 1, lexFreqCutoff = 1, openFreqCutoff = 100,
-		ruleFreqCutoff = 1;
+	int catFreqCutoff = 1, lexFreqCutoff = 1, openFreqCutoff = 100, ruleFreqCutoff = 1;
 	CCGBankTaskTestbed testbed = null;
-	
+
 	File lexiconTempFile, rulesTempFile;
 	TemplatesProcessor ruleProcessor;
-	Map<Type, XSLTProcessor> xsltProcessors
-		= new EnumMap<Type, XSLTProcessor>(Type.class);
-	
+	Map<Type, XSLTProcessor> xsltProcessors = new EnumMap<Type, XSLTProcessor>(Type.class);
+
 	public CCGBankExtract() {
 		super();
-		if(pkgPath == null) {
+		if (pkgPath == null) {
 			pkgPath = getClass().getPackage().getName().replace('.', '/');
 		}
 	}
-	
+
 	/**
 	 * Sets the name of the generated grammar.
+	 * 
 	 * @param grammarName The name of the generated grammar. This is the string
-	 * that will appear in the "name" attribute of the root element of the
-	 * generated grammar's <code>grammar.xml</code> file.
+	 *            that will appear in the "name" attribute of the root element
+	 *            of the generated grammar's <code>grammar.xml</code> file.
 	 */
 	public void setGrammarName(String grammarName) {
 		this.grammarName = grammarName;
 	}
 
-	
 	/**
 	 * @param tb the testbed to set
 	 */
@@ -100,7 +97,6 @@ public class CCGBankExtract extends CCGBankTask implements URIResolver {
 		this.testbed = tb;
 	}
 
-	
 	/**
 	 * @param catFreqCutoff the catFreqCutoff to set
 	 */
@@ -108,7 +104,6 @@ public class CCGBankExtract extends CCGBankTask implements URIResolver {
 		this.catFreqCutoff = catFreqCutoff;
 	}
 
-	
 	/**
 	 * @param lexFreqCutoff the lexFreqCutoff to set
 	 */
@@ -116,7 +111,6 @@ public class CCGBankExtract extends CCGBankTask implements URIResolver {
 		this.lexFreqCutoff = lexFreqCutoff;
 	}
 
-	
 	/**
 	 * @param openFreqCutoff the openFreqCutoff to set
 	 */
@@ -124,7 +118,6 @@ public class CCGBankExtract extends CCGBankTask implements URIResolver {
 		this.openFreqCutoff = openFreqCutoff;
 	}
 
-	
 	/**
 	 * @param pPheads the ppheads to set
 	 */
@@ -132,7 +125,6 @@ public class CCGBankExtract extends CCGBankTask implements URIResolver {
 		this.pPheads = pPheads;
 	}
 
-	
 	/**
 	 * @param ruleFreqCutoff the ruleFreqCutoff to set
 	 */
@@ -140,123 +132,123 @@ public class CCGBankExtract extends CCGBankTask implements URIResolver {
 		this.ruleFreqCutoff = ruleFreqCutoff;
 	}
 
-	
 	/**
 	 * @param skipUnmatched the skipUnmatched to set
 	 */
 	public void setSkipUnmatched(boolean skipUnmatched) {
 		this.skipUnmatched = skipUnmatched;
 	}
-	
-	
-	/* (non-Javadoc)
-	 * @see javax.xml.transform.URIResolver#resolve(java.lang.String, java.lang.String)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.xml.transform.URIResolver#resolve(java.lang.String,
+	 * java.lang.String)
 	 */
 	public Source resolve(String href, String base) {
-		if(href != null && href.length() > 0 && href.startsWith(pkgPath)) {
-			String lastChunk = (href.contains("/") && !href.endsWith("/"))
-				? href.substring(href.lastIndexOf('/') + 1) : href;
-			if(lastChunk.endsWith(CCGBankExtract.LEXICON_TEMPLATE)
+		if (href != null && href.length() > 0 && href.startsWith(pkgPath)) {
+			String lastChunk = (href.contains("/") && !href.endsWith("/")) ? href.substring(href
+					.lastIndexOf('/') + 1) : href;
+			if (lastChunk.endsWith(CCGBankExtract.LEXICON_TEMPLATE)
 					|| lastChunk.endsWith(CCGBankExtract.RULES_TEMPLATE)) {
 				return new StreamSource(getResource(href));
 			}
 		}
-		
+
 		return new StreamSource(new File(href));
 	}
-	
-	
-	/* (non-Javadoc)
-	 * @see opennlp.ccgbank.CCGBankTask#addConfiguredCCGBankTaskTemplates(opennlp.ccgbank.CCGBankTaskTemplates)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * opennlp.ccgbank.CCGBankTask#addConfiguredCCGBankTaskTemplates(opennlp
+	 * .ccgbank.CCGBankTaskTemplates)
 	 */
 	@Override
 	public void addConfiguredTemplates(CCGBankTaskTemplates taskTemplates) {
-		if(xsltProcessors.containsKey(taskTemplates.type)) {
-			throw new BuildException(taskTemplates.type 
-					+ " extraction type is multiply defined");
+		if (xsltProcessors.containsKey(taskTemplates.type)) {
+			throw new BuildException(taskTemplates.type + " extraction type is multiply defined");
 		}
-		
-		XSLTProcessor xp = useXMLFilter
-			? new XMLFilterProcessor(this, this)
-			: new TemplatesProcessor(this);
-		
+
+		XSLTProcessor xp = useXMLFilter ? new XMLFilterProcessor(this, this)
+				: new TemplatesProcessor(this);
+
 		xp.addTemplates(taskTemplates);
 		xp.transformerFactory.setURIResolver(this);
-		
+
 		xsltProcessors.put(taskTemplates.type, xp);
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see opennlp.ccgbank.CCGBankTask#start()
 	 */
 	@Override
 	protected void start() throws BuildException {
 		xsltProcessor = new TemplatesProcessor(this);
-		((TemplatesProcessor)xsltProcessor).addTemplates(
-			loadTemplates(pkgPath + "/" + CCGBankExtract.LEXICON_TEMPLATE));
+		((TemplatesProcessor) xsltProcessor).addTemplates(loadTemplates(pkgPath + "/"
+				+ CCGBankExtract.LEXICON_TEMPLATE));
 		ruleProcessor = new TemplatesProcessor(this);
-		ruleProcessor.addTemplates(loadTemplates(pkgPath + "/"
-				+ CCGBankExtract.RULES_TEMPLATE));
+		ruleProcessor.addTemplates(loadTemplates(pkgPath + "/" + CCGBankExtract.RULES_TEMPLATE));
 
 		FreqTally.reset();
 		FreqTally.CAT_FREQ_CUTOFF = catFreqCutoff;
 		FreqTally.LEX_FREQ_CUTOFF = lexFreqCutoff;
 		FreqTally.OPEN_FREQ_CUTOFF = openFreqCutoff;
-		
+
 		RulesTally.reset();
 		RulesTally.RULE_FREQ_CUTOFF = ruleFreqCutoff;
-        RulesTally.KEEP_UNMATCHED = !skipUnmatched;
-		
+		RulesTally.KEEP_UNMATCHED = !skipUnmatched;
+
 		try {
 			lexiconTempFile = File.createTempFile(grammarName, ".xml");
 			lexiconTempFile.deleteOnExit();
 			xsltProcessor.setTarget(lexiconTempFile);
-			
+
 			rulesTempFile = File.createTempFile(grammarName + "-rules", ".xml");
 			rulesTempFile.deleteOnExit();
 			ruleProcessor.setTarget(rulesTempFile);
-			
+
 			Writer w = xsltProcessor.serializer.getWriter();
 			w.write("<ccg-lexicon>");
 			w.flush();
-			
+
 			Writer rw = ruleProcessor.serializer.getWriter();
 			rw.write("<rules>");
 			rw.flush();
-		}
-		catch(IOException io) {
+		} catch (IOException io) {
 			throw new BuildException(io, getLocation());
 		}
 	}
-	
-		
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see opennlp.ccgbank.CCGBankTask#nextFile(java.io.File)
 	 */
 	@Override
 	protected InputSource nextFile(File file) throws BuildException {
 		try {
 			ruleProcessor.process(super.nextFile(file));
-		}
-		catch(IOException io) {
-			throw new BuildException("I/O problem processing " + file + ": "
-				+ io.getMessage(), io, getLocation());
-		}
-		catch(SAXException se) {
+		} catch (IOException io) {
+			throw new BuildException("I/O problem processing " + file + ": " + io.getMessage(), io,
+					getLocation());
+		} catch (SAXException se) {
+			throw new BuildException("Problem processing " + file + ": " + se.getMessage(), se,
+					getLocation());
+		} catch (TransformerException te) {
 			throw new BuildException("Problem processing " + file + ": "
-				+ se.getMessage(), se, getLocation());
+					+ te.getMessageAndLocation(), te, getLocation());
 		}
-		catch(TransformerException te) {
-			throw new BuildException("Problem processing " + file + ": "
-				+ te.getMessageAndLocation(), te, getLocation());
-		}
-		
+
 		return super.nextFile(file); // TODO is this right?
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see opennlp.ccgbank.CCGBankTask#finish()
 	 */
 	@Override
@@ -265,63 +257,52 @@ public class CCGBankExtract extends CCGBankTask implements URIResolver {
 			Writer w = xsltProcessor.serializer.getWriter();
 			w.write("</ccg-lexicon>");
 			w.close();
-			
+
 			Writer rw = ruleProcessor.serializer.getWriter();
 			rw.write("</rules>");
 			rw.close();
-		}
-		catch(IOException io) {
+		} catch (IOException io) {
 			throw new BuildException(io, getLocation());
 		}
-		
+
 		// generate lexicon, morph, rules
-		for(Type t : xsltProcessors.keySet()) {
-			if(t == Type.LEXICON) {
+		for (Type t : xsltProcessors.keySet()) {
+			if (t == Type.LEXICON) {
 				try {
 					FreqTally.printTally(target);
+				} catch (FileNotFoundException fnfe) {
+					throw new BuildException("problem generating frequencies", fnfe, getLocation());
 				}
-				catch(FileNotFoundException fnfe) {
-					throw new BuildException("problem generating frequencies",
-							fnfe, getLocation());
-				}
-			}
-			else if(t == Type.RULES) {
+			} else if (t == Type.RULES) {
 				try {
 					RulesTally.printTally(target);
-				}
-				catch(FileNotFoundException fnfe) {
-					throw new BuildException(
-						"problem generating rule frequencies", fnfe,
-						getLocation());
+				} catch (FileNotFoundException fnfe) {
+					throw new BuildException("problem generating rule frequencies", fnfe,
+							getLocation());
 				}
 			}
-			
+
 			String fileName = t.fileName();
 			log("Generating " + fileName);
 			try {
 				XSLTProcessor xp = xsltProcessors.get(t);
 				xp.setTarget(new File(target, fileName));
-				
-				xp.process(new InputSource(
-					new BufferedInputStream(new FileInputStream(						
+
+				xp.process(new InputSource(new BufferedInputStream(new FileInputStream(
 						(t == Type.RULES) ? rulesTempFile : lexiconTempFile))));
-			}
-			catch(IOException io) {
-				throw new BuildException("I/O problem writing " + fileName,
-						io, getLocation());
-			}
-			catch(TransformerException te) {
-				throw new BuildException("Problem transforming " + fileName
-					+ ": " + te.getMessageAndLocation(), te, getLocation());
-			}
-			catch(SAXException se) {
-				throw new BuildException("Problem transforming " + fileName
-					+ ": " + se.getMessage(), se, getLocation());
+			} catch (IOException io) {
+				throw new BuildException("I/O problem writing " + fileName, io, getLocation());
+			} catch (TransformerException te) {
+				throw new BuildException("Problem transforming " + fileName + ": "
+						+ te.getMessageAndLocation(), te, getLocation());
+			} catch (SAXException se) {
+				throw new BuildException("Problem transforming " + fileName + ": "
+						+ se.getMessage(), se, getLocation());
 			}
 		}
-		
+
 		// generate grammar.xml, if it doesn't already exist
-		// nb: should eventually make schema refs relative to OPENCCG_HOME		
+		// nb: should eventually make schema refs relative to OPENCCG_HOME
 		try {
 			File gramFile = new File(target, "grammar.xml");
 			if (!gramFile.exists()) {
@@ -347,45 +328,41 @@ public class CCGBankExtract extends CCGBankTask implements URIResolver {
 				gramOut.println("</grammar>");
 				gramOut.close();
 			}
+		} catch (IOException io) {
+			throw new BuildException("problem generating grammar.xml", io, getLocation());
 		}
-		catch(IOException io) {
-			throw new BuildException("problem generating grammar.xml",
-					io, getLocation());
-		}
-		
-		if(testbed != null) {
+
+		if (testbed != null) {
 			log("Creating testbed ...");
-			
+
 			try {
-				Testbed ct = new Testbed(ccgBankTaskSources,
-						target, testbed);
+				Testbed ct = new Testbed(ccgBankTaskSources, target, testbed);
 				ct.createTestFiles();
-			}
-			catch(Exception e) {e.printStackTrace();
-				throw new BuildException("problem generating testbed: "
-						+ e.getMessage(), e, getLocation());
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new BuildException("problem generating testbed: " + e.getMessage(), e,
+						getLocation());
 			}
 		}
 	}
-	
+
 	Templates loadTemplates(String resourceName) throws BuildException {
 		try {
 			// XXX nb: no xsltc option this way
-			//TransformerFactory tf = XSLTProcessor.newTransformerFactory(); 
-			SAXTransformerFactory tf = (SAXTransformerFactory)TransformerFactory.newInstance();
-			
+			// TransformerFactory tf = XSLTProcessor.newTransformerFactory();
+			SAXTransformerFactory tf = (SAXTransformerFactory) TransformerFactory.newInstance();
+
 			return tf.newTemplates(new StreamSource(new BufferedInputStream(
-				getResource(resourceName))));
-		}
-		catch(TransformerConfigurationException e) {
-			throw new BuildException("Problem loading template "
-				+ resourceName + ": " + e.getMessage(), e, getLocation());
+					getResource(resourceName))));
+		} catch (TransformerConfigurationException e) {
+			throw new BuildException("Problem loading template " + resourceName + ": "
+					+ e.getMessage(), e, getLocation());
 		}
 	}
-	
+
 	/**
-	 * Loads a resource using the fully qualified name with the current
-	 * class loader
+	 * Loads a resource using the fully qualified name with the current class
+	 * loader
 	 */
 	InputStream getResource(String resourceName) {
 		return getClass().getClassLoader().getResourceAsStream(resourceName);

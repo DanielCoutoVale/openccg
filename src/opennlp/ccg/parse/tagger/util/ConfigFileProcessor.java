@@ -32,61 +32,62 @@ import java.util.logging.Logger;
  * @author Dennis N. Mehay
  */
 public class ConfigFileProcessor {
-    
-    
-    /** Read in config file as a {@code Map<String,String>}. */
-    public static Map<String, String> readInConfig(String configFile) {
-    	return readInConfig(configFile, null);
-    }
 
-    /**
-     * Read in config file as a {@code Map<String,String>}, resolving the given path keys
-     * relative to the config file if not absolute.
-     */
-    public static Map<String, String> readInConfig(String configFile, String pathKeys[]) {
-    	Set<String> paths = Collections.emptySet();
-    	if (pathKeys != null) paths = new HashSet<String>(Arrays.asList(pathKeys));
-        BufferedReader cf = null;
-        Map<String, String> opts = new HashMap<String, String>();
-        try {
-        	File infile = new File(configFile);
-        	File parentDir = infile.getParentFile();
-            cf = new BufferedReader(new FileReader(infile));
-            
-            String ln = cf.readLine();
-            // map options to values.
-            while (ln != null) {
-                if (ln.trim().equals("") || ln.trim().startsWith("#")) {
-                    ln = cf.readLine();
-                    continue;
-                }
-                String[] parts = ln.trim().split("=");
-                String key = parts[0].trim().toLowerCase();
-                String val = parts[1].trim();
-                // resolve path keys
-                if (paths.contains(key)) {
-                	File f = new File(parentDir, val);
-                	if (!f.exists()) {
-                		f = new File(val);
-                		if (!f.exists()) throw new FileNotFoundException("Can't resolve filename: " + val);
-                	}
-                	val = f.getPath();
-                }
-                opts.put(key, val);
-                ln = cf.readLine();
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ConfigFileProcessor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ConfigFileProcessor.class.getName()).log(Level.SEVERE, null, ex);        
-        } finally {
-            try {
-                cf.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ConfigFileProcessor.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return opts;
-    }
+	/** Read in config file as a {@code Map<String,String>}. */
+	public static Map<String, String> readInConfig(String configFile) {
+		return readInConfig(configFile, null);
+	}
+
+	/**
+	 * Read in config file as a {@code Map<String,String>}, resolving the given
+	 * path keys relative to the config file if not absolute.
+	 */
+	public static Map<String, String> readInConfig(String configFile, String pathKeys[]) {
+		Set<String> paths = Collections.emptySet();
+		if (pathKeys != null)
+			paths = new HashSet<String>(Arrays.asList(pathKeys));
+		BufferedReader cf = null;
+		Map<String, String> opts = new HashMap<String, String>();
+		try {
+			File infile = new File(configFile);
+			File parentDir = infile.getParentFile();
+			cf = new BufferedReader(new FileReader(infile));
+
+			String ln = cf.readLine();
+			// map options to values.
+			while (ln != null) {
+				if (ln.trim().equals("") || ln.trim().startsWith("#")) {
+					ln = cf.readLine();
+					continue;
+				}
+				String[] parts = ln.trim().split("=");
+				String key = parts[0].trim().toLowerCase();
+				String val = parts[1].trim();
+				// resolve path keys
+				if (paths.contains(key)) {
+					File f = new File(parentDir, val);
+					if (!f.exists()) {
+						f = new File(val);
+						if (!f.exists())
+							throw new FileNotFoundException("Can't resolve filename: " + val);
+					}
+					val = f.getPath();
+				}
+				opts.put(key, val);
+				ln = cf.readLine();
+			}
+		} catch (FileNotFoundException ex) {
+			Logger.getLogger(ConfigFileProcessor.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (IOException ex) {
+			Logger.getLogger(ConfigFileProcessor.class.getName()).log(Level.SEVERE, null, ex);
+		} finally {
+			try {
+				cf.close();
+			} catch (IOException ex) {
+				Logger.getLogger(ConfigFileProcessor.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+		return opts;
+	}
 
 }

@@ -25,57 +25,51 @@ import gnu.trove.*;
 /**
  * An interface for objects which represent Logical Forms.
  *
- * @author      Jason Baldridge
- * @author      Michael White
- * @version     $Revision: 1.10 $, $Date: 2005/11/01 22:35:35 $
+ * @author Jason Baldridge
+ * @author Michael White
+ * @version $Revision: 1.10 $, $Date: 2005/11/01 22:35:35 $
  */
 public interface LF extends Unifiable, Mutable {
 
-    /**
-     * Sets the LF chunks to which this LF belongs.
-     * LF chunks are used during realization to ensure 
-     * that certain edges are semantically complete 
-     * before combination is attempted with edges 
-     * with semantics outside the chunk.
-     * The chunks are numbered starting with 0, 
-     * and null represents no chunks.
-     */
-    public void setChunks(TIntArrayList chunks);
-    
-    /**
-     * Gets the LF chunks to which this LF belongs.
-     */
-    public TIntArrayList getChunks();
-    
+	/**
+	 * Sets the LF chunks to which this LF belongs. LF chunks are used during
+	 * realization to ensure that certain edges are semantically complete before
+	 * combination is attempted with edges with semantics outside the chunk. The
+	 * chunks are numbered starting with 0, and null represents no chunks.
+	 */
+	public void setChunks(TIntArrayList chunks);
 
-    /** Returns the simple type of this LF, or null if none. */
-    public SimpleType getType();
-    
-    
-    /**
-     * Returns a copy of this LF.
-     * (LF chunks are not copied.)
-     */
-    public LF copy();
+	/**
+	 * Gets the LF chunks to which this LF belongs.
+	 */
+	public TIntArrayList getChunks();
 
-    /**
-     * Returns a hash code using the given map from vars to ints.
-     */
-    public int hashCode(TObjectIntHashMap varMap);
+	/** Returns the simple type of this LF, or null if none. */
+	public SimpleType getType();
 
-    /**
-     * Returns whether this LF equals the given object  
-     * up to variable names, using the given maps from vars to ints.
-     */
-    public boolean equals(Object obj, TObjectIntHashMap varMap, TObjectIntHashMap varMap2);
-    
-    /**
-     * Returns an XML representation of this LF.
-     */
-    public Element toXml();
-    
-    /**
-     * Returns a pretty-printed string of this LF, with the given indent.
-     */
-    public String prettyPrint(String indent);
+	/**
+	 * Returns a copy of this LF. (LF chunks are not copied.)
+	 */
+	public LF copy();
+
+	/**
+	 * Returns a hash code using the given map from vars to ints.
+	 */
+	public int hashCode(TObjectIntHashMap varMap);
+
+	/**
+	 * Returns whether this LF equals the given object up to variable names,
+	 * using the given maps from vars to ints.
+	 */
+	public boolean equals(Object obj, TObjectIntHashMap varMap, TObjectIntHashMap varMap2);
+
+	/**
+	 * Returns an XML representation of this LF.
+	 */
+	public Element toXml();
+
+	/**
+	 * Returns a pretty-printed string of this LF, with the given indent.
+	 */
+	public String prettyPrint(String indent);
 }

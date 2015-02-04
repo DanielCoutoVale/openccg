@@ -137,14 +137,16 @@ abstract public class Association implements Serializable, Comparable<Associatio
 	 * Checks whether an associate key is known
 	 * 
 	 * @param associateKey the associate key
-	 * @return <code>true</code> if the associate key is known and <code>false</code> otherwise
+	 * @return <code>true</code> if the associate key is known and
+	 *         <code>false</code> otherwise
 	 */
 	public final static boolean checkAssociateKeyKnown(String associateKey) {
 		return knownAssociateKeys.contains(associateKey.intern());
 	}
 
 	/**
-	 * @return <code>true</code> if all associates are formal and <code>false</code> otherwise
+	 * @return <code>true</code> if all associates are formal and
+	 *         <code>false</code> otherwise
 	 */
 	public final boolean isFormal() {
 		return getForm() != null && getTerm() == null && getFunctions() == null

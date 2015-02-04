@@ -20,35 +20,46 @@ package opennlp.ccg.lexicon;
 import org.jdom.*;
 
 /**
- * Data structure for storing information about a lexical entry.  Specifically
+ * Data structure for storing information about a lexical entry. Specifically
  * used by LMR grammars.
  *
- * @author      Jason Baldridge
+ * @author Jason Baldridge
  * @version $Revision: 1.2 $, $Date: 2007/12/17 20:02:23 $
  */
 public class DataItem {
-    private String stem = "";
-    private String pred = "";
-    
-    public DataItem() {}
-    public DataItem (String s, String p) {
+	private String stem = "";
+	private String pred = "";
+
+	public DataItem() {
+	}
+
+	public DataItem(String s, String p) {
 		stem = s;
 		pred = p;
-    }
+	}
 
-    
-    public DataItem(Element datael) {
-		stem = datael.getAttributeValue("stem");	
-	
-		pred = datael.getAttributeValue("pred");	
+	public DataItem(Element datael) {
+		stem = datael.getAttributeValue("stem");
+
+		pred = datael.getAttributeValue("pred");
 		if (null == pred) {
-		    pred = stem;
+			pred = stem;
 		}
-    }
+	}
 
-    public void setStem(String s) { stem = s; }
-    public void setPred(String s) { pred = s; }
+	public void setStem(String s) {
+		stem = s;
+	}
 
-    public String getStem() { return stem; }
-    public String getPred() { return pred; }
+	public void setPred(String s) {
+		pred = s;
+	}
+
+	public String getStem() {
+		return stem;
+	}
+
+	public String getPred() {
+		return pred;
+	}
 }

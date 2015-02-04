@@ -23,34 +23,33 @@ import opennlp.ccg.hylo.*;
 import java.util.*;
 
 /**
- * A hypertagger is a realization supertagger.  It must extend the 
- * SupertaggerAdapter interface for plugging a supertagger into the 
- * lexicon.
+ * A hypertagger is a realization supertagger. It must extend the
+ * SupertaggerAdapter interface for plugging a supertagger into the lexicon.
  * 
- * @author      Michael White
- * @version     $Revision: 1.5 $, $Date: 2009/08/24 01:56:14 $
+ * @author Michael White
+ * @version $Revision: 1.5 $, $Date: 2009/08/24 01:56:14 $
  */
 public interface Hypertagger extends SupertaggerAdapter {
-	
+
 	/**
-	 * Maps the given elementary predications to their predicted categories, 
-	 * so that the beta-best categories can be returned by calls to setPred
-	 * and getSupertags.
+	 * Maps the given elementary predications to their predicted categories, so
+	 * that the beta-best categories can be returned by calls to setPred and
+	 * getSupertags.
 	 */
 	public void mapPreds(List<SatOp> preds);
-	
+
 	/**
-	 * Sets the current elementary predication to the one with the given index, 
-	 * so that the beta-best categories for it can be returned by a call to 
+	 * Sets the current elementary predication to the one with the given index,
+	 * so that the beta-best categories for it can be returned by a call to
 	 * getSupertags.
 	 */
 	public void setPred(int index);
-	
-	/** 
+
+	/**
 	 * Stores the gold standard pred info, for use in discriminative training.
-	 * The string consists of space delimited tokens, where each token 
-	 * is a colon-separated list of fields, with the first field containing 
-	 * the nominal id, and the second field the gold supertag.
+	 * The string consists of space delimited tokens, where each token is a
+	 * colon-separated list of fields, with the first field containing the
+	 * nominal id, and the second field the gold supertag.
 	 */
 	public void storeGoldStdPredInfo(String goldStdPredInfo);
 }

@@ -33,50 +33,71 @@ import opennlp.ccg.util.Pair;
  * @author Dennis N. Mehay
  */
 public class TaggedWord {
-    // multitaggings for POSs and supertags (resp).
-    private List<Pair<Double,String>> postagging;    
-    private List<Pair<Double,String>> stagging;    
-    
-    // old-timey Word that holds the word form (and potentially gold POS and supertag).
-    private Association oldWord;
-    
-    /** Decorators for the core functionality of the underlying word. */
-    public String getSupertag() { return oldWord.getSupertag(); }
-    public String getForm() { return oldWord.getForm(); }
-    public String getPOS() { return oldWord.getFunctions(); }
-    
-    /** Accessor for the underlying vanilla Word. */
-    public Association getWord() { return oldWord; }
-    
-    /** Constructor with a Word. */
-    public TaggedWord(Association wd) { 
-        oldWord = WordPool.createFullWord(wd, wd.getForm(), wd.getFunctions(), wd.getSupertag(), wd.getEntityClass()); 
-    }
-        
-    /** This does the obvious thing. */
-    public void setSupertagging(List<Pair<Double,String>> stagging) { this.stagging = stagging; }
-    
-    /** 
-     * Set the multi-POS tagging.  
-     * Also replace the underlying single-best tagging with the
-     * first tag of the multitag list.
-     */
-    public void setPOSTagging(List<Pair<Double,String>> postagging) { 
-        this.postagging = postagging; 
-        oldWord = WordPool.createFullWord(oldWord, oldWord.getForm(), this.postagging.get(0).b, oldWord.getSupertag(), oldWord.getEntityClass());            
-    }
-    
-    
-    /** This does the obvious thing. */
-    public List<Pair<Double,String>> getSupertagging() { return stagging; }
-    
-    /** This does the obvious thing. */
-    public List<Pair<Double,String>> getPOSTagging() { return postagging; }
-    
-    /** Gets the gold-standard supertag. */
-    public String getGoldSuper() { return oldWord.getSupertag(); }
-    
-    /** Gets the gold-standard POS tag. */
-    public String getGoldPOS() { return oldWord.getFunctions(); }
-    
+	// multitaggings for POSs and supertags (resp).
+	private List<Pair<Double, String>> postagging;
+	private List<Pair<Double, String>> stagging;
+
+	// old-timey Word that holds the word form (and potentially gold POS and
+	// supertag).
+	private Association oldWord;
+
+	/** Decorators for the core functionality of the underlying word. */
+	public String getSupertag() {
+		return oldWord.getSupertag();
+	}
+
+	public String getForm() {
+		return oldWord.getForm();
+	}
+
+	public String getPOS() {
+		return oldWord.getFunctions();
+	}
+
+	/** Accessor for the underlying vanilla Word. */
+	public Association getWord() {
+		return oldWord;
+	}
+
+	/** Constructor with a Word. */
+	public TaggedWord(Association wd) {
+		oldWord = WordPool.createFullWord(wd, wd.getForm(), wd.getFunctions(), wd.getSupertag(),
+				wd.getEntityClass());
+	}
+
+	/** This does the obvious thing. */
+	public void setSupertagging(List<Pair<Double, String>> stagging) {
+		this.stagging = stagging;
+	}
+
+	/**
+	 * Set the multi-POS tagging. Also replace the underlying single-best
+	 * tagging with the first tag of the multitag list.
+	 */
+	public void setPOSTagging(List<Pair<Double, String>> postagging) {
+		this.postagging = postagging;
+		oldWord = WordPool.createFullWord(oldWord, oldWord.getForm(), this.postagging.get(0).b,
+				oldWord.getSupertag(), oldWord.getEntityClass());
+	}
+
+	/** This does the obvious thing. */
+	public List<Pair<Double, String>> getSupertagging() {
+		return stagging;
+	}
+
+	/** This does the obvious thing. */
+	public List<Pair<Double, String>> getPOSTagging() {
+		return postagging;
+	}
+
+	/** Gets the gold-standard supertag. */
+	public String getGoldSuper() {
+		return oldWord.getSupertag();
+	}
+
+	/** Gets the gold-standard POS tag. */
+	public String getGoldPOS() {
+		return oldWord.getFunctions();
+	}
+
 }

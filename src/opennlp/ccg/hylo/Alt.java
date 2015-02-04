@@ -22,45 +22,48 @@ import java.io.Serializable;
 import java.util.BitSet;
 
 /**
- * Class for representing alts.
- * LF alts are used during realization to represent 
- * exclusive disjunctions in the input.
- * The alts are represented as pairs of ints, 
- * one for the alt set and one for the alt within the set.
- * The alts are numbered starting with 0.
- * An alt has a bitset for the elementary predications 
+ * Class for representing alts. LF alts are used during realization to represent
+ * exclusive disjunctions in the input. The alts are represented as pairs of
+ * ints, one for the alt set and one for the alt within the set. The alts are
+ * numbered starting with 0. An alt has a bitset for the elementary predications
  * within the alt.
  *
- * @author      Michael White
- * @version     $Revision: 1.6 $, $Date: 2009/07/17 04:23:30 $
+ * @author Michael White
+ * @version $Revision: 1.6 $, $Date: 2009/07/17 04:23:30 $
  */
 public final class Alt implements Comparable<Alt>, Serializable {
-    
+
 	private static final long serialVersionUID = 7241395629445814238L;
-	
+
 	/** The alt set number. */
-    public final int altSet;
-    /** The alt within the set. */
-    public final int numInSet;
-    /** The bitset. */
-    public final BitSet bitset = new BitSet();
-    
-    /** Constructor. */
-    public Alt(int altSet, int numInSet) { 
-        this.altSet = altSet; this.numInSet = numInSet;
-    }
-    
-    /** Equals. */
-    public boolean equals(Object o) {
-        if (!(o instanceof Alt)) return false;
-        Alt a = (Alt) o;
-        return altSet == a.altSet && numInSet == a.numInSet;
-    }
-    /** Comparison. */
-    public int compareTo(Alt a) {
-        if (altSet < a.altSet) return -1;
-        if (altSet == a.altSet && numInSet < a.numInSet) return -1;
-        if (altSet == a.altSet && numInSet == a.numInSet) return 0;
-        return 1;
-    }
+	public final int altSet;
+	/** The alt within the set. */
+	public final int numInSet;
+	/** The bitset. */
+	public final BitSet bitset = new BitSet();
+
+	/** Constructor. */
+	public Alt(int altSet, int numInSet) {
+		this.altSet = altSet;
+		this.numInSet = numInSet;
+	}
+
+	/** Equals. */
+	public boolean equals(Object o) {
+		if (!(o instanceof Alt))
+			return false;
+		Alt a = (Alt) o;
+		return altSet == a.altSet && numInSet == a.numInSet;
+	}
+
+	/** Comparison. */
+	public int compareTo(Alt a) {
+		if (altSet < a.altSet)
+			return -1;
+		if (altSet == a.altSet && numInSet < a.numInSet)
+			return -1;
+		if (altSet == a.altSet && numInSet == a.numInSet)
+			return 0;
+		return 1;
+	}
 }

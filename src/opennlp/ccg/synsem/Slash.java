@@ -53,11 +53,11 @@ public final class Slash implements Unifiable, Mutable, Serializable {
 	private final Modality _modality;
 
 	private byte _ability = INERT_OR_ACTIVE;
-	
+
 	private boolean _modifier = false;
 
 	private boolean _harmonicCompositionResult = false;
-	
+
 	public Slash(Element el) {
 		String d = el.getAttributeValue("dir");
 		if (d == null)
@@ -113,19 +113,20 @@ public final class Slash implements Unifiable, Mutable, Serializable {
 		_modality = m;
 		_ability = a;
 	}
-	
+
 	public Element toXml() {
-    	Element retval = new Element("slash");
-    	retval.setAttribute("dir", encode());
-    	String ability = decodeAbility();
-    	if (_modality instanceof SlashMode) {
-    		String mode = _modality.toString();
-    		if (!mode.equals(".")) retval.setAttribute("mode", mode);
-    	}
-    	else if (_modality instanceof VarModality)
-    		retval.setAttribute("varmodality", ((VarModality) _modality).name());
-    	if (ability != null) retval.setAttribute("ability", ability);
-    	return retval;
+		Element retval = new Element("slash");
+		retval.setAttribute("dir", encode());
+		String ability = decodeAbility();
+		if (_modality instanceof SlashMode) {
+			String mode = _modality.toString();
+			if (!mode.equals("."))
+				retval.setAttribute("mode", mode);
+		} else if (_modality instanceof VarModality)
+			retval.setAttribute("varmodality", ((VarModality) _modality).name());
+		if (ability != null)
+			retval.setAttribute("ability", ability);
+		return retval;
 	}
 
 	public Slash copy() {
@@ -163,27 +164,37 @@ public final class Slash implements Unifiable, Mutable, Serializable {
 			return false;
 		}
 	}
-	
+
 	/** Returns a string for the ability or null if not set. */
 	public String decodeAbility() {
-		if (_ability == INERT) return "inert";
-		else if (_ability == ACTIVE) return "active";
-		else return null;
+		if (_ability == INERT)
+			return "inert";
+		else if (_ability == ACTIVE)
+			return "active";
+		else
+			return null;
 	}
-	
+
 	/** Returns whether this cat is a modifier cat (defaults to false). */
-	public boolean isModifier() { return _modifier; }
-	
+	public boolean isModifier() {
+		return _modifier;
+	}
+
 	/** Sets whether this cat is a modifier cat. */
 	// NB: Might want to change this allow lex overrides of defaults
-	public void setModifier(boolean modifier) { _modifier = modifier; }
-	
+	public void setModifier(boolean modifier) {
+		_modifier = modifier;
+	}
+
 	/** Returns whether this arg has resulted from harmonic composition. */
-	public boolean isHarmonicCompositionResult() { return _harmonicCompositionResult; }
-	
+	public boolean isHarmonicCompositionResult() {
+		return _harmonicCompositionResult;
+	}
+
 	/** Sets whether this arg has resulted from harmonic composition. */
-	public void setHarmonicCompositionResult(boolean harmonicResult) { _harmonicCompositionResult = harmonicResult; }
-	
+	public void setHarmonicCompositionResult(boolean harmonicResult) {
+		_harmonicCompositionResult = harmonicResult;
+	}
 
 	public void unifyCheck(Object u) throws UnifyFailure {
 		if (u instanceof Slash) {
@@ -237,9 +248,9 @@ public final class Slash implements Unifiable, Mutable, Serializable {
 		return retval;
 	}
 
-//	public boolean equals(Slash s) {
-//		return directionsMatch(_dir, s._dir);
-//	}
+	// public boolean equals(Slash s) {
+	// return directionsMatch(_dir, s._dir);
+	// }
 
 	public boolean sameDirAsModality() {
 		return directionsMatch(_dir, _modality.getDirection());
@@ -280,14 +291,17 @@ public final class Slash implements Unifiable, Mutable, Serializable {
 	}
 
 	/**
-	 * Returns whether this slash equals the given object 
-	 * based on the direction, ability and modality.
+	 * Returns whether this slash equals the given object based on the
+	 * direction, ability and modality.
 	 */
 	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj.getClass() != this.getClass())
+			return false;
 		Slash s = (Slash) obj;
-		if (_dir != s._dir ||_ability != s._ability) return false;
+		if (_dir != s._dir || _ability != s._ability)
+			return false;
 		return _modality.equals(s._modality);
 	}
 
@@ -296,8 +310,10 @@ public final class Slash implements Unifiable, Mutable, Serializable {
 	 */
 	public int hashCode(TObjectIntHashMap varMap) {
 		int retval = 31 * _dir + 7 * _ability;
-		if (_modality instanceof Variable) retval += ((Variable)_modality).hashCode(varMap);
-		else retval += _modality.hashCode();
+		if (_modality instanceof Variable)
+			retval += ((Variable) _modality).hashCode(varMap);
+		else
+			retval += _modality.hashCode();
 		return retval;
 	}
 
@@ -306,13 +322,16 @@ public final class Slash implements Unifiable, Mutable, Serializable {
 	 * using the given maps from vars to ints.
 	 */
 	public boolean equals(Object obj, TObjectIntHashMap varMap, TObjectIntHashMap varMap2) {
-		if (this == obj) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj.getClass() != this.getClass())
+			return false;
 		Slash s = (Slash) obj;
-		if (_dir != s._dir || _ability != s._ability) return false;
-		if (_modality instanceof Variable) 
-			return ((Variable)_modality).equals(s._modality, varMap, varMap2);
-		else 
+		if (_dir != s._dir || _ability != s._ability)
+			return false;
+		if (_modality instanceof Variable)
+			return ((Variable) _modality).equals(s._modality, varMap, varMap2);
+		else
 			return _modality.equals(s._modality);
 	}
 

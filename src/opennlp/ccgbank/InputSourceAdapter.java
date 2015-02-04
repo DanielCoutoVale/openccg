@@ -31,17 +31,17 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.xml.sax.InputSource;
 
-
 /**
- * Turns an {@link InputSource} into a {@link StreamSource}. This class wraps
- * an input source for XSLT transformation routines that expect {@link Source}
+ * Turns an {@link InputSource} into a {@link StreamSource}. This class wraps an
+ * input source for XSLT transformation routines that expect {@link Source}
  * objects.
+ * 
  * @author <a href="http://www.ling.osu.edu/~scott/">Scott Martin</a>
  * @version $Revision: 1.1 $
  */
 class InputSourceAdapter extends StreamSource {
 	InputSource inputSource;
-	
+
 	InputSourceAdapter(InputSource inputSource) {
 		this.inputSource = inputSource;
 	}
@@ -82,7 +82,9 @@ class InputSourceAdapter extends StreamSource {
 		inputSource.setSystemId(systemId);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.xml.transform.stream.StreamSource#getInputStream()
 	 */
 	@Override
@@ -90,7 +92,9 @@ class InputSourceAdapter extends StreamSource {
 		return inputSource.getByteStream();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.xml.transform.stream.StreamSource#getReader()
 	 */
 	@Override
@@ -98,15 +102,21 @@ class InputSourceAdapter extends StreamSource {
 		return inputSource.getCharacterStream();
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.xml.transform.stream.StreamSource#setInputStream(java.io.InputStream)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * javax.xml.transform.stream.StreamSource#setInputStream(java.io.InputStream
+	 * )
 	 */
 	@Override
 	public void setInputStream(InputStream inputStream) {
 		inputSource.setByteStream(inputStream);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.xml.transform.stream.StreamSource#setReader(java.io.Reader)
 	 */
 	@Override
@@ -114,7 +124,9 @@ class InputSourceAdapter extends StreamSource {
 		inputSource.setCharacterStream(reader);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.xml.transform.stream.StreamSource#setSystemId(java.io.File)
 	 */
 	@Override
@@ -122,5 +134,5 @@ class InputSourceAdapter extends StreamSource {
 		super.setSystemId(f);
 		inputSource.setSystemId(super.getSystemId());
 	}
-	
+
 }

@@ -18,38 +18,40 @@
 package opennlp.ccg.alignment;
 
 /**
- * A set of {@link Enum} constants for describing the status of a {@linkplain Mapping mapping}, either as
- * {@link #POSSIBLE} or {@link #SURE}.
+ * A set of {@link Enum} constants for describing the status of a
+ * {@linkplain Mapping mapping}, either as {@link #POSSIBLE} or {@link #SURE}.
  * <p>
- * Statuses have a corresponding {@linkplain #getAbbreviation() abbreviated form} for use when mappings are
- * formatted and parsed as strings. The enum constants are arranged in order of strength of surety, so that 
+ * Statuses have a corresponding {@linkplain #getAbbreviation() abbreviated
+ * form} for use when mappings are formatted and parsed as strings. The enum
+ * constants are arranged in order of strength of surety, so that
  * {@link Enum#ordinal()} returns numbers in order of increasing surety.
  * 
  * @author <a href="http://www.ling.ohio-state.edu/~scott/">Scott Martin</a>
  * @see MappingFormat
  */
 public enum Status {
-	
+
 	/**
 	 * The status of a mapping that is only possible, not sure.
 	 */
 	POSSIBLE,
-	
+
 	/**
 	 * The status of a sure mapping (not just possible).
 	 */
 	SURE;
-	
+
 	/**
 	 * An abbreviated form for this status, for use in parsing and formatting.
+	 * 
 	 * @see MappingFormat
 	 */
 	final String abbreviation;
-	
+
 	private Status() {
 		this.abbreviation = name().substring(0, 1);
 	}
-	
+
 	/**
 	 * Gets the abbreviated form of this status, &quot;S&quot; for {@link #SURE}
 	 * and &quot;P&quot; for {@link #POSSIBLE}.
@@ -60,17 +62,19 @@ public enum Status {
 
 	/**
 	 * Gives the status constant corresponding to the given abbreviation.
+	 * 
 	 * @param abbreviation The abbreviated form to find a status constant for.
-	 * @return A status constant if one is found whose {@link #getAbbreviation()} is equal to the specified 
-	 * abbreviation, otherwise <code>null</code>.
+	 * @return A status constant if one is found whose
+	 *         {@link #getAbbreviation()} is equal to the specified
+	 *         abbreviation, otherwise <code>null</code>.
 	 */
 	public static Status forAbbreviation(String abbreviation) {
-		for(Status s : values()) {
-			if(s.abbreviation.equals(abbreviation)) {
+		for (Status s : values()) {
+			if (s.abbreviation.equals(abbreviation)) {
 				return s;
 			}
 		}
-		
+
 		return null;
 	}
 }

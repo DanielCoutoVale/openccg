@@ -27,46 +27,47 @@ import opennlp.ccg.synsem.SymbolScorer;
 /**
  * Product of sign scorers, some of which may be feature extractors..
  *
- * @author      Michael White
- * @version     $Revision: 1.4 $, $Date: 2011/01/15 17:52:59 $
+ * @author Michael White
+ * @version $Revision: 1.4 $, $Date: 2011/01/15 17:52:59 $
  */
-public class SignScorerProduct implements SymbolScorer, FeatureExtractor
-{
-    /** The component models. */
-    protected SymbolScorer[] models;
-    
-    /** The composed feature extractor. */
-    protected ComposedFeatureExtractor composedFeatureExtractor;
-    
-    /**
-     * Constructor with component models.
-     */
-    public SignScorerProduct(SymbolScorer[] models) { 
-        this.models = models;
-        this.composedFeatureExtractor = new ComposedFeatureExtractor(models);
-    }
-    
-    /** 
-     * Returns a score between 0 (worst) and 1 (best) for the given sign 
-     * and completeness flag, as the product of the scores assigned 
-     * by the component models.
-     */
-    public double score(Symbol sign, boolean complete) {
-        double retval = 1.0;
-        for (int i = 0; i < models.length; i++) {
-            retval *= models[i].score(sign, complete);
-        }
-        return retval;
-    }
-    
+public class SignScorerProduct implements SymbolScorer, FeatureExtractor {
+	/** The component models. */
+	protected SymbolScorer[] models;
+
+	/** The composed feature extractor. */
+	protected ComposedFeatureExtractor composedFeatureExtractor;
+
+	/**
+	 * Constructor with component models.
+	 */
+	public SignScorerProduct(SymbolScorer[] models) {
+		this.models = models;
+		this.composedFeatureExtractor = new ComposedFeatureExtractor(models);
+	}
+
+	/**
+	 * Returns a score between 0 (worst) and 1 (best) for the given sign and
+	 * completeness flag, as the product of the scores assigned by the component
+	 * models.
+	 */
+	public double score(Symbol sign, boolean complete) {
+		double retval = 1.0;
+		for (int i = 0; i < models.length; i++) {
+			retval *= models[i].score(sign, complete);
+		}
+		return retval;
+	}
+
 	/** Sets the alphabet for the component feature extractors. */
 	public void setAlphabet(Alphabet alphabet) {
 		composedFeatureExtractor.setAlphabet(alphabet);
 	}
-	
-	/** Returns the features for the given sign and completeness flag from the component feature extractors. */
+
+	/**
+	 * Returns the features for the given sign and completeness flag from the
+	 * component feature extractors.
+	 */
 	public FeatureVector extractFeatures(Symbol sign, boolean complete) {
 		return composedFeatureExtractor.extractFeatures(sign, complete);
 	}
 }
-

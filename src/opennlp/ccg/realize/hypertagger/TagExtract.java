@@ -24,51 +24,70 @@ public class TagExtract {
 	private static File htVocabFile;
 	private TagExtractor tex;
 	private BufferedWriter output;
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	static class PairComparator implements Comparator {
 		@SuppressWarnings("boxing")
-		public int compare(Pair<Double,Integer> p, Pair<Double,Integer> q) {
-			if(p.a > q.a) {
+		public int compare(Pair<Double, Integer> p, Pair<Double, Integer> q) {
+			if (p.a > q.a) {
 				return 1;
 			}
-			if(p.a == q.a) {
+			if (p.a == q.a) {
 				return 0;
 			}
 			return -1;
 		}
+
 		public int compare(Object p, Object q) {
-			return this.compare((Pair<Double,Integer>) p, (Pair<Double,Integer>)q );
+			return this.compare((Pair<Double, Integer>) p, (Pair<Double, Integer>) q);
 		}
 	}
+
 	static class XmlFilenameFilter implements FileFilter {
 		public boolean accept(File f) {
 			return f.getName().toLowerCase().endsWith(".xml");
 		}
 	}
+
 	public TagExtract(TagExtractor t) {
 		this.tex = t;
 	}
-	/* TODO: this method should probably be rewritten to use LFLoader and a config file */
+
+	/*
+	 * TODO: this method should probably be rewritten to use LFLoader and a
+	 * config file
+	 */
 	public static void main(String[] args) throws IOException {
 		TagExtract t = null;
-		//PrintStream output = System.out;
+		// PrintStream output = System.out;
 		BufferedWriter output;
-		//int lfcount = 0;
-		//int lfNum = 0;
+		// int lfcount = 0;
+		// int lfNum = 0;
 		// option processing
 		OptionParser o = new OptionParser();
 		o.acceptsAll(asList("help", "h"), "this message");
 		o.acceptsAll(asList("quiet", "q"), "print no messages");
 		o.acceptsAll(asList("pos", "pos"), "extract POS features");
-		OptionSpec<File> pos_s = o.acceptsAll(asList("p", "pos-model")).withRequiredArg().ofType(File.class).describedAs("POS model to use");
-		OptionSpec<File> outf = o.acceptsAll(asList("o", "output")).withRequiredArg().ofType(File.class).describedAs("output file");
-		OptionSpec<File> posPrior_s = o.acceptsAll(asList("P", "pos-prior")).withRequiredArg().ofType(File.class).describedAs("POS prior model to use");
-		OptionSpec<File> ht_s = o.acceptsAll(asList("y", "hyper-model")).withRequiredArg().ofType(File.class).describedAs("HT model to use as input to 2-pass model (see README)");
-		OptionSpec<File> htPrior_s = o.acceptsAll(asList("H", "ht-prior")).withRequiredArg().ofType(File.class).describedAs("HT prior model to use");
-		OptionSpec<File> gr_s = o.acceptsAll(asList("g", "grammar")).withRequiredArg().ofType(File.class).describedAs("grammar filename");
-		OptionSpec<File> ht_vocab_s = o.acceptsAll(asList("V", "ht-prior-vocab")).withRequiredArg().ofType(File.class).describedAs("HT prior vocab filename");
-		OptionSpec<File> pos_vocab_s = o.acceptsAll(asList("v", "pos-prior-vocab")).withRequiredArg().ofType(File.class).describedAs("POS prior vocab filename");
-		OptionSpec<File> corpusDir_s = o.acceptsAll(asList("d", "lf-dir")).withRequiredArg().ofType(File.class).describedAs("Directory to change to before searching for XML files");
+		OptionSpec<File> pos_s = o.acceptsAll(asList("p", "pos-model")).withRequiredArg()
+				.ofType(File.class).describedAs("POS model to use");
+		OptionSpec<File> outf = o.acceptsAll(asList("o", "output")).withRequiredArg()
+				.ofType(File.class).describedAs("output file");
+		OptionSpec<File> posPrior_s = o.acceptsAll(asList("P", "pos-prior")).withRequiredArg()
+				.ofType(File.class).describedAs("POS prior model to use");
+		OptionSpec<File> ht_s = o.acceptsAll(asList("y", "hyper-model")).withRequiredArg()
+				.ofType(File.class)
+				.describedAs("HT model to use as input to 2-pass model (see README)");
+		OptionSpec<File> htPrior_s = o.acceptsAll(asList("H", "ht-prior")).withRequiredArg()
+				.ofType(File.class).describedAs("HT prior model to use");
+		OptionSpec<File> gr_s = o.acceptsAll(asList("g", "grammar")).withRequiredArg()
+				.ofType(File.class).describedAs("grammar filename");
+		OptionSpec<File> ht_vocab_s = o.acceptsAll(asList("V", "ht-prior-vocab")).withRequiredArg()
+				.ofType(File.class).describedAs("HT prior vocab filename");
+		OptionSpec<File> pos_vocab_s = o.acceptsAll(asList("v", "pos-prior-vocab"))
+				.withRequiredArg().ofType(File.class).describedAs("POS prior vocab filename");
+		OptionSpec<File> corpusDir_s = o.acceptsAll(asList("d", "lf-dir")).withRequiredArg()
+				.ofType(File.class)
+				.describedAs("Directory to change to before searching for XML files");
 		OptionSet options = o.parse(args);
 		/* if -h (help) is given, print message and exit */
 		if (options.has("h") || args.length == 0) {
@@ -77,36 +96,37 @@ public class TagExtract {
 			System.exit(0);
 		}
 		output = new BufferedWriter(new FileWriter(options.valueOf(outf)));
-		// some of these will be nulls, depending on what the user is trying to do
+		// some of these will be nulls, depending on what the user is trying to
+		// do
 		hyperModelFile = options.valueOf(ht_s);
 		posModelFile = options.valueOf(pos_s);
 		posPriorModelFile = options.valueOf(posPrior_s);
 		posVocabFile = options.valueOf(pos_vocab_s);
 		htPriorModelFile = options.valueOf(htPrior_s);
 		htVocabFile = options.valueOf(ht_vocab_s);
-		if(options.has("q"))
+		if (options.has("q"))
 			quiet = true;
-		LFLoader lfs = new LFLoader(options.valueOf(gr_s), options.valueOf(corpusDir_s), options.nonOptionArguments());
-		if(options.has("pos")) {
+		LFLoader lfs = new LFLoader(options.valueOf(gr_s), options.valueOf(corpusDir_s),
+				options.nonOptionArguments());
+		if (options.has("pos")) {
 			TagExtractor tex = new ZLPOSTagger();
-			if(posPriorModelFile != null && posVocabFile != null) {
+			if (posPriorModelFile != null && posVocabFile != null) {
 				debug("Loading POS model priors from " + posPriorModelFile);
 				debug("Loading POS model vocab from " + posVocabFile);
 				tex.loadPriorModel(posPriorModelFile, posVocabFile);
 			}
 			debug("Extracting POS features...");
 			t = new TagExtract(tex);
-		}
-		else {
+		} else {
 			// extracting hypertags
 			// using GS pos tags
 			TagExtractor tex = new ZLMaxentHypertagger();
-			if(htPriorModelFile != null && htVocabFile != null) {
+			if (htPriorModelFile != null && htVocabFile != null) {
 				debug("Loading HT model priors from " + htPriorModelFile);
 				debug("Loading HT model vocab from " + htVocabFile);
-				tex.loadPriorModel(htPriorModelFile,htVocabFile);
+				tex.loadPriorModel(htPriorModelFile, htVocabFile);
 			}
-			if(hyperModelFile != null) {
+			if (hyperModelFile != null) {
 				debug("Loading proto-HT model from " + hyperModelFile);
 				tex.loadProtoModel(hyperModelFile);
 			}
@@ -114,22 +134,23 @@ public class TagExtract {
 			t = new TagExtract(tex);
 		}
 		t.setOutput(output);
-		while(lfs.hasNext()) {
-				LFInfo lfi = lfs.next();
-				LF lf = lfi.getLF();
-				try {
-					//lfNum++;
-					t.extract(lf, lfi.getFullWords());
-					//lfcount++;
-					//debug("LFs extracted:       " + lfcount + "\r");
-				} catch (FeatureExtractionException e) {
-					debug("In LF #" + lfi.getLFNum() + ":\n");
-					debug(e.toString());
-				}
+		while (lfs.hasNext()) {
+			LFInfo lfi = lfs.next();
+			LF lf = lfi.getLF();
+			try {
+				// lfNum++;
+				t.extract(lf, lfi.getFullWords());
+				// lfcount++;
+				// debug("LFs extracted:       " + lfcount + "\r");
+			} catch (FeatureExtractionException e) {
+				debug("In LF #" + lfi.getLFNum() + ":\n");
+				debug(e.toString());
+			}
 		}
 		output.close();
 		debug("\n");
 	}
+
 	private void extract(LF flatLF, String fullWords) throws FeatureExtractionException {
 		tex.storeGoldStdPredInfo(fullWords);
 		tex.setLF(flatLF);
@@ -141,12 +162,14 @@ public class TagExtract {
 		}
 
 	}
+
 	private void setOutput(BufferedWriter output) {
 		this.output = output;
 
 	}
+
 	public static void debug(String string) {
-		if(!quiet) 
+		if (!quiet)
 			System.err.print(string);
 	}
 }

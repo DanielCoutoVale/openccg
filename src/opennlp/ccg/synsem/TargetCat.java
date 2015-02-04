@@ -19,11 +19,11 @@
 package opennlp.ccg.synsem;
 
 /**
- * A category that can be a target of a curried cat.  Basically, atomcats or
+ * A category that can be a target of a curried cat. Basically, atomcats or
  * variable cats.
  *
- * @author      Jason Baldridge
- * @version     $Revision: 1.1.1.1 $, $Date: 2003/02/28 18:02:13 $
+ * @author Jason Baldridge
+ * @version $Revision: 1.1.1.1 $, $Date: 2003/02/28 18:02:13 $
  */
 public interface TargetCat extends Category {
 

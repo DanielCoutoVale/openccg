@@ -23,23 +23,26 @@ import java.io.*;
 /**
  * Abstract command-line reader.
  *
- * @author  Michael White
- * @author  David Reitter
+ * @author Michael White
+ * @author David Reitter
  * @version $Revision: 1.2 $, $Date: 2005/10/13 20:33:49 $
  */
 abstract public class LineReader {
 
-    /** Creates a default line reader (currently a JLineReader) with the given completion strings. */
-    public static LineReader createLineReader(String[] completions) throws IOException {
-        return new JLineReader(completions);
-    }
-    
-    /** Sets the command history. */
-    abstract public void setCommandHistory(String histStr) throws IOException;
-    
-    /** Gets the current command history. */
-    abstract public String getCommandHistory() throws IOException;
-    
-    /** Returns an input string, using the given prompt. */
-    abstract public String readLine(String prompt) throws IOException;
+	/**
+	 * Creates a default line reader (currently a JLineReader) with the given
+	 * completion strings.
+	 */
+	public static LineReader createLineReader(String[] completions) throws IOException {
+		return new JLineReader(completions);
+	}
+
+	/** Sets the command history. */
+	abstract public void setCommandHistory(String histStr) throws IOException;
+
+	/** Gets the current command history. */
+	abstract public String getCommandHistory() throws IOException;
+
+	/** Returns an input string, using the given prompt. */
+	abstract public String readLine(String prompt) throws IOException;
 }

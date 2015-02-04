@@ -110,23 +110,21 @@ public class ExtractGrammar {
 		boolean doTestbed = true;
 
 		if (arguments.contains("-h") || arguments.contains("--help")) {
-			System.out.println("usage: extractGrammar \n"
+			System.out
+					.println("usage: extractGrammar \n"
 							+ "\t[-noPPs|--noPPHeads] \n"
 							+ "\t[-lexF] \n"
 							+ "\t[-origPuncts] \n"
 							+ "\t[-s|--section sectnum] [-ss|--startSection sectnum] [-es|endSection sectnum] \n"
 							+ "\t[-f|--file filenum] \n"
 							+ "\t[--lexOnly|--morpOnly|--rulesOnly|--testbedOnly] [--skipLex] [--skipMorph] [--skipRules] [--skipTestbed]\n"
-							+ "\t[-tmp|--tempDir tempDir] \n"
-							+ "\t[-cfc|--catFreqCutoff num] \n"
+							+ "\t[-tmp|--tempDir tempDir] \n" + "\t[-cfc|--catFreqCutoff num] \n"
 							+ "\t[-lfc|--lexFreqCutoff num] \n"
 							+ "\t[-ofc|--openFreqCutoff num] \n"
-							+ "\t[-rfc|--ruleFreqCutoff num] \n"
-							+ "\t[--skipUnmatched] \n"
+							+ "\t[-rfc|--ruleFreqCutoff num] \n" + "\t[--skipUnmatched] \n"
 							+ "\t[-dd|--debugDerivs] \n"
 							+ "\t[--text textfile] [--textf factorsfile] \n"
-							+ "\t[--combos combosfile] \n"
-							+ "\t[srcDir] [destDir]");
+							+ "\t[--combos combosfile] \n" + "\t[srcDir] [destDir]");
 			System.exit(0);
 		}
 
@@ -142,8 +140,7 @@ public class ExtractGrammar {
 		while (it.hasNext()) {
 			s = it.next();
 			if (s.equals("-s") || s.equals("--section") || s.equals("-ss")
-					|| s.equals("--startSection") || s.equals("-es")
-					|| s.equals("--endSection")) {
+					|| s.equals("--startSection") || s.equals("-es") || s.equals("--endSection")) {
 				if (!it.hasNext()) {
 					throw new IllegalArgumentException("encountered flag " + s
 							+ ", but no sectnum specified");
@@ -262,17 +259,16 @@ public class ExtractGrammar {
 		// ensure directories exist or can be made
 		File tempDir = new File(extractProps.tempDir);
 		if (!tempDir.exists() && !tempDir.mkdirs())
-			throw new IllegalArgumentException(
-					"could not create temp directory: " + extractProps.tempDir);
+			throw new IllegalArgumentException("could not create temp directory: "
+					+ extractProps.tempDir);
 		File srcDir = new File(extractProps.srcDir);
 		if (!srcDir.exists() || !srcDir.isDirectory())
-			throw new IllegalArgumentException(
-					"source directory does not exist: " + extractProps.srcDir);
+			throw new IllegalArgumentException("source directory does not exist: "
+					+ extractProps.srcDir);
 		File destDir = new File(extractProps.destDir);
 		if (!destDir.exists() && !destDir.mkdirs())
-			throw new IllegalArgumentException(
-					"could not create destination directory: "
-							+ extractProps.destDir);
+			throw new IllegalArgumentException("could not create destination directory: "
+					+ extractProps.destDir);
 
 		// log params
 		System.out.println("Extracting Grammar");
@@ -311,7 +307,8 @@ public class ExtractGrammar {
 		}
 
 		// do testbed
-		if (doTestbed && !doTestbed) ; // nb: just avoiding a warning here
+		if (doTestbed && !doTestbed)
+			; // nb: just avoiding a warning here
 		// TODO if (doTestbed) Testbed.createTestFiles(extractProps);
 	}
 

@@ -21,37 +21,44 @@ package opennlp.ccg.perceptron;
 import opennlp.ccg.synsem.*;
 
 /**
- * A re-ranking sign scorer for a perceptron model.
- * Note that at present, n-best re-ranking has been found to work better 
- * for parsing, but not for realization, where forest re-ranking (ie using 
- * the perceptron scorer throughout) seems to work better.
+ * A re-ranking sign scorer for a perceptron model. Note that at present, n-best
+ * re-ranking has been found to work better for parsing, but not for
+ * realization, where forest re-ranking (ie using the perceptron scorer
+ * throughout) seems to work better.
  * 
  * @author Michael White
- * @version     $Revision: 1.1 $, $Date: 2011/03/21 20:46:32 $
+ * @version $Revision: 1.1 $, $Date: 2011/03/21 20:46:32 $
  */
 public abstract class ReRankingPerceptronScorer extends PerceptronScorer implements ReRankingScorer {
 
 	/** Flag for whether to use the full model. */
-    protected boolean useFullModel = false;
+	protected boolean useFullModel = false;
 
-    /** Sets the full model flag. */
-    public void setFullModel(boolean on) { useFullModel = on; }
+	/** Sets the full model flag. */
+	public void setFullModel(boolean on) {
+		useFullModel = on;
+	}
 
 	/** The base scorer, for use when the full model is turned off. */
-    protected SymbolScorer baseScorer;
+	protected SymbolScorer baseScorer;
 
-    /** Returns the base scorer, using the given feature extractor if desired. */
-    abstract protected SymbolScorer getBaseScorer(FeatureExtractor featureExtractor);
+	/** Returns the base scorer, using the given feature extractor if desired. */
+	abstract protected SymbolScorer getBaseScorer(FeatureExtractor featureExtractor);
 
-    /** Constructor that configures the base scorer using getBaseScorer. */
+	/** Constructor that configures the base scorer using getBaseScorer. */
 	public ReRankingPerceptronScorer(FeatureExtractor featureExtractor, Model model) {
 		super(featureExtractor, model);
 		baseScorer = getBaseScorer(featureExtractor);
 	}
 
-    /** Scores the sign with the full or base model, according to the full model flag. */
-    public double score(Symbol sign, boolean complete) {
-		if (useFullModel) return super.score(sign, complete);
-		else return baseScorer.score(sign, complete);
-    }
+	/**
+	 * Scores the sign with the full or base model, according to the full model
+	 * flag.
+	 */
+	public double score(Symbol sign, boolean complete) {
+		if (useFullModel)
+			return super.score(sign, complete);
+		else
+			return baseScorer.score(sign, complete);
+	}
 }

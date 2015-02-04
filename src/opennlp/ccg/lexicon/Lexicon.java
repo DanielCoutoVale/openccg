@@ -220,7 +220,8 @@ public class Lexicon {
 						dItem, entries));
 				// index non-default preds to words
 				if (!dItem.getStem().equals(dItem.getPred())) {
-					Collection<Association> words = (Collection<Association>) _predToWords.get(dItem.getStem());
+					Collection<Association> words = (Collection<Association>) _predToWords
+							.get(dItem.getStem());
 					if (words == null) {
 						if (!openlex) {
 							System.out.print("Warning: couldn't find words for pred '");
@@ -503,7 +504,8 @@ public class Lexicon {
 														// Mr._Smith
 		{
 			String barePred = pred.substring(0, dotIndex);
-			Collection<Association> barePredWords = (Collection<Association>) _predToWords.get(barePred);
+			Collection<Association> barePredWords = (Collection<Association>) _predToWords
+					.get(barePred);
 			if (words == null)
 				words = barePredWords;
 			else if (barePredWords != null) {
@@ -592,8 +594,8 @@ public class Lexicon {
 	public SymbolHash getSymbolsForWord(Association w) throws LexException {
 		// reduce word to its core, removing coart attrs if any
 		Association surfaceWord = WordPool.createSurfaceWord(w);
-		Association coreWord = (surfaceWord.attrsIntersect(_coartAttrs)) ? WordPool.createCoreSurfaceWord(
-				surfaceWord, _coartAttrs) : surfaceWord;
+		Association coreWord = (surfaceWord.attrsIntersect(_coartAttrs)) ? WordPool
+				.createCoreSurfaceWord(surfaceWord, _coartAttrs) : surfaceWord;
 		// lookup core word
 		SymbolHash result = getSymbolsFromWord(coreWord, null, null, null);
 		if (result.size() == 0) {
@@ -639,8 +641,8 @@ public class Lexicon {
 
 	// get signs with additional args for a known special token const, target
 	// pred and target rel
-	private SymbolHash getSymbolsFromWord(Association w, String specialTokenConst, String targetPred,
-			String targetRel) throws LexException {
+	private SymbolHash getSymbolsFromWord(Association w, String specialTokenConst,
+			String targetPred, String targetRel) throws LexException {
 
 		Collection<MorphItem> morphItems = (specialTokenConst == null) ? (Collection<MorphItem>) _words
 				.get(w) : null;
@@ -670,8 +672,8 @@ public class Lexicon {
 
 	// given MorphItem
 	// TODO Understand and generalize construction of symbol hashes
-	private final void fillSymbolHash(Association w, MorphItem mi, String targetPred, String targetRel,
-			SymbolHash symbolHash) throws LexException {
+	private final void fillSymbolHash(Association w, MorphItem mi, String targetPred,
+			String targetRel, SymbolHash symbolHash) throws LexException {
 		// get supertags for filtering, if a supertagger is installed
 		Map<String, Double> supertags = null;
 		Set<String> supertagsFound = null;
@@ -1213,7 +1215,6 @@ public class Lexicon {
 	}
 
 	// default relation sort order
-	
 
 	/*
 	 * Accessor for words map

@@ -32,33 +32,33 @@ import opennlp.ccg.test.RegressionInfo;
 import opennlp.ccg.test.RegressionInfo.TestItem;
 import opennlp.ccg.util.Pair;
 
-/** 
- * A class implementing a variant of Hockenmaier's HWDep generative syntactic model, 
- * with additional postag variables.
- * Note that the top step is only used with complete derivations.
- * Also note that for simplicity there is no special treatment of rare words, and thus 
- * a single unknown word is used in the model, rather than one for each POS tag.
+/**
+ * A class implementing a variant of Hockenmaier's HWDep generative syntactic
+ * model, with additional postag variables. Note that the top step is only used
+ * with complete derivations. Also note that for simplicity there is no special
+ * treatment of rare words, and thus a single unknown word is used in the model,
+ * rather than one for each POS tag.
  * 
- * @author 	Michael White
- * @version	$Revision: 1.12 $, $Date: 2010/03/07 03:23:01 $
- */ 
+ * @author Michael White
+ * @version $Revision: 1.12 $, $Date: 2010/03/07 03:23:01 $
+ */
 public class GenerativeSyntacticModel implements FeatureExtractor, SymbolScorer {
 
 	/** Feature key. */
 	public static String genlogprobkey = "genlogprob";
-	
+
 	/** Expansion string constant. */
 	public static final String EXPANSION = "E";
-	
+
 	/** Left expansion string constant. */
 	public static final String LEFT = "left";
-	
+
 	/** Right expansion string constant. */
 	public static final String RIGHT = "right";
-	
+
 	/** Unary expansion string constant. */
 	public static final String UNARY = "unary";
-	
+
 	/** Leaf expansion string constant. */
 	public static final String LEAF = "leaf";
 
@@ -100,17 +100,20 @@ public class GenerativeSyntacticModel implements FeatureExtractor, SymbolScorer 
 
 	/** Derivation top string constant. */
 	public static final String TOP = "<top>";
-	
+
 	/**
 	 * Class for caching the model's log prob in a sign.
 	 */
 	public static class GenLogProb {
 		/** The log prob. */
 		public final double logprob;
+
 		/** Constructor. */
-		public GenLogProb(double logprob) { this.logprob = logprob; }
+		public GenLogProb(double logprob) {
+			this.logprob = logprob;
+		}
 	}
-	
+
 	/** The top step model. */
 	protected ConditionalProbabilityTable topModel;
 	/** The lexical step model. */
@@ -119,33 +122,34 @@ public class GenerativeSyntacticModel implements FeatureExtractor, SymbolScorer 
 	protected ConditionalProbabilityTable unaryModel;
 	/** The binary step model. */
 	protected ConditionalProbabilityTable binaryModel;
-	
+
 	/** Constructor with file names. */
-	public GenerativeSyntacticModel(String topModelFN, String leafModelFN, String unaryModelFN, String binaryModelFN) throws IOException {
+	public GenerativeSyntacticModel(String topModelFN, String leafModelFN, String unaryModelFN,
+			String binaryModelFN) throws IOException {
 		topModel = new ConditionalProbabilityTable(topModelFN);
 		leafModel = new ConditionalProbabilityTable(leafModelFN);
 		unaryModel = new ConditionalProbabilityTable(unaryModelFN);
 		binaryModel = new ConditionalProbabilityTable(binaryModelFN);
 	}
 
-    /** Flag for whether to show scoring breakdown. */
-    protected boolean debugScore = false;
-    
-    /** Sets the debug score flag, and propagates to component models. */
-    public void setDebug(boolean debugScore) { 
-    	this.debugScore = debugScore; 
-    	topModel.setDebug(debugScore);
-    	leafModel.setDebug(debugScore);
-    	unaryModel.setDebug(debugScore);
-    	binaryModel.setDebug(debugScore);
-    } 
-    
+	/** Flag for whether to show scoring breakdown. */
+	protected boolean debugScore = false;
+
+	/** Sets the debug score flag, and propagates to component models. */
+	public void setDebug(boolean debugScore) {
+		this.debugScore = debugScore;
+		topModel.setDebug(debugScore);
+		leafModel.setDebug(debugScore);
+		unaryModel.setDebug(debugScore);
+		binaryModel.setDebug(debugScore);
+	}
+
 	/** The alphabet. */
 	protected Alphabet alphabet = null;
 
 	/** Generative logprob feature. */
 	protected Alphabet.Feature genlogprobFeature = null;
-	
+
 	/** Sets the alphabet. */
 	public void setAlphabet(Alphabet alphabet) {
 		this.alphabet = alphabet;
@@ -153,221 +157,300 @@ public class GenerativeSyntacticModel implements FeatureExtractor, SymbolScorer 
 		keys.add(genlogprobkey);
 		genlogprobFeature = alphabet.closed() ? alphabet.index(keys) : alphabet.add(keys);
 	}
-	
+
 	/** Returns the features for the given sign and completeness flag. */
 	public FeatureVector extractFeatures(Symbol sign, boolean complete) {
 		return genLogProbVector((float) logprob(sign, complete));
 	}
-	
+
 	/** Returns a feature vector with the given gen log prob. */
 	protected FeatureVector genLogProbVector(float logprob) {
 		FeatureList retval = new FeatureList(1);
-		if (genlogprobFeature != null) retval.add(genlogprobFeature, logprob);
+		if (genlogprobFeature != null)
+			retval.add(genlogprobFeature, logprob);
 		return retval;
 	}
-	
-	/** Derivation handler for getting the log prob for each derivation step as a sum. */
+
+	/**
+	 * Derivation handler for getting the log prob for each derivation step as a
+	 * sum.
+	 */
 	public class LogProbGetter extends DerivationHandler<Double> {
 		// reusable list of pairs
-		private List<Pair<String,String>> pairs = new ArrayList<Pair<String,String>>(); 
+		private List<Pair<String, String>> pairs = new ArrayList<Pair<String, String>>();
+
 		private String listPairs() {
 			StringBuffer sb = new StringBuffer();
-			for (Pair<String,String> pair : pairs) sb.append(pair.a).append('-').append(pair.b).append(' ');
+			for (Pair<String, String> pair : pairs)
+				sb.append(pair.a).append('-').append(pair.b).append(' ');
 			return sb.toString();
 		}
+
 		/** Checks for cached value. */
 		public Double checkCache(Symbol sign) {
 			GenLogProb glp = (GenLogProb) sign.getData(GenLogProb.class);
 			return (glp == null) ? null : glp.logprob;
 		}
+
 		/** Caches the total. */
 		public void cache(Symbol sign, Double total) {
 			sign.addData(new GenLogProb(total));
 		}
+
 		/** Top step. */
 		public Double topStep(Symbol sign) {
-			pairs.clear(); addTopFactors(sign, pairs); 
-			if (debugScore) System.out.println("[topStep] " + listPairs());
+			pairs.clear();
+			addTopFactors(sign, pairs);
+			if (debugScore)
+				System.out.println("[topStep] " + listPairs());
 			return topModel.logprob(pairs) + handleDerivation(sign);
 		}
+
 		/** Lexical step. */
 		public Double lexStep(Symbol sign) {
-			pairs.clear(); addLexFactors(sign, pairs); 
-			if (debugScore) System.out.println("[lexStep] " + listPairs());
-			return leafModel.logprob(pairs); 
+			pairs.clear();
+			addLexFactors(sign, pairs);
+			if (debugScore)
+				System.out.println("[lexStep] " + listPairs());
+			return leafModel.logprob(pairs);
 		}
+
 		/** Unary step. */
 		public Double unaryStep(Symbol sign, Symbol headChild) {
-			pairs.clear(); addUnaryFactors(sign, pairs, headChild);
-			if (debugScore) System.out.println("[unaryStep] " + listPairs());
+			pairs.clear();
+			addUnaryFactors(sign, pairs, headChild);
+			if (debugScore)
+				System.out.println("[unaryStep] " + listPairs());
 			return unaryModel.logprob(pairs) + handleDerivation(headChild);
 		}
+
 		/** Binary step. */
 		public Double binaryStep(Symbol sign, boolean left, Symbol headChild, Symbol siblingChild) {
-			pairs.clear(); addBinaryFactors(sign, pairs, left, headChild, siblingChild); 
-			if (debugScore) System.out.println("[binaryStep] " + listPairs());
-			return binaryModel.logprob(pairs) + handleDerivation(headChild) + handleDerivation(siblingChild);
+			pairs.clear();
+			addBinaryFactors(sign, pairs, left, headChild, siblingChild);
+			if (debugScore)
+				System.out.println("[binaryStep] " + listPairs());
+			return binaryModel.logprob(pairs) + handleDerivation(headChild)
+					+ handleDerivation(siblingChild);
 		}
 	}
-	
-	/** Derivation handler for getting the factors for each derivation step as a list of words. */
+
+	/**
+	 * Derivation handler for getting the factors for each derivation step as a
+	 * list of words.
+	 */
 	public static class FactorsGetter extends DerivationHandler<Void> {
 		/** The factors. */
 		public List<Association> factors = new ArrayList<Association>();
 		// reusable list of pairs
-		private List<Pair<String,String>> pairs = null;
+		private List<Pair<String, String>> pairs = null;
+
 		// new pairs
-		private void newPairs() { pairs = new ArrayList<Pair<String,String>>(); }
+		private void newPairs() {
+			pairs = new ArrayList<Pair<String, String>>();
+		}
+
 		// adds new word for pairs to result
-		private void addPairs() { factors.add(new ListPairWord(pairs)); }
+		private void addPairs() {
+			factors.add(new ListPairWord(pairs));
+		}
+
 		/** Top step. */
 		public Void topStep(Symbol sign) {
-			newPairs(); addTopFactors(sign, pairs); addPairs(); 
-			handleDerivation(sign); return null;
+			newPairs();
+			addTopFactors(sign, pairs);
+			addPairs();
+			handleDerivation(sign);
+			return null;
 		}
+
 		/** Lexical step. */
 		public Void lexStep(Symbol sign) {
-			newPairs(); addLexFactors(sign, pairs); addPairs(); return null;
+			newPairs();
+			addLexFactors(sign, pairs);
+			addPairs();
+			return null;
 		}
+
 		/** Unary step. */
 		public Void unaryStep(Symbol sign, Symbol headChild) {
-			newPairs(); addUnaryFactors(sign, pairs, headChild); addPairs(); 
-			handleDerivation(headChild); return null;
+			newPairs();
+			addUnaryFactors(sign, pairs, headChild);
+			addPairs();
+			handleDerivation(headChild);
+			return null;
 		}
+
 		/** Binary step. */
 		public Void binaryStep(Symbol sign, boolean left, Symbol headChild, Symbol siblingChild) {
-			newPairs(); addBinaryFactors(sign, pairs, left, headChild, siblingChild); addPairs(); 
-			handleDerivation(headChild); handleDerivation(siblingChild); return null;
+			newPairs();
+			addBinaryFactors(sign, pairs, left, headChild, siblingChild);
+			addPairs();
+			handleDerivation(headChild);
+			handleDerivation(siblingChild);
+			return null;
 		}
 	}
-	
+
 	/** Returns the probability of the derivation according to the models. */
 	public double score(Symbol sign, boolean complete) {
 		return NgramScorer.convertToProb(logprob(sign, complete));
 	}
-	
+
 	/** Returns the log probability of the derivation according to the models. */
 	public double logprob(Symbol sign, boolean complete) {
 		LogProbGetter lpgetter = new LogProbGetter();
-		if (complete) return lpgetter.handleCompleteDerivation(sign);
-		else return lpgetter.handleDerivation(sign);
+		if (complete)
+			return lpgetter.handleCompleteDerivation(sign);
+		else
+			return lpgetter.handleDerivation(sign);
 	}
-	
-	/** Returns the factors from the derivation of the given sign (assumed to be complete). */
+
+	/**
+	 * Returns the factors from the derivation of the given sign (assumed to be
+	 * complete).
+	 */
 	public static List<Association> getFactors(Symbol sign) {
 		FactorsGetter fgetter = new FactorsGetter();
 		fgetter.handleCompleteDerivation(sign);
 		return fgetter.factors;
 	}
-	
+
 	/** Adds the factors for the top step in the derivation of the given sign. */
-	public static void addTopFactors(Symbol sign, List<Pair<String,String>> pairs) {
-		pairs.add(new Pair<String,String>(EXPANSION, TOP));
-		pairs.add(new Pair<String,String>(PARENT, TOP));
-		pairs.add(new Pair<String,String>(LEXCAT_PARENT, TOP));
-		pairs.add(new Pair<String,String>(WORD_PARENT, TOP));
-		pairs.add(new Pair<String,String>(HEAD, sign.getSupertag()));
+	public static void addTopFactors(Symbol sign, List<Pair<String, String>> pairs) {
+		pairs.add(new Pair<String, String>(EXPANSION, TOP));
+		pairs.add(new Pair<String, String>(PARENT, TOP));
+		pairs.add(new Pair<String, String>(LEXCAT_PARENT, TOP));
+		pairs.add(new Pair<String, String>(WORD_PARENT, TOP));
+		pairs.add(new Pair<String, String>(HEAD, sign.getSupertag()));
 		Symbol lexHead = sign.getLexHead();
-		pairs.add(new Pair<String,String>(LEXCAT_TOP, lexHead.getSupertag()));
-		pairs.add(new Pair<String,String>(POS_TOP, lexHead.getPOS()));
-		pairs.add(new Pair<String,String>(WORD_TOP, lexHead.getWordForm()));
+		pairs.add(new Pair<String, String>(LEXCAT_TOP, lexHead.getSupertag()));
+		pairs.add(new Pair<String, String>(POS_TOP, lexHead.getPOS()));
+		pairs.add(new Pair<String, String>(WORD_TOP, lexHead.getWordForm()));
 	}
-	
+
 	/** Adds the factors for a lexical step in the derivation of the given sign. */
-	public static void addLexFactors(Symbol sign, List<Pair<String,String>> pairs) {
-		pairs.add(new Pair<String,String>(EXPANSION, LEAF));
+	public static void addLexFactors(Symbol sign, List<Pair<String, String>> pairs) {
+		pairs.add(new Pair<String, String>(EXPANSION, LEAF));
 		addParentFactors(sign, pairs);
 	}
-	
+
 	/** Adds the parent factors for a step in the derivation of the given sign. */
-	public static void addParentFactors(Symbol sign, List<Pair<String,String>> pairs) {
-		pairs.add(new Pair<String,String>(PARENT, sign.getSupertag()));
+	public static void addParentFactors(Symbol sign, List<Pair<String, String>> pairs) {
+		pairs.add(new Pair<String, String>(PARENT, sign.getSupertag()));
 		Symbol lexHead = sign.getLexHead();
-		pairs.add(new Pair<String,String>(LEXCAT_PARENT, lexHead.getSupertag()));
-		pairs.add(new Pair<String,String>(POS_PARENT, lexHead.getPOS()));
-		pairs.add(new Pair<String,String>(WORD_PARENT, lexHead.getWordForm()));
+		pairs.add(new Pair<String, String>(LEXCAT_PARENT, lexHead.getSupertag()));
+		pairs.add(new Pair<String, String>(POS_PARENT, lexHead.getPOS()));
+		pairs.add(new Pair<String, String>(WORD_PARENT, lexHead.getWordForm()));
 	}
-	
-	/** Returns the factors for a unary step in the derivation of the given sign. */
-	public static void addUnaryFactors(Symbol sign, List<Pair<String,String>> pairs, Symbol headChild) {
-		pairs.add(new Pair<String,String>(EXPANSION, UNARY));
+
+	/**
+	 * Returns the factors for a unary step in the derivation of the given sign.
+	 */
+	public static void addUnaryFactors(Symbol sign, List<Pair<String, String>> pairs,
+			Symbol headChild) {
+		pairs.add(new Pair<String, String>(EXPANSION, UNARY));
 		addParentFactors(sign, pairs);
-		pairs.add(new Pair<String,String>(HEAD, headChild.getSupertag()));
+		pairs.add(new Pair<String, String>(HEAD, headChild.getSupertag()));
 	}
-	
-	/** Returns the factors for a binary step in the derivation of the given sign. */
-	public static void addBinaryFactors(Symbol sign, List<Pair<String,String>> pairs, boolean left, Symbol headChild, Symbol siblingChild) {
-		pairs.add(new Pair<String,String>(EXPANSION, (left) ? LEFT : RIGHT));
+
+	/**
+	 * Returns the factors for a binary step in the derivation of the given
+	 * sign.
+	 */
+	public static void addBinaryFactors(Symbol sign, List<Pair<String, String>> pairs,
+			boolean left, Symbol headChild, Symbol siblingChild) {
+		pairs.add(new Pair<String, String>(EXPANSION, (left) ? LEFT : RIGHT));
 		addParentFactors(sign, pairs);
-		pairs.add(new Pair<String,String>(HEAD, headChild.getSupertag()));
-		pairs.add(new Pair<String,String>(SIBLING, siblingChild.getSupertag()));
+		pairs.add(new Pair<String, String>(HEAD, headChild.getSupertag()));
+		pairs.add(new Pair<String, String>(SIBLING, siblingChild.getSupertag()));
 		Symbol siblingLexHead = siblingChild.getLexHead();
-		pairs.add(new Pair<String,String>(LEXCAT_SIBLING, siblingLexHead.getSupertag()));
-		pairs.add(new Pair<String,String>(POS_SIBLING, siblingLexHead.getPOS()));
-		pairs.add(new Pair<String,String>(WORD_SIBLING, siblingLexHead.getWordForm()));
+		pairs.add(new Pair<String, String>(LEXCAT_SIBLING, siblingLexHead.getSupertag()));
+		pairs.add(new Pair<String, String>(POS_SIBLING, siblingLexHead.getPOS()));
+		pairs.add(new Pair<String, String>(WORD_SIBLING, siblingLexHead.getWordForm()));
 	}
-	
-    /** Tests loading and scoring. */
-    public static void main(String[] args) throws IOException {
-        
-    	String argstr = "(-dir <modeldir>) (-g <grammarfile>) (-t <testbedfile>) (-verbose)";
-        String usage = "Usage: java opennlp.ccg.synsem.GenerativeSyntacticModel " + argstr;
-        
-        if (args.length > 0 && args[0].equals("-h")) {
-            System.out.println(usage);
-            System.exit(0);
-        }
-        
-        String dir = ".", topfn = "top.flm", leaffn = "leaf.flm", unaryfn = "unary.flm", binaryfn = "binary.flm";
-        String grammarfn = "grammar.xml", tbfn = "testbed.xml";
-        boolean verbose = false;
-        
-        for (int i=0; i < args.length; i++) {
-        	if (args[i].equals("-dir")) { dir = args[++i]; continue; }
-        	if (args[i].equals("-g")) { grammarfn = args[++i]; continue; }
-        	if (args[i].equals("-t")) { tbfn = args[++i]; continue; }
-        	if (args[i].equals("-v") || args[i].equals("-verbose")) { verbose = true; continue; }
-        	System.out.println("Unrecognized option: " + args[i]);
-        }
-        
-        // load grammar
-        URL grammarURL = new File(grammarfn).toURI().toURL();
-        System.out.println("Loading grammar from URL: " + grammarURL);
-        Grammar grammar = new Grammar(grammarURL);
-        
-        // load model
-        System.out.println("Loading syntactic model from: " + dir);
-        topfn = dir + "/" + topfn; leaffn = dir + "/" + leaffn; unaryfn = dir + "/" + unaryfn; binaryfn = dir + "/" + binaryfn;
-        GenerativeSyntacticModel model = new GenerativeSyntacticModel(topfn, leaffn, unaryfn, binaryfn);
-        if (verbose) model.setDebug(true);
-        
-    	// score saved signs
-    	double logprobttotal = 0.0;
-    	int numsents = 0;
-    	for (File f : Regression.getXMLFiles(new File(tbfn))) {
-            // load testfile
-        	System.out.println("Loading: " + f.getName());
-            RegressionInfo rinfo = new RegressionInfo(grammar, f);
-            // do each item
-	    	for (int i=0; i < rinfo.numberOfItems(); i++) {
-	    		TestItem item = rinfo.getItem(i);
-	    		if (item.numOfParses == 0) continue;
-	    		numsents++;
-	    		if (verbose) System.out.println("scoring: " + item.sentence);
-	    		else System.out.print(".");
-	    		Symbol sign = item.sign;
-	            double logprob = model.logprob(sign, true);
-	            logprobttotal += logprob;
-	            if (verbose) {
-		    		System.out.println(sign.getDerivationHistory().toString());
-		            System.out.println("logprob: " + logprob);
-	            }
-	    	}
-	    	System.out.println();
-    	}
-    	
-    	// totals
-    	System.out.println("total logprob: " + logprobttotal);
-    	System.out.println("logprob per sentence: " + (logprobttotal / numsents));
-    }
+
+	/** Tests loading and scoring. */
+	public static void main(String[] args) throws IOException {
+
+		String argstr = "(-dir <modeldir>) (-g <grammarfile>) (-t <testbedfile>) (-verbose)";
+		String usage = "Usage: java opennlp.ccg.synsem.GenerativeSyntacticModel " + argstr;
+
+		if (args.length > 0 && args[0].equals("-h")) {
+			System.out.println(usage);
+			System.exit(0);
+		}
+
+		String dir = ".", topfn = "top.flm", leaffn = "leaf.flm", unaryfn = "unary.flm", binaryfn = "binary.flm";
+		String grammarfn = "grammar.xml", tbfn = "testbed.xml";
+		boolean verbose = false;
+
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].equals("-dir")) {
+				dir = args[++i];
+				continue;
+			}
+			if (args[i].equals("-g")) {
+				grammarfn = args[++i];
+				continue;
+			}
+			if (args[i].equals("-t")) {
+				tbfn = args[++i];
+				continue;
+			}
+			if (args[i].equals("-v") || args[i].equals("-verbose")) {
+				verbose = true;
+				continue;
+			}
+			System.out.println("Unrecognized option: " + args[i]);
+		}
+
+		// load grammar
+		URL grammarURL = new File(grammarfn).toURI().toURL();
+		System.out.println("Loading grammar from URL: " + grammarURL);
+		Grammar grammar = new Grammar(grammarURL);
+
+		// load model
+		System.out.println("Loading syntactic model from: " + dir);
+		topfn = dir + "/" + topfn;
+		leaffn = dir + "/" + leaffn;
+		unaryfn = dir + "/" + unaryfn;
+		binaryfn = dir + "/" + binaryfn;
+		GenerativeSyntacticModel model = new GenerativeSyntacticModel(topfn, leaffn, unaryfn,
+				binaryfn);
+		if (verbose)
+			model.setDebug(true);
+
+		// score saved signs
+		double logprobttotal = 0.0;
+		int numsents = 0;
+		for (File f : Regression.getXMLFiles(new File(tbfn))) {
+			// load testfile
+			System.out.println("Loading: " + f.getName());
+			RegressionInfo rinfo = new RegressionInfo(grammar, f);
+			// do each item
+			for (int i = 0; i < rinfo.numberOfItems(); i++) {
+				TestItem item = rinfo.getItem(i);
+				if (item.numOfParses == 0)
+					continue;
+				numsents++;
+				if (verbose)
+					System.out.println("scoring: " + item.sentence);
+				else
+					System.out.print(".");
+				Symbol sign = item.sign;
+				double logprob = model.logprob(sign, true);
+				logprobttotal += logprob;
+				if (verbose) {
+					System.out.println(sign.getDerivationHistory().toString());
+					System.out.println("logprob: " + logprob);
+				}
+			}
+			System.out.println();
+		}
+
+		// totals
+		System.out.println("total logprob: " + logprobttotal);
+		System.out.println("logprob per sentence: " + (logprobttotal / numsents));
+	}
 }

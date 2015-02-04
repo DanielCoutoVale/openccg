@@ -44,70 +44,67 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-
 /**
  * Abstract class to provide functionality for applying XSLT to an XML stream.
  * <p>
  * This class is designed to be run as a task from within an Ant build file.
- * There is one concrete implementer for each of the separate tasks of 
+ * There is one concrete implementer for each of the separate tasks of
  * converting the CCGBank and extracting a grammar for the converted corpus.
+ * 
  * @author <a href="http://www.ling.osu.edu/~scott/">Scott Martin</a>
  * @version $Revision: 1.5 $
  * @see CCGBankConvert
  * @see CCGBankExtract
  * @see <a href="http://ant.apache.org/">Ant home page</a>
  */
-public abstract class CCGBankTask extends Task
-		implements TaskContainer,ErrorHandler,ErrorListener {
-	
+public abstract class CCGBankTask extends Task implements TaskContainer, ErrorHandler,
+		ErrorListener {
+
 	File target;
-	Set<CCGBankTaskSources> ccgBankTaskSources
-		= new HashSet<CCGBankTaskSources>();
-	List<CCGBankTaskTemplates> ccgBankTaskTemplates
-		= new ArrayList<CCGBankTaskTemplates>();
+	Set<CCGBankTaskSources> ccgBankTaskSources = new HashSet<CCGBankTaskSources>();
+	List<CCGBankTaskTemplates> ccgBankTaskTemplates = new ArrayList<CCGBankTaskTemplates>();
 	XSLTProcessor xsltProcessor = null;
-	
+
 	boolean useXMLFilter = true;
 	boolean terminateOnError = true, terminateOnWarning = false;
-		
+
 	/**
 	 * Counters
 	 */
 	int directoriesProcessed, filesProcessed, warnings, errors;
-	
-	
+
 	/**
 	 * Adds a sub-task, but included here only for binary compatibility.
-	 * @throws BuildException Always throws an exception, only
-	 * sourcesSet or xsltProcessors can be added to this task.
+	 * 
+	 * @throws BuildException Always throws an exception, only sourcesSet or
+	 *             xsltProcessors can be added to this task.
 	 */
 	public void addTask(Task task) {
 		throw new BuildException("nested task \"" + task.getTaskName()
 				+ "\" not supported, only sourcesSet or xsltProcessors");
 	}
 
-	
 	/**
 	 * Sets the target directory.
-	 * @param target The location of the result of the XSLT conversion (the 
-	 * converted corpus, extracted grammar, etc.).
-	 * @throws BuildException If the target is <code>null</code>
-	 * or not a directory.
+	 * 
+	 * @param target The location of the result of the XSLT conversion (the
+	 *            converted corpus, extracted grammar, etc.).
+	 * @throws BuildException If the target is <code>null</code> or not a
+	 *             directory.
 	 */
 	public void setTarget(File target) {
 		this.target = target;
-		
-		if(target == null) {
+
+		if (target == null) {
 			throw new BuildException("no target specified");
 		}
-		if(!target.exists()) {
+		if (!target.exists()) {
 			target.mkdirs();
-		}
-		else if(!target.isDirectory()) {
+		} else if (!target.isDirectory()) {
 			throw new BuildException("specified target is not a directory");
 		}
 	}
-	
+
 	/**
 	 * @param terminateOnError the terminateOnError to set
 	 */
@@ -115,8 +112,6 @@ public abstract class CCGBankTask extends Task
 		this.terminateOnError = terminateOnError;
 	}
 
-
-	
 	/**
 	 * @param terminateOnWarning the terminateOnWarning to set
 	 */
@@ -124,7 +119,6 @@ public abstract class CCGBankTask extends Task
 		this.terminateOnWarning = terminateOnWarning;
 	}
 
-	
 	/**
 	 * @param useXMLFilter the useXMLFilter to set
 	 */
@@ -132,15 +126,13 @@ public abstract class CCGBankTask extends Task
 		this.useXMLFilter = useXMLFilter;
 	}
 
-
 	/**
 	 * Adds a file set of source files.
 	 */
 	public void addConfiguredSources(CCGBankTaskSources sources) {
 		ccgBankTaskSources.add(sources);
 	}
-	
-	
+
 	/**
 	 * Adds a series of xsltProcessors for XSLT transformation.
 	 */
@@ -148,54 +140,47 @@ public abstract class CCGBankTask extends Task
 		ccgBankTaskTemplates.add(templates);
 	}
 
-	
 	/**
 	 * Hook to be overridden by subclasses that want notification of the start
 	 * of the transformation process.
 	 */
-	protected void start() throws BuildException {		
-		// to be overridden
-	}
-	
-	
-	/**
-	 * Hook to be overridden by subclasses that want notification of the end
-	 * of the transformation process.
-	 */
-	protected void finish() throws BuildException {		
+	protected void start() throws BuildException {
 		// to be overridden
 	}
 
-	
+	/**
+	 * Hook to be overridden by subclasses that want notification of the end of
+	 * the transformation process.
+	 */
+	protected void finish() throws BuildException {
+		// to be overridden
+	}
+
 	/**
 	 * Hook that lets subclasses be notified when processing starts on a new
 	 * directory.
+	 * 
 	 * @param section The file (directory) on which processing is starting.
 	 */
-	protected void nextDirectory(File section)
-			throws BuildException {		
+	protected void nextDirectory(File section) throws BuildException {
 		// to be overridden
-	} 
-	
+	}
 
 	/**
-	 * Hook that lets implementing subclasses know when processing starts on
-	 * a new file.
+	 * Hook that lets implementing subclasses know when processing starts on a
+	 * new file.
+	 * 
 	 * @param file The file on which processing is about to start.
 	 * @return The input source to process.
 	 */
 	protected InputSource nextFile(File file) throws BuildException {
 		try {
-			return new InputSource(
-					new BufferedInputStream(new FileInputStream(file)));
-		}
-		catch(FileNotFoundException fnfe) {
-			throw new BuildException("Unable to find file " + file,
-					fnfe, getLocation());
+			return new InputSource(new BufferedInputStream(new FileInputStream(file)));
+		} catch (FileNotFoundException fnfe) {
+			throw new BuildException("Unable to find file " + file, fnfe, getLocation());
 		}
 	}
-	
-	
+
 	/**
 	 * Required by {@link ErrorHandler}. Reports the specified error using the
 	 * Ant task {@link Task#log(String)} method.
@@ -205,7 +190,6 @@ public abstract class CCGBankTask extends Task
 		handleError("Error", exception, terminateOnError);
 	}
 
-	
 	/**
 	 * Required by {@link ErrorHandler}. Reports the specified error using the
 	 * Ant task {@link Task#log(String)} method.
@@ -215,7 +199,6 @@ public abstract class CCGBankTask extends Task
 		handleError("Fatal error", exception, terminateOnError);
 	}
 
-	
 	/**
 	 * Required by {@link ErrorHandler}. Reports the specified error using the
 	 * Ant task {@link Task#log(String)} method.
@@ -224,8 +207,7 @@ public abstract class CCGBankTask extends Task
 		warnings++;
 		handleError("Warning", exception, terminateOnWarning);
 	}
-	
-	
+
 	/**
 	 * Required by {@link ErrorListener}. Reports the specified error using the
 	 * Ant task {@link Task#log(String)} method.
@@ -235,7 +217,6 @@ public abstract class CCGBankTask extends Task
 		handleError("Error", exception, terminateOnError);
 	}
 
-	
 	/**
 	 * Required by {@link ErrorListener}. Reports the specified error using the
 	 * Ant task {@link Task#log(String)} method.
@@ -245,7 +226,6 @@ public abstract class CCGBankTask extends Task
 		handleError("Fatal error", exception, terminateOnError);
 	}
 
-	
 	/**
 	 * Required by {@link ErrorListener}. Reports the specified error using the
 	 * Ant task {@link Task#log(String)} method.
@@ -255,7 +235,6 @@ public abstract class CCGBankTask extends Task
 		handleError("Warning", exception, terminateOnWarning);
 	}
 
-	
 	/**
 	 * Helper method for the methods required by {@link ErrorHandler}.
 	 */
@@ -269,101 +248,94 @@ public abstract class CCGBankTask extends Task
 		sb.append(spe.getColumnNumber());
 		sb.append(": ");
 		sb.append(spe.getMessage());
-		
-		if(!terminate) {
+
+		if (!terminate) {
 			log(sb.toString());
-		}
-		else {
+		} else {
 			throw new BuildException(sb.toString(), spe, getLocation());
 		}
 	}
-	
-	
+
 	/**
 	 * Helper method for the methods required by {@link ErrorListener}.
 	 */
-	void handleError(String prefix, TransformerException te,
-			boolean terminate) {
+	void handleError(String prefix, TransformerException te, boolean terminate) {
 		StringBuilder sb = new StringBuilder(prefix);
 		sb.append(": problem in transform: ");
 		sb.append(te.getMessageAndLocation());
-		
-		if(!terminate) {
+
+		if (!terminate) {
 			log(sb.toString());
-		}
-		else {
+		} else {
 			throw new BuildException(sb.toString(), te, getLocation());
 		}
 	}
-	
-	
+
 	/**
 	 * Does the work of transforming the CCGBank and extracting grammars.
-	 * @throws BuildException In case no sourcesSet have been specified or an 
-	 * error occurs during the transformation process.
-	 * <p>
-	 * This method calls {@link #start()}, {@link #finish()},
-	 * {@link #nextDirectory(File)}, and {@link #nextFile(File)} as required.
+	 * 
+	 * @throws BuildException In case no sourcesSet have been specified or an
+	 *             error occurs during the transformation process.
+	 *             <p>
+	 *             This method calls {@link #start()}, {@link #finish()},
+	 *             {@link #nextDirectory(File)}, and {@link #nextFile(File)} as
+	 *             required.
 	 */
 	@Override
 	public void execute() throws BuildException {
-		if(ccgBankTaskSources.isEmpty()) {
+		if (ccgBankTaskSources.isEmpty()) {
 			throw new BuildException("no sourcesSet specified");
 		}
-				
+
 		filesProcessed = directoriesProcessed = warnings = errors = 0;
-		
+
 		start();
 		log("Target: " + target);
-		
-		if(xsltProcessor == null) { // should have been configured
+
+		if (xsltProcessor == null) { // should have been configured
 			throw new BuildException("null XSLT processor");
 		}
-		
+
 		xsltProcessor.addAllTemplates(ccgBankTaskTemplates);
-		
+
 		try {
-			for(CCGBankTaskSources sources : ccgBankTaskSources) {
+			for (CCGBankTaskSources sources : ccgBankTaskSources) {
 				File prevDir = null;
 				File currentDir = null;
-				
-				for(File file : sources) {
+
+				for (File file : sources) {
 					currentDir = file.getParentFile();
-					if(!currentDir.equals(prevDir)) {
+					if (!currentDir.equals(prevDir)) {
 						log("Processing " + currentDir + " ...");
 						directoriesProcessed++;
-						
+
 						nextDirectory(currentDir);
 					}
-					
+
 					prevDir = currentDir;
-					
+
 					log("Processing " + file);
 					filesProcessed++;
-					
+
 					xsltProcessor.process(nextFile(file));
 				}
 			}
-		}
-		catch(IOException io) {
-			throw new BuildException("I/O problem during processing: " + 
-				io.getMessage(), io, getLocation());
-		}
-		catch(SAXException se) {
-			throw new BuildException("Problem during processing: " + 
-					se.getMessage(), se, getLocation());
-		}
-		catch(TransformerException te) {
-			throw new BuildException("I/O problem during processing: " + 
-					te.getMessageAndLocation(), te, getLocation());
-		}
-		catch (TokenMgrError te) {
-			throw new BuildException("I/O problem during processing: " + 
-					te.getMessage(), te, getLocation());
-		}
-		finally {
+		} catch (IOException io) {
+			throw new BuildException("I/O problem during processing: " + io.getMessage(), io,
+					getLocation());
+		} catch (SAXException se) {
+			throw new BuildException("Problem during processing: " + se.getMessage(), se,
+					getLocation());
+		} catch (TransformerException te) {
+			throw new BuildException(
+					"I/O problem during processing: " + te.getMessageAndLocation(), te,
+					getLocation());
+		} catch (TokenMgrError te) {
+			throw new BuildException("I/O problem during processing: " + te.getMessage(), te,
+					getLocation());
+		} finally {
 			finish();
-			
+
 			StringBuilder sb = new StringBuilder("Processed ");
 			sb.append(filesProcessed);
 			sb.append(" files in ");
@@ -371,16 +343,16 @@ public abstract class CCGBankTask extends Task
 			sb.append(" directories with ");
 			sb.append(errors);
 			sb.append(" error");
-			if(errors != 1) {
+			if (errors != 1) {
 				sb.append('s');
 			}
 			sb.append(" and ");
 			sb.append(warnings);
 			sb.append(" warning");
-			if(warnings != 1) {
+			if (warnings != 1) {
 				sb.append('s');
 			}
-			
+
 			log(sb.toString());
 		}
 	}

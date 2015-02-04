@@ -25,11 +25,11 @@ import java.text.NumberFormat;
 import java.util.*;
 
 /**
- * A class implementing LF scoring in terms of recall and precision 
- * of elementary predications.
+ * A class implementing LF scoring in terms of recall and precision of
+ * elementary predications.
  *
- * @author      Michael White
- * @version     $Revision: 1.5 $, $Date: 2010/11/15 03:21:12 $
+ * @author Michael White
+ * @version $Revision: 1.5 $, $Date: 2010/11/15 03:21:12 $
  **/
 public class EPsScorer {
 
@@ -47,27 +47,28 @@ public class EPsScorer {
 		public double unlabeledDepsRecall = 0.0;
 		public double unlabeledDepsPrecision = 0.0;
 		public double unlabeledDepsFscore = 0.0;
+
 		// display
 		public String toString() {
-			return "fscore: " + nf.format(fscore) + 
-				"  recall: " + nf.format(recall) + 
-				"  precision: " + nf.format(precision) + 
-				"  deps fscore: " + nf.format(depsFscore) + 
-				"  deps recall: " + nf.format(depsRecall) + 
-				"  deps precision: " + nf.format(depsPrecision) +
-				"  unlabeled deps fscore: " + nf.format(unlabeledDepsFscore) + 
-				"  unlabeled deps recall: " + nf.format(unlabeledDepsRecall) + 
-				"  unlabeled deps precision: " + nf.format(unlabeledDepsPrecision);
+			return "fscore: " + nf.format(fscore) + "  recall: " + nf.format(recall)
+					+ "  precision: " + nf.format(precision) + "  deps fscore: "
+					+ nf.format(depsFscore) + "  deps recall: " + nf.format(depsRecall)
+					+ "  deps precision: " + nf.format(depsPrecision) + "  unlabeled deps fscore: "
+					+ nf.format(unlabeledDepsFscore) + "  unlabeled deps recall: "
+					+ nf.format(unlabeledDepsRecall) + "  unlabeled deps precision: "
+					+ nf.format(unlabeledDepsPrecision);
 		}
-	    // formats to four decimal places
-	    private static final NumberFormat nf = initNF();
-	    private static NumberFormat initNF() { 
-	        NumberFormat f = NumberFormat.getInstance();
-	        f.setMinimumIntegerDigits(1);
-	        f.setMinimumFractionDigits(1);
-	        f.setMaximumFractionDigits(4);
-	        return f;
-	    }
+
+		// formats to four decimal places
+		private static final NumberFormat nf = initNF();
+
+		private static NumberFormat initNF() {
+			NumberFormat f = NumberFormat.getInstance();
+			f.setMinimumIntegerDigits(1);
+			f.setMinimumFractionDigits(1);
+			f.setMaximumFractionDigits(4);
+			return f;
+		}
 	}
 
 	/**
@@ -80,15 +81,17 @@ public class EPsScorer {
 		Set<SatOp> epsSet = new HashSet<SatOp>(eps);
 		Set<SatOp> goldEPsSet = new HashSet<SatOp>(goldEPs);
 		// get unlabeled deps
-		Set<Pair<Nominal,Nominal>> unlabeledDepsSet = new HashSet<Pair<Nominal,Nominal>>();
-		Set<Pair<Nominal,Nominal>> goldUnlabeledDepsSet = new HashSet<Pair<Nominal,Nominal>>();
+		Set<Pair<Nominal, Nominal>> unlabeledDepsSet = new HashSet<Pair<Nominal, Nominal>>();
+		Set<Pair<Nominal, Nominal>> goldUnlabeledDepsSet = new HashSet<Pair<Nominal, Nominal>>();
 		for (SatOp ep : eps) {
-			Pair<Nominal,Nominal> dep = getDep(ep);
-			if (dep != null) unlabeledDepsSet.add(dep);
+			Pair<Nominal, Nominal> dep = getDep(ep);
+			if (dep != null)
+				unlabeledDepsSet.add(dep);
 		}
 		for (SatOp ep : goldEPs) {
-			Pair<Nominal,Nominal> dep = getDep(ep);
-			if (dep != null) goldUnlabeledDepsSet.add(dep);
+			Pair<Nominal, Nominal> dep = getDep(ep);
+			if (dep != null)
+				goldUnlabeledDepsSet.add(dep);
 		}
 		// calc recall
 		Results retval = new Results();
@@ -98,9 +101,11 @@ public class EPsScorer {
 			boolean isdep = HyloHelper.getInstance().isRelPred(ep);
 			if (epsSet.contains(ep)) {
 				recalled++;
-				if (isdep) depsRecalled++;
+				if (isdep)
+					depsRecalled++;
 			}
-			if (isdep && unlabeledDepsSet.contains(getDep(ep))) unlabeledDepsRecalled++;
+			if (isdep && unlabeledDepsSet.contains(getDep(ep)))
+				unlabeledDepsRecalled++;
 		}
 		retval.recall = 1.0 * recalled / goldEPs.size();
 		retval.depsRecall = (goldDeps > 0) ? 1.0 * depsRecalled / goldDeps : 1.0;
@@ -112,9 +117,11 @@ public class EPsScorer {
 			boolean isdep = HyloHelper.getInstance().isRelPred(ep);
 			if (goldEPsSet.contains(ep)) {
 				precise++;
-				if (isdep) depsPrecise++;
+				if (isdep)
+					depsPrecise++;
 			}
-			if (isdep && goldUnlabeledDepsSet.contains(getDep(ep))) unlabeledDepsPrecise++;
+			if (isdep && goldUnlabeledDepsSet.contains(getDep(ep)))
+				unlabeledDepsPrecise++;
 		}
 		retval.precision = 1.0 * precise / eps.size();
 		retval.depsPrecision = (lfDeps > 0) ? 1.0 * depsPrecise / lfDeps : 1.0;
@@ -122,27 +129,32 @@ public class EPsScorer {
 		// calc f-score
 		retval.fscore = fscore(retval.recall, retval.precision);
 		retval.depsFscore = fscore(retval.depsRecall, retval.depsPrecision);
-		retval.unlabeledDepsFscore = fscore(retval.unlabeledDepsRecall, retval.unlabeledDepsPrecision);
+		retval.unlabeledDepsFscore = fscore(retval.unlabeledDepsRecall,
+				retval.unlabeledDepsPrecision);
 		// done
 		return retval;
 	}
 
-	// returns an unlabeled dependency as a pair of nominals, or null if the ep is not relational
-	private static Pair<Nominal,Nominal> getDep(SatOp ep) {
+	// returns an unlabeled dependency as a pair of nominals, or null if the ep
+	// is not relational
+	private static Pair<Nominal, Nominal> getDep(SatOp ep) {
 		if (HyloHelper.getInstance().isRelPred(ep)) {
-			// put nominals in canonical order, so that direction of dependency doesn't matter
+			// put nominals in canonical order, so that direction of dependency
+			// doesn't matter
 			Nominal n1 = HyloHelper.getInstance().getPrincipalNominal(ep);
 			Nominal n2 = HyloHelper.getInstance().getSecondaryNominal(ep);
-			if (n1.compareTo(n2) <= 0) return new Pair<Nominal,Nominal>(n1, n2);
-			else return new Pair<Nominal,Nominal>(n2, n1);
-		}
-		else
+			if (n1.compareTo(n2) <= 0)
+				return new Pair<Nominal, Nominal>(n1, n2);
+			else
+				return new Pair<Nominal, Nominal>(n2, n1);
+		} else
 			return null;
 	}
-	
+
 	/** Calculates f-score as balanced harmonic mean of recall and precision. */
 	public static double fscore(double recall, double precision) {
-		if (recall + precision == 0.0) return 0.0;
+		if (recall + precision == 0.0)
+			return 0.0;
 		return 2.0 * recall * precision / (recall + precision);
 	}
 }

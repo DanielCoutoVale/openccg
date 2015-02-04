@@ -32,60 +32,61 @@ import opennlp.ccg.util.Pair;
 public class STTaggerPOSDictionary implements STTaggerDictionary, Serializable {
 
 	private static final long serialVersionUID = -4814356608876054823L;
-	
+
 	/**
-     * This object represents our dictionary.  The String is the
-     * POS we want to look up, and the Collection<String> holds all of 
-     * of the CCG lex. cat's seen with that POS.
-    */
-    private Map<String, Collection<String>> dict = null;
+	 * This object represents our dictionary. The String is the POS we want to
+	 * look up, and the Collection<String> holds all of of the CCG lex. cat's
+	 * seen with that POS.
+	 */
+	private Map<String, Collection<String>> dict = null;
 
-   
-    /**
-     * This constructor does not create the dictionary; that must
-     * be done using a <code>DictionaryMaker</code>.    
-     */
-    public STTaggerPOSDictionary(Map<String, Collection<String>> dict) { 
-    	this.dict = dict;
-    } 
+	/**
+	 * This constructor does not create the dictionary; that must be done using
+	 * a <code>DictionaryMaker</code>.
+	 */
+	public STTaggerPOSDictionary(Map<String, Collection<String>> dict) {
+		this.dict = dict;
+	}
 
-    /** 
-     * This method implements the <code>interface</code> STTaggerDictionary
-     * by delegating to <code>getEntry(String, int)</code> (see below).
-    */
-    public Collection<String> getEntry(String POS) {
-	return this.dict.get(POS);
-    }
+	/**
+	 * This method implements the <code>interface</code> STTaggerDictionary by
+	 * delegating to <code>getEntry(String, int)</code> (see below).
+	 */
+	public Collection<String> getEntry(String POS) {
+		return this.dict.get(POS);
+	}
 
-    /**
-     * A method that returns the contents of the mapping embodied in this dictionary.
-     * @return An <code>Iterator</code> of <code>supertagger.util.Pair</code>s
-     * that represent the pos ->  { ... supertags ...} mappings in the dictionary.
-     */
-    public Iterator<Pair<String, Collection<String>>> getMappings() {
-        Iterator<String> keyset = this.dict.keySet().iterator();
-        ArrayList<Pair<String, Collection<String>>> preRes = 
-                new ArrayList<Pair<String, Collection<String>>>();
-        String tempS = null;
-        while(keyset.hasNext()) {
-            tempS = keyset.next();
-            preRes.add(new Pair<String, Collection<String>>(tempS, this.dict.get(tempS)));
-        }
-        return preRes.iterator();
-    }
-    
-    /**
-     * A method to test whether this <code>STTaggerDictionary</code> contains 
-     * an entry for a particular <code>String</code> representing a POS tag.  
-     *
-     * @param key A <code>String</code> representing a particular
-     *            POS tag.
-     * @return A <code>boolean</code> value of <code>true</code> or 
-     *           <code>false</code> answering the question of whether this
-     *           dictionary contains an entry for the specified POS tag.
-     */
-    public boolean containsEntry(String POS) { return this.dict.containsKey(POS); }
-    
+	/**
+	 * A method that returns the contents of the mapping embodied in this
+	 * dictionary.
+	 * 
+	 * @return An <code>Iterator</code> of <code>supertagger.util.Pair</code>s
+	 *         that represent the pos -> { ... supertags ...} mappings in the
+	 *         dictionary.
+	 */
+	public Iterator<Pair<String, Collection<String>>> getMappings() {
+		Iterator<String> keyset = this.dict.keySet().iterator();
+		ArrayList<Pair<String, Collection<String>>> preRes = new ArrayList<Pair<String, Collection<String>>>();
+		String tempS = null;
+		while (keyset.hasNext()) {
+			tempS = keyset.next();
+			preRes.add(new Pair<String, Collection<String>>(tempS, this.dict.get(tempS)));
+		}
+		return preRes.iterator();
+	}
+
+	/**
+	 * A method to test whether this <code>STTaggerDictionary</code> contains an
+	 * entry for a particular <code>String</code> representing a POS tag.
+	 *
+	 * @param key A <code>String</code> representing a particular POS tag.
+	 * @return A <code>boolean</code> value of <code>true</code> or
+	 *         <code>false</code> answering the question of whether this
+	 *         dictionary contains an entry for the specified POS tag.
+	 */
+	public boolean containsEntry(String POS) {
+		return this.dict.containsKey(POS);
+	}
+
 } // End class STTaggerPOSDictionary
-
 

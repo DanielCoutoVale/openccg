@@ -20,28 +20,31 @@
 package opennlp.ccg.unify;
 
 /**
- * @author      Jason Baldridge
- * @author      Michael White
- * @version     $Revision: 1.4 $, $Date: 2009/11/28 03:39:27 $
+ * @author Jason Baldridge
+ * @author Michael White
+ * @version $Revision: 1.4 $, $Date: 2009/11/28 03:39:27 $
  */
 public class UnifyFailure extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-    /** Constructor. */
-    public UnifyFailure() {}
+	/** Constructor. */
+	public UnifyFailure() {
+	}
 
-    /** Constructor with message. */
-    public UnifyFailure(String m) { super(m); }
+	/** Constructor with message. */
+	public UnifyFailure(String m) {
+		super(m);
+	}
 
-    /** Constructor with two args that failed to unify. */
-    public UnifyFailure(String arg1, String arg2) {
-    	super("Unable to unify " + arg1 + " with " + arg2 + ".");
-    }
+	/** Constructor with two args that failed to unify. */
+	public UnifyFailure(String arg1, String arg2) {
+		super("Unable to unify " + arg1 + " with " + arg2 + ".");
+	}
 
-    /** Returns exception message. */
-    public String toString() {
-    	String msg = getMessage();
-        return "Unify Failure: " + (msg != null ? msg : "(no message)");
-    }
+	/** Returns exception message. */
+	public String toString() {
+		String msg = getMessage();
+		return "Unify Failure: " + (msg != null ? msg : "(no message)");
+	}
 }

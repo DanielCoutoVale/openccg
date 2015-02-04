@@ -49,339 +49,377 @@ import opennlp.ccg.util.Pair;
 
 /**
  * (c) (2009) Dennis N. Mehay
+ * 
  * @author Dennis N. Mehay
  * 
- * Model for predicting p(supertag | word, pos).  Uses an ARPA-formatted
- * SRILM-trained "unigram" factored LM for this, where each "unigram" is
- * a bundle of word:pos:supertag.
+ *         Model for predicting p(supertag | word, pos). Uses an ARPA-formatted
+ *         SRILM-trained "unigram" factored LM for this, where each "unigram" is
+ *         a bundle of word:pos:supertag.
  */
 public class STPriorModel extends ConditionalProbabilityTable {
 
-    public static final String WORD = DefaultTokenizer.FORM_ASSOCIATE;
-    public static final String POS_TAG = DefaultTokenizer.FUNCTIONS_ASSOCIATE;
-    public static final String SUPERTAG = DefaultTokenizer.SUPERTAG_ASSOCIATE;
-    private Interner<Pair<String, String>> pairs = new Interner<Pair<String, String>>();
-    /** 
-     * Re-usable list for attr-val pairs of word-pos-supertag inputs to the prior model
-     * (i.e., for predicting p(STag | word, POS). 
-     */
-    public List<Pair<String, String>> attrVals = new ArrayList<Pair<String, String>>(5);
-    /** 
-     * A comparator for sorting Pair<Double,String>'s where the Double is a probability
-     * (effectively sorts by descending order of probability).
-     */
-    private ProbPairComparator ppcomp = new ProbPairComparator();
-    /** All the priors. Reference them when getting beta-best, beta-worst, etc. */
-    List<Pair<Double, String>> priors = new ArrayList<Pair<Double, String>>(1000);
-    /** String[] of all possible supertag outcomes. */
-    private String[] stagVocab = null;
-    /** double[] containing the probability distro over all supertags. */
-    private double[] stagDistro = null;
-    /** 
-     * POS-keyed tagging dictionary (to provide restrictions on what the prior model may consider.
-     * No restrictions if null.
-     */
-    private STTaggerPOSDictionary posDict = null;
-    /** 
-     * Re-usable way of containing the probabilities and a pointer back into where they came from
-     * in the probability distro over all supertags. 
-     */
-    private ProbIndexPair[] stagPointers = null;
+	public static final String WORD = DefaultTokenizer.FORM_ASSOCIATE;
+	public static final String POS_TAG = DefaultTokenizer.FUNCTIONS_ASSOCIATE;
+	public static final String SUPERTAG = DefaultTokenizer.SUPERTAG_ASSOCIATE;
+	private Interner<Pair<String, String>> pairs = new Interner<Pair<String, String>>();
+	/**
+	 * Re-usable list for attr-val pairs of word-pos-supertag inputs to the
+	 * prior model (i.e., for predicting p(STag | word, POS).
+	 */
+	public List<Pair<String, String>> attrVals = new ArrayList<Pair<String, String>>(5);
+	/**
+	 * A comparator for sorting Pair<Double,String>'s where the Double is a
+	 * probability (effectively sorts by descending order of probability).
+	 */
+	private ProbPairComparator ppcomp = new ProbPairComparator();
+	/** All the priors. Reference them when getting beta-best, beta-worst, etc. */
+	List<Pair<Double, String>> priors = new ArrayList<Pair<Double, String>>(1000);
+	/** String[] of all possible supertag outcomes. */
+	private String[] stagVocab = null;
+	/** double[] containing the probability distro over all supertags. */
+	private double[] stagDistro = null;
+	/**
+	 * POS-keyed tagging dictionary (to provide restrictions on what the prior
+	 * model may consider. No restrictions if null.
+	 */
+	private STTaggerPOSDictionary posDict = null;
+	/**
+	 * Re-usable way of containing the probabilities and a pointer back into
+	 * where they came from in the probability distro over all supertags.
+	 */
+	private ProbIndexPair[] stagPointers = null;
 
-    /** Construct a prior model with the FLM config file and corresponding vocab file. */
-    public STPriorModel(String flmFile, String vocabFile) throws IOException {
-        // create with a null POS dictionary (i.e., no restrictions on taggings).
-        this(flmFile, vocabFile, null);
-    }
+	/**
+	 * Construct a prior model with the FLM config file and corresponding vocab
+	 * file.
+	 */
+	public STPriorModel(String flmFile, String vocabFile) throws IOException {
+		// create with a null POS dictionary (i.e., no restrictions on
+		// taggings).
+		this(flmFile, vocabFile, null);
+	}
 
-    /** Construct a prior model with the FLM config file and corresponding vocab file. */
-    public STPriorModel(String flmFile, String vocabFile, STTaggerPOSDictionary posDict) throws IOException {
-        super(flmFile);
-        this.posDict = posDict;
+	/**
+	 * Construct a prior model with the FLM config file and corresponding vocab
+	 * file.
+	 */
+	public STPriorModel(String flmFile, String vocabFile, STTaggerPOSDictionary posDict)
+			throws IOException {
+		super(flmFile);
+		this.posDict = posDict;
 
-        String st = null;
-        BufferedReader br = new BufferedReader(new FileReader(new File(vocabFile)));
-        st = br.readLine().trim();
+		String st = null;
+		BufferedReader br = new BufferedReader(new FileReader(new File(vocabFile)));
+		st = br.readLine().trim();
 
-        // get next supertag from the vocab.
-        while ((st != null) && !st.trim().startsWith(SUPERTAG + "-")) {
-            st = br.readLine();
-        }
-        if (st != null) {
-            st = st.trim().split("-")[1];
-        }
+		// get next supertag from the vocab.
+		while ((st != null) && !st.trim().startsWith(SUPERTAG + "-")) {
+			st = br.readLine();
+		}
+		if (st != null) {
+			st = st.trim().split("-")[1];
+		}
 
-        Collection<String> allSupertags = new HashSet<String>();
+		Collection<String> allSupertags = new HashSet<String>();
 
-        // find out how many outcomes we have.
-        int cnt = 0;
-        while (st != null) {
-            cnt++;
-            allSupertags.add(st);
-            while ((st != null) && !st.trim().startsWith(SUPERTAG + "-")) {
-                st = br.readLine();
-            }
-            if (st != null) {
-                st = st.trim().split("-")[1];
-            }
-        }
-        br.close();
+		// find out how many outcomes we have.
+		int cnt = 0;
+		while (st != null) {
+			cnt++;
+			allSupertags.add(st);
+			while ((st != null) && !st.trim().startsWith(SUPERTAG + "-")) {
+				st = br.readLine();
+			}
+			if (st != null) {
+				st = st.trim().split("-")[1];
+			}
+		}
+		br.close();
 
-        // initialize the arrays to this size.
-        stagVocab = new String[cnt];
-        stagPointers = new ProbIndexPair[cnt];
-        stagDistro = new double[cnt];
+		// initialize the arrays to this size.
+		stagVocab = new String[cnt];
+		stagPointers = new ProbIndexPair[cnt];
+		stagDistro = new double[cnt];
 
-        cnt = 0;
-        // fill the vocab array with all possible supertags.
-        for (String stag : allSupertags) {
-            stagVocab[cnt++] = stag.intern();
-        }
-    }
+		cnt = 0;
+		// fill the vocab array with all possible supertags.
+		for (String stag : allSupertags) {
+			stagVocab[cnt++] = stag.intern();
+		}
+	}
 
-    /** Set the POS-keyed tagging dictionary. */
-    public void setPOSDict(STTaggerPOSDictionary posDict) {
-        this.posDict = posDict;
-    }
+	/** Set the POS-keyed tagging dictionary. */
+	public void setPOSDict(STTaggerPOSDictionary posDict) {
+		this.posDict = posDict;
+	}
 
-    /** Get the prior probability of this supertag/POS/word combo. */
-    public double getPriorOf(String supertag, String word, String pos) {
-        attrVals.clear();
-        Pair<String, String> surfaceForm = pairs.intern(new Pair<String, String>(WORD, DefaultTokenizer.escape(word).intern()));
-        attrVals.add(surfaceForm);
-        Pair<String, String> partOfSpeech = pairs.intern(new Pair<String, String>(POS_TAG, DefaultTokenizer.escape(pos).intern()));
-        attrVals.add(partOfSpeech);
-        attrVals.add(pairs.intern(new Pair<String, String>(SUPERTAG, DefaultTokenizer.escape(supertag).intern())));
-        return score(attrVals);
-    }
+	/** Get the prior probability of this supertag/POS/word combo. */
+	public double getPriorOf(String supertag, String word, String pos) {
+		attrVals.clear();
+		Pair<String, String> surfaceForm = pairs.intern(new Pair<String, String>(WORD,
+				DefaultTokenizer.escape(word).intern()));
+		attrVals.add(surfaceForm);
+		Pair<String, String> partOfSpeech = pairs.intern(new Pair<String, String>(POS_TAG,
+				DefaultTokenizer.escape(pos).intern()));
+		attrVals.add(partOfSpeech);
+		attrVals.add(pairs.intern(new Pair<String, String>(SUPERTAG, DefaultTokenizer.escape(
+				supertag).intern())));
+		return score(attrVals);
+	}
 
-    /** Get the beta-best tags for this word, under the prior model. */
-    public List<Pair<String, Double>> getBetaBestPriors(Association w, double beta) {
-        List<Pair<String, Double>> allPriors = getAllPriors(w);
-        List<Pair<String, Double>> betaBestPriors = new ArrayList<Pair<String, Double>>(100);
-        double best = allPriors.get(0).b;
-        for (Pair<String, Double> prior : allPriors) {
-            if (best * beta <= prior.b) {
-                betaBestPriors.add(prior);
-            } else {
-                break;
-            }
-        }
-        return betaBestPriors;
-    }
+	/** Get the beta-best tags for this word, under the prior model. */
+	public List<Pair<String, Double>> getBetaBestPriors(Association w, double beta) {
+		List<Pair<String, Double>> allPriors = getAllPriors(w);
+		List<Pair<String, Double>> betaBestPriors = new ArrayList<Pair<String, Double>>(100);
+		double best = allPriors.get(0).b;
+		for (Pair<String, Double> prior : allPriors) {
+			if (best * beta <= prior.b) {
+				betaBestPriors.add(prior);
+			} else {
+				break;
+			}
+		}
+		return betaBestPriors;
+	}
 
-    /** Compute all priors, subject to the POS dict constraints. */
-    public void computePriors(Association w) {
-        if (posDict != null) {
-            priors = getPOSRestrictedPriors(w);
-        }
-    }
+	/** Compute all priors, subject to the POS dict constraints. */
+	public void computePriors(Association w) {
+		if (posDict != null) {
+			priors = getPOSRestrictedPriors(w);
+		}
+	}
 
-    /** Get the POS-dict restricted prior distribution (sorted descending by prob.) */
-    protected List<Pair<Double, String>> getPOSRestrictedPriors(Association w) {
-        Collection<String> tagsAllowed = posDict.getEntry(w.getFunctions());
-        if (tagsAllowed == null || tagsAllowed.size() == 0) {
-            return priors;
-        } else {
-            List<Pair<Double, String>> sortedTags = new ArrayList<Pair<Double, String>>(tagsAllowed.size());
-            for (String tag : tagsAllowed) {
-                sortedTags.add(new Pair<Double, String>(getPriorOf(tag, w.getForm(), w.getFunctions()), tag));
-            }
-            Collections.sort(sortedTags, ppcomp);
-            return sortedTags;
-        }
-    }
+	/**
+	 * Get the POS-dict restricted prior distribution (sorted descending by
+	 * prob.)
+	 */
+	protected List<Pair<Double, String>> getPOSRestrictedPriors(Association w) {
+		Collection<String> tagsAllowed = posDict.getEntry(w.getFunctions());
+		if (tagsAllowed == null || tagsAllowed.size() == 0) {
+			return priors;
+		} else {
+			List<Pair<Double, String>> sortedTags = new ArrayList<Pair<Double, String>>(
+					tagsAllowed.size());
+			for (String tag : tagsAllowed) {
+				sortedTags.add(new Pair<Double, String>(getPriorOf(tag, w.getForm(),
+						w.getFunctions()), tag));
+			}
+			Collections.sort(sortedTags, ppcomp);
+			return sortedTags;
+		}
+	}
 
-    /** 
-     * Get the beta-best tags (using the prior model) only from among the POS-dictionary-allowed possibilities. 
-     * beta-best (def'n): {t | p(t) >= beta * p(best-tag) }
-     */
-    public List<Pair<String, Double>> getRestrictedBetaBestPriors(Association w, double beta) {
-        if (posDict == null) {
-            return getBetaBestPriors(w, beta);
-        } else {
-            List<Pair<String,Double>> rez = new ArrayList<Pair<String,Double>>(50);
-            double best = priors.get(0).a;
-            for(Pair<Double,String> tg : priors) {
-                if(tg.a >= (beta * best)) {
-                    rez.add(new Pair<String,Double>(tg.b,tg.a));
-                } else {
-                    break;
-                }
-            }
-            return rez;
-        }
-    }
-    
-    /** 
-     *  Get the beta-WORST tags (using the prior model) only from among the POS-dictionary-allowed possibilities. 
-     *  beta-best (def'n): {t | p(t) >= beta * p(best-tag) }
-     *  beta-worst (def'n): {t | p(t) * beta <= p(worst-tag)}
-     */
-    public List<Pair<String, Double>> getRestrictedBetaWorstPriors(Association w, double beta) {
-        if (posDict == null) {
-            throw new UnsupportedOperationException("Cannot get beta-worst without a pos-keyed tagging dict.\nNot yet implemented.");
-        } else {
-            List<Pair<String,Double>> rez = new ArrayList<Pair<String,Double>>(50);
-            List<Pair<Double,String>> cpy = new ArrayList<Pair<Double,String>>(priors);
-            Collections.reverse(cpy);            
-            double worst = cpy.get(0).a;
-            for(Pair<Double,String> tg : cpy) {
-                if((tg.a * beta) <= worst) {
-                    rez.add(new Pair<String,Double>(tg.b,tg.a));
-                } else {
-                    break;
-                }
-            }
-            return rez;
-        }
-    }
+	/**
+	 * Get the beta-best tags (using the prior model) only from among the
+	 * POS-dictionary-allowed possibilities. beta-best (def'n): {t | p(t) >=
+	 * beta * p(best-tag) }
+	 */
+	public List<Pair<String, Double>> getRestrictedBetaBestPriors(Association w, double beta) {
+		if (posDict == null) {
+			return getBetaBestPriors(w, beta);
+		} else {
+			List<Pair<String, Double>> rez = new ArrayList<Pair<String, Double>>(50);
+			double best = priors.get(0).a;
+			for (Pair<Double, String> tg : priors) {
+				if (tg.a >= (beta * best)) {
+					rez.add(new Pair<String, Double>(tg.b, tg.a));
+				} else {
+					break;
+				}
+			}
+			return rez;
+		}
+	}
 
-    public List<Pair<String, Double>> getAllPriors(Association w) {
-        return getNBestPriors(w, stagVocab.length);
-    }
+	/**
+	 * Get the beta-WORST tags (using the prior model) only from among the
+	 * POS-dictionary-allowed possibilities. beta-best (def'n): {t | p(t) >=
+	 * beta * p(best-tag) } beta-worst (def'n): {t | p(t) * beta <=
+	 * p(worst-tag)}
+	 */
+	public List<Pair<String, Double>> getRestrictedBetaWorstPriors(Association w, double beta) {
+		if (posDict == null) {
+			throw new UnsupportedOperationException(
+					"Cannot get beta-worst without a pos-keyed tagging dict.\nNot yet implemented.");
+		} else {
+			List<Pair<String, Double>> rez = new ArrayList<Pair<String, Double>>(50);
+			List<Pair<Double, String>> cpy = new ArrayList<Pair<Double, String>>(priors);
+			Collections.reverse(cpy);
+			double worst = cpy.get(0).a;
+			for (Pair<Double, String> tg : cpy) {
+				if ((tg.a * beta) <= worst) {
+					rez.add(new Pair<String, Double>(tg.b, tg.a));
+				} else {
+					break;
+				}
+			}
+			return rez;
+		}
+	}
 
-    /** Get the n-best supertags on the prior model, given this word (with POS). */
-    public List<Pair<String, Double>> getNBestPriors(Association w, int n) {
-        attrVals.clear();
-        Pair<String, String> surfaceForm = pairs.intern(new Pair<String, String>(WORD, DefaultTokenizer.escape(w.getForm()).intern()));
-        attrVals.add(surfaceForm);
-        Pair<String, String> pos = pairs.intern(new Pair<String, String>(POS_TAG, DefaultTokenizer.escape(w.getFunctions()).intern()));
-        attrVals.add(pos);
+	public List<Pair<String, Double>> getAllPriors(Association w) {
+		return getNBestPriors(w, stagVocab.length);
+	}
 
-        int cnt = 0;
-        for (String st : stagVocab) {
-            // remove the last stag factor, if there.
-            if (attrVals.size() == 3) {
-                attrVals.remove(attrVals.size() - 1);
-            }
+	/** Get the n-best supertags on the prior model, given this word (with POS). */
+	public List<Pair<String, Double>> getNBestPriors(Association w, int n) {
+		attrVals.clear();
+		Pair<String, String> surfaceForm = pairs.intern(new Pair<String, String>(WORD,
+				DefaultTokenizer.escape(w.getForm()).intern()));
+		attrVals.add(surfaceForm);
+		Pair<String, String> pos = pairs.intern(new Pair<String, String>(POS_TAG, DefaultTokenizer
+				.escape(w.getFunctions()).intern()));
+		attrVals.add(pos);
 
-            attrVals.add(pairs.intern(new Pair<String, String>(SUPERTAG, st)));
-            // add the probability of this tag under the prior model to the distro array.
-            double sc = score(attrVals);
-            stagDistro[cnt] = sc;
-            // add this probability with a pointer back to where it came from in the vocab.
-            // (so that we can sort by probability, but then retrieve the supertag string).
-            stagPointers[cnt] = new ProbIndexPair(sc, cnt);
-            cnt++;
+		int cnt = 0;
+		for (String st : stagVocab) {
+			// remove the last stag factor, if there.
+			if (attrVals.size() == 3) {
+				attrVals.remove(attrVals.size() - 1);
+			}
 
-        }
-        // sort descending by probability (achieved by the comparator implementation of ProbIndexPair).
+			attrVals.add(pairs.intern(new Pair<String, String>(SUPERTAG, st)));
+			// add the probability of this tag under the prior model to the
+			// distro array.
+			double sc = score(attrVals);
+			stagDistro[cnt] = sc;
+			// add this probability with a pointer back to where it came from in
+			// the vocab.
+			// (so that we can sort by probability, but then retrieve the
+			// supertag string).
+			stagPointers[cnt] = new ProbIndexPair(sc, cnt);
+			cnt++;
 
-        Arrays.sort(stagPointers);
+		}
+		// sort descending by probability (achieved by the comparator
+		// implementation of ProbIndexPair).
 
-        List<Pair<String, Double>> result = new ArrayList<Pair<String, Double>>(n);
-        for (int i = 0; i <
-                n; i++) {
-            result.add(new Pair<String, Double>(stagVocab[stagPointers[i].b], stagPointers[i].a));
-        }
+		Arrays.sort(stagPointers);
 
-        return result;
-    }
+		List<Pair<String, Double>> result = new ArrayList<Pair<String, Double>>(n);
+		for (int i = 0; i < n; i++) {
+			result.add(new Pair<String, Double>(stagVocab[stagPointers[i].b], stagPointers[i].a));
+		}
 
-    public static void main(String[] args) throws IOException {
-        String usage = "\nSTPriorModel -vocab <vocabfile> (-c <corpus>) (-o <output>) (-u <catFreqCutoff> ) (-v [ or '-verbose'])\n";
-        if (args.length > 0 && args[0].equals("-h")) {
-            System.out.println(usage);
-            System.exit(0);
-        }
+		return result;
+	}
 
-        SRILMFactoredBundleCorpusIterator in = null;
-        BufferedWriter out = null;
-        BufferedWriter voc = null;
+	public static void main(String[] args) throws IOException {
+		String usage = "\nSTPriorModel -vocab <vocabfile> (-c <corpus>) (-o <output>) (-u <catFreqCutoff> ) (-v [ or '-verbose'])\n";
+		if (args.length > 0 && args[0].equals("-h")) {
+			System.out.println(usage);
+			System.exit(0);
+		}
 
-        try {
-            String inputCorp = "<stdin>", output = "<stdout>", vocabFile = "vocab.voc";
-            int catCutoff = 10;
+		SRILMFactoredBundleCorpusIterator in = null;
+		BufferedWriter out = null;
+		BufferedWriter voc = null;
 
-            for (int i = 0; i <
-                    args.length; i++) {
-                if (args[i].equals("-c")) { inputCorp = args[++i]; continue; }
-                if (args[i].equals("-o")) { output = args[++i];    continue; }
-                if (args[i].equals("-vocab")) {vocabFile = args[++i]; continue; }
-                if (args[i].equals("-u")) { catCutoff = Integer.parseInt(args[++i]); continue; }
-                System.out.println("Unrecognized option: " + args[i]);
-            }
-            
-            try {
-                in = new SRILMFactoredBundleCorpusIterator(
-                        (inputCorp.equals("<stdin>")) ? new BufferedReader(new InputStreamReader(System.in)) : new BufferedReader(new FileReader(new File(inputCorp))));
-            } catch (FileNotFoundException ex) {
-                System.err.print("Input corpus " + inputCorp + " not found.  Exiting...");
-                Logger.getLogger(STPriorModel.class.getName()).log(Level.SEVERE, null, ex);
-                System.exit(
-                        -1);
-            }
+		try {
+			String inputCorp = "<stdin>", output = "<stdout>", vocabFile = "vocab.voc";
+			int catCutoff = 10;
 
-            try {
-                out = (output.equals("<stdout>")) ? new BufferedWriter(new OutputStreamWriter(System.out)) : new BufferedWriter(new FileWriter(new File(output)));
-            } catch (IOException ex) {
-                System.err.print("Output file " + output + " not found.  Exiting...");
-                Logger.getLogger(STPriorModel.class.getName()).log(Level.SEVERE, null, ex);
-                System.exit(
-                        -1);
-            }
+			for (int i = 0; i < args.length; i++) {
+				if (args[i].equals("-c")) {
+					inputCorp = args[++i];
+					continue;
+				}
+				if (args[i].equals("-o")) {
+					output = args[++i];
+					continue;
+				}
+				if (args[i].equals("-vocab")) {
+					vocabFile = args[++i];
+					continue;
+				}
+				if (args[i].equals("-u")) {
+					catCutoff = Integer.parseInt(args[++i]);
+					continue;
+				}
+				System.out.println("Unrecognized option: " + args[i]);
+			}
 
-            try {
-                voc = new BufferedWriter(new FileWriter(new File(vocabFile)));
-            } catch (IOException ex) {
-                Logger.getLogger(STPriorModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+			try {
+				in = new SRILMFactoredBundleCorpusIterator(
+						(inputCorp.equals("<stdin>")) ? new BufferedReader(new InputStreamReader(
+								System.in)) : new BufferedReader(
+								new FileReader(new File(inputCorp))));
+			} catch (FileNotFoundException ex) {
+				System.err.print("Input corpus " + inputCorp + " not found.  Exiting...");
+				Logger.getLogger(STPriorModel.class.getName()).log(Level.SEVERE, null, ex);
+				System.exit(-1);
+			}
 
-            Map<String, Integer> vocab = new HashMap<String, Integer>();
-            for (List<Association> inLine : in) {
-                for (Association w : inLine) {
-                    String st = SUPERTAG + "-" + DefaultTokenizer.escape(w.getSupertag()),
-                            pos = POS_TAG + "-" + DefaultTokenizer.escape(w.getFunctions()),
-                            wform = WORD + "-" + DefaultTokenizer.escape(w.getForm());
+			try {
+				out = (output.equals("<stdout>")) ? new BufferedWriter(new OutputStreamWriter(
+						System.out)) : new BufferedWriter(new FileWriter(new File(output)));
+			} catch (IOException ex) {
+				System.err.print("Output file " + output + " not found.  Exiting...");
+				Logger.getLogger(STPriorModel.class.getName()).log(Level.SEVERE, null, ex);
+				System.exit(-1);
+			}
 
-                    vocab.put(st, (vocab.get(st) == null) ? 1 : vocab.get(st) + 1);
-                    vocab.put(pos, (vocab.get(pos) == null) ? 1 : vocab.get(pos) + 1);
-                    vocab.put(wform, (vocab.get(wform) == null) ? 1 : vocab.get(wform) + 1);
-                }
+			try {
+				voc = new BufferedWriter(new FileWriter(new File(vocabFile)));
+			} catch (IOException ex) {
+				Logger.getLogger(STPriorModel.class.getName()).log(Level.SEVERE, null, ex);
+			}
 
-            }
+			Map<String, Integer> vocab = new HashMap<String, Integer>();
+			for (List<Association> inLine : in) {
+				for (Association w : inLine) {
+					String st = SUPERTAG + "-" + DefaultTokenizer.escape(w.getSupertag()), pos = POS_TAG
+							+ "-" + DefaultTokenizer.escape(w.getFunctions()), wform = WORD + "-"
+							+ DefaultTokenizer.escape(w.getForm());
 
-            // reopen file
-            try {
-                in = new SRILMFactoredBundleCorpusIterator(
-                        (inputCorp.equals("<stdin>")) ? new BufferedReader(new InputStreamReader(System.in)) : new BufferedReader(new FileReader(new File(inputCorp))));
-            } catch (FileNotFoundException ex) {
-                System.err.print("Input corpus " + inputCorp + " not found.  Exiting...");
-                Logger.getLogger(STPriorModel.class.getName()).log(Level.SEVERE, null, ex);
-                System.exit(
-                        -1);
-            }
-            for (List<Association> inLine : in) {
-                for (Association w : inLine) {
-                    String st = SUPERTAG + "-" + DefaultTokenizer.escape(w.getSupertag()),
-                            pos = POS_TAG + "-" + DefaultTokenizer.escape(w.getFunctions()),
-                            wform = WORD + "-" + DefaultTokenizer.escape(w.getForm());
-                    if (vocab.get(st) > catCutoff) {
-                        out.write(wform + ":" + pos + ":" + st + " ");
-                    }
-                }
+					vocab.put(st, (vocab.get(st) == null) ? 1 : vocab.get(st) + 1);
+					vocab.put(pos, (vocab.get(pos) == null) ? 1 : vocab.get(pos) + 1);
+					vocab.put(wform, (vocab.get(wform) == null) ? 1 : vocab.get(wform) + 1);
+				}
 
-                out.write(System.getProperty("line.separator"));
-            }
+			}
 
-            out.flush();
+			// reopen file
+			try {
+				in = new SRILMFactoredBundleCorpusIterator(
+						(inputCorp.equals("<stdin>")) ? new BufferedReader(new InputStreamReader(
+								System.in)) : new BufferedReader(
+								new FileReader(new File(inputCorp))));
+			} catch (FileNotFoundException ex) {
+				System.err.print("Input corpus " + inputCorp + " not found.  Exiting...");
+				Logger.getLogger(STPriorModel.class.getName()).log(Level.SEVERE, null, ex);
+				System.exit(-1);
+			}
+			for (List<Association> inLine : in) {
+				for (Association w : inLine) {
+					String st = SUPERTAG + "-" + DefaultTokenizer.escape(w.getSupertag()), pos = POS_TAG
+							+ "-" + DefaultTokenizer.escape(w.getFunctions()), wform = WORD + "-"
+							+ DefaultTokenizer.escape(w.getForm());
+					if (vocab.get(st) > catCutoff) {
+						out.write(wform + ":" + pos + ":" + st + " ");
+					}
+				}
 
-            for (String str : vocab.keySet()) {
-                if (vocab.get(str) > catCutoff) {
-                    voc.write(str + System.getProperty("line.separator"));
-                }
-            }
+				out.write(System.getProperty("line.separator"));
+			}
 
-            voc.flush();
-        } finally {
-            try {
-                out.close();
-                in.close();
-                voc.close();
-            } catch (IOException ex) {
-                Logger.getLogger(STPriorModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
+			out.flush();
+
+			for (String str : vocab.keySet()) {
+				if (vocab.get(str) > catCutoff) {
+					voc.write(str + System.getProperty("line.separator"));
+				}
+			}
+
+			voc.flush();
+		} finally {
+			try {
+				out.close();
+				in.close();
+				voc.close();
+			} catch (IOException ex) {
+				Logger.getLogger(STPriorModel.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+	}
 }

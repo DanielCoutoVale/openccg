@@ -21,16 +21,19 @@ package opennlp.ccg.hylo;
 import opennlp.ccg.synsem.*;
 
 /**
- * A interface for hybrid logic nominals, to allow polymorphism for
- * both Nominal atoms and Nominal variables.
+ * A interface for hybrid logic nominals, to allow polymorphism for both Nominal
+ * atoms and Nominal variables.
  *
- * @author      Jason Baldridge
- * @author      Michael White
- * @version     $Revision: 1.6 $, $Date: 2005/11/01 19:39:27 $
+ * @author Jason Baldridge
+ * @author Michael White
+ * @version $Revision: 1.6 $, $Date: 2005/11/01 19:39:27 $
  **/
 public interface Nominal extends LF {
-    public String getName();
-    public boolean isShared();
-    public void setShared(boolean shared);
-    public int compareTo(Nominal nom);
+	public String getName();
+
+	public boolean isShared();
+
+	public void setShared(boolean shared);
+
+	public int compareTo(Nominal nom);
 }

@@ -34,7 +34,7 @@ import gnu.trove.*;
 public final class SetArg implements Arg, Serializable {
 
 	private static final long serialVersionUID = -7067480310511294657L;
-	
+
 	private ArgStack _args;
 
 	@SuppressWarnings("unchecked")
@@ -62,7 +62,8 @@ public final class SetArg implements Arg, Serializable {
 	public Element toXml() {
 		Element retval = new Element("setarg");
 		for (Arg arg : _args._list) {
-			if (arg instanceof BasicArg) { // only supporting basic args per xml construction
+			if (arg instanceof BasicArg) { // only supporting basic args per xml
+											// construction
 				BasicArg barg = (BasicArg) arg;
 				retval.addContent(barg.getSlash().toXml());
 				retval.addContent(barg.getCat().toXml());
@@ -70,7 +71,7 @@ public final class SetArg implements Arg, Serializable {
 		}
 		return retval;
 	}
-	
+
 	public Arg copy() {
 		return new SetArg(_args.copy());
 	}
@@ -142,20 +143,20 @@ public final class SetArg implements Arg, Serializable {
 		// }
 	}
 
-	public void setSlashModifier(boolean modifier) { 
+	public void setSlashModifier(boolean modifier) {
 		for (int i = 0; i < _args.size(); i++) {
 			BasicArg arg = get(i);
 			arg.setSlashModifier(modifier);
 		}
 	}
-	
-    public void setSlashHarmonicCompositionResult(boolean harmonicResult) { 
+
+	public void setSlashHarmonicCompositionResult(boolean harmonicResult) {
 		for (int i = 0; i < _args.size(); i++) {
 			BasicArg arg = get(i);
 			arg.setSlashHarmonicCompositionResult(harmonicResult);
 		}
 	}
-    
+
 	public boolean containsContrarySlash() {
 		for (int i = 0; i < _args.size(); i++) {
 			if (!((BasicArg) _args.get(i)).getSlash().sameDirAsModality()) {
@@ -230,8 +231,7 @@ public final class SetArg implements Arg, Serializable {
 	 * Returns whether this arg equals the given object up to variable names,
 	 * using the given maps from vars to ints.
 	 */
-	public boolean equals(Object obj, TObjectIntHashMap varMap,
-			TObjectIntHashMap varMap2) {
+	public boolean equals(Object obj, TObjectIntHashMap varMap, TObjectIntHashMap varMap2) {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}

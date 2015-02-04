@@ -20,24 +20,23 @@ package opennlp.ccg.unify;
 /**
  * An object which can be indexed.
  *
- * @author      Jason Baldridge
- * @version     $Revision: 1.1.1.1 $, $Date: 2003/02/28 18:02:13 $
+ * @author Jason Baldridge
+ * @version $Revision: 1.1.1.1 $, $Date: 2003/02/28 18:02:13 $
  **/
 public interface Indexed {
 
-    /**
-     * Gets the index of this Indexed object.
-     *
-     * @return the index 
-     **/
-    public int getIndex ();
+	/**
+	 * Gets the index of this Indexed object.
+	 *
+	 * @return the index
+	 **/
+	public int getIndex();
 
+	/**
+	 * Sets the index of this Indexed object.
+	 *
+	 * @param index An int which provides a unique index
+	 **/
+	public void setIndex(int index);
 
-    /**
-     * Sets the index of this Indexed object.
-     *
-     * @param index An int which provides a unique index
-     **/
-    public void setIndex (int index);
-    
 }

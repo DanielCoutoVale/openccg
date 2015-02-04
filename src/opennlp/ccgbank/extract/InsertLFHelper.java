@@ -27,55 +27,59 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class InsertLFHelper{
-	
-	private List<String> featTally=new ArrayList<String>();
-	
-	//Flush feat tally
-	public String initFeat(){
+public class InsertLFHelper {
+
+	private List<String> featTally = new ArrayList<String>();
+
+	// Flush feat tally
+	public String initFeat() {
 		featTally.clear();
 		return null;
 	}
-	
-	public String putFeat(String feat){
+
+	public String putFeat(String feat) {
 		featTally.add(feat);
 		return null;
 	}
-	
-	public String getFeat(){
-		String feat="";
-		
+
+	public String getFeat() {
+		String feat = "";
+
 		if (featTally.size() > 0) {
 			feat = featTally.get(0);
 			featTally.remove(0);
-		}
-		else feat="xxx";
-		
+		} else
+			feat = "xxx";
+
 		return feat;
 	}
 
 	// for ensuring uniqueness of stem/rel pairs
 	private Set<String> stemRelPairs = new HashSet<String>();
-	
+
 	// reset
-	public String resetStemRelPairs() { stemRelPairs.clear(); return null; }
-	
+	public String resetStemRelPairs() {
+		stemRelPairs.clear();
+		return null;
+	}
+
 	// contains, updating
 	public boolean containsStemRelPair(String stem, String rel) {
 		String key = stem + "_" + rel;
-		if (stemRelPairs.contains(key)) return true;
+		if (stemRelPairs.contains(key))
+			return true;
 		stemRelPairs.add(key);
 		return false;
 	}
-	
+
 	private String[] rolesArray = {};
-	
+
 	// sets the roles
 	public boolean setRoles(String roles) {
 		rolesArray = roles.split("\\s+");
 		return true;
 	}
-	
+
 	// returns the nth role
 	public String getRole(int n) {
 		return (n < rolesArray.length) ? rolesArray[n] : "null";

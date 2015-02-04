@@ -25,112 +25,126 @@ import java.util.*;
 import gnu.trove.*;
 
 /**
- * A parent class for modal operators, such as &lt;P&gt;p, [F]q, and
- * &lt;&gt;(p ^ q).
+ * A parent class for modal operators, such as &lt;P&gt;p, [F]q, and &lt;&gt;(p
+ * ^ q).
  *
- * @author      Jason Baldridge
- * @author      Michael White
- * @version     $Revision: 1.6 $, $Date: 2009/12/21 03:27:19 $
+ * @author Jason Baldridge
+ * @author Michael White
+ * @version $Revision: 1.6 $, $Date: 2009/12/21 03:27:19 $
  **/
 public abstract class ModalOp extends HyloFormula {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	protected Mode _mode;
-    protected LF _arg;
+	protected LF _arg;
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	protected ModalOp(Element e) {
-        String atomLabel = e.getAttributeValue("mode");
-        if (atomLabel == null) atomLabel = e.getAttributeValue("m");
-        if (atomLabel != null) {
-            _mode = new ModeLabel(atomLabel);
-            _arg = HyloHelper.getInstance().getLF_FromChildren(e);
-        } else {
-            List<Element> children = e.getChildren();
-            _mode = (Mode)HyloHelper.getInstance().getLF((Element)children.get(0));
-            _arg = HyloHelper.getInstance().getLF((Element)children.get(1));
-        }
-    }
-    
-    protected ModalOp(Mode mode, LF arg) {
-        _mode = mode;
-        _arg = arg;
-    }
+		String atomLabel = e.getAttributeValue("mode");
+		if (atomLabel == null)
+			atomLabel = e.getAttributeValue("m");
+		if (atomLabel != null) {
+			_mode = new ModeLabel(atomLabel);
+			_arg = HyloHelper.getInstance().getLF_FromChildren(e);
+		} else {
+			List<Element> children = e.getChildren();
+			_mode = (Mode) HyloHelper.getInstance().getLF((Element) children.get(0));
+			_arg = HyloHelper.getInstance().getLF((Element) children.get(1));
+		}
+	}
 
-    public Mode getMode() { return _mode; }
-    public void setMode(Mode mode) { _mode = mode; }
+	protected ModalOp(Mode mode, LF arg) {
+		_mode = mode;
+		_arg = arg;
+	}
 
-    public LF getArg() { return _arg; }
-    public void setArg(LF arg) { _arg = arg; }
-    
-    public void deepMap(ModFcn mf) {
-        _arg.deepMap(mf);
-        mf.modify(this);
-    }
+	public Mode getMode() {
+		return _mode;
+	}
 
-    public boolean occurs(Variable var) {
-        return _mode.occurs(var) || _arg.occurs(var);
-    }
+	public void setMode(Mode mode) {
+		_mode = mode;
+	}
 
-    protected boolean equals(ModalOp mo) {
-        if (_mode.equals(mo._mode) && _arg.equals(mo._arg)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	public LF getArg() {
+		return _arg;
+	}
 
-    protected void unifyCheck(ModalOp mo) throws UnifyFailure {
-        _mode.unifyCheck(mo._mode);
-        _arg.unifyCheck(mo._arg);
-    }
+	public void setArg(LF arg) {
+		_arg = arg;
+	}
 
-    /** Returns a hash code based on the mode and arg. */
-    public int hashCode() { return _mode.hashCode() + _arg.hashCode(); }
-    
-    /**
-     * Returns a hash code using the given map from vars to ints.
-     */
-    public int hashCode(TObjectIntHashMap varMap) { 
-        return _mode.hashCode(varMap) + _arg.hashCode(varMap); 
-    }
-        
-    /**
-     * Returns whether this modal op equals the given object  
-     * up to variable names, using the given maps from vars to ints.
-     */
-    public boolean equals(Object obj, TObjectIntHashMap varMap, TObjectIntHashMap varMap2) {
-        if (obj.getClass() != this.getClass()) { return false; }
-        ModalOp mo = (ModalOp) obj;
-        return _mode.equals(mo._mode, varMap, varMap2) && 
-               _arg.equals(mo._arg, varMap, varMap2); 
-    }
+	public void deepMap(ModFcn mf) {
+		_arg.deepMap(mf);
+		mf.modify(this);
+	}
 
-    /** Returns the string form of this modal op, without the arg. */
-    abstract public String modalOpString();
-    
-    public String toString() {
-        return new StringBuffer().append(modalOpString()).append(_arg.toString()).toString();
-    }
+	public boolean occurs(Variable var) {
+		return _mode.occurs(var) || _arg.occurs(var);
+	}
 
-    /**
-     * Returns a pretty-printed string of this LF, with the given indent.
-     */
-    public String prettyPrint(String indent) {
-        // calc new indent
-        StringBuffer ibuf = new StringBuffer();
-        ibuf.append(indent).append(' ');
-        String modalOpString = modalOpString(); 
-        for (int i = 0; i < modalOpString.length(); i++) {
-            ibuf.append(' ');
-        }
-        String newIndent = ibuf.toString();
-        // calc string
-        StringBuffer sb = new StringBuffer();
-        sb.append('\n').append(indent).append(modalOpString);
-        sb.append(_arg.prettyPrint(newIndent));
-        // done
-        return sb.toString();
-    }
+	protected boolean equals(ModalOp mo) {
+		if (_mode.equals(mo._mode) && _arg.equals(mo._arg)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected void unifyCheck(ModalOp mo) throws UnifyFailure {
+		_mode.unifyCheck(mo._mode);
+		_arg.unifyCheck(mo._arg);
+	}
+
+	/** Returns a hash code based on the mode and arg. */
+	public int hashCode() {
+		return _mode.hashCode() + _arg.hashCode();
+	}
+
+	/**
+	 * Returns a hash code using the given map from vars to ints.
+	 */
+	public int hashCode(TObjectIntHashMap varMap) {
+		return _mode.hashCode(varMap) + _arg.hashCode(varMap);
+	}
+
+	/**
+	 * Returns whether this modal op equals the given object up to variable
+	 * names, using the given maps from vars to ints.
+	 */
+	public boolean equals(Object obj, TObjectIntHashMap varMap, TObjectIntHashMap varMap2) {
+		if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+		ModalOp mo = (ModalOp) obj;
+		return _mode.equals(mo._mode, varMap, varMap2) && _arg.equals(mo._arg, varMap, varMap2);
+	}
+
+	/** Returns the string form of this modal op, without the arg. */
+	abstract public String modalOpString();
+
+	public String toString() {
+		return new StringBuffer().append(modalOpString()).append(_arg.toString()).toString();
+	}
+
+	/**
+	 * Returns a pretty-printed string of this LF, with the given indent.
+	 */
+	public String prettyPrint(String indent) {
+		// calc new indent
+		StringBuffer ibuf = new StringBuffer();
+		ibuf.append(indent).append(' ');
+		String modalOpString = modalOpString();
+		for (int i = 0; i < modalOpString.length(); i++) {
+			ibuf.append(' ');
+		}
+		String newIndent = ibuf.toString();
+		// calc string
+		StringBuffer sb = new StringBuffer();
+		sb.append('\n').append(indent).append(modalOpString);
+		sb.append(_arg.prettyPrint(newIndent));
+		// done
+		return sb.toString();
+	}
 }

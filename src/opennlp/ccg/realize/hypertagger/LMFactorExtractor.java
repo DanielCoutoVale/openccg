@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-
 /* this is a copy of TagExtract, modified to extract SRILM-format data using  the full-words
  * element from XML-format LFs.
  * The input is a file in which each line is a "pred-info"-style line, one per LF.
@@ -19,37 +18,36 @@ public class LMFactorExtractor {
 		int bNum = 0;
 		try {
 			rd = new BufferedReader(new FileReader(new File(args[0])));
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
 		String line = null;
 		StringBuilder out;
-		while(true) {
-			try { 
+		while (true) {
+			try {
 				line = rd.readLine();
-			}
-			catch(IOException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 				System.exit(1);
 			}
 			lineNum++;
-			if(line == null) {
+			if (line == null) {
 				break;
 			}
-			if(line.matches("^\\s*$")) {
+			if (line.matches("^\\s*$")) {
 				continue;
 			}
 			out = new StringBuilder();
 			out.append("<s> ");
 			String[] fields = line.split("\\s+");
 			bNum = 0;
-			for(String f : fields) {
+			for (String f : fields) {
 				bNum++;
 				String[] info = f.split(":");
-				if(info.length != 4) {
-					System.err.println("Wrong number of fields encountered in input line " + lineNum + ", bundle " + bNum);
+				if (info.length != 4) {
+					System.err.println("Wrong number of fields encountered in input line "
+							+ lineNum + ", bundle " + bNum);
 					System.exit(1);
 				}
 				out.append(info[3]);
@@ -64,5 +62,5 @@ public class LMFactorExtractor {
 			out.append("</s>");
 			System.out.println(out.toString());
 		}
-	}	
+	}
 }

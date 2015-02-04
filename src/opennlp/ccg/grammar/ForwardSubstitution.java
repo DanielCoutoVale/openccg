@@ -53,8 +53,10 @@ public class ForwardSubstitution extends AbstractSubstitutionRule {
 		_functorSlash.setAbility("active");
 	}
 
-    /** Returns an XML element representing the rule. */
-    public Element toXml() { return super.toXml("forward"); }
+	/** Returns an XML element representing the rule. */
+	public Element toXml() {
+		return super.toXml("forward");
+	}
 
 	public List<Category> applyRule(Category[] inputs) throws UnifyFailure {
 		if (inputs.length != 2) {
@@ -66,9 +68,8 @@ public class ForwardSubstitution extends AbstractSubstitutionRule {
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("X").append(_functorSlash.toString()).append("Y Y").append(
-				_argSlash.toString()).append("Z => X").append(
-				_argSlash.toString()).append("Z");
+		sb.append("X").append(_functorSlash.toString()).append("Y Y").append(_argSlash.toString())
+				.append("Z => X").append(_argSlash.toString()).append("Z");
 		return sb.toString();
 	}
 

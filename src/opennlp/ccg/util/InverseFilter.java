@@ -19,32 +19,36 @@
 package opennlp.ccg.util;
 
 /**
- * A filter that wraps another filter an inverts its effects. Specifically, for each argument that
- * the wrapped filter's {@link Filter#allows(Object)} method returns <tt>true</tt>, this filter
- * returns <tt>false</tt>, and vice versa.
+ * A filter that wraps another filter an inverts its effects. Specifically, for
+ * each argument that the wrapped filter's {@link Filter#allows(Object)} method
+ * returns <tt>true</tt>, this filter returns <tt>false</tt>, and vice versa.
  * 
  * @author <a href="http://www.ling.ohio-state.edu/~scott/">Scott Martin</a>
  */
 public class InverseFilter<E> implements Filter<E> {
 
 	Filter<? super E> originalFilter;
-	
+
 	/**
-	 * Creates a new filter based on the specified filter, inverting its effects. The specified filter can
-	 * apply to any superclass of this filter's type parameter.
+	 * Creates a new filter based on the specified filter, inverting its
+	 * effects. The specified filter can apply to any superclass of this
+	 * filter's type parameter.
+	 * 
 	 * @param originalFilter The filter to invert.
-	 * @throws IllegalArgumentException If <tt>originalFilter</tt> is <tt>null</tt>.
+	 * @throws IllegalArgumentException If <tt>originalFilter</tt> is
+	 *             <tt>null</tt>.
 	 */
 	public InverseFilter(Filter<? super E> originalFilter) {
-		if(originalFilter == null) {
+		if (originalFilter == null) {
 			throw new IllegalArgumentException("originalFilter is null");
 		}
-		
+
 		this.originalFilter = originalFilter;
 	}
-	
+
 	/**
 	 * Gets the original, non-inverted filter that this inverse filter wraps.
+	 * 
 	 * @return The filter specified at creation.
 	 * @see #InverseFilter(Filter)
 	 */
@@ -53,11 +57,13 @@ public class InverseFilter<E> implements Filter<E> {
 	}
 
 	/**
-	 * Tests whether this filter allows a specified element by calling the original filter's
-	 * {@link Filter#allows(Object)} method and reversing its boolean value.
+	 * Tests whether this filter allows a specified element by calling the
+	 * original filter's {@link Filter#allows(Object)} method and reversing its
+	 * boolean value.
 	 * 
 	 * @param e The element to test.
-	 * @return A value equivalent to calling <tt>!getOriginalFilter().allows(e)</tt>.
+	 * @return A value equivalent to calling
+	 *         <tt>!getOriginalFilter().allows(e)</tt>.
 	 */
 	@Override
 	public boolean allows(E e) {

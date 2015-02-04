@@ -31,32 +31,32 @@ import opennlp.ccg.synsem.*;
  * @version $Revision: 1.5 $, $Date: 2009/12/21 03:27:18 $
  */
 public class MacroItem {
-    private final String name;
-    private final FeatureStructure[] featStrucs;
-    private final LF[] preds;
-    
-    public MacroItem() {
-    	name = null;
-    	featStrucs = null;
-    	preds = null;
-    };
+	private final String name;
+	private final FeatureStructure[] featStrucs;
+	private final LF[] preds;
 
-    public MacroItem (String name, FeatureStructure[] featStrucs, LF[] preds) {
+	public MacroItem() {
+		name = null;
+		featStrucs = null;
+		preds = null;
+	};
+
+	public MacroItem(String name, FeatureStructure[] featStrucs, LF[] preds) {
 		this.name = name;
 		this.featStrucs = featStrucs;
 		this.preds = preds;
-    }
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public FeatureStructure[] getFeatureStructures() {
-        return featStrucs;
-    }
-    
-    public LF[] getPreds() {
-        return preds;
-    }
+	public FeatureStructure[] getFeatureStructures() {
+		return featStrucs;
+	}
+
+	public LF[] getPreds() {
+		return preds;
+	}
 
 }

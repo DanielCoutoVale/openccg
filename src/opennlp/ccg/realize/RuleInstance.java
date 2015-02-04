@@ -25,34 +25,33 @@ import java.util.*;
 //import java.text.*;
 
 /**
- * A rule instance is a tracker for an instantiated version of a type changing 
- * rule, ie a type changing rule with its semantics instantiated together with 
- * bitsets representing its coverage of the input predicates 
- * and the indices in its arg category, along with lists of the active LF alts.
- * Such rule instances are created and managed by an EdgeFactory.
- * The design follows the Singleton pattern.
+ * A rule instance is a tracker for an instantiated version of a type changing
+ * rule, ie a type changing rule with its semantics instantiated together with
+ * bitsets representing its coverage of the input predicates and the indices in
+ * its arg category, along with lists of the active LF alts. Such rule instances
+ * are created and managed by an EdgeFactory. The design follows the Singleton
+ * pattern.
  *
- * @author      Michael White
- * @version     $Revision: 1.7 $, $Date: 2005/11/24 03:22:08 $
+ * @author Michael White
+ * @version $Revision: 1.7 $, $Date: 2005/11/24 03:22:08 $
  */
-public class RuleInstance extends Tracker
-{
-    /** The instantiated type changing rule. */
-    public final TypeChangingRule rule;
-    
-    /** Constructor. */
-    public RuleInstance(TypeChangingRule rule, BitSet bitset, BitSet indices, List<List<Alt>> activeLfAlts) {
-        super(bitset, indices, activeLfAlts);
-        this.rule = rule;
-    }
+public class RuleInstance extends Tracker {
+	/** The instantiated type changing rule. */
+	public final TypeChangingRule rule;
 
-    /** Returns '{bitset} name: arg => result'. */
-    public String toString() {
-        StringBuffer sb = new StringBuffer();
-        //sb.append(indices + " ");
-        sb.append(bitset + " ");
-        sb.append(rule);
-        return sb.toString();
-    }
+	/** Constructor. */
+	public RuleInstance(TypeChangingRule rule, BitSet bitset, BitSet indices,
+			List<List<Alt>> activeLfAlts) {
+		super(bitset, indices, activeLfAlts);
+		this.rule = rule;
+	}
+
+	/** Returns '{bitset} name: arg => result'. */
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		// sb.append(indices + " ");
+		sb.append(bitset + " ");
+		sb.append(rule);
+		return sb.toString();
+	}
 }
-    

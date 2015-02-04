@@ -22,24 +22,26 @@ package opennlp.ccg.lexicon;
 /**
  * Any exception thrown if something wrong happens in the lexicon.
  *
- * @author      Gann Bierner
- * @author      Michael White
- * @version     $Revision: 1.3 $, $Date: 2005/10/20 17:30:30 $
+ * @author Gann Bierner
+ * @author Michael White
+ * @version $Revision: 1.3 $, $Date: 2005/10/20 17:30:30 $
  */
 public class LexException extends Exception {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	/** The message. */
-    protected String msg;
+	protected String msg;
 
-    /**
-     * Constructor with message.
-     */    
-    public LexException(String s) { msg = s; }
+	/**
+	 * Constructor with message.
+	 */
+	public LexException(String s) {
+		msg = s;
+	}
 
-    /** Returns exception message. */
-    public String toString() {
-        return "Lexicon Exception: " + msg;
-    }
+	/** Returns exception message. */
+	public String toString() {
+		return "Lexicon Exception: " + msg;
+	}
 }

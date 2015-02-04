@@ -39,103 +39,101 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLFilter;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-
 /**
  * An implementation of {@link XSLTProcessor} that performs transformations
  * using an {@link XMLFilter}. This particular implementation uses the XSLTC
- * compiler distributed with Apache's Xalan in order to avoid the known 
- * problems with re-using {@link XMLFilter}.
+ * compiler distributed with Apache's Xalan in order to avoid the known problems
+ * with re-using {@link XMLFilter}.
+ * 
  * @see <a href="http://xml.apache.org/xalan-j/">Apache Xalan</a>
  * @author <a href="http://www.ling.osu.edu/~scott/">Scott Martin</a>
  * @version $Revision: 1.4 $
  */
 class XMLFilterProcessor extends XSLTProcessor {
-	
+
 	// nb: this could be in the super class
 	List<Templates> templates = null;
-	
+
 	XMLFilter filter;
 	ErrorHandler errorHandler;
-	
-	static final String
-		XSLT_KEY = "javax.xml.transform.TransformerFactory",
-		XSLTC_VALUE = "org.apache.xalan.xsltc.trax.TransformerFactoryImpl";
-	
+
+	static final String XSLT_KEY = "javax.xml.transform.TransformerFactory",
+			XSLTC_VALUE = "org.apache.xalan.xsltc.trax.TransformerFactoryImpl";
+
 	XMLFilterProcessor(ErrorListener errorListener, ErrorHandler errorHandler) {
 		super(errorListener);
 		this.errorHandler = errorHandler;
 	}
-	
+
 	SAXTransformerFactory newTransformerFactory() {
-		// TODO try using xsltc (seems to yield hard-to-trace bugs at the moment)
-		//System.setProperty(XSLT_KEY, XSLTC_VALUE);
+		// TODO try using xsltc (seems to yield hard-to-trace bugs at the
+		// moment)
+		// System.setProperty(XSLT_KEY, XSLTC_VALUE);
 		return super.newTransformerFactory();
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see opennlp.ccgbank.XSLTProcessor#process(java.io.File)
 	 */
 	@Override
-	void process(InputSource inputSource) throws IOException,SAXException,
-			TransformerException {
+	void process(InputSource inputSource) throws IOException, SAXException, TransformerException {
 		// TODO figure out how to re-use filter without breaking :(
 		// make new filter each time
 		filter = makeFilter(taskTemplatesList);
 		filter.setContentHandler(serializer.asContentHandler());
 		filter.parse(inputSource);
 	}
-	
+
 	/**
 	 * Makes a filter from a single xsltProcessors object.
+	 * 
 	 * @see #makeFilter(List)
 	 */
-	XMLFilter makeFilter(CCGBankTaskTemplates templates)
-		throws FileNotFoundException,SAXException,
-			TransformerConfigurationException {
+	XMLFilter makeFilter(CCGBankTaskTemplates templates) throws FileNotFoundException,
+			SAXException, TransformerConfigurationException {
 		return makeFilter(Collections.singletonList(templates));
 	}
-	
-	
+
 	/**
-	 * Makes a filter from a series of xsltProcessors that applies those 
+	 * Makes a filter from a series of xsltProcessors that applies those
 	 * templates in order.
+	 * 
 	 * @param templateList The series of xsltProcessors used to construct the
-	 * filter.
+	 *            filter.
 	 * @throws BuildException If no xsltProcessors are specified.
 	 */
-	XMLFilter makeFilter(List<CCGBankTaskTemplates> templateList)
-		throws FileNotFoundException,SAXException,
-			 TransformerConfigurationException {
+	XMLFilter makeFilter(List<CCGBankTaskTemplates> templateList) throws FileNotFoundException,
+			SAXException, TransformerConfigurationException {
 
 		// make templates
-		if(templates == null) {
+		if (templates == null) {
 			templates = makeTemplates(taskTemplatesList);
 		}
-		
+
 		// assemble list of xslt templates into a filter
 		XMLFilter currentFilter = null, previousFilter = null;
 		for (Templates t : templates) {
 			currentFilter = transformerFactory.newXMLFilter(t);
 			currentFilter.setErrorHandler(errorHandler);
-			
-			if(previousFilter == null) { // it's the first one
-				currentFilter.setParent(
-						XMLReaderFactory.createXMLReader());					
-			}
-			else {
+
+			if (previousFilter == null) { // it's the first one
+				currentFilter.setParent(XMLReaderFactory.createXMLReader());
+			} else {
 				currentFilter.setParent(previousFilter);
 			}
-			
+
 			previousFilter = currentFilter;
 		}
-		
-		if(currentFilter == null ) {
+
+		if (currentFilter == null) {
 			throw new IllegalArgumentException("no templates specified");
 		}
-		
+
 		currentFilter.setErrorHandler(errorHandler);
 		currentFilter.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
-		
+
 		return currentFilter;
 	}
 }

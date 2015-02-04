@@ -22,11 +22,17 @@ package opennlp.ccg.synsem;
  * An adapter for Category Functions so that you only have to implement the
  * methods you want.
  *
- * @author      Gann Bierner
- * @version     $Revision: 1.1.1.1 $, $Date: 2003/02/28 18:02:12 $
+ * @author Gann Bierner
+ * @version $Revision: 1.1.1.1 $, $Date: 2003/02/28 18:02:12 $
  */
-public class CategoryFcnAdapter implements CategoryFcn{
-    public Category fcn(Category c) {return c;}
-    public void fcn(Category a, Category c, int i) {}
-    public void forall(Category c) {};
+public class CategoryFcnAdapter implements CategoryFcn {
+	public Category fcn(Category c) {
+		return c;
+	}
+
+	public void fcn(Category a, Category c, int i) {
+	}
+
+	public void forall(Category c) {
+	};
 }

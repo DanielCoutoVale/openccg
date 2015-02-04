@@ -43,7 +43,7 @@ public interface AssociationFactory {
 	 * @param associates the associates
 	 * @return the association
 	 */
-	public Association create(String form, String tone, String term, String functions, String supertag,
-			String entityClass, List<Pair<String, String>> associates);
+	public Association create(String form, String tone, String term, String functions,
+			String supertag, String entityClass, List<Pair<String, String>> associates);
 
 }

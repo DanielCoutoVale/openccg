@@ -21,8 +21,8 @@ package opennlp.ccg.ngrams;
 /**
  * Interface for scoring models that implement a self-paraphrase bias.
  *
- * @author      Michael White
- * @version     $Revision: 1.1 $, $Date: 2011/05/15 20:35:06 $
+ * @author Michael White
+ * @version $Revision: 1.1 $, $Date: 2011/05/15 20:35:06 $
  */
 public interface SelfParaphraseBiaser {
 	/** Sets the target strings for implementing the self-paraphrase bias. */

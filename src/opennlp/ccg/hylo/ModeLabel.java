@@ -23,35 +23,35 @@ import opennlp.ccg.unify.*;
 import org.jdom.*;
 
 /**
- * A modality label.
- * Types are not currently supported.
+ * A modality label. Types are not currently supported.
  *
- * @author      Jason Baldridge
- * @author      Michael White
- * @version     $Revision: 1.5 $, $Date: 2009/07/17 04:23:30 $
+ * @author Jason Baldridge
+ * @author Michael White
+ * @version $Revision: 1.5 $, $Date: 2009/07/17 04:23:30 $
  **/
 public final class ModeLabel extends HyloAtom implements Mode {
 
 	private static final long serialVersionUID = -4101305505903588678L;
 
 	public ModeLabel(String name) {
-        super(name);
-    }
+		super(name);
+	}
 
-    public LF copy() {
-        return new ModeLabel(_name);
-    }
+	public LF copy() {
+		return new ModeLabel(_name);
+	}
 
-    public Object unify(Object u, Substitution sub) throws UnifyFailure {
-        if (equals(u)) return this;
-        return super.unify(u, sub);
-    }
-    
-    /**
-     * Returns an XML representation of this LF (not currently supported).
-     * Throws a runtime exception.
-     */
-    public Element toXml() {
-        throw new RuntimeException("toXml() not currently supported for ModeLabel.");
-    }
+	public Object unify(Object u, Substitution sub) throws UnifyFailure {
+		if (equals(u))
+			return this;
+		return super.unify(u, sub);
+	}
+
+	/**
+	 * Returns an XML representation of this LF (not currently supported).
+	 * Throws a runtime exception.
+	 */
+	public Element toXml() {
+		throw new RuntimeException("toXml() not currently supported for ModeLabel.");
+	}
 }

@@ -20,11 +20,12 @@ package opennlp.ccg.util;
 
 /**
  * Interface for filters that characterize a set by some membership criteria.
- * This interface uses a single method, {@link #allows(Object)}, to allow implementing
- * classes to say whether the specified element should be a member of the collection or not.
+ * This interface uses a single method, {@link #allows(Object)}, to allow
+ * implementing classes to say whether the specified element should be a member
+ * of the collection or not.
  * <p>
- * Filters can be thought of as characteristic functions for sets. The type parameter is 
- * used to signal what kind of elements a filter applies to.
+ * Filters can be thought of as characteristic functions for sets. The type
+ * parameter is used to signal what kind of elements a filter applies to.
  * 
  * @param <E> The type of elements that this filter applies to.
  * 
@@ -36,7 +37,9 @@ public interface Filter<E> {
 
 	/**
 	 * Tests whether the specified element is allowed.
-	 * @return <tt>true</tt> if the provided element should be allowed into the collection.
+	 * 
+	 * @return <tt>true</tt> if the provided element should be allowed into the
+	 *         collection.
 	 */
 	boolean allows(E e);
 }

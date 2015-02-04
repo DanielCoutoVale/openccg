@@ -22,13 +22,17 @@ import opennlp.ccg.unify.*;
 /**
  * A modality that can decorate a categorial slash.
  *
- * @author      Jason Baldridge
- * @version     $Revision: 1.2 $, $Date: 2004/05/01 10:40:04 $
+ * @author Jason Baldridge
+ * @version $Revision: 1.2 $, $Date: 2004/05/01 10:40:04 $
  */
 public interface Modality extends Unifiable {
-    public Object copy();
-    public byte getDirection();
-    public String toString(byte dir);
-    public String toTeX(byte dir);
-    public String toTeX();
+	public Object copy();
+
+	public byte getDirection();
+
+	public String toString(byte dir);
+
+	public String toTeX(byte dir);
+
+	public String toTeX();
 }

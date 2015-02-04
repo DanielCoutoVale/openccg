@@ -24,10 +24,10 @@ public interface LexiconBuilder {
 	public LexiconObject buildLexicon();
 
 	public void makeRelationSorting(Element element);
-	
+
 	public void makeLicensingFeatures(Element element);
-	
+
 	public void makeDistributiveFeatures(Element element);
-	
+
 	public void makeFamilyItem(Element element);
 }

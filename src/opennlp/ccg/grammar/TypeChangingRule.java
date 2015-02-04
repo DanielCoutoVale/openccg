@@ -29,124 +29,137 @@ import org.jdom.Element;
 /**
  * A CCG unary type changing rule.
  *
- * @author      Jason Baldridge
- * @author      Michael White
+ * @author Jason Baldridge
+ * @author Michael White
  * @version $Revision: 1.12 $, $Date: 2009/11/30 20:36:16 $
  **/
 public class TypeChangingRule extends AbstractRule implements EntityRealizer {
-	
+
 	private static final long serialVersionUID = -2654945192870162776L;
 
 	/**
-	 * String used as the POS for all type changing rules, 
-	 * to satisfy the LexSemOrigin interface.
-	 * Defaults to "URULE".
+	 * String used as the POS for all type changing rules, to satisfy the
+	 * LexSemOrigin interface. Defaults to "URULE".
 	 */
 	public static String POS_STRING = "URULE";
-	
 
-    /** The argument category. */   
-    protected Category _arg; 
+	/** The argument category. */
+	protected Category _arg;
 
-    /** The result category. */
-    protected Category _result; 
-    
-    /** The first elementary predication in the result LF (or null), before sorting. */
-    protected LF _firstEP;
+	/** The result category. */
+	protected Category _result;
 
+	/**
+	 * The first elementary predication in the result LF (or null), before
+	 * sorting.
+	 */
+	protected LF _firstEP;
 
-    /** Constructor. */
-    public TypeChangingRule(Category arg, Category result, String name, LF firstEP) {
-        _arg = arg; _result = result; _name = name.intern(); _firstEP = firstEP;
-        HyloHelper.getInstance().setEntityRealizer(_result.getLF(), this);
-    }
+	/** Constructor. */
+	public TypeChangingRule(Category arg, Category result, String name, LF firstEP) {
+		_arg = arg;
+		_result = result;
+		_name = name.intern();
+		_firstEP = firstEP;
+		HyloHelper.getInstance().setEntityRealizer(_result.getLF(), this);
+	}
 
-    /** Returns an XML element representing the rule. */
-    public Element toXml() {
-    	Element retval = new Element("typechanging");
-    	retval.setAttribute("name", _name);
-    	Element argElt = new Element("arg");
-    	retval.addContent(argElt);
-    	argElt.addContent(_arg.toXml());
-    	Element resultElt = new Element("result");
-    	retval.addContent(resultElt);
-    	resultElt.addContent(_result.toXml());
-    	return retval;
-    }
+	/** Returns an XML element representing the rule. */
+	public Element toXml() {
+		Element retval = new Element("typechanging");
+		retval.setAttribute("name", _name);
+		Element argElt = new Element("arg");
+		retval.addContent(argElt);
+		argElt.addContent(_arg.toXml());
+		Element resultElt = new Element("result");
+		retval.addContent(resultElt);
+		resultElt.addContent(_result.toXml());
+		return retval;
+	}
 
-    /** Returns 1. */
-    public int arity() { return 1; }
-    
-    /** Returns the arg. */
-    public Category getArg() { return _arg; }
-    
-    /** Returns the result. */
-    public Category getResult() { return _result; }
+	/** Returns 1. */
+	public int arity() {
+		return 1;
+	}
 
-    /** Returns the first elementary predication in the result LF (or null), before sorting. */
-    public LF getFirstEP() { return _firstEP; }
+	/** Returns the arg. */
+	public Category getArg() {
+		return _arg;
+	}
 
+	/** Returns the result. */
+	public Category getResult() {
+		return _result;
+	}
 
-    /** Applies this rule to the given inputs. */
-    public List<Category> applyRule(Category[] inputs) throws UnifyFailure {
-        // check arity
-        if (inputs.length != 1) {
-            throw new UnifyFailure();
-        }
-        return apply(inputs[0]);
-    }
+	/**
+	 * Returns the first elementary predication in the result LF (or null),
+	 * before sorting.
+	 */
+	public LF getFirstEP() {
+		return _firstEP;
+	}
 
-    /** Applies this rule to the given input. */
-    protected List<Category> apply(Category input) throws UnifyFailure {
+	/** Applies this rule to the given inputs. */
+	public List<Category> applyRule(Category[] inputs) throws UnifyFailure {
+		// check arity
+		if (inputs.length != 1) {
+			throw new UnifyFailure();
+		}
+		return apply(inputs[0]);
+	}
 
-        // unify quick check
-        _arg.unifyCheck(input);
-        
-        // copy arg and result
-        Category arg = _arg.copy();
-        Category result = _result.copy();
-        
-        // make variables unique
-        UnifyControl.reindex(result, arg);
+	/** Applies this rule to the given input. */
+	protected List<Category> apply(Category input) throws UnifyFailure {
 
-        // unify
-        Substitution sub = new GSubstitution();
-        GUnifier.unify(input, arg, sub);
-        ((GSubstitution)sub).condense();
+		// unify quick check
+		_arg.unifyCheck(input);
 
-        // fill in result
-        Category $result = (Category)result.fill(sub);
-        appendLFs(input, result, $result, sub);
+		// copy arg and result
+		Category arg = _arg.copy();
+		Category result = _result.copy();
 
-        // return
-        List<Category> results = new ArrayList<Category>(1);
-        _headCats.clear();
-        results.add($result);
-        _headCats.add(input);
-        return results;
-    }
-    
-    
-    /** Returns 'name: arg => result'. */
-    public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(_name).append(": ");
-        sb.append(_arg).append(' ');
-        sb.append("=> ").append(_result);
-        return sb.toString();
-    }
-    
-    /** Returns 'arg_=>_result' as the supertag. */
-    public String getSupertag() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(_arg.getSupertag()).append("_=>_").append(_result.getSupertag());
-        return sb.toString();
-    }
-    
-    /**
-     * Always returns POS_STRING. 
-     */
-    public String getPOS() { return POS_STRING; }
-    
+		// make variables unique
+		UnifyControl.reindex(result, arg);
+
+		// unify
+		Substitution sub = new GSubstitution();
+		GUnifier.unify(input, arg, sub);
+		((GSubstitution) sub).condense();
+
+		// fill in result
+		Category $result = (Category) result.fill(sub);
+		appendLFs(input, result, $result, sub);
+
+		// return
+		List<Category> results = new ArrayList<Category>(1);
+		_headCats.clear();
+		results.add($result);
+		_headCats.add(input);
+		return results;
+	}
+
+	/** Returns 'name: arg => result'. */
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(_name).append(": ");
+		sb.append(_arg).append(' ');
+		sb.append("=> ").append(_result);
+		return sb.toString();
+	}
+
+	/** Returns 'arg_=>_result' as the supertag. */
+	public String getSupertag() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(_arg.getSupertag()).append("_=>_").append(_result.getSupertag());
+		return sb.toString();
+	}
+
+	/**
+	 * Always returns POS_STRING.
+	 */
+	public String getPOS() {
+		return POS_STRING;
+	}
+
 }
-

@@ -29,13 +29,13 @@ import opennlp.ccg.lexicon.Association;
  * @version $Revision: 1.1 $, $Date: 2010/09/21 04:12:41 $
  */
 public interface CorpusIterator {
-    
-    public List<Association> next() throws IOException;
-    
-    public boolean hasNext();
-    
-    public void close();
-    
-    public Iterator<List<Association>> iterator();
-    
+
+	public List<Association> next() throws IOException;
+
+	public boolean hasNext();
+
+	public void close();
+
+	public Iterator<List<Association>> iterator();
+
 }

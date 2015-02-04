@@ -37,121 +37,127 @@ import org.xml.sax.helpers.DefaultHandler;
  * @version $Revision: 1.2 $, $Date: 2009/12/21 02:10:57 $
  */
 public class XMLPOSDictionaryReader {
-    
-    private File dictFile;
-    private XMLReader reader;
-    private Map<String, Collection<String>> dict; 
-    
-    /** Creates a new instance of XMLDictionaryReader
-     * @param dictFile A <code>String</code> pointing to the location of
-     * the XML file specifying the word dictionary.
-     */
-    public XMLPOSDictionaryReader(File df) {
-        if(!df.exists()) {
-            throw new RuntimeException("File "+df.getAbsolutePath().toString()+" does not exist.");
-        }
-        this.dictFile = df;       
-    }
-    
-    /**
-     * Read in the dictionary file and create a new STTaggerPOSDictionary.
-     * @return A new <tt>STTaggerPOSDictionary</tt>.
-     */
-    public STTaggerPOSDictionary read() {
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        try {
-            SAXParser parser = factory.newSAXParser();
-            reader = parser.getXMLReader();
-            reader.setContentHandler(new wdContentHandler());
-            reader.parse(this.dictFile.toURI().toString());
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return new STTaggerPOSDictionary(this.dict);
-    }
-    
-    public static void main(String[] args) {
-        // This is just to verify that the XML doc read in is the one 
-        // spit out.
-        String fname = args[0];
-        XMLPOSDictionaryReader rdr = new XMLPOSDictionaryReader(new File(fname));
-        STTaggerPOSDictionary dct = rdr.read();
-        Iterator<Pair<String, Collection<String>>> it = dct.getMappings();
-        Pair<String, Collection<String>> tempP = null;
-        System.out.println("<posdict>");
-        while(it.hasNext()) {
-            tempP = it.next();
-            System.out.println("     <entry pos=\""+tempP.a+"\">");            
-            for(Iterator<String> stgs = tempP.b.iterator(); stgs.hasNext(); ) {
-                System.out.println("          <supertag> "+stgs.next().trim()+" </supertag>");
-            }
-            System.out.println("     </entry>");
-        }
-        System.out.print("</posdict>");
-    }
-    
-    /*
-     * A ContentHandler to properly interpret the "semantics" of the XML (semantics
-     * in the CS sense of formal semantics of a structured document).
-     */
-    class wdContentHandler extends DefaultHandler {
-        private boolean inEntry = false, inSupertag = false;
-        private String curPOS = null, currSTFrag = null;
-        
-        @Override
-        public void startDocument() {
-            dict = new TreeMap<String, Collection<String>>();
-        }
-        
-        @Override
-        public void startElement(String namespaceURI, String lname, String qname, Attributes attrs)
-                throws SAXException {
-            if(qname.equalsIgnoreCase("entry")) {  
-                if(this.inEntry) {
-                    throw new SAXException("Something is wrong.\nThis is not a well-formed dictionary.");
-                } else {
-                    this.inEntry = true;
-                    String pos = attrs.getValue(0).trim();                    
-                    dict.
-                         put(pos,
-                             new HashSet<String>());
-                    this.curPOS = pos;
-                }
-                
-            } else if(qname.equalsIgnoreCase("supertag")) {
-                if(!this.inEntry) {
-                    throw new SAXException("Something is wrong.\nThis is not a well-formed dictionary.");
-                } else {
-                    this.inSupertag = true;
-                    this.currSTFrag = "";
-                }
-            }
-        }
-        
-        @Override
-        public void endElement(String uri, String name, String qName) {
-            if(qName.equalsIgnoreCase("entry")) {
-                this.inEntry = false; this.curPOS = null;
-            } else if(qName.equalsIgnoreCase("supertag")) {
-                this.inSupertag = false; 
-                Collection<String> tempL = dict.get(this.curPOS);
-                tempL.add(this.currSTFrag.trim());
-                dict.put(this.curPOS, tempL);
-                this.currSTFrag = null;
-            }
-        }
-        
-        @Override
-        public void characters(char[] ch, int start, int length) {
-            if(this.inSupertag && this.curPOS!=null) {
-                // Get this supertag and add it to the list mapped to by this POS (i.e., the list
-                // of supertags seen with this POS in training).
-                String temp = new String(ch);      
-                temp = temp.substring(start, start+length);
-                this.currSTFrag += temp;
-            } else if(this.inSupertag) {
-                System.err.println("Something is wrong.\nThis is not a well-formed dictionary.");
-            }
-        }
-    }
+
+	private File dictFile;
+	private XMLReader reader;
+	private Map<String, Collection<String>> dict;
+
+	/**
+	 * Creates a new instance of XMLDictionaryReader
+	 * 
+	 * @param dictFile A <code>String</code> pointing to the location of the XML
+	 *            file specifying the word dictionary.
+	 */
+	public XMLPOSDictionaryReader(File df) {
+		if (!df.exists()) {
+			throw new RuntimeException("File " + df.getAbsolutePath().toString()
+					+ " does not exist.");
+		}
+		this.dictFile = df;
+	}
+
+	/**
+	 * Read in the dictionary file and create a new STTaggerPOSDictionary.
+	 * 
+	 * @return A new <tt>STTaggerPOSDictionary</tt>.
+	 */
+	public STTaggerPOSDictionary read() {
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+		try {
+			SAXParser parser = factory.newSAXParser();
+			reader = parser.getXMLReader();
+			reader.setContentHandler(new wdContentHandler());
+			reader.parse(this.dictFile.toURI().toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new STTaggerPOSDictionary(this.dict);
+	}
+
+	public static void main(String[] args) {
+		// This is just to verify that the XML doc read in is the one
+		// spit out.
+		String fname = args[0];
+		XMLPOSDictionaryReader rdr = new XMLPOSDictionaryReader(new File(fname));
+		STTaggerPOSDictionary dct = rdr.read();
+		Iterator<Pair<String, Collection<String>>> it = dct.getMappings();
+		Pair<String, Collection<String>> tempP = null;
+		System.out.println("<posdict>");
+		while (it.hasNext()) {
+			tempP = it.next();
+			System.out.println("     <entry pos=\"" + tempP.a + "\">");
+			for (Iterator<String> stgs = tempP.b.iterator(); stgs.hasNext();) {
+				System.out.println("          <supertag> " + stgs.next().trim() + " </supertag>");
+			}
+			System.out.println("     </entry>");
+		}
+		System.out.print("</posdict>");
+	}
+
+	/*
+	 * A ContentHandler to properly interpret the "semantics" of the XML
+	 * (semantics in the CS sense of formal semantics of a structured document).
+	 */
+	class wdContentHandler extends DefaultHandler {
+		private boolean inEntry = false, inSupertag = false;
+		private String curPOS = null, currSTFrag = null;
+
+		@Override
+		public void startDocument() {
+			dict = new TreeMap<String, Collection<String>>();
+		}
+
+		@Override
+		public void startElement(String namespaceURI, String lname, String qname, Attributes attrs)
+				throws SAXException {
+			if (qname.equalsIgnoreCase("entry")) {
+				if (this.inEntry) {
+					throw new SAXException(
+							"Something is wrong.\nThis is not a well-formed dictionary.");
+				} else {
+					this.inEntry = true;
+					String pos = attrs.getValue(0).trim();
+					dict.put(pos, new HashSet<String>());
+					this.curPOS = pos;
+				}
+
+			} else if (qname.equalsIgnoreCase("supertag")) {
+				if (!this.inEntry) {
+					throw new SAXException(
+							"Something is wrong.\nThis is not a well-formed dictionary.");
+				} else {
+					this.inSupertag = true;
+					this.currSTFrag = "";
+				}
+			}
+		}
+
+		@Override
+		public void endElement(String uri, String name, String qName) {
+			if (qName.equalsIgnoreCase("entry")) {
+				this.inEntry = false;
+				this.curPOS = null;
+			} else if (qName.equalsIgnoreCase("supertag")) {
+				this.inSupertag = false;
+				Collection<String> tempL = dict.get(this.curPOS);
+				tempL.add(this.currSTFrag.trim());
+				dict.put(this.curPOS, tempL);
+				this.currSTFrag = null;
+			}
+		}
+
+		@Override
+		public void characters(char[] ch, int start, int length) {
+			if (this.inSupertag && this.curPOS != null) {
+				// Get this supertag and add it to the list mapped to by this
+				// POS (i.e., the list
+				// of supertags seen with this POS in training).
+				String temp = new String(ch);
+				temp = temp.substring(start, start + length);
+				this.currSTFrag += temp;
+			} else if (this.inSupertag) {
+				System.err.println("Something is wrong.\nThis is not a well-formed dictionary.");
+			}
+		}
+	}
 }

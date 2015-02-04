@@ -42,8 +42,9 @@ public class AssociateCanonFactory implements AssociationFactory {
 	// looks up the word equivalent to w, or if none, returns a new one
 	// based on it
 	/**
-	 * Looks up whether there is an interned equivalent association and returns it if there is one.
-	 * Otherwise, interns the association and returns the interned.
+	 * Looks up whether there is an interned equivalent association and returns
+	 * it if there is one. Otherwise, interns the association and returns the
+	 * interned.
 	 * 
 	 * @return the interned association
 	 */
@@ -100,8 +101,9 @@ public class AssociateCanonFactory implements AssociationFactory {
 	}
 
 	@Override
-	public final synchronized Association create(String form, String tone, String term, String functions,
-			String supertag, String entityClass, List<Pair<String, String>> associates) {
+	public final synchronized Association create(String form, String tone, String term,
+			String functions, String supertag, String entityClass,
+			List<Pair<String, String>> associates) {
 		updateAssociates(form, tone, term, functions, supertag, entityClass, associates);
 		return internAssociation();
 	}

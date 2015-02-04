@@ -26,57 +26,63 @@ import jline.*;
 /**
  * A command-line reader based on JLine.
  *
- * @author  David Reitter
- * @author  Michael White
+ * @author David Reitter
+ * @author Michael White
  * @version $Revision: 1.4 $, $Date: 2009/12/21 03:27:18 $
  */
 public class JLineReader extends LineReader {
 
 	// reader for console input
-    ConsoleReader reader;
+	ConsoleReader reader;
 
-    // command history, buffer    
-    History history = null;
-    StringWriter histbuf = null;
-    
-    /** Constructor with completion strings. */
-    public JLineReader(String[] completions) throws IOException {
-        // init reader
-        reader = new ConsoleReader();
-		// store commands for 'tab' argument completion 
-    	List<SimpleCompletor> completors = new LinkedList<SimpleCompletor>();
-    	completors.add(new SimpleCompletor(completions));
-        reader.addCompletor(new ArgumentCompletor(completors));
-    }
-    
-    /** Sets the command history. */
-    public void setCommandHistory(String histStr) throws IOException {
+	// command history, buffer
+	History history = null;
+	StringWriter histbuf = null;
+
+	/** Constructor with completion strings. */
+	public JLineReader(String[] completions) throws IOException {
+		// init reader
+		reader = new ConsoleReader();
+		// store commands for 'tab' argument completion
+		List<SimpleCompletor> completors = new LinkedList<SimpleCompletor>();
+		completors.add(new SimpleCompletor(completions));
+		reader.addCompletor(new ArgumentCompletor(completors));
+	}
+
+	/** Sets the command history. */
+	public void setCommandHistory(String histStr) throws IOException {
 		// initialize history with max size = 50
 		history = new History();
-        history.setMaxSize(50);
+		history.setMaxSize(50);
 		if (!histStr.equals("")) {
-            histStr = histStr.replaceAll("<br/>", "\n"); // using <br/> to get around XML problem in Java 1.4
+			histStr = histStr.replaceAll("<br/>", "\n"); // using <br/> to get
+															// around XML
+															// problem in Java
+															// 1.4
 			StringReader sreader = new StringReader(histStr);
-			history.load(sreader); 
+			history.load(sreader);
 		}
-        // set to reader's history
+		// set to reader's history
 		reader.setHistory(history);
-    }
-    
-    /** Gets the current command history. */
-    public String getCommandHistory() throws IOException {
-        if (history == null) return "";
-        StringBuffer retbuf = new StringBuffer();
-        List<?> commands = history.getHistoryList();
-        for (Iterator<?> it = commands.iterator(); it.hasNext(); ) {
-            retbuf.append(it.next().toString());
-            if (it.hasNext()) retbuf.append("<br/>"); // using <br/> to get around XML problem in Java 1.4
-        }
-        return retbuf.toString();
-    }
-    
-    /** Returns an input string, using the given prompt. */
-    public String readLine(String prompt) throws IOException {
-	    return reader.readLine(prompt);
-    }
+	}
+
+	/** Gets the current command history. */
+	public String getCommandHistory() throws IOException {
+		if (history == null)
+			return "";
+		StringBuffer retbuf = new StringBuffer();
+		List<?> commands = history.getHistoryList();
+		for (Iterator<?> it = commands.iterator(); it.hasNext();) {
+			retbuf.append(it.next().toString());
+			if (it.hasNext())
+				retbuf.append("<br/>"); // using <br/> to get around XML problem
+										// in Java 1.4
+		}
+		return retbuf.toString();
+	}
+
+	/** Returns an input string, using the given prompt. */
+	public String readLine(String prompt) throws IOException {
+		return reader.readLine(prompt);
+	}
 }

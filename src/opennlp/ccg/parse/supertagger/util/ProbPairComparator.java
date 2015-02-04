@@ -24,23 +24,25 @@ import opennlp.ccg.util.Pair;
 /**
  * @author Dennis N. Mehay
  * 
- * A little Comparator instance for comparing Pair<Double,String>
- * instances of pair by descending order of the Double value (assuming
- * that they are probabilities of string tags).
+ *         A little Comparator instance for comparing Pair<Double,String>
+ *         instances of pair by descending order of the Double value (assuming
+ *         that they are probabilities of string tags).
  */
-public class ProbPairComparator implements Comparator<Pair<Double,String>> {
+public class ProbPairComparator implements Comparator<Pair<Double, String>> {
 
-    /**
-     * Implements the Comparator interface's work-horse method.
-     * 
-     * Compares two Pair<Double,String> objects.  Crucially, it does NOT
-     * ensure that both objects are Pair<Double,String> before casting them.
-     * The caller is responsible for ensuring this, and failure to do so may
-     * result in a RuntimeException.
-     */
-    public int compare(Pair<Double,String> pr1, Pair<Double,String> pr2) {
-        if (pr1 == pr2) { return 0; }
-        return -1 * Double.compare(pr1.a, pr2.a);
+	/**
+	 * Implements the Comparator interface's work-horse method.
+	 * 
+	 * Compares two Pair<Double,String> objects. Crucially, it does NOT ensure
+	 * that both objects are Pair<Double,String> before casting them. The caller
+	 * is responsible for ensuring this, and failure to do so may result in a
+	 * RuntimeException.
+	 */
+	public int compare(Pair<Double, String> pr1, Pair<Double, String> pr2) {
+		if (pr1 == pr2) {
+			return 0;
+		}
+		return -1 * Double.compare(pr1.a, pr2.a);
 
-    }
+	}
 }

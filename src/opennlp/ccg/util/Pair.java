@@ -24,37 +24,44 @@ import java.io.Serializable;
 /**
  * Dinky class to package pairs of things.
  *
- * @author      Jason Baldridge
- * @author      Gann Bierner
- * @author      Michael White
- * @version     $Revision: 1.7 $, $Date: 2009/12/21 03:27:18 $
+ * @author Jason Baldridge
+ * @author Gann Bierner
+ * @author Michael White
+ * @version $Revision: 1.7 $, $Date: 2009/12/21 03:27:18 $
  */
-public final class Pair<TypeA,TypeB> implements Serializable {
-    
+public final class Pair<TypeA, TypeB> implements Serializable {
+
 	private static final long serialVersionUID = 3626104184233533389L;
 
 	/** The first element of the pair. */
-    public final TypeA a; 
+	public final TypeA a;
 
-    /** The second element of the pair. */
-    public final TypeB b;
+	/** The second element of the pair. */
+	public final TypeB b;
 
-    /** Constructor. */
-    public Pair(TypeA a, TypeB b) {
-        this.a = a; this.b = b; 
-    }
-    
-    /** Returns a hash code constructed from those of a and b. */
-    public int hashCode() { return a.hashCode() - b.hashCode(); }
-    
-    /** Returns true if the given object pairs the same elements. */
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Pair<?, ?>)) return false;
-        Pair<?, ?> p = (Pair<?, ?>) obj;
-        return a.equals(p.a) && b.equals(p.b);
-    }
+	/** Constructor. */
+	public Pair(TypeA a, TypeB b) {
+		this.a = a;
+		this.b = b;
+	}
 
-    /** Returns "[a/b]". */
-    public String toString() { return "["+a+"/"+b+"]"; }
+	/** Returns a hash code constructed from those of a and b. */
+	public int hashCode() {
+		return a.hashCode() - b.hashCode();
+	}
+
+	/** Returns true if the given object pairs the same elements. */
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Pair<?, ?>))
+			return false;
+		Pair<?, ?> p = (Pair<?, ?>) obj;
+		return a.equals(p.a) && b.equals(p.b);
+	}
+
+	/** Returns "[a/b]". */
+	public String toString() {
+		return "[" + a + "/" + b + "]";
+	}
 }

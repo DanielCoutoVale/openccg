@@ -18,66 +18,68 @@
 package opennlp.ccg.hylo.graph;
 
 /**
- * A set of enum constants indicating the type of an LF vertex. The type of a vertex is
- * also signaled by the character prefix of its name, as in <tt>w9</tt> and <tt>x3</tt>.
+ * A set of enum constants indicating the type of an LF vertex. The type of a
+ * vertex is also signaled by the character prefix of its name, as in
+ * <tt>w9</tt> and <tt>x3</tt>.
  * 
  * @author <a href="http://www.ling.ohio-state.edu/~scott/">Scott Martin</a>
  */
 public enum LFVertexType {
-	
+
 	/**
 	 * The type of vertices representing words, with prefix <tt>w</tt>.
 	 */
 	WORD('w'),
-	
+
 	/**
 	 * The type of vertices representing nonwords, prefixed <tt>x</tt>.
 	 */
 	NONWORD('x');
-	
+
 	/**
 	 * The prefix character for this vertex type.
 	 */
 	final Character prefix;
-	
+
 	private LFVertexType(Character prefix) {
 		this.prefix = prefix;
 	}
-	
+
 	/**
 	 * Gets the naming prefix used by this vertex type.
 	 */
 	public Character getPrefix() {
 		return prefix;
 	}
-	
+
 	/**
 	 * Gets the LF vertex type corresponding to the specified prefix string.
 	 * 
 	 * @param string The prefix string.
-	 * @return The value of {@link #fromPrefix(Character)} for the first character in the
-	 * specified string.
+	 * @return The value of {@link #fromPrefix(Character)} for the first
+	 *         character in the specified string.
 	 * 
 	 * @see #fromPrefix(Character)
 	 */
 	public static LFVertexType fromPrefix(String string) {
 		return fromPrefix(Character.valueOf(string.charAt(0)));
 	}
-	
+
 	/**
 	 * Gets the LF vertex type corresponding to the specified character prefix.
+	 * 
 	 * @param prefix The prefix character.
 	 * @return The vertex type with the specified prefix, as determined by
-	 * {@link #getPrefix()}, or {@link #NONWORD} if there is no vertex type for the given
-	 * prefix character.
+	 *         {@link #getPrefix()}, or {@link #NONWORD} if there is no vertex
+	 *         type for the given prefix character.
 	 */
 	public static LFVertexType fromPrefix(Character prefix) {
-		for(LFVertexType type : values()) {
-			if(type.prefix.equals(prefix)) {
+		for (LFVertexType type : values()) {
+			if (type.prefix.equals(prefix)) {
 				return type;
 			}
 		}
-		
+
 		return NONWORD;
 	}
 }

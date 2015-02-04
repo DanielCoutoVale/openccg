@@ -53,8 +53,10 @@ public class BackwardComposition extends AbstractCompositionRule {
 		_functorSlash.setAbility("active");
 	}
 
-    /** Returns an XML element representing the rule. */
-    public Element toXml() { return super.toXml("backward"); }
+	/** Returns an XML element representing the rule. */
+	public Element toXml() {
+		return super.toXml("backward");
+	}
 
 	public List<Category> applyRule(Category[] inputs) throws UnifyFailure {
 		if (inputs.length != 2) {
@@ -66,8 +68,8 @@ public class BackwardComposition extends AbstractCompositionRule {
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("Y").append(_argSlash.toString()).append("Z ").append(
-				"X\\Y => X").append(_argSlash.toString()).append("Z");
+		sb.append("Y").append(_argSlash.toString()).append("Z ").append("X\\Y => X")
+				.append(_argSlash.toString()).append("Z");
 		return sb.toString();
 	}
 

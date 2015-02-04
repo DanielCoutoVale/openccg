@@ -19,27 +19,27 @@ package opennlp.ccg.alignment;
 
 /**
  * In an alignment, a phrase position indicates which of the two aligned phrases
- * is first (the &quot;A&quot; phrase) and which is second (the &quot;B&quot; phrase)
- * in terms of the alignment indices.
- *  
+ * is first (the &quot;A&quot; phrase) and which is second (the &quot;B&quot;
+ * phrase) in terms of the alignment indices.
+ * 
  * @author <a href="http://www.ling.ohio-state.edu/~scott/">Scott Martin</a>
  */
 public enum PhrasePosition {
-	
+
 	/**
 	 * The &quot;A&quot; position.
 	 */
 	A,
-	
+
 	/**
 	 * The &quot;B&quot; position.
 	 */
 	B;
-	
+
 	/**
 	 * Gives the opposite of this phrase position.
-	 * @return {@link #B} if this position is {@link #A}, otherwise 
-	 * {@link #A}.
+	 * 
+	 * @return {@link #B} if this position is {@link #A}, otherwise {@link #A}.
 	 */
 	public PhrasePosition opposite() {
 		return (this == A) ? B : A;

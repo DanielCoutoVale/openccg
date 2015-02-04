@@ -46,9 +46,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 public class MorphExtract {
 
-	public static void extractMorph(ExtractionProperties extractProps)
-			throws TransformerException, TransformerConfigurationException,
-			SAXException, IOException, JDOMException {
+	public static void extractMorph(ExtractionProperties extractProps) throws TransformerException,
+			TransformerConfigurationException, SAXException, IOException, JDOMException {
 
 		System.out.println("Extracting morph:");
 		System.out.println("Generating morph.xml");
@@ -58,8 +57,7 @@ public class MorphExtract {
 		File morphFile = new File(new File(extractProps.destDir), "morph.xml");
 		File tempFile = new File(new File(extractProps.tempDir), "temp.xml");
 
-		if (tFactory.getFeature(SAXSource.FEATURE)
-				&& tFactory.getFeature(SAXResult.FEATURE)) {
+		if (tFactory.getFeature(SAXSource.FEATURE) && tFactory.getFeature(SAXResult.FEATURE)) {
 
 			SAXTransformerFactory saxTFactory = ((SAXTransformerFactory) tFactory);
 
@@ -73,14 +71,13 @@ public class MorphExtract {
 			addTransforms(xslChain, extractProps.macroSpecs);
 
 			for (String xslFile : xslChain)
-				filterChain.add(saxTFactory.newXMLFilter(ExtractGrammar
-						.getSource(xslFile)));
+				filterChain.add(saxTFactory.newXMLFilter(ExtractGrammar.getSource(xslFile)));
 			// Create an XMLReader and set first xsl transform to that.
 			XMLReader reader = XMLReaderFactory.createXMLReader();
 			XMLFilter xmlFilter0 = filterChain.get(0);
 			xmlFilter0.setParent(reader);
 
-			//Create chain of xsl transforms
+			// Create chain of xsl transforms
 			// Create an XMLFilter for each stylesheet.
 			for (int i = 1; i < filterChain.size(); i++) {
 				XMLFilter xmlFilterPrev = filterChain.get(i - 1);
@@ -94,19 +91,18 @@ public class MorphExtract {
 					.getDefaultMethodProperties("xml");
 			xmlProps.setProperty("indent", "yes");
 			xmlProps.setProperty("standalone", "no");
-			xmlProps.setProperty("{http://xml.apache.org/xalan}indent-amount",
-					"2");
+			xmlProps.setProperty("{http://xml.apache.org/xalan}indent-amount", "2");
 			Serializer serializer = SerializerFactory.getSerializer(xmlProps);
 			serializer.setOutputStream(new FileOutputStream(morphFile));
-			//XMLFilter xmlFilter = xmlFilter2;
-			//XMLFilter xmlFilter = xmlFilter3;
+			// XMLFilter xmlFilter = xmlFilter2;
+			// XMLFilter xmlFilter = xmlFilter3;
 
 			xmlFilter.setContentHandler(serializer.asContentHandler());
 			xmlFilter.parse(new InputSource(tempFile.getPath()));
 		}
 
-		//Deleting the temporary lex file
-		//tempFile.delete();
+		// Deleting the temporary lex file
+		// tempFile.delete();
 	}
 
 	public static void addTransforms(ArrayList<String> xslChain, String macroSpecs) {
@@ -117,14 +113,12 @@ public class MorphExtract {
 			xslChain.add("opennlp.ccgbank/transform/macroInsert.xsl");
 
 		if (macroSpecs.contains("agr")) {
-			System.out
-					.println("Inserting a macro to check agreement in the copula");
+			System.out.println("Inserting a macro to check agreement in the copula");
 			xslChain.add("opennlp.ccgbank/transform/agr-macroInsert.xsl");
 		}
 
 		if (macroSpecs.contains("anim")) {
-			System.out
-					.println("Inserting a macro to check animacy constraints");
+			System.out.println("Inserting a macro to check animacy constraints");
 			xslChain.add("opennlp.ccgbank/transform/anim-macroInsert.xsl");
 		}
 	}

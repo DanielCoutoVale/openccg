@@ -18,41 +18,49 @@
 
 package opennlp.ccg.perceptron;
 
-/** 
- * A sparse feature vector, with size and an iterator over feature-value pairs. 
+/**
+ * A sparse feature vector, with size and an iterator over feature-value pairs.
  * 
- * @author 	Michael White
- * @version	$Revision: 1.6 $, $Date: 2011/01/15 17:52:59 $
- */ 
+ * @author Michael White
+ * @version $Revision: 1.6 $, $Date: 2011/01/15 17:52:59 $
+ */
 public interface FeatureVector {
-	
+
 	/**
-	 * Iterator over feature-value pairs.
-	 * Features and values must be retrieved using a pair of calls 
-	 * to nextFeature and nextValue, otherwise the behavior is not defined.
+	 * Iterator over feature-value pairs. Features and values must be retrieved
+	 * using a pair of calls to nextFeature and nextValue, otherwise the
+	 * behavior is not defined.
 	 */
 	public interface Iterator {
-		
+
 		/** Whether any items remain. */
 		public boolean hasNext();
-		
+
 		/** Returns the next feature. */
 		public Alphabet.Feature nextFeature();
-		
+
 		/** Returns the next value. */
 		public Float nextValue();
 	}
-	
+
 	/** Size. */
 	public int size();
 
 	/** Iterator over feature-value pairs. */
 	public Iterator iterator();
-	
+
 	/** Empty iterator. */
 	public static Iterator EMPTY_ITERATOR = new Iterator() {
-		public boolean hasNext() { return false; }
-		public Alphabet.Feature nextFeature() { return null; }
-		public Float nextValue() { return null; }
+		public boolean hasNext() {
+			return false;
+		}
+
+		public Alphabet.Feature nextFeature() {
+			return null;
+		}
+
+		public Float nextValue() {
+			return null;
+		}
 	};
 }

@@ -25,19 +25,21 @@ import java.text.*;
 
 /**
  * <p>
- * A scored symbol is a symbol annotated with a score and, optionally, with a list of alternative
- * scored symbols.
+ * A scored symbol is a symbol annotated with a score and, optionally, with a
+ * list of alternative scored symbols.
  * 
- * A representative scored symbol is a scored symbol that stands in for other scored symbols.
- * It has the same category but different rhetorico-semantic entities (LFs).
- * The represented scored symbols are stored in the list of alternative scored symbols during
- * chart construction. The representative scored symbol is considered disjunctive when there is
- * more than one alternatives to it.
+ * A representative scored symbol is a scored symbol that stands in for other
+ * scored symbols. It has the same category but different rhetorico-semantic
+ * entities (LFs). The represented scored symbols are stored in the list of
+ * alternative scored symbols during chart construction. The representative
+ * scored symbol is considered disjunctive when there is more than one
+ * alternatives to it.
  * 
- * WARNING: A representative scored symbol will initially be present in its list of alternatives,
- * but this may not be the case all the way through chart construction. This is the case because
- * the representative scored symbol as any other alternative may be removed from the list of
- * alternatives through pruning.
+ * WARNING: A representative scored symbol will initially be present in its list
+ * of alternatives, but this may not be the case all the way through chart
+ * construction. This is the case because the representative scored symbol as
+ * any other alternative may be removed from the list of alternatives through
+ * pruning.
  * </p>
  *
  * @author Michael White
@@ -51,7 +53,7 @@ public class ScoredSymbol implements Serializable {
 	 */
 	private static final long serialVersionUID = -4998260616580204169L;
 
-	/** 
+	/**
 	 * A holder of a scored symbol.
 	 */
 	public static class ScoredSymbolHolder implements Serializable {
@@ -60,7 +62,7 @@ public class ScoredSymbol implements Serializable {
 		 * Generated serial version UID
 		 */
 		private static final long serialVersionUID = -5600090138895781778L;
-		
+
 		/**
 		 * The scored symbol held
 		 */

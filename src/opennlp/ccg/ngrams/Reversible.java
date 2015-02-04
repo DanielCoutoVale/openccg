@@ -18,19 +18,16 @@
 
 package opennlp.ccg.ngrams;
 
-
 /**
  * Interface for reversible n-gram classes.
  *
- * @author      Michael White
- * @version     $Revision: 1.1 $, $Date: 2005/05/26 22:18:05 $
+ * @author Michael White
+ * @version $Revision: 1.1 $, $Date: 2005/05/26 22:18:05 $
  */
-public interface Reversible
-{
-    /** Get reverse flag. */
-    public boolean getReverse();
-    
-    /** Set reverse flag. */
-    public void setReverse(boolean reverse);
-}
+public interface Reversible {
+	/** Get reverse flag. */
+	public boolean getReverse();
 
+	/** Set reverse flag. */
+	public void setReverse(boolean reverse);
+}

@@ -21,21 +21,24 @@ import opennlp.ccg.hylo.graph.LFEdge;
 import opennlp.ccg.hylo.graph.LFEdgeLabel;
 import opennlp.ccg.util.Filter;
 
-
 /**
- * A filter for edges based on a comparison of their {@linkplain LFEdge#getLabel() labels}. Instances of
- * this class compare a specified {@linkplain #getBasis() basis edge label}, so that the 
+ * A filter for edges based on a comparison of their
+ * {@linkplain LFEdge#getLabel() labels}. Instances of this class compare a
+ * specified {@linkplain #getBasis() basis edge label}, so that the
  * {@link #allows(LFEdge)} method returns <tt>true</tt> if it is
- * {@linkplain LFEdgeLabel#equals(Object) equivalent to} the specified edge's label. 
+ * {@linkplain LFEdgeLabel#equals(Object) equivalent to} the specified edge's
+ * label.
  * 
  * @author <a href="http://www.ling.ohio-state.edu/~scott/">Scott Martin</a>
  */
 public class LabelMatchFilter implements Filter<LFEdge> {
-	
+
 	LFEdgeLabel basis;
-	
+
 	/**
-	 * Creates a new label match filter that will compare edge labels to the specified label.
+	 * Creates a new label match filter that will compare edge labels to the
+	 * specified label.
+	 * 
 	 * @param basis The label to be used for comparison.
 	 * @throws IllegalArgumentException if <tt>basis</tt> is <tt>null</tt>.
 	 */
@@ -45,13 +48,15 @@ public class LabelMatchFilter implements Filter<LFEdge> {
 	}
 
 	private void checkBasis(LFEdgeLabel basis) {
-		if(basis == null) {
+		if (basis == null) {
 			throw new IllegalArgumentException("basis is null");
 		}
 	}
-	
+
 	/**
-	 * Gets the label used as the basis for comparison in the {@link #allows(LFEdge)} method.
+	 * Gets the label used as the basis for comparison in the
+	 * {@link #allows(LFEdge)} method.
+	 * 
 	 * @return The edge label specified at creation.
 	 * 
 	 * @see #LabelMatchFilter(LFEdgeLabel)
@@ -62,6 +67,7 @@ public class LabelMatchFilter implements Filter<LFEdge> {
 
 	/**
 	 * Sets the edge label used as the basis for comparison.
+	 * 
 	 * @throws IllegalArgumentException if <tt>basis</tt> is <tt>null</tt>.
 	 */
 	public void setBasis(LFEdgeLabel basis) {
@@ -70,11 +76,13 @@ public class LabelMatchFilter implements Filter<LFEdge> {
 	}
 
 	/**
-	 * Tests whether the specified edge's label is equivalent to this filter's {@linkplain #getBasis() basis
-	 * edge}.
+	 * Tests whether the specified edge's label is equivalent to this filter's
+	 * {@linkplain #getBasis() basis edge}.
+	 * 
 	 * @param edge The edge to test.
-	 * @return <tt>true</tt> if the basis edge label is equivalent to <tt>edge.getLabel()</tt> based on a
-	 * comparison via their {@link LFEdgeLabel#equals(Object)} method.
+	 * @return <tt>true</tt> if the basis edge label is equivalent to
+	 *         <tt>edge.getLabel()</tt> based on a comparison via their
+	 *         {@link LFEdgeLabel#equals(Object)} method.
 	 */
 	@Override
 	public boolean allows(LFEdge edge) {

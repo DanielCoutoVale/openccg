@@ -5,8 +5,8 @@ package opennlp.ccg.grammardoc;
 
 /**
  * An exception thrown by a {@link Documenter} because of a problem in the
- * source grammar. This exception tracks the
- * {@link SourceGrammarFile source grammar file} where the problem occurred.
+ * source grammar. This exception tracks the {@link SourceGrammarFile source
+ * grammar file} where the problem occurred.
  * 
  * @author Scott Martin (http://www.ling.osu.edu/~scott/)
  * @version $Revision: 1.2 $
@@ -29,8 +29,7 @@ public class DocumenterSourceException extends DocumenterException {
 	 * Creates a new exception with the specified message, signaling a problem
 	 * in the specified source grammar file.
 	 */
-	public DocumenterSourceException(String message,
-			SourceGrammarFile sourceGrammarFile) {
+	public DocumenterSourceException(String message, SourceGrammarFile sourceGrammarFile) {
 		super(message);
 		this.sourceGrammarFile = sourceGrammarFile;
 	}
@@ -49,8 +48,7 @@ public class DocumenterSourceException extends DocumenterException {
 	 * Creates a new exception with the specified underlying cause, signaling a
 	 * problem in the specified source grammar file.
 	 */
-	public DocumenterSourceException(Throwable cause,
-			SourceGrammarFile sourceGrammarFile) {
+	public DocumenterSourceException(Throwable cause, SourceGrammarFile sourceGrammarFile) {
 		super(cause);
 		this.sourceGrammarFile = sourceGrammarFile;
 	}

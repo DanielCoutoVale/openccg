@@ -24,36 +24,37 @@ import opennlp.ccg.synsem.Symbol;
 import java.util.*;
 
 /**
- * A diversity pruning strategy that defines signs to be 
- * notCompellinglyDifferent if they have the same sequence of
- * stems. 
- * The empty constructor defaults the singleBestPerGroup flag 
- * to true.
+ * A diversity pruning strategy that defines signs to be
+ * notCompellinglyDifferent if they have the same sequence of stems. The empty
+ * constructor defaults the singleBestPerGroup flag to true.
  *
- * @author      Michael White
- * @version     $Revision: 1.1 $, $Date: 2011/04/02 16:32:17 $
+ * @author Michael White
+ * @version $Revision: 1.1 $, $Date: 2011/04/02 16:32:17 $
  */
-public class StemPruningStrategy extends DiversityPruningStrategy
-{
-    /** Constructor, defaults singleBestPerGroup to true. */
-    public StemPruningStrategy() { this(true); }
+public class StemPruningStrategy extends DiversityPruningStrategy {
+	/** Constructor, defaults singleBestPerGroup to true. */
+	public StemPruningStrategy() {
+		this(true);
+	}
 
-    /** Full constructor. */
-    public StemPruningStrategy(boolean singleBestPerGroup) { 
-        this.singleBestPerGroup = singleBestPerGroup;
-    }
-    
-    /** Returns true iff the given signs are not compellingly different.
-        In particular, returns true iff the signs have the same
-        sequence of stems. */
-    public boolean notCompellinglyDifferent(Symbol sign1, Symbol sign2) {
-	List<Association> words1 = sign1.getWords();
-	List<Association> words2 = sign2.getWords();
-	if (words1.size() != words2.size()) return false;
-    	for (int i=0; i < words1.size(); i++) {
-	    if (words1.get(i).getTerm() != words2.get(i).getTerm())
-		return false;
-    	}
-        return true;
-    }
+	/** Full constructor. */
+	public StemPruningStrategy(boolean singleBestPerGroup) {
+		this.singleBestPerGroup = singleBestPerGroup;
+	}
+
+	/**
+	 * Returns true iff the given signs are not compellingly different. In
+	 * particular, returns true iff the signs have the same sequence of stems.
+	 */
+	public boolean notCompellinglyDifferent(Symbol sign1, Symbol sign2) {
+		List<Association> words1 = sign1.getWords();
+		List<Association> words2 = sign2.getWords();
+		if (words1.size() != words2.size())
+			return false;
+		for (int i = 0; i < words1.size(); i++) {
+			if (words1.get(i).getTerm() != words2.get(i).getTerm())
+				return false;
+		}
+		return true;
+	}
 }

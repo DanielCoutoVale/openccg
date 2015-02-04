@@ -10,36 +10,33 @@ package opennlp.ccg.grammardoc;
  * @version $Revision: 1.3 $
  */
 public enum SourceGrammarFileType {
-	GRAMMAR("grammar"),
-	LEXICON("lexicon"),
-	MORPHOLOGY("morph"),
-	RULES("rules"),
-	TYPES("types", false),
-	DOCUMENTATION("documentation", false);
-	
+	GRAMMAR("grammar"), LEXICON("lexicon"), MORPHOLOGY("morph"), RULES("rules"), TYPES("types",
+			false), DOCUMENTATION("documentation", false);
+
 	final String fileName;
 	final boolean required;
-	
+
 	private SourceGrammarFileType(String fileName) {
 		this(fileName, true);
 	}
-	
+
 	private SourceGrammarFileType(String fileName, boolean required) {
 		this.fileName = fileName;
 		this.required = required;
 	}
-	
+
 	/**
 	 * Gets the file name associated with this file type.
 	 */
 	public String getFileName() {
 		return fileName;
 	}
-	
+
 	/**
 	 * Tests whether or not this grammar file name is required.
+	 * 
 	 * @return true iff this grammar file type is required to be present in a
-	 * grammar.
+	 *         grammar.
 	 */
 	public boolean isRequired() {
 		return required;

@@ -24,120 +24,118 @@ import java.util.ArrayList;
 import java.util.List;
 
 // NB: addRes and changeCat probably made superfluous by computeCats.xsl
-public class Javafns{
-	
-	//Prep heads storage
-	public List<String> heads = new ArrayList<String>();
-	
-	//Temp id of pp heads with args
-	String tempId="";	
+public class Javafns {
 
-	//Insert the prep-head into a result category by string replacement
-	public String addRes(String cat,String ppHead){
-		
-		//Xsl spl char detected and escaped
-		if(ppHead.equals("$"))
-			ppHead="\\$";
-		
-		//Head inserted into first PP category
-		cat=cat.replaceFirst("pp","pp["+ppHead+"]");
+	// Prep heads storage
+	public List<String> heads = new ArrayList<String>();
+
+	// Temp id of pp heads with args
+	String tempId = "";
+
+	// Insert the prep-head into a result category by string replacement
+	public String addRes(String cat, String ppHead) {
+
+		// Xsl spl char detected and escaped
+		if (ppHead.equals("$"))
+			ppHead = "\\$";
+
+		// Head inserted into first PP category
+		cat = cat.replaceFirst("pp", "pp[" + ppHead + "]");
 		return cat;
 	}
-	
-	//A safety hatch to elide extra heads detected - For leaf nodes
-	public String elimRedun(int headCount){
-		
-		//Calculating redundant Headcount
-		int j=0;
-		
-		//All heads following the last PP-head in a cat spec are redundant
-		int redun=heads.size()-headCount;
-		
-		//Redundant heads removed
-		for(j=0;j<redun;j++)
-			heads.remove(heads.size()-1);
-		
+
+	// A safety hatch to elide extra heads detected - For leaf nodes
+	public String elimRedun(int headCount) {
+
+		// Calculating redundant Headcount
+		int j = 0;
+
+		// All heads following the last PP-head in a cat spec are redundant
+		int redun = heads.size() - headCount;
+
+		// Redundant heads removed
+		for (j = 0; j < redun; j++)
+			heads.remove(heads.size() - 1);
+
 		return null;
-		
-	}
-	
-	//Fn to store temp id of a treenode with pp arg(s)
-	public String putTempId(String x){
-		
-			tempId=x;	
-			return tempId;
-	
-	}
-		
-	//Fn to retrieve temp id of a treenode with pp arg(s)
-	public String getTempId(){
-			
-			return tempId;
-	
+
 	}
 
-	//Inserts pp-heads into argument categories 
-	public String changeCat(String cat){
-		
-		//System.out.println(cat);
-		//System.out.println(heads);
-		
-		int i=heads.size()-1;
-		
-		for(;i>-1;i--){
-			
+	// Fn to store temp id of a treenode with pp arg(s)
+	public String putTempId(String x) {
+
+		tempId = x;
+		return tempId;
+
+	}
+
+	// Fn to retrieve temp id of a treenode with pp arg(s)
+	public String getTempId() {
+
+		return tempId;
+
+	}
+
+	// Inserts pp-heads into argument categories
+	public String changeCat(String cat) {
+
+		// System.out.println(cat);
+		// System.out.println(heads);
+
+		int i = heads.size() - 1;
+
+		for (; i > -1; i--) {
+
 			String ppHead = heads.get(i);
-			
-			//Escaping dollar signs for xsl
-			if(ppHead.equals("$"))
-				ppHead="\\$";
-			
-			//Simple head insertion by replacement on the string
-			cat=cat.replaceFirst("pp_","pp["+ppHead+"]_");
-			
+
+			// Escaping dollar signs for xsl
+			if (ppHead.equals("$"))
+				ppHead = "\\$";
+
+			// Simple head insertion by replacement on the string
+			cat = cat.replaceFirst("pp_", "pp[" + ppHead + "]_");
+
 		}
 
 		return cat;
 	}
-	
-	public String flush(){
-		heads.clear();tempId="";		
+
+	public String flush() {
+		heads.clear();
+		tempId = "";
 		return null;
 	}
-	
-	
-	public String setHead(String head){
+
+	public String setHead(String head) {
 		heads.add(head);
 		return null;
 	}
-	
-	
-	public String getHead(){
-		
-		String head="";
-		
-		if(heads.size()==0)
-			head="WrongHead";
-		else{
-			head = heads.get(heads.size()-1);
-			heads.remove(heads.size()-1);
-		} 
-		
-		return head;
-	}
-	
-	
-	public String peekHead(){
-		
-		String head="WrongHead";
-		
-		if(heads.size()>0)
-			head = heads.get(heads.size()-1);
-		
+
+	public String getHead() {
+
+		String head = "";
+
+		if (heads.size() == 0)
+			head = "WrongHead";
+		else {
+			head = heads.get(heads.size() - 1);
+			heads.remove(heads.size() - 1);
+		}
+
 		return head;
 	}
 
-	public String printCat(String cat){
+	public String peekHead() {
+
+		String head = "WrongHead";
+
+		if (heads.size() > 0)
+			head = heads.get(heads.size() - 1);
+
+		return head;
+	}
+
+	public String printCat(String cat) {
 		System.out.println(cat);
 		return cat;
 	}

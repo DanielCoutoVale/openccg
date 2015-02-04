@@ -53,7 +53,7 @@ public class Testbed {
 
 	// supertagger stand-in
 	private SupertaggerStandIn supertaggerStandIn = new SupertaggerStandIn();
-	
+
 	// results of following deriv
 	private Symbol sign = null;
 
@@ -121,26 +121,27 @@ public class Testbed {
 		PrintWriter treePW = null;
 		File textFile = ccgBankTaskTestbed.getText();
 		File factorsFile = ccgBankTaskTestbed.getFactors();
-		File combosFile = ccgBankTaskTestbed.getCombos(); 
-		File predsFile = ccgBankTaskTestbed.getPreds(); 
+		File combosFile = ccgBankTaskTestbed.getCombos();
+		File predsFile = ccgBankTaskTestbed.getPreds();
 		File treeFile = ccgBankTaskTestbed.getTree();
-		
+
 		if (textFile != null) {
-			File textscFile=new File(textFile.getParent()+"/"+textFile.getName().replaceFirst("text-","textsc-"));
+			File textscFile = new File(textFile.getParent() + "/"
+					+ textFile.getName().replaceFirst("text-", "textsc-"));
 			ccgBankTaskTestbed.log("Writing text to: " + textFile);
 			ccgBankTaskTestbed.log("Writing class-replaced text to: " + textscFile);
-            textFile.getParentFile().mkdirs(); 
+			textFile.getParentFile().mkdirs();
 			textPW = new PrintWriter(new BufferedWriter(new FileWriter(textFile)));
 			textscPW = new PrintWriter(new BufferedWriter(new FileWriter(textscFile)));
 		}
 		if (factorsFile != null) {
 			ccgBankTaskTestbed.log("Writing factors to: " + factorsFile);
-            factorsFile.getParentFile().mkdirs();
+			factorsFile.getParentFile().mkdirs();
 			factorsPW = new PrintWriter(new BufferedWriter(new FileWriter(factorsFile)));
 		}
 		if (combosFile != null) {
 			ccgBankTaskTestbed.log("Writing supertag-rule combos to: " + combosFile);
-            combosFile.getParentFile().mkdirs(); 
+			combosFile.getParentFile().mkdirs();
 			combos = new HashSet<String>();
 			combosPW = new PrintWriter(new BufferedWriter(new FileWriter(combosFile)));
 		}
@@ -151,7 +152,7 @@ public class Testbed {
 		}
 		if (treeFile != null) {
 			ccgBankTaskTestbed.log("Writing tree node info to: " + treeFile);
-            treeFile.getParentFile().mkdirs();
+			treeFile.getParentFile().mkdirs();
 			treePW = new PrintWriter(new BufferedWriter(new FileWriter(treeFile)));
 			treeInfoFlag = true;
 		}
@@ -180,7 +181,7 @@ public class Testbed {
 				Document outDoc = new Document();
 				Element outRoot = new Element("regression");
 				outDoc.setRootElement(outRoot);
-				Map<String,Symbol> signMap = new HashMap<String,Symbol>();
+				Map<String, Symbol> signMap = new HashMap<String, Symbol>();
 
 				// loop through derivations, making test items
 				List derivElts = inRoot.getChildren();
@@ -199,7 +200,8 @@ public class Testbed {
 							ccgBankTaskTestbed.log("Warning: missing header in " + file);
 						}
 						item.setAttribute("info", header);
-						if (header != null) signMap.put(header, sign);
+						if (header != null)
+							signMap.put(header, sign);
 
 						// Add parsed words as a separate LF element
 						Element fullWordsElt = new Element("full-words");
@@ -217,22 +219,24 @@ public class Testbed {
 						// append to text, factors files
 						if (textPW != null)
 							textPW.println(str);
-						
-						 if (textscPW != null) {
-                             textscPW.flush();
-                             String textsc="";
-                             //Note sem class replacement works only for NE classes spec in the grammar file
-                             textsc=tokenizer.getOrthography((List<Association>)sign.getWords(),true);
-                             textscPW.println(textsc);
-                             textscPW.flush();
-						 }
 
-						
+						if (textscPW != null) {
+							textscPW.flush();
+							String textsc = "";
+							// Note sem class replacement works only for NE
+							// classes spec in the grammar file
+							textsc = tokenizer.getOrthography((List<Association>) sign.getWords(),
+									true);
+							textscPW.println(textsc);
+							textscPW.flush();
+						}
+
 						if (factorsPW != null)
 							factorsPW.println(tokenizer.format(sign.getWords()));
 						// append new combos to combos file
 						if (combosPW != null) {
-							for (String combo : newCombos()) combosPW.println(combo);
+							for (String combo : newCombos())
+								combosPW.println(combo);
 						}
 						// also to preds
 						if (predsPW != null)
@@ -286,16 +290,16 @@ public class Testbed {
 	}
 
 	private void followDeriv(Element derivElt) {
-		
+
 		// reset
 		sign = null;
 		lf = null;
 		str = "";
 		header = derivElt.getAttributeValue("Header");
-		
+
 		// bookkeeping
 		UnifyControl.startUnifySequence();
-		
+
 		try {
 
 			Category cat = null;
@@ -318,7 +322,8 @@ public class Testbed {
 					index = cat.getIndexNominal();
 					flatLF = cat.getLF();
 					if (flatLF != null) {
-						lf = HyloHelper.getInstance().compactAndConvertNominals(flatLF, index, sign);
+						lf = HyloHelper.getInstance()
+								.compactAndConvertNominals(flatLF, index, sign);
 						// Break when the first single rooted LF is encountered
 						if (lf instanceof SatOp) {
 							matchSRLF++;
@@ -335,7 +340,9 @@ public class Testbed {
 					cat = sign.getCategory();
 					index = cat.getIndexNominal();
 					flatLF = cat.getLF();
-					if (flatLF != null) lf = HyloHelper.getInstance().compactAndConvertNominals(flatLF, index, sign);
+					if (flatLF != null)
+						lf = HyloHelper.getInstance()
+								.compactAndConvertNominals(flatLF, index, sign);
 				}
 
 				if (flatLF != null) {
@@ -345,7 +352,7 @@ public class Testbed {
 				numParses = signs.size();
 				str = str.trim();
 			}
-			
+
 		} catch (ParseException exc) {
 			ccgBankTaskTestbed.log("Warning for " + header + ": " + exc.toString());
 		}
@@ -364,9 +371,10 @@ public class Testbed {
 			List childElts = derivElt.getChildren();
 			int numChildren = childElts.size();
 			if (numChildren == 0)
-				throw new ParseException(header
-						+ ": no child elements for TreeNode for cat: " + cat);
-			// if no cat element present, adjust list with an initial dummy node, 
+				throw new ParseException(header + ": no child elements for TreeNode for cat: "
+						+ cat);
+			// if no cat element present, adjust list with an initial dummy
+			// node,
 			// to avoid code changes in what follows
 			Element elt0 = (Element) childElts.get(0);
 			String elt0name = elt0.getName();
@@ -375,9 +383,8 @@ public class Testbed {
 				numChildren++;
 			}
 			if (numChildren != 2 && numChildren != 3)
-				throw new ParseException(header
-						+ ": wrong number of child elements: " + numChildren
-						+ " for cat: " + cat);
+				throw new ParseException(header + ": wrong number of child elements: "
+						+ numChildren + " for cat: " + cat);
 			Element firstInputElt = (Element) childElts.get(1);
 			SymbolHash firstSigns = followDerivR(firstInputElt);
 			SymbolHash retval = new SymbolHash();
@@ -436,7 +443,8 @@ public class Testbed {
 					boolean noResults = retval.isEmpty();
 					String inCat1 = firstInputElt.getAttributeValue("cat");
 					String inCat2 = secondInputElt.getAttributeValue("cat");
-					String msg = "Unable to derive: " + cat + " from: " + inCat1 + " and: " + inCat2;
+					String msg = "Unable to derive: " + cat + " from: " + inCat1 + " and: "
+							+ inCat2;
 					if (!noResults)
 						ccgBankTaskTestbed.log("Caution for " + header + ": " + msg);
 					if (ccgBankTaskTestbed.isDebugDerivations()) {
@@ -532,9 +540,10 @@ public class Testbed {
 				if (!pos.startsWith("VB"))
 					rel = null;
 				// lex lookup with required supertag
-				// NB: there's no guarantee of getting the right arg roles if the word-cat pair is observed 
+				// NB: there's no guarantee of getting the right arg roles if
+				// the word-cat pair is observed
 				lexicon.setSupertagger(supertaggerStandIn);
-				supertaggerStandIn.setTag(simpleCat); 
+				supertaggerStandIn.setTag(simpleCat);
 				SymbolHash lexSigns = lexicon.getSymbolsForWord(w);
 
 				if (semClass == null || semClass.length() == 0)
@@ -557,12 +566,10 @@ public class Testbed {
 
 					// allow any class if no sem class given
 					if (!(semClass.equals("NoClass") || semClass.equals(morphClass))
-							|| !containsPred(lexLF, rel)
-							|| !containsRoles(lexLF, roles)
+							|| !containsPred(lexLF, rel) || !containsRoles(lexLF, roles)
 							|| !containsRel(lexLF, indexRel, s)) {
 						it.remove();
-					}
-					else {
+					} else {
 						UnifyControl.reindex(lexcat);
 						if (wTemp.getFunctions().equals(pos)) {
 							matchPOS++;
@@ -577,7 +584,8 @@ public class Testbed {
 						Symbol s = it.next();
 						Association wTemp = s.getWords().get(0);
 						if (!wTemp.getFunctions().equals(pos)) {
-							it.remove(); continue;
+							it.remove();
+							continue;
 						}
 						// filter by mismatched class if apropos
 						if (matchNoClass) {
@@ -610,8 +618,7 @@ public class Testbed {
 
 	// Recurse through a CCG cat and print out the atomcats and their ids
 	private static void recurseCat(Category cat, ArrayList<String> fullCat,
-			Hashtable<String, String> idConvTally,
-			Hashtable<String, Integer> freqTally) {
+			Hashtable<String, String> idConvTally, Hashtable<String, Integer> freqTally) {
 
 		if (cat instanceof ComplexCat) {
 
@@ -741,9 +748,9 @@ public class Testbed {
 		if (pos == null)
 			return false;
 
-		return (pos.equals("|") || pos.equals(".") || pos.equals(",")
-				|| pos.equals(";") || pos.equals(":") || pos.equals("LRB")
-				|| pos.equals("RRB") || pos.equals("``") || pos.equals("''"));
+		return (pos.equals("|") || pos.equals(".") || pos.equals(",") || pos.equals(";")
+				|| pos.equals(":") || pos.equals("LRB") || pos.equals("RRB") || pos.equals("``") || pos
+					.equals("''"));
 	}
 
 	// return whether signs contains cat; filter if so
@@ -809,11 +816,11 @@ public class Testbed {
 	}
 
 	/**
-	 * Extracts the nom id, pos, and supertag info related to LF lexical preds, 
-	 * and puts it in the given map keyed off the nom id.
-	 * Note that the map should be cleared for each new LF.
+	 * Extracts the nom id, pos, and supertag info related to LF lexical preds,
+	 * and puts it in the given map keyed off the nom id. Note that the map
+	 * should be cleared for each new LF.
 	 */
-	public static void extractPredInfo(LF lf, Map<String,String> predInfoMap) {
+	public static void extractPredInfo(LF lf, Map<String, String> predInfoMap) {
 
 		String predData = "";
 		List<SatOp> preds = HyloHelper.getInstance().getPreds(lf);
@@ -864,38 +871,70 @@ public class Testbed {
 	}
 
 	/**
-	 * Returns the pred info string for the given pred info map (see extractPredInfo).
+	 * Returns the pred info string for the given pred info map (see
+	 * extractPredInfo).
 	 */
-	public static String getPredInfo(Map<String,String> predInfoMap) {
+	public static String getPredInfo(Map<String, String> predInfoMap) {
 		String predData = "";
 		for (String nomId : predInfoMap.keySet()) {
 			predData = predData + " " + nomId + ":" + predInfoMap.get(nomId);
 		}
 		return predData.trim();
 	}
-	
+
 	// escapes a string using DefaultTokenizer
-	private static String escape(String s) { return DefaultTokenizer.escape(s); }
-	
+	private static String escape(String s) {
+		return DefaultTokenizer.escape(s);
+	}
+
 	// stands in for a supertagger during lex lookup
 	private static class SupertaggerStandIn implements SupertaggerAdapter {
 		// map for a single key
-		private Map<String,Double> map = new HashMap<String,Double>(2);
-		public Map<String,Double> getSupertags() { return map; }
-		
+		private Map<String, Double> map = new HashMap<String, Double>(2);
+
+		public Map<String, Double> getSupertags() {
+			return map;
+		}
+
 		// set tag
-		void setTag(String tag) { map.clear(); map.put(tag, 1.0); }
-		
+		void setTag(String tag) {
+			map.clear();
+			map.put(tag, 1.0);
+		}
+
 		// dummy implementations
-		public void setIncludeGold(boolean includeGold) {}
-		public void resetBeta() {}
-		public void resetBetaToMax() {}
-		public void nextBeta() {}
-		public void previousBeta() {}
-		public boolean hasMoreBetas() { return false; }
-		public boolean hasLessBetas() { return false; }
-		public double[] getBetas() { return new double[]{1.0}; }
-		public void setBetas(double[] betas) {}
-		public double getCurrentBetaValue() { return 1.0; }
+		public void setIncludeGold(boolean includeGold) {
+		}
+
+		public void resetBeta() {
+		}
+
+		public void resetBetaToMax() {
+		}
+
+		public void nextBeta() {
+		}
+
+		public void previousBeta() {
+		}
+
+		public boolean hasMoreBetas() {
+			return false;
+		}
+
+		public boolean hasLessBetas() {
+			return false;
+		}
+
+		public double[] getBetas() {
+			return new double[] { 1.0 };
+		}
+
+		public void setBetas(double[] betas) {
+		}
+
+		public double getCurrentBetaValue() {
+			return 1.0;
+		}
 	}
 }

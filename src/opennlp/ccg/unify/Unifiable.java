@@ -28,8 +28,7 @@ public interface Unifiable {
 	/**
 	 * Determines if a Variable occurs within this Unifiable
 	 * 
-	 * @param v
-	 *            the Variable to check for
+	 * @param v the Variable to check for
 	 * @return whether or not the Variable occurs
 	 */
 	public boolean occurs(Variable v);
@@ -37,22 +36,18 @@ public interface Unifiable {
 	/**
 	 * Tests for equality with the given Object.
 	 * 
-	 * @param o
-	 *            object to test for equality
-	 * @return true if this Unifiable is equal to <code>o</code>, false if
-	 *         not.
+	 * @param o object to test for equality
+	 * @return true if this Unifiable is equal to <code>o</code>, false if not.
 	 */
 	public boolean equals(Object o);
 
 	/**
 	 * Unify this Unfiable with another Object.
 	 * 
-	 * @param o
-	 *            object to unify with
-	 * @param s
-	 *            Substitution containing the variable resolutions
-	 * @exception UnifyFailure
-	 *                if this Unifiable cannot be unified with the Object
+	 * @param o object to unify with
+	 * @param s Substitution containing the variable resolutions
+	 * @exception UnifyFailure if this Unifiable cannot be unified with the
+	 *                Object
 	 * @return an object which represents the unification of this Unifiable with
 	 *         the Object
 	 */
@@ -70,10 +65,9 @@ public interface Unifiable {
 	 * one to avoid calling the unify() method on other Unifiables in a group
 	 * because the quick check failed on this one.
 	 * 
-	 * @param o
-	 *            object to check for unifiability
-	 * @exception UnifyFailure
-	 *                if this Unifiable cannot be unified with the Object
+	 * @param o object to check for unifiability
+	 * @exception UnifyFailure if this Unifiable cannot be unified with the
+	 *                Object
 	 */
 	public void unifyCheck(Object u) throws UnifyFailure;
 
@@ -81,8 +75,7 @@ public interface Unifiable {
 	 * Replaces any variables in this Unifiable with the values found for them
 	 * in the Substitution argument.
 	 * 
-	 * @param s
-	 *            Substitution containing the variable resolutions
+	 * @param s Substitution containing the variable resolutions
 	 * @return a copy of this Unifiable with all variables from the Substitution
 	 *         replaced by their values.
 	 */

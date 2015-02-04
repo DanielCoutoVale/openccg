@@ -19,19 +19,22 @@
 package opennlp.ccg.unify;
 
 /**
- * An attribute paired with a value, possibly with an index that ties
- * it to another feature.
+ * An attribute paired with a value, possibly with an index that ties it to
+ * another feature.
  *
- * @author      Jason Baldridge
- * @version     $Revision: 1.1.1.1 $, $Date: 2003/02/28 18:02:13 $
+ * @author Jason Baldridge
+ * @version $Revision: 1.1.1.1 $, $Date: 2003/02/28 18:02:13 $
  **/
 public interface Feature {
 
-    public String getAttribute ();
-    public Unifiable getValue ();
-    public short getIndex ();
+	public String getAttribute();
 
-    public void setValue (Unifiable u);
-    public void setIndex (short index);
+	public Unifiable getValue();
+
+	public short getIndex();
+
+	public void setValue(Unifiable u);
+
+	public void setIndex(short index);
 
 }

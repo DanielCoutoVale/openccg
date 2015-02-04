@@ -32,8 +32,8 @@ import java.io.*;
 import java.util.*;
 
 /**
- * A CCG symbol, consisting of a list of words paired with a category. Symbols may
- * contain arbitrary data objects which are ignored in equality checking.
+ * A CCG symbol, consisting of a list of words paired with a category. Symbols
+ * may contain arbitrary data objects which are ignored in equality checking.
  * 
  * WARNING: Non-serializable data objects are filtered during serialization.
  *
@@ -80,7 +80,8 @@ public class Symbol implements EntityRealizer, Serializable {
 	 * @param indexedHead the indexed head
 	 */
 	@SuppressWarnings("unchecked")
-	private Symbol(List<Association> words, Category category, DerivationHistory history, Symbol indexedHead) {
+	private Symbol(List<Association> words, Category category, DerivationHistory history,
+			Symbol indexedHead) {
 		this.words = (List<Association>) Interner.globalIntern(words);
 		this.category = category;
 		this.history = history != null ? history : new DerivationHistory(this);
@@ -181,7 +182,8 @@ public class Symbol implements EntityRealizer, Serializable {
 	 * Factory method for creating derived signs with the given cat from the
 	 * given inputs, rule and lex head.
 	 */
-	public final static Symbol createDerivedSign(Category cat, Symbol[] inputs, Rule rule, Symbol lexHead) {
+	public final static Symbol createDerivedSign(Category cat, Symbol[] inputs, Rule rule,
+			Symbol lexHead) {
 		return new Symbol(cat, inputs, rule, lexHead);
 	}
 
@@ -252,8 +254,9 @@ public class Symbol implements EntityRealizer, Serializable {
 	}
 
 	/**
-	 * Gets whether the symbol is derived from indexed symbols. Gets false when the symbol has a
-	 * formal index, i.e. when the symbol form is an index for the symbol in the symbol recognizer.
+	 * Gets whether the symbol is derived from indexed symbols. Gets false when
+	 * the symbol has a formal index, i.e. when the symbol form is an index for
+	 * the symbol in the symbol recognizer.
 	 * 
 	 * @return <code>false</code> if the symbol has a formal index in the symbol
 	 *         recognizer and <code>true</code> if the symbol is not indicated
@@ -608,7 +611,8 @@ public class Symbol implements EntityRealizer, Serializable {
 			return udeps.unfilledDeps;
 		// lex case: calculate, store and return
 		if (isIndexed()) {
-			List<LexDependency> unfilledDeps = HyloHelper.getInstance().getUnfilledLexDeps(category.getLF());
+			List<LexDependency> unfilledDeps = HyloHelper.getInstance().getUnfilledLexDeps(
+					category.getLF());
 			addData(new UnfilledDeps(unfilledDeps));
 			return unfilledDeps;
 		}
@@ -635,8 +639,8 @@ public class Symbol implements EntityRealizer, Serializable {
 			unfilledDeps.addAll(inputs[i].getUnfilledDeps());
 		}
 		// calculate filled deps
-		List<LexDependency> filledDeps = HyloHelper.getInstance()
-				.getFilledLexDeps(unfilledDeps, category.getLF());
+		List<LexDependency> filledDeps = HyloHelper.getInstance().getFilledLexDeps(unfilledDeps,
+				category.getLF());
 		// store filled and unfilled, returning filled
 		addData(new UnfilledDeps(unfilledDeps));
 		addData(new FilledDeps(filledDeps));

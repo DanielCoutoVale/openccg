@@ -17,7 +17,8 @@ public abstract class AbstractDocumenter implements Documenter {
 	/**
 	 * Default constructor. All documenters must have a no-argument constructor.
 	 */
-	protected AbstractDocumenter() {}
+	protected AbstractDocumenter() {
+	}
 
 	/**
 	 * Creates a new documenter with the specified name.

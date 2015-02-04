@@ -21,8 +21,8 @@ public class SourceGrammar {
 
 	SourceGrammar(File sourceDirectory) {
 		this.sourceDirectory = sourceDirectory;
-		sourceFiles = new EnumMap<SourceGrammarFileType, SourceGrammarFile>
-			(SourceGrammarFileType.class);
+		sourceFiles = new EnumMap<SourceGrammarFileType, SourceGrammarFile>(
+				SourceGrammarFileType.class);
 	}
 
 	/**
@@ -47,13 +47,11 @@ public class SourceGrammar {
 	 * @param fileType The file name identifying the desired
 	 *            {@link SourceGrammarFile source grammar file}.
 	 */
-	public SourceGrammarFile getSourceGrammarFile(
-			SourceGrammarFileType fileType) {
+	public SourceGrammarFile getSourceGrammarFile(SourceGrammarFileType fileType) {
 		return sourceFiles.get(fileType);
 	}
 
-	void addSourceGrammarFile(SourceGrammarFileType fileType,
-			SourceGrammarFile sourceGrammarFile) {
+	void addSourceGrammarFile(SourceGrammarFileType fileType, SourceGrammarFile sourceGrammarFile) {
 		sourceFiles.put(fileType, sourceGrammarFile);
 	}
 

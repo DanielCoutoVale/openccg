@@ -19,7 +19,6 @@ package opennlp.ccg.unify;
 
 import java.util.Iterator;
 
-
 /**
  * A Substitution which does not hold any substitutions.
  * 

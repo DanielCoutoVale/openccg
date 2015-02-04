@@ -39,7 +39,8 @@ public class ChartPrinter {
 						words[i] = symbols.asSymbolSet().iterator().next().getOrthography();
 					}
 					if (symbols.size() >= s + 1) {
-						toprint[row + s][j] = ((Symbol) symbols.toArray()[s]).getCategory().toString();
+						toprint[row + s][j] = ((Symbol) symbols.toArray()[s]).getCategory()
+								.toString();
 						if (toprint[row + s][j].length() > maxwidth)
 							maxwidth = toprint[row + s][j].length();
 					}

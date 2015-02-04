@@ -29,18 +29,22 @@ package opennlp.ccgbank.convert;
 import opennlp.ccg.lexicon.TrueCaser;
 
 public class XSLTTrueCaser {
-	
+
 	static TrueCaser tc = null;
-	
+
 	/**
-	 * Static constructor that creates a true-caser. See the TrueCaser.java doc's for more info.
+	 * Static constructor that creates a true-caser. See the TrueCaser.java
+	 * doc's for more info.
 	 */
 	public static void init(String pathToTrueCaseList) {
 		XSLTTrueCaser.tc = new TrueCaser(pathToTrueCaseList, 0.5);
 	}
-	
-	/** Function invoked from the XSLT transform trueCaser.xsl to true case words in a derivation .*/
-	public String trueCase(String theWord, String neClass, String pos,String wordPosition) {
+
+	/**
+	 * Function invoked from the XSLT transform trueCaser.xsl to true case words
+	 * in a derivation .
+	 */
+	public String trueCase(String theWord, String neClass, String pos, String wordPosition) {
 		return tc.trueCase(theWord, true, true);
 	}
 }

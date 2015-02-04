@@ -192,7 +192,7 @@ public class Parser {
 	 * Parses a character sequence.
 	 *
 	 * @param string the character sequence
-	 * @return 
+	 * @return
 	 * @exception ParseException thrown if a parse can't be found for the entire
 	 *                string
 	 */
@@ -205,7 +205,7 @@ public class Parser {
 	 * Parses a list of words
 	 * 
 	 * @param words the list of words
-	 * @return 
+	 * @return
 	 * @throws ParseException
 	 */
 	public final ParseProduct parse(List<Association> words) throws ParseException {
@@ -220,11 +220,11 @@ public class Parser {
 	 * Parses a list of words
 	 * 
 	 * @param words the list of words
-	 * @return 
+	 * @return
 	 * @throws ParseException
 	 */
 	private final ParseProduct parseOnce(List<Association> words) throws ParseException {
-		
+
 		try {
 			product = new ParseProduct();
 			// init
@@ -297,7 +297,8 @@ public class Parser {
 	}
 
 	// iterative beta-best parsing
-	private final ParseProduct parseIterativeBetaBest(List<Association> words) throws ParseException {
+	private final ParseProduct parseIterativeBetaBest(List<Association> words)
+			throws ParseException {
 		// set supertagger in lexicon
 		product = new ParseProduct();
 		grammar.lexicon.setSupertagger(supertagger);
@@ -479,8 +480,8 @@ public class Parser {
 		List<Double> scores = new ArrayList<Double>();
 		ChartCompleter chartCompleter = product.getChartCompleter();
 		// unpack top
-		List<ScoredSymbol> edges = lazyUnpacking ? chartCompleter.lazyUnpack(0,
-				size - 1) : chartCompleter.unpack(0, size - 1);
+		List<ScoredSymbol> edges = lazyUnpacking ? chartCompleter.lazyUnpack(0, size - 1)
+				: chartCompleter.unpack(0, size - 1);
 		// add signs for unpacked edges
 		for (ScoredSymbol edge : edges) {
 			symbols.add(edge.symbol);

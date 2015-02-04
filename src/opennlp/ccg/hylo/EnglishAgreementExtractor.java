@@ -37,145 +37,158 @@ import java.util.*;
  * Class which extracts subject verb and relative pronoun agreement features for
  * English (described in):
  * 
- * @InProceedings{rajkumar-white:2010:POSTERS, 
- * 	author = {Rajkumar, Rajakrishnan and White, Michael}, 
- * 	title = {Designing Agreement Features for Realization Ranking}, 
- * 	booktitle = {Coling 2010: Posters}, 
- * 	month = {August}, 
- * 	year = {2010}, 
- * 	address = {Beijing, China}, 
- * 	publisher = {Coling 2010 Organizing Committee}, 
- * 	pages = {1032--1040}, 
- * 	url = {http://www.aclweb.org/anthology/C10-2119} 
- * }
+ * @InProceedings{rajkumar-white:2010:POSTERS, author = {Rajkumar, Rajakrishnan
+ *                                             and White, Michael}, title =
+ *                                             {Designing Agreement Features for
+ *                                             Realization Ranking}, booktitle =
+ *                                             {Coling 2010: Posters}, month =
+ *                                             {August}, year = {2010}, address
+ *                                             = {Beijing, China}, publisher =
+ *                                             {Coling 2010 Organizing
+ *                                             Committee}, pages = {1032--1040},
+ *                                             url = {http://www.aclweb.org/
+ *                                             anthology/C10-2119} }
  * 
- * The class extracts features based on the OpenCCG HLDS specific LF rels: ArgN (subject rel), whApposRel, GenRel, First, Next
+ *                                             The class extracts features based
+ *                                             on the OpenCCG HLDS specific LF
+ *                                             rels: ArgN (subject rel),
+ *                                             whApposRel, GenRel, First, Next
  * 
  * @author raja
  * @version $Revision: 1.11 $, $Date: 2011/11/25 18:18:33 $
  */
-public class EnglishAgreementExtractor implements FeatureExtractor{
+public class EnglishAgreementExtractor implements FeatureExtractor {
 
 	/** Feature map wrapper, for unique retrieval from a sign's data objects. */
 	public static class FeatureMapWrapper {
 		public FeatureMap featureMap;
-		public FeatureMapWrapper(FeatureMap featureMap) { this.featureMap = featureMap;}
-	}
-	
-	/** Inner class to store specific properties of signs (right now for unbalanced punctuation status). */
-	private class SignProps{
 
-		//Store comma/dash unbalanced punctuation
-		private String unbalPunct=null;
-		
-		/** Constructor to specify unbalanced punctuation. */
-		public SignProps(String unbalPunct){
-			this.unbalPunct=unbalPunct;
+		public FeatureMapWrapper(FeatureMap featureMap) {
+			this.featureMap = featureMap;
 		}
-		
-		public String getUnbalancedPunct(){
+	}
+
+	/**
+	 * Inner class to store specific properties of signs (right now for
+	 * unbalanced punctuation status).
+	 */
+	private class SignProps {
+
+		// Store comma/dash unbalanced punctuation
+		private String unbalPunct = null;
+
+		/** Constructor to specify unbalanced punctuation. */
+		public SignProps(String unbalPunct) {
+			this.unbalPunct = unbalPunct;
+		}
+
+		public String getUnbalancedPunct() {
 			return unbalPunct;
 		}
 	}
-	
+
 	/** The alphabet. */
 	protected Alphabet alphabet = null;
 
 	/** Current feature map. */
 	protected FeatureMap currentMap = null;
-	
-	/** Head and dependent signs (For feature extraction) .*/
-	protected Symbol headSign=null;
-	protected Symbol depSign=null;
-	
+
+	/** Head and dependent signs (For feature extraction) . */
+	protected Symbol headSign = null;
+	protected Symbol depSign = null;
+
 	/** Error analysis related. */
-	//Sentence id
-	String sentId=null;
-	//Instance num
-	int INSTANCENUM=0;
-	
+	// Sentence id
+	String sentId = null;
+	// Instance num
+	int INSTANCENUM = 0;
+
 	/** Subject-verb agreement feature extractors. */
 	protected List<List<TrieMap.KeyExtractor<String>>> agrExtractors = new ArrayList<List<TrieMap.KeyExtractor<String>>>();
 	protected List<List<TrieMap.KeyExtractor<String>>> agrConjExtractors = new ArrayList<List<TrieMap.KeyExtractor<String>>>();
 	protected List<List<TrieMap.KeyExtractor<String>>> agrOfComplementExtractors = new ArrayList<List<TrieMap.KeyExtractor<String>>>();
-	
+
 	/** WH-pronoun agreement feature extractors. */
 	protected List<List<TrieMap.KeyExtractor<String>>> whExtractors = new ArrayList<List<TrieMap.KeyExtractor<String>>>();
 	protected List<List<TrieMap.KeyExtractor<String>>> whConjExtractors = new ArrayList<List<TrieMap.KeyExtractor<String>>>();
-	
+
 	/** Punctuation agreement feature extractors. */
 	protected List<List<TrieMap.KeyExtractor<String>>> punctExtractor = new ArrayList<List<TrieMap.KeyExtractor<String>>>();
-	
+
 	/** Constructors. */
-	
-	//Constructor used during actual perceptron training and testing
+
+	// Constructor used during actual perceptron training and testing
 	public EnglishAgreementExtractor() {
-		
+
 		// init lazy feature extractors
 		this.init();
 	}
-	
-	//Constructor used during error analysis using serialized signs
+
+	// Constructor used during error analysis using serialized signs
 	public EnglishAgreementExtractor(String sentId) {
-		
-		//init lazy feature extractors
-		this.sentId=sentId;
-		this.INSTANCENUM=0;
+
+		// init lazy feature extractors
+		this.sentId = sentId;
+		this.INSTANCENUM = 0;
 		this.init();
 	}
-	
+
 	/** Sets the alphabet. */
 	public void setAlphabet(Alphabet alphabet) {
 		this.alphabet = alphabet;
 	}
-	
-	/** Initializes lazy feature extractors .*/
+
+	/** Initializes lazy feature extractors . */
 	public void init() {
-	
-		//Agreement: Simple subj-verb feature extractors
+
+		// Agreement: Simple subj-verb feature extractors
 		this.agrExtractors.add(dep_word_head_word(1));
 		this.agrExtractors.add(dep_word_head_pos(1));
 		this.agrExtractors.add(dep_pos_head_word(1));
 		this.agrExtractors.add(dep_pos_head_pos(1));
 
-		//Agreement: Disjunct subj feature extractors
+		// Agreement: Disjunct subj feature extractors
 		this.agrConjExtractors.add(dep_word_head_word(2));
 		this.agrConjExtractors.add(dep_word_head_pos(2));
 		this.agrConjExtractors.add(dep_pos_head_word(2));
 		this.agrConjExtractors.add(dep_pos_head_pos(2));
-		
-		//Agreement: Of-complement feature extractors
+
+		// Agreement: Of-complement feature extractors
 		this.agrOfComplementExtractors.add(dep_word_head_word(3));
 		this.agrOfComplementExtractors.add(dep_word_head_pos(3));
 		this.agrOfComplementExtractors.add(dep_pos_head_word(3));
 		this.agrOfComplementExtractors.add(dep_pos_head_pos(3));
-		
-		//WH-pronoun: Simple relative pronoun feature extractors
+
+		// WH-pronoun: Simple relative pronoun feature extractors
 		this.whExtractors.add(dep_word_head_stem(4));
 		this.whExtractors.add(dep_word_head_pos(4));
 		this.whExtractors.add(dep_word_head_class(4));
-		
-		//WH-pronoun: Conjunct/Disjunct subj feature extractors
+
+		// WH-pronoun: Conjunct/Disjunct subj feature extractors
 		this.whConjExtractors.add(dep_word_head_stem(5));
 		this.whConjExtractors.add(dep_word_head_pos(5));
 		this.whConjExtractors.add(dep_word_head_class(5));
-		
-		//Unbalanced punctuation
+
+		// Unbalanced punctuation
 		this.punctExtractor.add(unbal_punct());
-		
+
 	}
-	
+
 	/** Returns the features for the given sign and completeness flag. */
 	public FeatureVector extractFeatures(Symbol sign, boolean complete) {
 		addFeatures(sign, complete);
 		return getFeatureMap(sign);
 	}
-	
-	/** Recursively adds features to the feature map for the given sign, if not already present. */
-	//TODO: Lazier feature extraction involving conditional feature extractors
+
+	/**
+	 * Recursively adds features to the feature map for the given sign, if not
+	 * already present.
+	 */
+	// TODO: Lazier feature extraction involving conditional feature extractors
 	protected void addFeatures(Symbol sign, boolean complete) {
 		// check for existing map, otherwise make one
-		if (getFeatureMap(sign) != null) return;
+		if (getFeatureMap(sign) != null)
+			return;
 		// lex case
 		if (sign.isIndexed()) {
 			currentMap = new FeatureMap(0);
@@ -184,175 +197,208 @@ public class EnglishAgreementExtractor implements FeatureExtractor{
 		else {
 			Symbol[] inputs = sign.getDerivationHistory().getInputs();
 			// first recurse
-			for (Symbol child : inputs) addFeatures(child, false);
+			for (Symbol child : inputs)
+				addFeatures(child, false);
 			// use input maps in making current map
 			if (inputs.length == 1) {
 				currentMap = new FeatureMap(getFeatureMap(inputs[0]));
-			}
-			else if (inputs.length == 2) {
+			} else if (inputs.length == 2) {
 				currentMap = new FeatureMap(getFeatureMap(inputs[0]), getFeatureMap(inputs[1]));
 			}
 
-			String subjArg=null;
-			
-			//do each newly filled dep
+			String subjArg = null;
+
+			// do each newly filled dep
 			for (LexDependency dep : sign.getFilledDeps()) {
-				
-				this.headSign=dep.lexHead;
-				this.depSign=dep.lexDep;
-				//System.out.println("DEP: "+dep);
-				
-				//Find value of the subject feature
-				if(subjArg==null){
-					subjArg=getSubjectFeature(dep.lexHead.getCategory());
-					//Back-off to Arg0 heuristic if subject feature not available for this verb
-					if(subjArg==null)subjArg="Arg0";
+
+				this.headSign = dep.lexHead;
+				this.depSign = dep.lexDep;
+				// System.out.println("DEP: "+dep);
+
+				// Find value of the subject feature
+				if (subjArg == null) {
+					subjArg = getSubjectFeature(dep.lexHead.getCategory());
+					// Back-off to Arg0 heuristic if subject feature not
+					// available for this verb
+					if (subjArg == null)
+						subjArg = "Arg0";
 				}
-				
-				//Subject-verb agr features
-				if(subjArg.equals(dep.rel) && (dep.lexHead.getOrthography().equals("was") ||  dep.lexHead.getOrthography().equals("were") || dep.lexHead.getPOS().equals("VBZ") || dep.lexHead.getPOS().equals("VBP"))){
-					
-					//Simple subj-verb feats
-					//Increment instance number if in error analysis mode
-					if(sentId!=null)INSTANCENUM++;
+
+				// Subject-verb agr features
+				if (subjArg.equals(dep.rel)
+						&& (dep.lexHead.getOrthography().equals("was")
+								|| dep.lexHead.getOrthography().equals("were")
+								|| dep.lexHead.getPOS().equals("VBZ") || dep.lexHead.getPOS()
+								.equals("VBP"))) {
+
+					// Simple subj-verb feats
+					// Increment instance number if in error analysis mode
+					if (sentId != null)
+						INSTANCENUM++;
 					inc(agrExtractors);
 
-					//Disjunct features
-					if(dep.lexDep.getOrthography().equals("or")){
-						ArrayList<String>rels=new ArrayList<String>(2);
-						rels.add("First");rels.add("Next");
-						Hashtable<LexDependency,Symbol>cdeps=this.getLowerSiblingDeps(inputs,dep.lexDep,rels,null);
-						if(cdeps!=null){
-							for(Enumeration<LexDependency>e=cdeps.keys();e.hasMoreElements();){
-								LexDependency cdep=e.nextElement();
-								this.depSign=cdep.lexDep;
+					// Disjunct features
+					if (dep.lexDep.getOrthography().equals("or")) {
+						ArrayList<String> rels = new ArrayList<String>(2);
+						rels.add("First");
+						rels.add("Next");
+						Hashtable<LexDependency, Symbol> cdeps = this.getLowerSiblingDeps(inputs,
+								dep.lexDep, rels, null);
+						if (cdeps != null) {
+							for (Enumeration<LexDependency> e = cdeps.keys(); e.hasMoreElements();) {
+								LexDependency cdep = e.nextElement();
+								this.depSign = cdep.lexDep;
 								inc(agrConjExtractors);
 							}
 						}
 					}
-					
-					//Of-complement subjects (for non-numeral, non-%-sign subjs)
-					String subjClass=dep.lexDep.getWords().get(0).getEntityClass();
-					String subjPOS=dep.lexDep.getPOS();
-					if(subjClass==null)subjClass="NULL";
-					if(!subjClass.equals("PERCENT") && !subjPOS.startsWith("CD")){
-						ArrayList<String>rels=new ArrayList<String>(1);
+
+					// Of-complement subjects (for non-numeral, non-%-sign
+					// subjs)
+					String subjClass = dep.lexDep.getWords().get(0).getEntityClass();
+					String subjPOS = dep.lexDep.getPOS();
+					if (subjClass == null)
+						subjClass = "NULL";
+					if (!subjClass.equals("PERCENT") && !subjPOS.startsWith("CD")) {
+						ArrayList<String> rels = new ArrayList<String>(1);
 						rels.add("Mod");
-						ArrayList<String>depPreds=new ArrayList<String>(1);
+						ArrayList<String> depPreds = new ArrayList<String>(1);
 						depPreds.add("of");
-						Hashtable<LexDependency,Symbol>ofComplDeps=this.getLowerSiblingDeps(inputs,dep.lexDep,rels,depPreds);
-						if(ofComplDeps!=null){
-							for(Enumeration<LexDependency>e1=ofComplDeps.keys();e1.hasMoreElements();){
-								LexDependency ofComplDep=e1.nextElement();
-								Symbol[] ofComplSigns=ofComplDeps.get(ofComplDep).getDerivationHistory().getInputs();
-								rels=new ArrayList<String>(1);
+						Hashtable<LexDependency, Symbol> ofComplDeps = this.getLowerSiblingDeps(
+								inputs, dep.lexDep, rels, depPreds);
+						if (ofComplDeps != null) {
+							for (Enumeration<LexDependency> e1 = ofComplDeps.keys(); e1
+									.hasMoreElements();) {
+								LexDependency ofComplDep = e1.nextElement();
+								Symbol[] ofComplSigns = ofComplDeps.get(ofComplDep)
+										.getDerivationHistory().getInputs();
+								rels = new ArrayList<String>(1);
 								rels.add("Arg1");
-								Hashtable<LexDependency,Symbol>ofDeps=this.getLowerSiblingDeps(ofComplSigns,ofComplDep.lexDep,rels,null);
-								if(ofDeps!=null){
-									for(Enumeration<LexDependency>e2=ofDeps.keys();e2.hasMoreElements();){
-										LexDependency ofDep=e2.nextElement();
-										this.depSign=ofDep.lexDep;
+								Hashtable<LexDependency, Symbol> ofDeps = this.getLowerSiblingDeps(
+										ofComplSigns, ofComplDep.lexDep, rels, null);
+								if (ofDeps != null) {
+									for (Enumeration<LexDependency> e2 = ofDeps.keys(); e2
+											.hasMoreElements();) {
+										LexDependency ofDep = e2.nextElement();
+										this.depSign = ofDep.lexDep;
 										inc(agrOfComplementExtractors);
 									}
 								}
 							}
 						}
 					}
-					
+
 				}
-				
-				//Relative clause features
-				String whPrn=dep.lexDep.getOrthography();
-				if((dep.rel.equals("GenRel")||dep.rel.equals("whApposRel")) && (whPrn.equals("that")||whPrn.equals("who")||whPrn.equals("which")||whPrn.equals("whose"))){
-					
-					//Make sure relative clause is linked to head of the quoted NP 
-					//(and not the quotation mark itself)
-					Symbol sib=this.getSibling(sign.getSiblingFilledDeps(),"Arg");
-					if(sib!=null){
-						this.headSign=sib;
+
+				// Relative clause features
+				String whPrn = dep.lexDep.getOrthography();
+				if ((dep.rel.equals("GenRel") || dep.rel.equals("whApposRel"))
+						&& (whPrn.equals("that") || whPrn.equals("who") || whPrn.equals("which") || whPrn
+								.equals("whose"))) {
+
+					// Make sure relative clause is linked to head of the quoted
+					// NP
+					// (and not the quotation mark itself)
+					Symbol sib = this.getSibling(sign.getSiblingFilledDeps(), "Arg");
+					if (sib != null) {
+						this.headSign = sib;
 					}
-					
-					//Simple WH-pronoun features
-					//Increment instance number if in error analysis mode
-					if(sentId!=null)INSTANCENUM++;
+
+					// Simple WH-pronoun features
+					// Increment instance number if in error analysis mode
+					if (sentId != null)
+						INSTANCENUM++;
 					inc(whExtractors);
 
-					//Proximal conjunct features
-					if(dep.lexDep.getPOS().equals("CC") || dep.lexDep.getOrthography().equals(",") || dep.lexDep.getOrthography().equals(";")|| dep.lexDep.getOrthography().equals("or")|| dep.lexDep.getOrthography().equals("and")){
-						ArrayList<String>rels=new ArrayList<String>(1);
+					// Proximal conjunct features
+					if (dep.lexDep.getPOS().equals("CC") || dep.lexDep.getOrthography().equals(",")
+							|| dep.lexDep.getOrthography().equals(";")
+							|| dep.lexDep.getOrthography().equals("or")
+							|| dep.lexDep.getOrthography().equals("and")) {
+						ArrayList<String> rels = new ArrayList<String>(1);
 						rels.add("Next");
-						Hashtable<LexDependency,Symbol>cdeps=this.getLowerSiblingDeps(inputs,dep.lexDep,rels,null);
-						if(cdeps!=null){
-							for(Enumeration<LexDependency>e=cdeps.keys();e.hasMoreElements();){
-								LexDependency cdep=e.nextElement();
-								this.depSign=cdep.lexDep;
+						Hashtable<LexDependency, Symbol> cdeps = this.getLowerSiblingDeps(inputs,
+								dep.lexDep, rels, null);
+						if (cdeps != null) {
+							for (Enumeration<LexDependency> e = cdeps.keys(); e.hasMoreElements();) {
+								LexDependency cdep = e.nextElement();
+								this.depSign = cdep.lexDep;
 								inc(whConjExtractors);
 							}
 						}
 					}
 				}
 			}
-			
-			//Punctuation feature extraction: Unbalanced sentence medial appositions are flagged
-			if (sign!=null && inputs!=null) {
-				
-				//Pass up unbalanced punctuation indicator
-				
-				//Result cat of current has unbal feature
+
+			// Punctuation feature extraction: Unbalanced sentence medial
+			// appositions are flagged
+			if (sign != null && inputs != null) {
+
+				// Pass up unbalanced punctuation indicator
+
+				// Result cat of current has unbal feature
 				Category target = sign.getCategory().getTarget();
 				FeatureStructure fs = target.getFeatureStructure();
-				String punctFeatVal=null;
-				if ( (fs != null && fs.hasAttribute("unbal"))) {
+				String punctFeatVal = null;
+				if ((fs != null && fs.hasAttribute("unbal"))) {
 					Object val = fs.getValue("unbal");
-					punctFeatVal = (val instanceof SimpleType) ? ((SimpleType)val).getName() : null;
+					punctFeatVal = (val instanceof SimpleType) ? ((SimpleType) val).getName()
+							: null;
 				}
-				
-				//Right child (binary case) or only child (unary case) has unbalanced punct feature
-				SignProps childProps=(SignProps)inputs[inputs.length-1].getData(SignProps.class);
-				if(childProps!=null)punctFeatVal=childProps.getUnbalancedPunct();
-				
-				if(punctFeatVal!=null){
-					SignProps currProps=new SignProps(punctFeatVal);
+
+				// Right child (binary case) or only child (unary case) has
+				// unbalanced punct feature
+				SignProps childProps = (SignProps) inputs[inputs.length - 1]
+						.getData(SignProps.class);
+				if (childProps != null)
+					punctFeatVal = childProps.getUnbalancedPunct();
+
+				if (punctFeatVal != null) {
+					SignProps currProps = new SignProps(punctFeatVal);
 					sign.addData(currProps);
 				}
-				
-				//Extract unbalanced punctuation feature for unbalanced sentence medial punctuation
+
+				// Extract unbalanced punctuation feature for unbalanced
+				// sentence medial punctuation
 				if (inputs.length == 2) {
-					//Left child has unbalanced punct feature
-					SignProps lchildProps=(SignProps)inputs[0].getData(SignProps.class);
-					if(lchildProps!=null && lchildProps.getUnbalancedPunct()!=null){
+					// Left child has unbalanced punct feature
+					SignProps lchildProps = (SignProps) inputs[0].getData(SignProps.class);
+					if (lchildProps != null && lchildProps.getUnbalancedPunct() != null) {
 						Association nextWord = inputs[1].getWords().get(0);
-						//Check whether right child begins with a punctuation mark; else fire feature
-						if (!isPunct(nextWord)){
+						// Check whether right child begins with a punctuation
+						// mark; else fire feature
+						if (!isPunct(nextWord)) {
 							inc(punctExtractor);
 						}
 					}
-					
+
 				}
 			}
 		}
 		// store it
 		storeFeatureMap(sign);
 	}
-	
-	public Symbol getOfComplSign(){
-	
-		Symbol retval=null;
-		
+
+	public Symbol getOfComplSign() {
+
+		Symbol retval = null;
+
 		return retval;
 	}
-	
+
 	/** Stores the current feature map as a data object in the given sign. */
 	protected void storeFeatureMap(Symbol sign) {
 		sign.addData(new FeatureMapWrapper(currentMap));
 	}
-	
-	/** Returns the feature map for this extractor from the given sign (null if none). */
+
+	/**
+	 * Returns the feature map for this extractor from the given sign (null if
+	 * none).
+	 */
 	public FeatureMap getFeatureMap(Symbol sign) {
-		FeatureMapWrapper fmw = (FeatureMapWrapper)sign.getData(FeatureMapWrapper.class);
+		FeatureMapWrapper fmw = (FeatureMapWrapper) sign.getData(FeatureMapWrapper.class);
 		return (fmw != null) ? fmw.featureMap : null;
 	}
-	
 
 	/**
 	 * Increments the count of the given features, if relevant.
@@ -360,282 +406,397 @@ public class EnglishAgreementExtractor implements FeatureExtractor{
 	protected void inc(List<List<TrieMap.KeyExtractor<String>>> extractors) {
 		for (List<TrieMap.KeyExtractor<String>> lazyExtractor : extractors) {
 			Alphabet.Feature f = alphabet.indexLazy(lazyExtractor);
-			if (f != null)currentMap.inc(f);
+			if (f != null)
+				currentMap.inc(f);
 		}
 	}
 
-	//------------------------------------
+	// ------------------------------------
 	// utility functions
-	
-	//Get value of subject feature from verb's result cat
-	public String getSubjectFeature(Category cat){
-	
-		String retval=null;
+
+	// Get value of subject feature from verb's result cat
+	public String getSubjectFeature(Category cat) {
+
+		String retval = null;
 		if (cat instanceof ComplexCat) {
-			Category resCat = ((ComplexCat)cat).getResult();
-			retval=this.getSubjectFeature(resCat);
-		}
-		else if (cat instanceof AtomCat) {
+			Category resCat = ((ComplexCat) cat).getResult();
+			retval = this.getSubjectFeature(resCat);
+		} else if (cat instanceof AtomCat) {
 			AtomCat ac = (AtomCat) cat;
 			FeatureStructure fs = ac.getFeatureStructure();
-			for(String attr: fs.getAttributes()){
-				if(attr.equals("sbj")){
-					retval=fs.getValue(attr).toString();
+			for (String attr : fs.getAttributes()) {
+				if (attr.equals("sbj")) {
+					retval = fs.getValue(attr).toString();
 					break;
 				}
 			}
 		}
-		
+
 		return retval;
 	}
-	
-	//checks for punct
+
+	// checks for punct
 	private boolean isPunct(Association w) {
 		String pos = w.getFunctions();
 		boolean retval = pos.startsWith("PUNCT");
-		retval = retval || pos.equals(".") || pos.equals(",") || pos.equals(";") || pos.equals(":") || pos.equals("LRB") || pos.equals("RRB");
-		//if (retval) {
-		//System.out.println("isPunct: " + w.getForm() + " pos: " + pos);
-		//}
+		retval = retval || pos.equals(".") || pos.equals(",") || pos.equals(";") || pos.equals(":")
+				|| pos.equals("LRB") || pos.equals("RRB");
+		// if (retval) {
+		// System.out.println("isPunct: " + w.getForm() + " pos: " + pos);
+		// }
 		return retval;
 	}
-	
-	// Get siblings of a given head 1-step down the derivation, given the head-sibling relations and lexical preds of deps .*/
-	public Hashtable<LexDependency,Symbol> getLowerSiblingDeps(Symbol[] inputs,Symbol headSign,ArrayList<String>rels,ArrayList<String>depPreds){
-		
-		Hashtable<LexDependency,Symbol> retval=new Hashtable<LexDependency,Symbol>();
-		for(Symbol sign: inputs){
-			if(retval.size()==rels.size())break;
-			List<LexDependency>sdeps=sign.getSiblingFilledDeps();
+
+	// Get siblings of a given head 1-step down the derivation, given the
+	// head-sibling relations and lexical preds of deps .*/
+	public Hashtable<LexDependency, Symbol> getLowerSiblingDeps(Symbol[] inputs, Symbol headSign,
+			ArrayList<String> rels, ArrayList<String> depPreds) {
+
+		Hashtable<LexDependency, Symbol> retval = new Hashtable<LexDependency, Symbol>();
+		for (Symbol sign : inputs) {
+			if (retval.size() == rels.size())
+				break;
+			List<LexDependency> sdeps = sign.getSiblingFilledDeps();
 			sdeps.addAll(sign.getFilledDeps());
-			for(LexDependency sdep: sdeps){
-				if(sdep.lexHead==headSign && rels.contains(sdep.rel) && !retval.containsKey(sdep)){
-					if(depPreds==null || depPreds.contains(sdep.lexDep.getOrthography())){
-						retval.put(sdep,sign);
+			for (LexDependency sdep : sdeps) {
+				if (sdep.lexHead == headSign && rels.contains(sdep.rel)
+						&& !retval.containsKey(sdep)) {
+					if (depPreds == null || depPreds.contains(sdep.lexDep.getOrthography())) {
+						retval.put(sdep, sign);
 					}
 				}
 			}
 		}
-		if(retval.size()==0)retval=null;
+		if (retval.size() == 0)
+			retval = null;
 		return retval;
 	}
-	
-	//returns sibling sign of a given head given a relation label
-	private Symbol getSibling(List<LexDependency> sdeps,String rel){
-		
-		Symbol retval=null;
-		if(sdeps!=null){
-			for(LexDependency dep: sdeps){
-				if(dep.rel.equals(rel)){
-					retval=dep.lexDep;
+
+	// returns sibling sign of a given head given a relation label
+	private Symbol getSibling(List<LexDependency> sdeps, String rel) {
+
+		Symbol retval = null;
+		if (sdeps != null) {
+			for (LexDependency dep : sdeps) {
+				if (dep.rel.equals(rel)) {
+					retval = dep.lexDep;
 					break;
 				}
 			}
 		}
-		
+
 		return retval;
 	}
-	
+
 	// returns acceptable paraphrases for words
 	private String adjustWord(String word) {
-		
-		String retval=word;
-		//Account for acceptable paraphrases
+
+		String retval = word;
+		// Account for acceptable paraphrases
 		if (word.equals("'ve"))
-			retval="have";
+			retval = "have";
 		else if (word.equals("'s"))
-			retval="is";
+			retval = "is";
 		else if (word.equals("'re"))
-			retval="are";
-		
+			retval = "are";
+
 		return retval;
 	}
-	
-	//adjusts POS tags
-	private String adjustPOS(String word,String pos,String semClass) {
-		
-		String retval=pos;
-		
-		if(word.equals("has"))
-			retval="VBZ";
+
+	// adjusts POS tags
+	private String adjustPOS(String word, String pos, String semClass) {
+
+		String retval = pos;
+
+		if (word.equals("has"))
+			retval = "VBZ";
 		else if (word.equals("have"))
-			retval="VBP";
-		else if(word.equals("one") || word.equals("1"))
-			pos="CD-1";
-		else if(semClass!=null && semClass.equals("PERCENT"))
-			retval=semClass;
-		else if(word.equals(",") || word.equals(";"))
-			retval="CC";
-		
+			retval = "VBP";
+		else if (word.equals("one") || word.equals("1"))
+			pos = "CD-1";
+		else if (semClass != null && semClass.equals("PERCENT"))
+			retval = semClass;
+		else if (word.equals(",") || word.equals(";"))
+			retval = "CC";
+
 		return retval;
 	}
-	
-	//adjust sem class info
+
+	// adjust sem class info
 	private String adjustSemClass(String semClass) {
-		String retval="UNK";
-		if(semClass!=null){
-			String[]temp=semClass.split("\\|");
-			retval=temp[0].split(":")[0];
+		String retval = "UNK";
+		if (semClass != null) {
+			String[] temp = semClass.split("\\|");
+			retval = temp[0].split(":")[0];
 		}
 		return retval;
 	}
-	
-	//main prefixes (AGR=Agr; CONJ=Conjn/Disjn; WH=wh-pronoun; OF=Of-complement)
+
+	// main prefixes (AGR=Agr; CONJ=Conjn/Disjn; WH=wh-pronoun;
+	// OF=Of-complement)
 	private void add_prefix_main1(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return "AGR"; }});
-	}
-	private void add_prefix_main2(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return "AGRCONJ"; }});
-	}
-	private void add_prefix_main3(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return "AGROF"; }});
-	}
-	private void add_prefix_main4(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return "AGRWH"; }});
-	}
-	private void add_prefix_main5(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return "AGRWHCONJ"; }});
-	}
-	
-	//instance # in error analysis mode
-	private void add_instance_num(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return Integer.toString(INSTANCENUM); }});
-	}
-	
-	//sub-prefixes (W=Word; P=POS tag; S=Stem; C=SemClass)
-	private void add_prefix_sub1(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return "WW"; }});
-	}
-	private void add_prefix_sub2(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return "WP"; }});
-	}
-	private void add_prefix_sub3(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return "PW"; }});
-	}
-	private void add_prefix_sub4(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return "PP"; }});
-	}
-	private void add_prefix_sub5(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return "WS"; }});
-	}
-	private void add_prefix_sub6(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return "WC"; }});
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				return "AGR";
+			}
+		});
 	}
 
-	//select required feature prefix
-	private void add_prefix(int prefix,List<TrieMap.KeyExtractor<String>> retval) {
-        switch (prefix) {
-    		case 1:add_prefix_main1(retval);break;
-    		case 2:add_prefix_main2(retval);break;
-    		case 3:add_prefix_main3(retval);break;
-    		case 4:add_prefix_main4(retval);break;
-    		case 5:add_prefix_main5(retval);break;
-        }
-    }
-	
-	//	-------------------------------
+	private void add_prefix_main2(List<TrieMap.KeyExtractor<String>> retval) {
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				return "AGRCONJ";
+			}
+		});
+	}
+
+	private void add_prefix_main3(List<TrieMap.KeyExtractor<String>> retval) {
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				return "AGROF";
+			}
+		});
+	}
+
+	private void add_prefix_main4(List<TrieMap.KeyExtractor<String>> retval) {
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				return "AGRWH";
+			}
+		});
+	}
+
+	private void add_prefix_main5(List<TrieMap.KeyExtractor<String>> retval) {
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				return "AGRWHCONJ";
+			}
+		});
+	}
+
+	// instance # in error analysis mode
+	private void add_instance_num(List<TrieMap.KeyExtractor<String>> retval) {
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				return Integer.toString(INSTANCENUM);
+			}
+		});
+	}
+
+	// sub-prefixes (W=Word; P=POS tag; S=Stem; C=SemClass)
+	private void add_prefix_sub1(List<TrieMap.KeyExtractor<String>> retval) {
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				return "WW";
+			}
+		});
+	}
+
+	private void add_prefix_sub2(List<TrieMap.KeyExtractor<String>> retval) {
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				return "WP";
+			}
+		});
+	}
+
+	private void add_prefix_sub3(List<TrieMap.KeyExtractor<String>> retval) {
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				return "PW";
+			}
+		});
+	}
+
+	private void add_prefix_sub4(List<TrieMap.KeyExtractor<String>> retval) {
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				return "PP";
+			}
+		});
+	}
+
+	private void add_prefix_sub5(List<TrieMap.KeyExtractor<String>> retval) {
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				return "WS";
+			}
+		});
+	}
+
+	private void add_prefix_sub6(List<TrieMap.KeyExtractor<String>> retval) {
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				return "WC";
+			}
+		});
+	}
+
+	// select required feature prefix
+	private void add_prefix(int prefix, List<TrieMap.KeyExtractor<String>> retval) {
+		switch (prefix) {
+		case 1:
+			add_prefix_main1(retval);
+			break;
+		case 2:
+			add_prefix_main2(retval);
+			break;
+		case 3:
+			add_prefix_main3(retval);
+			break;
+		case 4:
+			add_prefix_main4(retval);
+			break;
+		case 5:
+			add_prefix_main5(retval);
+			break;
+		}
+	}
+
+	// -------------------------------
 	// feature extractors
-	
+
 	// dep-word-head-word
 	private List<TrieMap.KeyExtractor<String>> dep_word_head_word(int prefix) {
 		List<TrieMap.KeyExtractor<String>> retval = new ArrayList<TrieMap.KeyExtractor<String>>(3);
-		if(this.sentId!=null)add_instance_num(retval);
-		add_prefix(prefix,retval);
+		if (this.sentId != null)
+			add_instance_num(retval);
+		add_prefix(prefix, retval);
 		add_prefix_sub1(retval);
 		add_dep_word(retval);
 		add_head_word(retval);
 		return retval;
 	}
-	
-	//dep-word head-pos
+
+	// dep-word head-pos
 	private List<TrieMap.KeyExtractor<String>> dep_word_head_pos(int prefix) {
 		List<TrieMap.KeyExtractor<String>> retval = new ArrayList<TrieMap.KeyExtractor<String>>(3);
-		if(this.sentId!=null)add_instance_num(retval);
-		add_prefix(prefix,retval);
+		if (this.sentId != null)
+			add_instance_num(retval);
+		add_prefix(prefix, retval);
 		add_prefix_sub2(retval);
 		add_dep_word(retval);
 		add_head_pos(retval);
 		return retval;
 	}
-	
-	//dep-pos head-word
+
+	// dep-pos head-word
 	private List<TrieMap.KeyExtractor<String>> dep_pos_head_word(int prefix) {
 		List<TrieMap.KeyExtractor<String>> retval = new ArrayList<TrieMap.KeyExtractor<String>>(3);
-		if(this.sentId!=null)add_instance_num(retval);
-		add_prefix(prefix,retval);
+		if (this.sentId != null)
+			add_instance_num(retval);
+		add_prefix(prefix, retval);
 		add_prefix_sub3(retval);
 		add_dep_pos(retval);
 		add_head_word(retval);
 		return retval;
 	}
-	
-	//dep-pos head-pos
+
+	// dep-pos head-pos
 	private List<TrieMap.KeyExtractor<String>> dep_pos_head_pos(int prefix) {
 		List<TrieMap.KeyExtractor<String>> retval = new ArrayList<TrieMap.KeyExtractor<String>>(3);
-		if(this.sentId!=null)add_instance_num(retval);
-		add_prefix(prefix,retval);
+		if (this.sentId != null)
+			add_instance_num(retval);
+		add_prefix(prefix, retval);
 		add_prefix_sub4(retval);
 		add_dep_pos(retval);
 		add_head_pos(retval);
 		return retval;
 	}
 
-	//dep-word head-stem
+	// dep-word head-stem
 	private List<TrieMap.KeyExtractor<String>> dep_word_head_stem(int prefix) {
 		List<TrieMap.KeyExtractor<String>> retval = new ArrayList<TrieMap.KeyExtractor<String>>(3);
-		if(this.sentId!=null)add_instance_num(retval);
-		add_prefix(prefix,retval);
+		if (this.sentId != null)
+			add_instance_num(retval);
+		add_prefix(prefix, retval);
 		add_prefix_sub5(retval);
 		add_dep_word(retval);
 		add_head_stem(retval);
 		return retval;
 	}
-	
-	//dep-word head-class
+
+	// dep-word head-class
 	private List<TrieMap.KeyExtractor<String>> dep_word_head_class(int prefix) {
 		List<TrieMap.KeyExtractor<String>> retval = new ArrayList<TrieMap.KeyExtractor<String>>(3);
-		if(this.sentId!=null)add_instance_num(retval);
-		add_prefix(prefix,retval);
+		if (this.sentId != null)
+			add_instance_num(retval);
+		add_prefix(prefix, retval);
 		add_prefix_sub6(retval);
 		add_dep_word(retval);
 		add_head_class(retval);
 		return retval;
 	}
-	
-	//unbalanced punctuation
+
+	// unbalanced punctuation
 	private List<TrieMap.KeyExtractor<String>> unbal_punct() {
 		List<TrieMap.KeyExtractor<String>> retval = new ArrayList<TrieMap.KeyExtractor<String>>(1);
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return "$punct"; }});
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				return "$punct";
+			}
+		});
 		return retval;
 	}
-	
-	//head word
+
+	// head word
 	private void add_head_word(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ String word=adjustWord(headSign.getWordForm());return word; }});
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				String word = adjustWord(headSign.getWordForm());
+				return word;
+			}
+		});
 	}
-	
-	//head stem
+
+	// head stem
 	private void add_head_stem(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ return headSign.getWords().get(0).getTerm();}});
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				return headSign.getWords().get(0).getTerm();
+			}
+		});
 	}
-	
-	//head class
+
+	// head class
 	private void add_head_class(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ String semClass=adjustSemClass(headSign.getWords().get(0).getEntityClass());return semClass;}});
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				String semClass = adjustSemClass(headSign.getWords().get(0).getEntityClass());
+				return semClass;
+			}
+		});
 	}
-	
+
 	// head pos
 	private void add_head_pos(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ String pos=adjustPOS(headSign.getOrthography(),headSign.getPOS(),headSign.getWords().get(0).getEntityClass());return pos; }});
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				String pos = adjustPOS(headSign.getOrthography(), headSign.getPOS(), headSign
+						.getWords().get(0).getEntityClass());
+				return pos;
+			}
+		});
 	}
-	
+
 	// dep word
 	private void add_dep_word(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ String word=adjustWord(depSign.getWordForm());return word; }});
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				String word = adjustWord(depSign.getWordForm());
+				return word;
+			}
+		});
 	}
-	
+
 	// dep pos
 	private void add_dep_pos(List<TrieMap.KeyExtractor<String>> retval) {
-		retval.add(new TrieMap.KeyExtractor<String>(){public String getKey(){ String pos=adjustPOS(depSign.getOrthography(),depSign.getPOS(),depSign.getWords().get(0).getEntityClass());return pos; }});
+		retval.add(new TrieMap.KeyExtractor<String>() {
+			public String getKey() {
+				String pos = adjustPOS(depSign.getOrthography(), depSign.getPOS(), depSign
+						.getWords().get(0).getEntityClass());
+				return pos;
+			}
+		});
 	}
 }

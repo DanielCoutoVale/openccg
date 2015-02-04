@@ -21,45 +21,44 @@ package opennlp.ccg.test;
 // import javax.xml.parsers.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
-// import java.net.*;
 
+// import java.net.*;
 
 /**
  * Validates XML files against their declared schemas.
  *
- * @author  Michael White
+ * @author Michael White
  * @version $Revision: 1.4 $, $Date: 2005/10/20 18:49:42 $
  */
 public class Validator {
 
-    public static void main(String[] args) throws Exception {
-        
-        if (args.length == 0) {
-            System.out.println("Usage: java opennlp.ccg.test.Validator <XML files>");
-            System.exit(1);
-        }
+	public static void main(String[] args) throws Exception {
 
-        // configure schema validating XML parser
-        XMLReader parser = getXercesSchemaValidatingParser();
-        
-        // parse
-        for (int i = 0; i < args.length; i++) {
-            // System.out.println("Parsing: " + args[i]);
-            parser.parse(args[i]);
-        }
-    }
+		if (args.length == 0) {
+			System.out.println("Usage: java opennlp.ccg.test.Validator <XML files>");
+			System.exit(1);
+		}
 
-    // NB: this requires xercesImpl.jar, but on the other hand it does not seem 
-    //     possible to validate with the version of JAXP that comes with JDK 1.4.1
-    //     (cf. JAXP sample SAXLocalNameCount.java)
-    private static XMLReader getXercesSchemaValidatingParser() throws Exception {
-        String DEFAULT_PARSER_NAME = "org.apache.xerces.parsers.SAXParser";
-        XMLReader parser = XMLReaderFactory.createXMLReader(DEFAULT_PARSER_NAME);
-        String VALIDATION_FEATURE_ID = "http://xml.org/sax/features/validation";
-        String SCHEMA_VALIDATION_FEATURE_ID = "http://apache.org/xml/features/validation/schema";
-        parser.setFeature(VALIDATION_FEATURE_ID, true);
-        parser.setFeature(SCHEMA_VALIDATION_FEATURE_ID, true);
-        return parser;
-    }
+		// configure schema validating XML parser
+		XMLReader parser = getXercesSchemaValidatingParser();
+
+		// parse
+		for (int i = 0; i < args.length; i++) {
+			// System.out.println("Parsing: " + args[i]);
+			parser.parse(args[i]);
+		}
+	}
+
+	// NB: this requires xercesImpl.jar, but on the other hand it does not seem
+	// possible to validate with the version of JAXP that comes with JDK 1.4.1
+	// (cf. JAXP sample SAXLocalNameCount.java)
+	private static XMLReader getXercesSchemaValidatingParser() throws Exception {
+		String DEFAULT_PARSER_NAME = "org.apache.xerces.parsers.SAXParser";
+		XMLReader parser = XMLReaderFactory.createXMLReader(DEFAULT_PARSER_NAME);
+		String VALIDATION_FEATURE_ID = "http://xml.org/sax/features/validation";
+		String SCHEMA_VALIDATION_FEATURE_ID = "http://apache.org/xml/features/validation/schema";
+		parser.setFeature(VALIDATION_FEATURE_ID, true);
+		parser.setFeature(SCHEMA_VALIDATION_FEATURE_ID, true);
+		return parser;
+	}
 }
-

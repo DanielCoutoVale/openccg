@@ -25,70 +25,121 @@ import java.util.*;
 /**
  * Lexicon category family.
  *
- * @author      Jason Baldridge
- * @author      Gann Bierner
- * @author      Michael White
- * @version     $Revision: 1.11 $, $Date: 2010/11/30 18:51:05 $
+ * @author Jason Baldridge
+ * @author Gann Bierner
+ * @author Michael White
+ * @version $Revision: 1.11 $, $Date: 2010/11/30 18:51:05 $
  */
 public class Family {
-	
-    private String name = "";
-    private Boolean closed = Boolean.FALSE;
-    private String pos = "";
-    private String indexRel = ""; 
-    private String coartRel = ""; 
-    private DataItem[] data;
-    private EntriesItem[] entries;
 
-    @SuppressWarnings("unchecked")
+	private String name = "";
+	private Boolean closed = Boolean.FALSE;
+	private String pos = "";
+	private String indexRel = "";
+	private String coartRel = "";
+	private DataItem[] data;
+	private EntriesItem[] entries;
+
+	@SuppressWarnings("unchecked")
 	public Family(Element famel) {
-    	
-        setName(famel.getAttributeValue("name"));
-        pos = famel.getAttributeValue("pos");
-        
-        String isClosed = famel.getAttributeValue("closed");
-        if (isClosed != null && isClosed.equals("true")) {
-            setClosed(Boolean.TRUE);
-        }
 
-        String indexRelVal = famel.getAttributeValue("indexRel");
-        if (indexRelVal != null) { indexRel = indexRelVal; }
+		setName(famel.getAttributeValue("name"));
+		pos = famel.getAttributeValue("pos");
 
-        String coartRelVal = famel.getAttributeValue("coartRel");
-        if (coartRelVal != null) { coartRel = coartRelVal; }
+		String isClosed = famel.getAttributeValue("closed");
+		if (isClosed != null && isClosed.equals("true")) {
+			setClosed(Boolean.TRUE);
+		}
 
-        List<Element> entriesList = famel.getChildren("entry");
-        entries = new EntriesItem[entriesList.size()];
-        for (int j=0; j < entriesList.size(); j++) {
-            entries[j] = new EntriesItem(entriesList.get(j), this);
-        }
-        
-        List<Element> members = famel.getChildren("member");
-        data = new DataItem[members.size()];
-        for (int j=0; j < members.size(); j++) {
-            data[j] = new DataItem(members.get(j));
-        }
-    }
+		String indexRelVal = famel.getAttributeValue("indexRel");
+		if (indexRelVal != null) {
+			indexRel = indexRelVal;
+		}
 
-    public Family(String s) { setName(s); }
+		String coartRelVal = famel.getAttributeValue("coartRel");
+		if (coartRelVal != null) {
+			coartRel = coartRelVal;
+		}
 
-    public boolean isClosed() { return closed.booleanValue(); }
-    
-    public void setName(String s) { name = s; }
-    public void setClosed(Boolean b) { closed = b; }
-    public void setPOS(String s) { pos = s; }
-    public void setIndexRel(String s) { indexRel = s; }
-    public void setCoartRel(String s) { coartRel = s; }
-    public void setData(DataItem[] dm) { data = dm; }
-    public void setEntries(EntriesItem[] em) { entries = em; }
+		List<Element> entriesList = famel.getChildren("entry");
+		entries = new EntriesItem[entriesList.size()];
+		for (int j = 0; j < entriesList.size(); j++) {
+			entries[j] = new EntriesItem(entriesList.get(j), this);
+		}
 
-    public String getName() { return name; }
-    /** Delegates to first entry. */
-    public String getSupertag() { return entries[0].getSupertag(); } 
-    public Boolean getClosed() { return closed; }
-    public String getPOS() { return pos; }
-    public String getIndexRel() { return indexRel; }
-    public String getCoartRel() { return coartRel; }
-    public DataItem[] getData() { return data; }
-    public EntriesItem[] getEntries() { return entries; }
+		List<Element> members = famel.getChildren("member");
+		data = new DataItem[members.size()];
+		for (int j = 0; j < members.size(); j++) {
+			data[j] = new DataItem(members.get(j));
+		}
+	}
+
+	public Family(String s) {
+		setName(s);
+	}
+
+	public boolean isClosed() {
+		return closed.booleanValue();
+	}
+
+	public void setName(String s) {
+		name = s;
+	}
+
+	public void setClosed(Boolean b) {
+		closed = b;
+	}
+
+	public void setPOS(String s) {
+		pos = s;
+	}
+
+	public void setIndexRel(String s) {
+		indexRel = s;
+	}
+
+	public void setCoartRel(String s) {
+		coartRel = s;
+	}
+
+	public void setData(DataItem[] dm) {
+		data = dm;
+	}
+
+	public void setEntries(EntriesItem[] em) {
+		entries = em;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	/** Delegates to first entry. */
+	public String getSupertag() {
+		return entries[0].getSupertag();
+	}
+
+	public Boolean getClosed() {
+		return closed;
+	}
+
+	public String getPOS() {
+		return pos;
+	}
+
+	public String getIndexRel() {
+		return indexRel;
+	}
+
+	public String getCoartRel() {
+		return coartRel;
+	}
+
+	public DataItem[] getData() {
+		return data;
+	}
+
+	public EntriesItem[] getEntries() {
+		return entries;
+	}
 }

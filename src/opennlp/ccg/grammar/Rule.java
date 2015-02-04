@@ -25,7 +25,6 @@ import java.util.*;
 
 import org.jdom.Element;
 
-
 /**
  * Interface for categorial rules.
  *
@@ -36,40 +35,39 @@ import org.jdom.Element;
  */
 public interface Rule {
 
-    /**
-     * Apply this rule to some input categories.
-     *
-     * @param inputs the input categories to try to combine
-     * @return the Category (or categories) resulting from using this Rule to combine the
-     *         inputs
-     * @exception UnifyFailure if the inputs cannot be combined by this Rule
-     **/
-    public List<Category> applyRule(Category[] inputs) throws UnifyFailure;
+	/**
+	 * Apply this rule to some input categories.
+	 *
+	 * @param inputs the input categories to try to combine
+	 * @return the Category (or categories) resulting from using this Rule to
+	 *         combine the inputs
+	 * @exception UnifyFailure if the inputs cannot be combined by this Rule
+	 **/
+	public List<Category> applyRule(Category[] inputs) throws UnifyFailure;
 
-    /**
-     * The number of arguments this rule takes.  For example, the arity of the
-     * forward application rule of categorial grammar (X/Y Y => Y) is 2.
-     *
-     * @return the number of arguments this rule takes
-     **/
-    public int arity();
+	/**
+	 * The number of arguments this rule takes. For example, the arity of the
+	 * forward application rule of categorial grammar (X/Y Y => Y) is 2.
+	 *
+	 * @return the number of arguments this rule takes
+	 **/
+	public int arity();
 
-    /**
-     * Returns the interned name of this rule.
-     */
-    public String name();
-    
-    /**
-     * Returns the rule group which contains this rule.
-     */
-    public RuleGroup getRuleGroup();
-    
-    /**
-     * Sets this rule's rule group.
-     */
-    public void setRuleGroup(RuleGroup ruleGroup);
-    
-    /** Returns an XML element representing the rule. */
-    public Element toXml();
+	/**
+	 * Returns the interned name of this rule.
+	 */
+	public String name();
+
+	/**
+	 * Returns the rule group which contains this rule.
+	 */
+	public RuleGroup getRuleGroup();
+
+	/**
+	 * Sets this rule's rule group.
+	 */
+	public void setRuleGroup(RuleGroup ruleGroup);
+
+	/** Returns an XML element representing the rule. */
+	public Element toXml();
 }
-

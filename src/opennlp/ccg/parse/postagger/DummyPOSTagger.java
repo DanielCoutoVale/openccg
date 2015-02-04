@@ -17,12 +17,13 @@
 //////////////////////////////////////////////////////////////////////////////
 
 package opennlp.ccg.parse.postagger;
+
 import java.util.ArrayList;
 import java.util.List;
 import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.parse.tagger.TaggedWord;
 import opennlp.ccg.util.Pair;
-        
+
 /**
  * A "DummyPOSTagger" simply grabs the single POS tag in the Words themselves
  * and puts them into a TaggedWord with a singleton list of probability 1.0 POS
@@ -30,17 +31,17 @@ import opennlp.ccg.util.Pair;
  * 
  * @author Dennis N. Mehay
  */
-public class DummyPOSTagger extends POSTagger {    
+public class DummyPOSTagger extends POSTagger {
 
-    public List<TaggedWord> tagSentence(List<Association> sentence) { 
-        List<TaggedWord> result = new ArrayList<TaggedWord>(sentence.size());
-        for(Association w : sentence) {            
-            List<Pair<Double,String>> tmpTagging = new ArrayList<Pair<Double,String>>(1);
-            tmpTagging.add(new Pair<Double,String>(1.0,w.getFunctions()));            
-            TaggedWord tmp = new TaggedWord(w);
-            tmp.setPOSTagging(tmpTagging);
-            result.add(tmp);            
-        }
-        return result; 
-    }
+	public List<TaggedWord> tagSentence(List<Association> sentence) {
+		List<TaggedWord> result = new ArrayList<TaggedWord>(sentence.size());
+		for (Association w : sentence) {
+			List<Pair<Double, String>> tmpTagging = new ArrayList<Pair<Double, String>>(1);
+			tmpTagging.add(new Pair<Double, String>(1.0, w.getFunctions()));
+			TaggedWord tmp = new TaggedWord(w);
+			tmp.setPOSTagging(tmpTagging);
+			result.add(tmp);
+		}
+		return result;
+	}
 }

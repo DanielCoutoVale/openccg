@@ -29,19 +29,21 @@ import java.util.Set;
 import opennlp.ccg.hylo.graph.LFEdge;
 import opennlp.ccg.hylo.graph.LFVertex;
 
-
 /**
- * A filter for edges that tests whether they are aligned based on a specified set of 
- * {@linkplain #getAlignmentIndices() alignment indices}. Whether the source or target vertices
- * (or both) is considered depends on the match type criteria in effect. For example, if the match
- * type criteria contains {@link MatchType#SOURCE_ALIGNED}, this filter's {@link #allows(LFEdge)} method
- * will check whether argument edges have a {@linkplain LFVertex#getIndex() source index} that is 
- * contained in the set of alignment indices. 
+ * A filter for edges that tests whether they are aligned based on a specified
+ * set of {@linkplain #getAlignmentIndices() alignment indices}. Whether the
+ * source or target vertices (or both) is considered depends on the match type
+ * criteria in effect. For example, if the match type criteria contains
+ * {@link MatchType#SOURCE_ALIGNED}, this filter's {@link #allows(LFEdge)}
+ * method will check whether argument edges have a
+ * {@linkplain LFVertex#getIndex() source index} that is contained in the set of
+ * alignment indices.
  * <p>
- * Instances of this class use the following match type criteria: {@link MatchType#SOURCE_ALIGNED},
- * {@link MatchType#SOURCE_UNALIGNED}, {@link MatchType#TARGET_ALIGNED}, 
- * and {@link MatchType#TARGET_UNALIGNED}. If the set of alignment indices is modified after an instance
- * of this class is created, the filter will reflect the changes because the set is not copied at
+ * Instances of this class use the following match type criteria:
+ * {@link MatchType#SOURCE_ALIGNED}, {@link MatchType#SOURCE_UNALIGNED},
+ * {@link MatchType#TARGET_ALIGNED}, and {@link MatchType#TARGET_UNALIGNED}. If
+ * the set of alignment indices is modified after an instance of this class is
+ * created, the filter will reflect the changes because the set is not copied at
  * creation.
  * 
  * @author <a href="http://www.ling.ohio-state.edu/~scott/">Scott Martin</a>
@@ -49,37 +51,41 @@ import opennlp.ccg.hylo.graph.LFVertex;
 public class AlignedEdgeFilter extends MatchTypeFilter {
 
 	Set<Integer> alignmentIndices;
-		
+
 	/**
-	 * Creates a new aligned edge filter based on the specified alignment indices for the specified
-	 * match type criteria.
+	 * Creates a new aligned edge filter based on the specified alignment
+	 * indices for the specified match type criteria.
+	 * 
 	 * @param alignmentIndices The set of indices to check for alignment.
 	 * @param matchTypes The match type criteria to use.
-	 * @throws IllegalArgumentException If <tt>alignmentIndices</tt> is <tt>null</tt>.
+	 * @throws IllegalArgumentException If <tt>alignmentIndices</tt> is
+	 *             <tt>null</tt>.
 	 */
 	public AlignedEdgeFilter(Set<Integer> alignmentIndices, MatchType... matchTypes) {
 		super(matchTypes);
-		
+
 		checkAlignmentIndices(alignmentIndices);
 		this.alignmentIndices = alignmentIndices;
 	}
 
 	/**
-	 * Creates a new aligned edge filter based on the specified alignment indices for the specified
-	 * match type criteria.
+	 * Creates a new aligned edge filter based on the specified alignment
+	 * indices for the specified match type criteria.
+	 * 
 	 * @param alignmentIndices The set of indices to check for alignment.
 	 * @param matchTypes The match type criteria to use.
-	 * @throws IllegalArgumentException If <tt>alignmentIndices</tt> is <tt>null</tt>.
+	 * @throws IllegalArgumentException If <tt>alignmentIndices</tt> is
+	 *             <tt>null</tt>.
 	 */
 	public AlignedEdgeFilter(Set<Integer> alignmentIndices, Collection<MatchType> matchTypes) {
 		super(matchTypes);
-		
+
 		checkAlignmentIndices(alignmentIndices);
 		this.alignmentIndices = alignmentIndices;
 	}
-	
+
 	private void checkAlignmentIndices(Set<Integer> alignmentIndices) {
-		if(alignmentIndices == null) {
+		if (alignmentIndices == null) {
 			throw new IllegalArgumentException("alignmentIndices is null");
 		}
 	}
@@ -93,27 +99,30 @@ public class AlignedEdgeFilter extends MatchTypeFilter {
 
 	/**
 	 * Sets the alignment indices used by this filter.
-	 * @throws IllegalArgumentException If <tt>alignmentIndices</tt> is <tt>null</tt>.
+	 * 
+	 * @throws IllegalArgumentException If <tt>alignmentIndices</tt> is
+	 *             <tt>null</tt>.
 	 */
 	public void setAlignmentIndices(Set<Integer> alignmentIndices) {
-		checkAlignmentIndices(alignmentIndices);	
+		checkAlignmentIndices(alignmentIndices);
 		this.alignmentIndices = alignmentIndices;
 	}
 
 	/**
 	 * Tests whether this filter allows the specified LF edge.
+	 * 
 	 * @return <tt>false</tt> if {@link #getMatchTypes()} contains
-	 * <ul>
-	 * 	<li>{@link MatchType#SOURCE_ALIGNED}, but the alignment indices does not contain the edge's
-	 * 		source vertex's index,</li>
-	 * 	<li>{@link MatchType#SOURCE_UNALIGNED}, but the alignment indices contains the edge's
-	 * 		source vertex's index,</li>
-	 * 	<li>{@link MatchType#TARGET_ALIGNED}, but the alignment indices does not contain the edge's
-	 * 		target vertex's index,</li>
-	 * 	<li>{@link MatchType#TARGET_UNALIGNED}, but the alignment indices contains the edge's
-	 * 		target vertex's index,</li>
-	 * </ul>
-	 * and <tt>true</tt> otherwise.
+	 *         <ul>
+	 *         <li>{@link MatchType#SOURCE_ALIGNED}, but the alignment indices
+	 *         does not contain the edge's source vertex's index,</li>
+	 *         <li>{@link MatchType#SOURCE_UNALIGNED}, but the alignment indices
+	 *         contains the edge's source vertex's index,</li>
+	 *         <li>{@link MatchType#TARGET_ALIGNED}, but the alignment indices
+	 *         does not contain the edge's target vertex's index,</li>
+	 *         <li>{@link MatchType#TARGET_UNALIGNED}, but the alignment indices
+	 *         contains the edge's target vertex's index,</li>
+	 *         </ul>
+	 *         and <tt>true</tt> otherwise.
 	 * 
 	 * @see #getAlignmentIndices()
 	 * @see LFEdge#getSource()
@@ -122,21 +131,21 @@ public class AlignedEdgeFilter extends MatchTypeFilter {
 	 */
 	@Override
 	public boolean allows(LFEdge edge) {
-		for(MatchType t : matchTypes) {
-			if(t == SOURCE_ALIGNED && !alignmentIndices.contains(edge.getSource().getIndex())) {
+		for (MatchType t : matchTypes) {
+			if (t == SOURCE_ALIGNED && !alignmentIndices.contains(edge.getSource().getIndex())) {
 				return false;
-			}
-			else if(t == SOURCE_UNALIGNED && alignmentIndices.contains(edge.getSource().getIndex())) {
+			} else if (t == SOURCE_UNALIGNED
+					&& alignmentIndices.contains(edge.getSource().getIndex())) {
 				return false;
-			}
-			else if(t == TARGET_ALIGNED && !alignmentIndices.contains(edge.getTarget().getIndex())) {
+			} else if (t == TARGET_ALIGNED
+					&& !alignmentIndices.contains(edge.getTarget().getIndex())) {
 				return false;
-			}
-			else if(t == TARGET_UNALIGNED && alignmentIndices.contains(edge.getTarget().getIndex())) {
+			} else if (t == TARGET_UNALIGNED
+					&& alignmentIndices.contains(edge.getTarget().getIndex())) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
 

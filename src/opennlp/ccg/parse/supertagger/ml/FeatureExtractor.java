@@ -28,36 +28,46 @@ import opennlp.ccg.util.Pair;
  * @version $Revision: 1.1 $, $Date: 2010/09/21 04:12:41 $
  */
 public interface FeatureExtractor {
-	
-    /** 
-     * @param sentence A {@code Map<Integer,Word>} giving the (string-indexed) sentence of
-     *  {@code Word}s to be tagged.
-     * @param wordIndex An {@code Integer}, giving the string index of the current word.
-     * @return A {@code Collection<Pair<String,Double>><String>} representing the 
-     * real-valued activations of features (predicates) in the context of a word to be labelled.
-     */
-    public Collection<Pair<String,Double>> getFeatures(Map<Integer,TaggedWord> sentence, Integer wordIndex);
-    
-     /** 
-     * Same as getFeatures, but for the whole sentence, returning a List of contextual features, in order, one
-      * per <code>Word</code> in <tt>sentence</tt>
-     */
-    public List<Collection<Pair<String,Double>>> getSentenceFeatures(Map<Integer,TaggedWord> sentence);
-    
-    /** 
-     * @param sentence A <code>Map<Integer,Word></code> giving the (string-indexed) sentence of
-     *  <tt>Word</tt>s to be tagged.
-     * @param wordIndex An <code>Integer</code>, giving the string index of the current word.
-     * @param training A boolean indicating whether we are extracting features for training (in which case
-     * we need the label too).
-     * @return A <code>Collection<Pair<String,Double>><String></code> representing the 
-     * real-valued activations of features (predicates) in the context of a word to be labelled.
-     */
-    public Collection<Pair<String,Double>> getFeatures(Map<Integer,TaggedWord> sentence, Integer wordIndex, boolean training);
-    
-     /** 
-     * Same as getFeatures, but for the whole sentence, returning a List of contextual features, in order, one
-      * per <code>Word</code> in <tt>sentence</tt>
-     */
-    public List<Collection<Pair<String,Double>>> getSentenceFeatures(Map<Integer,TaggedWord> sentence, boolean training);
+
+	/**
+	 * @param sentence A {@code Map<Integer,Word>} giving the (string-indexed)
+	 *            sentence of {@code Word}s to be tagged.
+	 * @param wordIndex An {@code Integer}, giving the string index of the
+	 *            current word.
+	 * @return A {@code Collection<Pair<String,Double>><String>} representing
+	 *         the real-valued activations of features (predicates) in the
+	 *         context of a word to be labelled.
+	 */
+	public Collection<Pair<String, Double>> getFeatures(Map<Integer, TaggedWord> sentence,
+			Integer wordIndex);
+
+	/**
+	 * Same as getFeatures, but for the whole sentence, returning a List of
+	 * contextual features, in order, one per <code>Word</code> in
+	 * <tt>sentence</tt>
+	 */
+	public List<Collection<Pair<String, Double>>> getSentenceFeatures(
+			Map<Integer, TaggedWord> sentence);
+
+	/**
+	 * @param sentence A <code>Map<Integer,Word></code> giving the
+	 *            (string-indexed) sentence of <tt>Word</tt>s to be tagged.
+	 * @param wordIndex An <code>Integer</code>, giving the string index of the
+	 *            current word.
+	 * @param training A boolean indicating whether we are extracting features
+	 *            for training (in which case we need the label too).
+	 * @return A <code>Collection<Pair<String,Double>><String></code>
+	 *         representing the real-valued activations of features (predicates)
+	 *         in the context of a word to be labelled.
+	 */
+	public Collection<Pair<String, Double>> getFeatures(Map<Integer, TaggedWord> sentence,
+			Integer wordIndex, boolean training);
+
+	/**
+	 * Same as getFeatures, but for the whole sentence, returning a List of
+	 * contextual features, in order, one per <code>Word</code> in
+	 * <tt>sentence</tt>
+	 */
+	public List<Collection<Pair<String, Double>>> getSentenceFeatures(
+			Map<Integer, TaggedWord> sentence, boolean training);
 }

@@ -16,7 +16,6 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //////////////////////////////////////////////////////////////////////////////
 
-
 /*
  * Read in the CCGbank (auto format), line by line, and transform each lexical
  * item (<L cat1 pos1 pos2 word cat2>) into an SRILM factored LM bundle format:
@@ -41,52 +40,60 @@ import opennlp.ccg.lexicon.DefaultTokenizer;
  * @author Dennis N. Mehay
  */
 public class CCGBankToSRILMFLM {
-    public static void main(String[] args) throws FileNotFoundException, IOException {
-        String usage = "\nCCGBankToSRILMFLM -input <inputCorpus> -o <outputCorpus> \n";
-        if (args.length > 0 && args[0].equals("-h") || args.length == 0) {
-            System.out.println(usage);
-            System.exit(0);
-        }
+	public static void main(String[] args) throws FileNotFoundException, IOException {
+		String usage = "\nCCGBankToSRILMFLM -input <inputCorpus> -o <outputCorpus> \n";
+		if (args.length > 0 && args[0].equals("-h") || args.length == 0) {
+			System.out.println(usage);
+			System.exit(0);
+		}
 
-        BufferedReader reader = null;
-        BufferedWriter writer = null;
-        String inputCorp = "train.auto", output = "train.srilm";
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-i")) {inputCorp = args[++i]; continue;}
-            if (args[i].equals("-o")) {output = args[++i]; continue;}
-            System.out.println("Unrecognized option: " + args[i]);
-        }
-        reader = new BufferedReader(new FileReader(new File(inputCorp)));
-        writer = new BufferedWriter(new FileWriter(new File(output)));
-        String parseIDHeader = "ID=";
-        Pattern p = Pattern.compile("(<L\\s+.*?>)+?");
-        
-        String line = reader.readLine();
-        while(line != null) {
-            if(line.startsWith(parseIDHeader)) {line = reader.readLine(); continue;}
-            line = line.trim();
-            Matcher m = p.matcher(line);
-            String word = null, pos = null, cat = null;
-            int cnt = 0;
-            while(m.find()) {
-                String toks = m.group();
-                // {<L, cat1, pos1, pos2, word, cat2>}
-                String[] parts = toks.split(" ");
-                word = parts[4];
-                pos = parts[2];
-                cat = parts[1];
-                if(cnt++ > 0) {
-                    writer.write(" ");
-                }
-                writer.write("W-"+DefaultTokenizer.escape(word)+":"
-                        +"S-"+DefaultTokenizer.escape(word)+":"
-                        +"P-"+DefaultTokenizer.escape(pos)+":"
-                        +"T-"+DefaultTokenizer.escape(cat));
-            }
-            writer.write(System.getProperty("line.separator"));
-            line = reader.readLine();
-        }
-        writer.close();
-        reader.close();
-    }
+		BufferedReader reader = null;
+		BufferedWriter writer = null;
+		String inputCorp = "train.auto", output = "train.srilm";
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].equals("-i")) {
+				inputCorp = args[++i];
+				continue;
+			}
+			if (args[i].equals("-o")) {
+				output = args[++i];
+				continue;
+			}
+			System.out.println("Unrecognized option: " + args[i]);
+		}
+		reader = new BufferedReader(new FileReader(new File(inputCorp)));
+		writer = new BufferedWriter(new FileWriter(new File(output)));
+		String parseIDHeader = "ID=";
+		Pattern p = Pattern.compile("(<L\\s+.*?>)+?");
+
+		String line = reader.readLine();
+		while (line != null) {
+			if (line.startsWith(parseIDHeader)) {
+				line = reader.readLine();
+				continue;
+			}
+			line = line.trim();
+			Matcher m = p.matcher(line);
+			String word = null, pos = null, cat = null;
+			int cnt = 0;
+			while (m.find()) {
+				String toks = m.group();
+				// {<L, cat1, pos1, pos2, word, cat2>}
+				String[] parts = toks.split(" ");
+				word = parts[4];
+				pos = parts[2];
+				cat = parts[1];
+				if (cnt++ > 0) {
+					writer.write(" ");
+				}
+				writer.write("W-" + DefaultTokenizer.escape(word) + ":" + "S-"
+						+ DefaultTokenizer.escape(word) + ":" + "P-" + DefaultTokenizer.escape(pos)
+						+ ":" + "T-" + DefaultTokenizer.escape(cat));
+			}
+			writer.write(System.getProperty("line.separator"));
+			line = reader.readLine();
+		}
+		writer.close();
+		reader.close();
+	}
 }

@@ -32,101 +32,96 @@ import org.apache.tools.ant.TaskContainer;
 import org.apache.tools.ant.types.FileList;
 import org.apache.tools.ant.types.FileSet;
 
-
 /**
  * Abstract class providing generalized functionality for file groups used by
  * {@link CCGBankTask}s.
  * <p>
  * For convenience, this class implements {@link Iterable} over {@link File}s.
  * This allows instances to be used in standard iteration constructs while
- * abstracting away from implementation details such as multiple
- * {@link FileSet}s or {@link FileList}s. 
+ * abstracting away from implementation details such as multiple {@link FileSet}
+ * s or {@link FileList}s.
+ * 
  * @author <a href="http://www.ling.osu.edu/~scott/">Scott Martin</a>
  * @version $Revision: 1.1 $
  */
-public abstract class CCGBankTaskFileGroup<G> extends Task implements
-		TaskContainer,Iterable<File> {
+public abstract class CCGBankTaskFileGroup<G> extends Task implements TaskContainer, Iterable<File> {
 
 	protected Collection<G> subGroups;
-	
+
 	/**
 	 * Creates a file group over the specified collection of subgroups.
+	 * 
 	 * @param subGroups The collection over which this class is an abstracted
-	 * view.
+	 *            view.
 	 */
 	protected CCGBankTaskFileGroup(Collection<G> subGroups) {
 		this.subGroups = subGroups;
 	}
-	
-	
+
 	/**
 	 * Adds a subgroup to the collection of subgroups this class abstracts over.
 	 */
 	protected void addGroup(G group) {
 		subGroups.add(group);
 	}
-	
-	
+
 	/**
 	 * Gets all the files in a group as an array. To be implemented by extending
-	 * classes, as {@link FileSet} and {@link FileList} represent files 
+	 * classes, as {@link FileSet} and {@link FileList} represent files
 	 * differently.
+	 * 
 	 * @return The collection of files in <code>group</code>, as an array.
 	 */
-	protected abstract File[] getFiles(G group); 
-	
-	
+	protected abstract File[] getFiles(G group);
+
 	/**
 	 * Creates an array of files given a directory and an array of file names
 	 * (specified relative to that directory).
+	 * 
 	 * @param directory The directory that the specified file names are relative
-	 * to.
+	 *            to.
 	 * @param fileNames The file names, relative to the specified directory.
 	 * @return An array containing all the files as specified relative to the
-	 * specified directory.
+	 *         specified directory.
 	 */
 	protected File[] makeFiles(File directory, String[] fileNames) {
 		File[] files = new File[fileNames.length];
-		
-		for(int i = 0; i < fileNames.length; i++) {
+
+		for (int i = 0; i < fileNames.length; i++) {
 			files[i] = new File(directory, fileNames[i]);
 		}
-		
+
 		return files;
 	}
-	
-	
+
 	/**
 	 * Included for binary compatibility with {@link TaskContainer}.
+	 * 
 	 * @throws BuildException Always throws a build exception, as only the
-	 * parameterized type of this class's subgroups can be contained by this
-	 * task.
+	 *             parameterized type of this class's subgroups can be contained
+	 *             by this task.
 	 */
 	public void addTask(Task task) {
-		throw new BuildException("nested task \"" + task
-				+ "\" not supported, only "
-				+ subGroups.getClass().getTypeParameters()[0]
-				  .getGenericDeclaration());
+		throw new BuildException("nested task \"" + task + "\" not supported, only "
+				+ subGroups.getClass().getTypeParameters()[0].getGenericDeclaration());
 	}
-	
-	
+
 	/**
-	 * Provides an
-	 * iterator over all the files in the collection of subgroups contained by
-	 * this instance. The iterator returned will iterate through files in all
-	 * the subgroups returned in the same order as the order returned by the
-	 * subgroups collection. 
+	 * Provides an iterator over all the files in the collection of subgroups
+	 * contained by this instance. The iterator returned will iterate through
+	 * files in all the subgroups returned in the same order as the order
+	 * returned by the subgroups collection.
 	 */
 	public Iterator<File> iterator() {
 		return new AllFileView();
 	}
 
-	
 	/**
 	 * Implements an iterator over the files contained in the subgroups
 	 * collection. This class iterates over all the files contained in the
-	 * groups in the subgroups collection, in the order that they
-	 * are returned by the subgroups collection.
+	 * groups in the subgroups collection, in the order that they are returned
+	 * by the subgroups collection.
+	 * 
 	 * @author <a href="http://www.ling.osu.edu/~scott/">Scott Martin</a>
 	 * @version $Revision: 1.1 $
 	 */
@@ -134,52 +129,53 @@ public abstract class CCGBankTaskFileGroup<G> extends Task implements
 
 		Iterator<G> groupIterator = subGroups.iterator();
 		Iterator<File> currentIterator;
-		
+
 		/**
 		 * Tests whether there is a next file.
+		 * 
 		 * @return true If the current subgroup contains a next file, or if
-		 * there is a next subgroup that is non-empty.
+		 *         there is a next subgroup that is non-empty.
 		 */
 		public boolean hasNext() {
-			while((currentIterator == null || !currentIterator.hasNext())
+			while ((currentIterator == null || !currentIterator.hasNext())
 					&& groupIterator.hasNext()) {
-				currentIterator = new FileArrayIterator(
-						getFiles(groupIterator.next()));
+				currentIterator = new FileArrayIterator(getFiles(groupIterator.next()));
 			}
-			
+
 			// current may be empty
-			return (currentIterator != null && currentIterator.hasNext()); 
+			return (currentIterator != null && currentIterator.hasNext());
 		}
-		
-		
+
 		/**
-		 * Gets the next file in the series, as returned in order by the 
+		 * Gets the next file in the series, as returned in order by the
 		 * subgroups collection.
+		 * 
 		 * @throws NoSuchElementException If the collection of subgroups is
-		 * exhausted.
+		 *             exhausted.
 		 */
 		public File next() {
-			if(!hasNext()) {
+			if (!hasNext()) {
 				throw new NoSuchElementException("elements exhausted");
 			}
-			
+
 			return currentIterator.next();
 		}
-		
+
 		/**
 		 * Included only for binary compatibility with {@link Iterator}.
+		 * 
 		 * @throws UnsupportedOperationException Always, as this operation is
-		 * not supported.
+		 *             not supported.
 		 */
 		public void remove() {
 			throw new UnsupportedOperationException("removed not supported");
 		}
-		
+
 	}
-	
-	
+
 	/**
 	 * Implements an iterator view of an array of {@link File} objects.
+	 * 
 	 * @author <a href="http://www.ling.osu.edu/~scott/">Scott Martin</a>
 	 * @version $Revision: 1.1 $
 	 */
@@ -187,18 +183,19 @@ public abstract class CCGBankTaskFileGroup<G> extends Task implements
 
 		File[] array;
 		int index = 0;
-		
-		
+
 		/**
 		 * Creates a new iterator view over the specified array of files.
+		 * 
 		 * @param array The file array backing this iterator view.
 		 */
 		FileArrayIterator(File[] array) {
 			this.array = array;
 		}
-		
+
 		/**
 		 * Tests whether the array of files is exhausted.
+		 * 
 		 * @return true If the current index is less than the array length.
 		 */
 		public boolean hasNext() {
@@ -208,25 +205,27 @@ public abstract class CCGBankTaskFileGroup<G> extends Task implements
 		/**
 		 * Gets the next file in series, as specified by the array backing this
 		 * iterator view.
+		 * 
 		 * @throws NoSuchElementException If the array of files is exhausted.
 		 * @see #hasNext()
 		 */
 		public File next() {
-			if(!hasNext()) {
+			if (!hasNext()) {
 				throw new NoSuchElementException("elements exhausted");
 			}
-			
+
 			return array[index++];
 		}
 
 		/**
 		 * Included only for binary compatibility with {@link Iterator}.
+		 * 
 		 * @throws UnsupportedOperationException Always, as this operation is
-		 * not supported.
+		 *             not supported.
 		 */
 		public void remove() {
 			throw new UnsupportedOperationException("remove not supported");
 		}
-		
+
 	}
 }

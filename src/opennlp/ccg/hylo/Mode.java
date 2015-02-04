@@ -21,18 +21,17 @@ package opennlp.ccg.hylo;
 import opennlp.ccg.synsem.*;
 
 /**
- * A interface for hybrid logic nominals, to allow polymorphism for
- * both Modality labels and variables over Modality labels.
+ * A interface for hybrid logic nominals, to allow polymorphism for both
+ * Modality labels and variables over Modality labels.
  *
- * @author      Jason Baldridge
- * @author 		<a href="http://www.ling.ohio-state.edu/~scott/">Scott Martin</a>
- * @version     $Revision: 1.2 $, $Date: 2005/10/19 21:27:15 $
+ * @author Jason Baldridge
+ * @author <a href="http://www.ling.ohio-state.edu/~scott/">Scott Martin</a>
+ * @version $Revision: 1.2 $, $Date: 2005/10/19 21:27:15 $
  **/
 public interface Mode extends LF {
-	
+
 	/**
 	 * Gets the name of this mode.
 	 */
 	String getName();
 }
-

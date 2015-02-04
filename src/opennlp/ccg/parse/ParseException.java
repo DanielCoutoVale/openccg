@@ -25,24 +25,25 @@ package opennlp.ccg.parse;
  * @version $Revision: 1.3 $, $Date: 2009/12/20 18:54:41 $
  */
 public class ParseException extends Exception {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	/** Time limit exceeded message. */
 	public static final String TIME_LIMIT_EXCEEDED = "Time limit exceeded";
-	
+
 	/** Edge limit exceeded message. */
 	public static final String EDGE_LIMIT_EXCEEDED = "Edge limit exceeded";
 
 	/**
 	 * Class constructor
 	 * 
-	 * @param s
-	 *            the error message
+	 * @param s the error message
 	 */
 	public ParseException(String s) {
-		super(s); 
+		super(s);
 	}
 
-	public String toString() { return getMessage(); }
+	public String toString() {
+		return getMessage();
+	}
 }

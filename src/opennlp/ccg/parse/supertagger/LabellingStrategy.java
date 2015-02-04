@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import opennlp.ccg.lexicon.Association;
 import opennlp.ccg.util.Pair;
+
 //import ml.MaxentModel;
 
 /**
@@ -28,18 +29,21 @@ import opennlp.ccg.util.Pair;
  * @version $Revision: 1.2 $, $Date: 2010/09/21 04:12:41 $
  */
 public interface LabellingStrategy {
-	
-    /**
-     * A method to reset the K parameter (for word dictionaries).
-     * @param newK An int to replace the int value of K.
-     * @returns null.
-     */
-    public void setK(int newK);
-    
-    /** Multitag a TaggedWord and throw away the probabilities. */
-    public List<String> multitag(Association thisword, Collection<Pair<String,Double>> context, double beta);
-    
-    /** Multitag a TaggedWord and retain the probabilities. */
-    public List<Pair<Double,String>> multitagWithScores(Association thisword, Collection<Pair<String,Double>>contex, double beta);
-    
+
+	/**
+	 * A method to reset the K parameter (for word dictionaries).
+	 * 
+	 * @param newK An int to replace the int value of K.
+	 * @returns null.
+	 */
+	public void setK(int newK);
+
+	/** Multitag a TaggedWord and throw away the probabilities. */
+	public List<String> multitag(Association thisword, Collection<Pair<String, Double>> context,
+			double beta);
+
+	/** Multitag a TaggedWord and retain the probabilities. */
+	public List<Pair<Double, String>> multitagWithScores(Association thisword,
+			Collection<Pair<String, Double>> contex, double beta);
+
 }

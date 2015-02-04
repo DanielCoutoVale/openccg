@@ -39,13 +39,13 @@ public class DebugHelper {
 
 	}
 
-	//Read in bkgrnd info
+	// Read in bkgrnd info
 	public void readInfo() {
 
 		try {
 
-			BufferedReader inp = new BufferedReader(new FileReader(
-					"/scratch/propgrammar/unmat.txt"));
+			BufferedReader inp = new BufferedReader(
+					new FileReader("/scratch/propgrammar/unmat.txt"));
 			String line = "";
 
 			while ((line = inp.readLine()) != null) {
@@ -62,11 +62,11 @@ public class DebugHelper {
 				pos = purgeCat(y[1]);
 				String unmat = name + " " + pos;
 				unmatCats.add(unmat);
-				//System.out.println(name+" "+pos);		
+				// System.out.println(name+" "+pos);
 
 			}
-			//System.out.println(tagInfo);
-			//System.out.println(tagInfo.size());
+			// System.out.println(tagInfo);
+			// System.out.println(tagInfo.size());
 			init = false;
 			inp.close();
 		}
@@ -82,7 +82,7 @@ public class DebugHelper {
 		cat = cat.replaceAll("~", "");
 		cat = cat.replaceAll("_[0-9]+", "");
 		cat = cat.replaceAll(">", "");
-		//System.out.println("Debug: "+cat);
+		// System.out.println("Debug: "+cat);
 		return cat;
 
 	}
@@ -98,8 +98,7 @@ public class DebugHelper {
 	public void printInfo() {
 		System.out.println(unmatCats);
 		System.out.println("No:of nsr LFs: " + nsrCount);
-		System.out.println("No:of unmatched that a NSR LF contains: "
-				+ unmatCount);
+		System.out.println("No:of unmatched that a NSR LF contains: " + unmatCount);
 	}
 
 }

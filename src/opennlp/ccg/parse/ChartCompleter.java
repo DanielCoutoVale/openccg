@@ -8,12 +8,12 @@ import opennlp.ccg.synsem.Symbol;
 /**
  * A chart completer.
  * 
- * The x1 position is the position of the first atom of the form x.
- * The x2 position is the position of the last atom of the form x.
+ * The x1 position is the position of the first atom of the form x. The x2
+ * position is the position of the last atom of the form x.
  * 
- * If we tokenize the input string into word tokens, our atoms shall be words. However, if we
- * recognize forms in the input string instead of tokenizing it, each character of the input string
- * is an atom.
+ * If we tokenize the input string into word tokens, our atoms shall be words.
+ * However, if we recognize forms in the input string instead of tokenizing it,
+ * each character of the input string is an atom.
  * 
  * @author Daniel Couto-Vale
  */
@@ -45,14 +45,14 @@ public interface ChartCompleter {
 	 * @param x1 the x1 position
 	 * @param x2 the y2 position
 	 * @param sign the sign to insert
-	 * @return <code>true</code> if an edge is duly created and associated to the form and
-	 *     <code>false</code> otherwise
+	 * @return <code>true</code> if an edge is duly created and associated to
+	 *         the form and <code>false</code> otherwise
 	 */
 	boolean annotateForm(int x1, int x2, Symbol sign);
 
 	/**
-	 * Associates form (x1,x2) with edges that result from applying unary rules to those already
-	 * associated with the form.
+	 * Associates form (x1,x2) with edges that result from applying unary rules
+	 * to those already associated with the form.
 	 * 
 	 * @param x1 the x1 position
 	 * @param x2 the x2 position
@@ -61,8 +61,8 @@ public interface ChartCompleter {
 	void annotateForm(int x1, int x2) throws ParseException;
 
 	/**
-	 * Associates form (z1,z2) with edges that result from combining the edges of form (x1,x2) with
-	 * those of form (y1,y2).
+	 * Associates form (z1,z2) with edges that result from combining the edges
+	 * of form (x1,x2) with those of form (y1,y2).
 	 * 
 	 * @param x1 the x1 position
 	 * @param x2 the x2 position
@@ -75,8 +75,9 @@ public interface ChartCompleter {
 	void combineForms(int x1, int x2, int y1, int y2, int z1, int z2) throws ParseException;
 
 	/**
-	 * Associates form (z1,z2) with fragmentary edges, if it is non-empty, that result from
-	 * combining the edges of form (x1,x2) with those of form (y1,y2) using the glue rule.
+	 * Associates form (z1,z2) with fragmentary edges, if it is non-empty, that
+	 * result from combining the edges of form (x1,x2) with those of form
+	 * (y1,y2) using the glue rule.
 	 * 
 	 * @param x1 the x1 position
 	 * @param x2 the x2 position
@@ -93,7 +94,8 @@ public interface ChartCompleter {
 	 * 
 	 * @param x1 the x1 position
 	 * @param x2 the x2 position
-	 * @return <code>true</code> if the cell is empty and <code>false</code> otherwise
+	 * @return <code>true</code> if the cell is empty and <code>false</code>
+	 *         otherwise
 	 */
 	boolean isEmpty(int x1, int x2);
 

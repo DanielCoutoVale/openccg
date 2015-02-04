@@ -19,17 +19,19 @@
 package opennlp.ccgbank.convert;
 
 /**
- * Utility class for adjusting roles and augmenting cat names with roles. 
- */ 
+ * Utility class for adjusting roles and augmenting cat names with roles.
+ */
 public class RoleAdjuster {
 
-	/** Returns the adjusted argument roles, making guesses at the missing roles. */
+	/**
+	 * Returns the adjusted argument roles, making guesses at the missing roles.
+	 */
 	public String getAdjustedRoles(String cat, String roles) {
 		// aux things like "have to"
 		if (roles.equals("null e") || roles.equals("e e")) {
 			if (cat.indexOf("np[thr]") < 0)
 				return "Arg0 Arg1";
-			else 
+			else
 				return "e Arg1";
 		}
 		// vp mods
@@ -63,16 +65,16 @@ public class RoleAdjuster {
 		if (cat.startsWith("s[pss]")) {
 			if (rest.indexOf("Arg1") < 0)
 				return "Arg1" + rest;
-			else 
+			else
 				return "Arg2" + rest;
 		}
 		// otherwise Arg0 or Arg1
 		if (rest.indexOf("Arg0") < 0)
 			return "Arg0" + rest;
-		else 
+		else
 			return "Arg1" + rest;
 	}
-	
+
 	/** Returns the cat name augmented with the given argument roles. */
 	public String getCatPlusRoles(String cat, String roles) {
 		return cat + ":" + roles.replaceAll(" ", "+");

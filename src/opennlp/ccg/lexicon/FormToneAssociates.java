@@ -19,7 +19,8 @@
 package opennlp.ccg.lexicon;
 
 /**
- * Form and tone associates are an association that has a form and a tone as associates.
+ * Form and tone associates are an association that has a form and a tone as
+ * associates.
  *
  * @author Michael White
  * @author Daniel Couto-Vale

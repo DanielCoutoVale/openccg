@@ -49,8 +49,8 @@ public class MorphItem {
 	};
 
 	/** Constructor from XML element. */
-	public MorphItem(Association surfaceWord, Association word, Association coartIndexingWord, String[] macros,
-			String[] excluded, boolean coart) {
+	public MorphItem(Association surfaceWord, Association word, Association coartIndexingWord,
+			String[] macros, String[] excluded, boolean coart) {
 		this.surfaceWord = surfaceWord;
 		this.word = word;
 		this.coartIndexingWord = coartIndexingWord;

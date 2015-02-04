@@ -82,17 +82,21 @@ public final class Dollar implements Arg, Variable, Mutable, Indexed, Serializab
 		return _slash;
 	}
 
-	public void setSlashModifier(boolean modifier) { _slash.setModifier(modifier); }
-	
-    public void setSlashHarmonicCompositionResult(boolean harmonicResult) { _slash.setHarmonicCompositionResult(harmonicResult); }
+	public void setSlashModifier(boolean modifier) {
+		_slash.setModifier(modifier);
+	}
 
-    public boolean equals(Object o) {
+	public void setSlashHarmonicCompositionResult(boolean harmonicResult) {
+		_slash.setHarmonicCompositionResult(harmonicResult);
+	}
+
+	public boolean equals(Object o) {
 		return (o instanceof Dollar && _index == ((Dollar) o).getIndex() && _slash
 				.equals(((Dollar) o).getSlash()));
 	}
 
 	public int hashCode() {
-		return 31 * _index + _slash.hashCode() ;
+		return 31 * _index + _slash.hashCode();
 	}
 
 	public boolean occurs(Variable v) {
@@ -111,8 +115,7 @@ public final class Dollar implements Arg, Variable, Mutable, Indexed, Serializab
 		// quite implement Unifiable
 		if (value instanceof Arg && !((Arg) value).occurs(this)) {
 			return ((Arg) value).fill(sub);
-		} else if (value instanceof ArgStack
-				&& !((ArgStack) value).occurs(this)) {
+		} else if (value instanceof ArgStack && !((ArgStack) value).occurs(this)) {
 			return ((ArgStack) value).fill(sub);
 		} else {
 			// System.out.println("Error in value for dollar: " + this +" = " +
@@ -197,11 +200,15 @@ public final class Dollar implements Arg, Variable, Mutable, Indexed, Serializab
 	 * using the given maps from vars to ints.
 	 */
 	public boolean equals(Object obj, TObjectIntHashMap varMap, TObjectIntHashMap varMap2) {
-		if (this == obj) return true;
-		if (obj.getClass() != this.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj.getClass() != this.getClass())
+			return false;
 		Dollar d = (Dollar) obj;
-		if (varMap.get(this) != varMap2.get(d)) return false;
-		if (!_slash.equals(d._slash, varMap, varMap2)) return false;
+		if (varMap.get(this) != varMap2.get(d))
+			return false;
+		if (!_slash.equals(d._slash, varMap, varMap2))
+			return false;
 		return true;
 	}
 }

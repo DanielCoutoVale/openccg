@@ -11,11 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The implementation of a sparse chart as a hash map of a hash map. This implementation has cost
- * O(1) for set and get operations.
+ * The implementation of a sparse chart as a hash map of a hash map. This
+ * implementation has cost O(1) for set and get operations.
  * 
- * This chart is more efficient in space and less efficient in time than a dense chart. It is to be
- * preferred in cases where the chart has many atoms.
+ * This chart is more efficient in space and less efficient in time than a dense
+ * chart. It is to be preferred in cases where the chart has many atoms.
  * 
  * @author Daniel Couto-Vale
  */
@@ -54,7 +54,7 @@ public class SparseChart implements Chart, Serializable {
 	 * @throws FileNotFoundException when the file is not found
 	 */
 	@SuppressWarnings("unchecked")
-	public SparseChart(File chartFile) throws FileNotFoundException , IOException {
+	public SparseChart(File chartFile) throws FileNotFoundException, IOException {
 		FileInputStream fis = new FileInputStream(chartFile);
 		BufferedInputStream bis = new BufferedInputStream(fis);
 		ObjectInputStream ois = new ObjectInputStream(bis);

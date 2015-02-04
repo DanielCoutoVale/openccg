@@ -51,11 +51,15 @@ public final class BasicArg implements Arg, Serializable {
 		return _slash;
 	}
 
-	public void setSlashModifier(boolean modifier) { _slash.setModifier(modifier); }
-	
-    public void setSlashHarmonicCompositionResult(boolean harmonicResult) { _slash.setHarmonicCompositionResult(harmonicResult); }
+	public void setSlashModifier(boolean modifier) {
+		_slash.setModifier(modifier);
+	}
 
-    public Category getCat() {
+	public void setSlashHarmonicCompositionResult(boolean harmonicResult) {
+		_slash.setHarmonicCompositionResult(harmonicResult);
+	}
+
+	public Category getCat() {
 		return _cat;
 	}
 
@@ -80,9 +84,8 @@ public final class BasicArg implements Arg, Serializable {
 
 	public Object unify(Object u, Substitution sub) throws UnifyFailure {
 		if (u instanceof BasicArg) {
-			return new BasicArg((Slash) _slash
-					.unify(((BasicArg) u)._slash, sub), (Category) _cat.unify(
-					((BasicArg) u)._cat, sub));
+			return new BasicArg((Slash) _slash.unify(((BasicArg) u)._slash, sub),
+					(Category) _cat.unify(((BasicArg) u)._cat, sub));
 		} else {
 			throw new UnifyFailure();
 		}
@@ -144,8 +147,7 @@ public final class BasicArg implements Arg, Serializable {
 	 * Returns whether this arg equals the given object up to variable names,
 	 * using the given maps from vars to ints.
 	 */
-	public boolean equals(Object obj, TObjectIntHashMap varMap,
-			TObjectIntHashMap varMap2) {
+	public boolean equals(Object obj, TObjectIntHashMap varMap, TObjectIntHashMap varMap2) {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}

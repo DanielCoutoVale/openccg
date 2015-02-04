@@ -24,9 +24,9 @@ public enum DocumenterName {
 	 * A documenter that produces HTML output.
 	 */
 	HTML(HTMLDocumenter.class);
-	
+
 	Class<? extends Documenter> documenterClass;
-	
+
 	private DocumenterName(Class<? extends Documenter> documenterClass) {
 		this.documenterClass = documenterClass;
 	}

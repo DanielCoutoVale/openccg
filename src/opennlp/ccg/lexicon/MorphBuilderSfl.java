@@ -28,9 +28,9 @@ import opennlp.ccg.unify.GFeatStruc;
 import org.jdom.Element;
 
 /**
- * A morph builder that reads in a series of realizational chains (realizational associations) as
- * well as a series of feature bundles. The naming convention comes from Systemic Functional
- * Linguistics (SFL).
+ * A morph builder that reads in a series of realizational chains (realizational
+ * associations) as well as a series of feature bundles. The naming convention
+ * comes from Systemic Functional Linguistics (SFL).
  *
  * @author Daniel Couto-Vale
  * @version
@@ -84,7 +84,8 @@ public class MorphBuilderSfl implements MorphBuilder {
 		String functions = element.getAttributeValue("functions");
 		String supertag = null;
 		String entityClass = element.getAttributeValue("entity-class");
-		Association word = WordPool.createFullWord(surfaceWord, term, functions, supertag, entityClass);
+		Association word = WordPool.createFullWord(surfaceWord, term, functions, supertag,
+				entityClass);
 		String featuresString = element.getAttributeValue("features");
 		String[] features = empty;
 		if (featuresString != null) {
@@ -103,8 +104,8 @@ public class MorphBuilderSfl implements MorphBuilder {
 			String indexValue = surfaceWord.getAssociateValue(indexAttribute);
 			coartIndexingWord = WordPool.createWord(indexAttribute, indexValue);
 		}
-		morph.getMorphItems().add(new MorphItem(surfaceWord, word, coartIndexingWord, features,
-				excluded, modal));
+		morph.getMorphItems().add(
+				new MorphItem(surfaceWord, word, coartIndexingWord, features, excluded, modal));
 	}
 
 	@Override

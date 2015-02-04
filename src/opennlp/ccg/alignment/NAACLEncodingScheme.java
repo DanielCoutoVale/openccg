@@ -26,34 +26,58 @@ import java.util.HashSet;
 /**
  * Represents the NAACL shared task encoding.
  * <table>
- * 	<tr><td>Field separator</td><td>(space)</td></tr>
- * 	<tr><td>Mapping separator</td><td>(newline)</td></tr>
- * 	<tr><td>Group separator</td><td>(newline)</td></tr>
- * 	<tr><td>ID base</td><td>{@link IndexBase#ZERO}</td></tr>
- * 	<tr><td>Index base</td><td>{@link IndexBase#ONE}</td></tr>
- * 	<tr><td>Example group</td><td>
+ * <tr>
+ * <td>Field separator</td>
+ * <td>(space)</td>
+ * </tr>
+ * <tr>
+ * <td>Mapping separator</td>
+ * <td>(newline)</td>
+ * </tr>
+ * <tr>
+ * <td>Group separator</td>
+ * <td>(newline)</td>
+ * </tr>
+ * <tr>
+ * <td>ID base</td>
+ * <td>{@link IndexBase#ZERO}</td>
+ * </tr>
+ * <tr>
+ * <td>Index base</td>
+ * <td>{@link IndexBase#ONE}</td>
+ * </tr>
+ * <tr>
+ * <td>Example group</td>
+ * <td>
+ * 
  * <pre>
  * 37 1 2 S
  * 37 3 4 S
  * 37 3 5 P
  * 37 4 1 S
  * </pre>
- * </td></tr>
+ * 
+ * </td>
+ * </tr>
  * </table>
- * @see <a href="http://www.cse.unt.edu/~rada/wpt/WordAlignment.Guidelines.txt">NAACL shared task word alignment guidelines</a>
+ * 
+ * @see <a
+ *      href="http://www.cse.unt.edu/~rada/wpt/WordAlignment.Guidelines.txt">NAACL
+ *      shared task word alignment guidelines</a>
  * @author <a href="http://www.ling.ohio-state.edu/~scott/">Scott Martin</a>
  */
 public class NAACLEncodingScheme extends AbstractEncodingScheme {
-	
+
 	/**
 	 * Creates a new instance of the NAACL encoding scheme.
+	 * 
 	 * @see Alignments#NAACL_ENCODING_SCHEME
 	 */
 	public NAACLEncodingScheme() {
-		super(' ', '\n', '\n', IndexBase.ZERO, IndexBase.ONE,
-			Alignments.NAACL_DEFAULT_FIELDS,				
-			new HashSet<MappingFormat.Field>(Arrays.asList(PHRASE_NUMBER_FIELD, A_INDEX_FIELD, B_INDEX_FIELD)),				
-			PHRASE_NUMBER_FIELD, A_INDEX_FIELD, B_INDEX_FIELD, STATUS_FIELD, CONFIDENCE_FIELD);
+		super(' ', '\n', '\n', IndexBase.ZERO, IndexBase.ONE, Alignments.NAACL_DEFAULT_FIELDS,
+				new HashSet<MappingFormat.Field>(Arrays.asList(PHRASE_NUMBER_FIELD, A_INDEX_FIELD,
+						B_INDEX_FIELD)), PHRASE_NUMBER_FIELD, A_INDEX_FIELD, B_INDEX_FIELD,
+				STATUS_FIELD, CONFIDENCE_FIELD);
 	}
 
 }

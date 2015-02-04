@@ -19,39 +19,34 @@
 //Class which stores the context of punctuations
 package opennlp.ccgbank.convert;
 
+public class DiscrCheck {
 
+	// Sentence id
+	private String id = "";
 
-public class DiscrCheck{
+	// Proc which traps, stores id of each sentence in a global var
+	public String storeId(String x) {
 
-		//Sentence id
-		private  String id="";
+		id = "";
+		id = x;
+		return null;
+	}
 
-	 //Proc which traps, stores id of each sentence in a global var
-    public String storeId(String x){
+	public void checkCatDiscr(String cat, String cat0, String lex) {
 
-				id="";
-				id=x;
-				return null;
-    }
+		// Comparing discrepancies between cat0 & cat1
+		// Just a check. Should be commented out in the final version
 
-		 public void checkCatDiscr(String cat,String cat0,String lex){
+		String catA = cat0;
+		String catB = cat;
 
-				 //Comparing discrepancies between cat0 & cat1
-				 //Just a check. Should be commented out in the final version
-				 
-				 String catA=cat0;
-				 String catB=cat;
-				 
-				 catA=catA.toLowerCase();
-				 catB=catB.replaceAll("[0-9]","");
-				 catB=catB.replaceAll("_","");
-				 
-				 if(!catA.equals(catB) && !cat0.contains("nb"))
-						 System.out.println(id+": "+cat0+"***"+cat+" - "+lex);
-				 
-		 }
-		
+		catA = catA.toLowerCase();
+		catB = catB.replaceAll("[0-9]", "");
+		catB = catB.replaceAll("_", "");
+
+		if (!catA.equals(catB) && !cat0.contains("nb"))
+			System.out.println(id + ": " + cat0 + "***" + cat + " - " + lex);
+
+	}
+
 }
-
-
-

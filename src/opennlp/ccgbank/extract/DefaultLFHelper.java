@@ -21,13 +21,14 @@
 package opennlp.ccgbank.extract;
 
 import java.util.*;
+
 //import java.io.*;
 
 public class DefaultLFHelper {
 
 	private ArrayList<String> idTally = new ArrayList<String>();
 
-	private Hashtable<String,Integer> freqTable = new Hashtable<String,Integer>();
+	private Hashtable<String, Integer> freqTable = new Hashtable<String, Integer>();
 
 	private String lfType = "ord";
 
@@ -35,7 +36,7 @@ public class DefaultLFHelper {
 
 		lfType = "ord";
 		idTally = new ArrayList<String>();
-		freqTable = new Hashtable<String,Integer>();
+		freqTable = new Hashtable<String, Integer>();
 		argCounter = 0;
 	}
 
@@ -45,7 +46,7 @@ public class DefaultLFHelper {
 
 		if (id.length() > 0) {
 
-			//System.out.println(cat+" "+id+" "+idType);
+			// System.out.println(cat+" "+id+" "+idType);
 
 			if (!freqTable.containsKey(id))
 				freqTable.put(id, freq);
@@ -56,8 +57,8 @@ public class DefaultLFHelper {
 
 			if (id.equals("1") && idType.equals("inherits"))
 				lfType = "mod-mod";
-			else if (!lfType.equals("mod-mod") && id.equals("1")
-					&& idTally.size() > 0 && idTally.get(0).equals("1"))
+			else if (!lfType.equals("mod-mod") && id.equals("1") && idTally.size() > 0
+					&& idTally.get(0).equals("1"))
 				lfType = "mod";
 
 			idTally.add(id);
@@ -81,8 +82,8 @@ public class DefaultLFHelper {
 
 	public boolean isArg(String id) {
 
-		//System.out.println(id);
-		//System.out.println(freqTable);
+		// System.out.println(id);
+		// System.out.println(freqTable);
 
 		int freq = 0;
 		if (freqTable.containsKey(id))
@@ -99,7 +100,7 @@ public class DefaultLFHelper {
 		cat = cat.replaceAll("~", "");
 		cat = cat.replaceAll("_[0-9]+", "");
 		cat = cat.replaceAll(">", "");
-		//System.out.println("Debug: "+cat);
+		// System.out.println("Debug: "+cat);
 		return cat;
 	}
 }

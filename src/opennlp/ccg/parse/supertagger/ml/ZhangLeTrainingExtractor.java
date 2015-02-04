@@ -45,93 +45,102 @@ import opennlp.ccg.util.Pair;
  */
 public class ZhangLeTrainingExtractor {
 
-    private File outputF;
-    private Iterator<List<Association>> incorp;
-    private FeatureExtractor fexer = new STFex();
+	private File outputF;
+	private Iterator<List<Association>> incorp;
+	private FeatureExtractor fexer = new STFex();
 
-    /**
-     * Create a training feature extractor that will extract features (with results)
-     * for every instance in the input (training) corpus corpusName.
-     * 
-     * @param corpusName A <code>String</code> giving the complete
-     * path to the input file of SRILM-compliant factored bundles.
-     * @param outputFileName A <code>String</code> giving the complete
-     * path to the output file where the features will be written.
-     */
-    public ZhangLeTrainingExtractor(File corpus, File outputF, String tokenisation) {
-        this(corpus, outputF, tokenisation, new STFex());
-    }
-    
-    public ZhangLeTrainingExtractor(File corpus, File outputF, String tokenisation, FeatureExtractor fexer) {
-        this.fexer = fexer;
-        this.outputF = outputF;
-        try {
-            if (tokenisation.equalsIgnoreCase("srilm")) {
-                incorp = new SRILMFactoredBundleCorpusIterator(new BufferedReader(new FileReader(corpus)));
-            } else {
-                incorp = new PipeDelimitedFactoredBundleCorpusIterator(new BufferedReader(new FileReader(corpus)));
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ZhangLeTrainingExtractor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+	/**
+	 * Create a training feature extractor that will extract features (with
+	 * results) for every instance in the input (training) corpus corpusName.
+	 * 
+	 * @param corpusName A <code>String</code> giving the complete path to the
+	 *            input file of SRILM-compliant factored bundles.
+	 * @param outputFileName A <code>String</code> giving the complete path to
+	 *            the output file where the features will be written.
+	 */
+	public ZhangLeTrainingExtractor(File corpus, File outputF, String tokenisation) {
+		this(corpus, outputF, tokenisation, new STFex());
+	}
 
-    /**
-     * Writes training feats to file.
-     */
-    public void writeFeats() {
-        BufferedWriter bw = null;
-        try {
-            try {
-                bw = new BufferedWriter(new FileWriter(this.outputF));
-            } catch (IOException ex) {
-                Logger.getLogger(ZhangLeTrainingExtractor.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            if (bw != null || this.incorp != null) {
-                List<Association> sent = null;
-                Map<Integer, TaggedWord> snt = null;
+	public ZhangLeTrainingExtractor(File corpus, File outputF, String tokenisation,
+			FeatureExtractor fexer) {
+		this.fexer = fexer;
+		this.outputF = outputF;
+		try {
+			if (tokenisation.equalsIgnoreCase("srilm")) {
+				incorp = new SRILMFactoredBundleCorpusIterator(new BufferedReader(new FileReader(
+						corpus)));
+			} else {
+				incorp = new PipeDelimitedFactoredBundleCorpusIterator(new BufferedReader(
+						new FileReader(corpus)));
+			}
+		} catch (FileNotFoundException ex) {
+			Logger.getLogger(ZhangLeTrainingExtractor.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 
-                Iterator<List<Association>> sents = this.incorp;
-                while (sents.hasNext()) {
-                    //for (Iterator<List<Word>> sents = this.incorp; sents.hasNext();) {
-                    sent = sents.next();
+	/**
+	 * Writes training feats to file.
+	 */
+	public void writeFeats() {
+		BufferedWriter bw = null;
+		try {
+			try {
+				bw = new BufferedWriter(new FileWriter(this.outputF));
+			} catch (IOException ex) {
+				Logger.getLogger(ZhangLeTrainingExtractor.class.getName()).log(Level.SEVERE, null,
+						ex);
+			}
+			if (bw != null || this.incorp != null) {
+				List<Association> sent = null;
+				Map<Integer, TaggedWord> snt = null;
 
-                    // turn the sent into a map from integer string indices to Words.
-                    int index = 0;
-                    snt = new TreeMap<Integer, TaggedWord>();
-                    for (Association w : sent) {
-                        snt.put(index++, new TaggedWord(w));
-                    }
+				Iterator<List<Association>> sents = this.incorp;
+				while (sents.hasNext()) {
+					// for (Iterator<List<Word>> sents = this.incorp;
+					// sents.hasNext();) {
+					sent = sents.next();
 
-                    // 'true' says "we're getting training feats"
-                    for (Collection<Pair<String, Double>> sentFeatsWithActivation : fexer.getSentenceFeatures(snt, true)) {
-                        try {
-                            boolean isLabel = true;
-                            for (Pair<String, Double> ftWAct : sentFeatsWithActivation) {
-                                if (isLabel) {
-                                    bw.write(ftWAct.a + " ");
-                                    isLabel = false;
-                                } else {
-                                    bw.write(ftWAct.a + ":" + ftWAct.b.doubleValue() + " ");
-                                }
-                            }
-                            bw.newLine();
-                        } catch (IOException ex) {
-                            Logger.getLogger(ZhangLeTrainingExtractor.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+					// turn the sent into a map from integer string indices to
+					// Words.
+					int index = 0;
+					snt = new TreeMap<Integer, TaggedWord>();
+					for (Association w : sent) {
+						snt.put(index++, new TaggedWord(w));
+					}
 
-                    }
-                }
-            }
-        } finally {
-            try {
-                bw.flush();
-                bw.close();
-            } catch (IOException ex) {
-                Logger.getLogger(ZhangLeTrainingExtractor.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
-    }
+					// 'true' says "we're getting training feats"
+					for (Collection<Pair<String, Double>> sentFeatsWithActivation : fexer
+							.getSentenceFeatures(snt, true)) {
+						try {
+							boolean isLabel = true;
+							for (Pair<String, Double> ftWAct : sentFeatsWithActivation) {
+								if (isLabel) {
+									bw.write(ftWAct.a + " ");
+									isLabel = false;
+								} else {
+									bw.write(ftWAct.a + ":" + ftWAct.b.doubleValue() + " ");
+								}
+							}
+							bw.newLine();
+						} catch (IOException ex) {
+							Logger.getLogger(ZhangLeTrainingExtractor.class.getName()).log(
+									Level.SEVERE, null, ex);
+						}
+
+					}
+				}
+			}
+		} finally {
+			try {
+				bw.flush();
+				bw.close();
+			} catch (IOException ex) {
+				Logger.getLogger(ZhangLeTrainingExtractor.class.getName()).log(Level.SEVERE, null,
+						ex);
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
+	}
 }

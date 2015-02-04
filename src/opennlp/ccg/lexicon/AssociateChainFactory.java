@@ -29,9 +29,8 @@ public class AssociateChainFactory implements AssociationFactory {
 	 * Creates a (surface or full) word from the given normalized factors.
 	 * Returns null if no non-null vals.
 	 */
-	public synchronized Association create(String form, String pitchAccent,
-			String stem, String POS, String supertag, String semClass,
-			List<Pair<String, String>> attrValPairs) {
+	public synchronized Association create(String form, String pitchAccent, String stem,
+			String POS, String supertag, String semClass, List<Pair<String, String>> attrValPairs) {
 		// adds non-null vals from the root, in a rough specificity order
 		TrieMap<Object, AssociateChain> currentNode = factorChainRoot;
 		if (POS != null)
@@ -61,7 +60,8 @@ public class AssociateChainFactory implements AssociationFactory {
 	 * Creates a word from the given node, adding the given interned attr and
 	 * non-null val.
 	 */
-	protected Association create(TrieMap<Object, AssociateChain> currentNode, String attr, String val) {
+	protected Association create(TrieMap<Object, AssociateChain> currentNode, String attr,
+			String val) {
 		TrieMap<Object, AssociateChain> child = findChild(currentNode, attr, val);
 		return child.data;
 	}

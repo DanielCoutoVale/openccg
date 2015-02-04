@@ -43,95 +43,91 @@ import javax.xml.transform.stream.StreamSource;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-
 /**
  * Implements an XSLT processor using {@link Templates}. This class processes
- * XSLT template objects successively with a given input, writing the output
- * of each successive transformation into memory, then feeding that output to
- * the next template in the chain.
+ * XSLT template objects successively with a given input, writing the output of
+ * each successive transformation into memory, then feeding that output to the
+ * next template in the chain.
+ * 
  * @author <a href="http://www.ling.osu.edu/~scott/">Scott Martin</a>
  * @version $Revision: 1.2 $
  */
 class TemplatesProcessor extends XSLTProcessor {
 	List<Templates> templates = null;
-	
+
 	TemplatesProcessor(ErrorListener errorListener) {
 		super(errorListener);
 	}
-	
+
 	void addTemplates(Templates t) {
-		if(templates == null) {
+		if (templates == null) {
 			templates = new ArrayList<Templates>();
 		}
-		
+
 		templates.add(t);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see opennlp.ccgbank.XSLTProcessor#process(java.io.File)
 	 */
 	@Override
-	void process(InputSource inputSource) throws IOException,SAXException,
-			TransformerException {
-		if(templates == null) {
+	void process(InputSource inputSource) throws IOException, SAXException, TransformerException {
+		if (templates == null) {
 			templates = makeTemplates(taskTemplatesList);
 		}
-		
+
 		StreamSource input = new InputSourceAdapter(inputSource);
-		
+
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		byte[] bytesIn = null;
-		
+
 		try {
 			// transform input with each template successively,
 			// writing the output of each to a memory buffer
 			Iterator<Templates> i = templates.iterator();
 			Source source;
 			StreamSource memorySource = null;
-			while(i.hasNext()) {
-				if(bytesIn == null) { // first pass?
+			while (i.hasNext()) {
+				if (bytesIn == null) { // first pass?
 					source = input; // use source
-				}
-				else { // use buffer otherwise
+				} else { // use buffer otherwise
 					InputStream in = new ByteArrayInputStream(bytesIn);
-					if(memorySource == null) {
-						memorySource = new StreamSource(in);						
-					}
-					else {
+					if (memorySource == null) {
+						memorySource = new StreamSource(in);
+					} else {
 						memorySource.setInputStream(in);
 					}
-					
+
 					source = memorySource;
 				}
-				
+
 				// get and configure transformer for this template
 				Templates template = i.next();
 				Transformer transformer = template.newTransformer();
 				transformer.setOutputProperties(xmlProperties);
 				transformer.setErrorListener(errorListener);
-				
+
 				boolean ihn = i.hasNext(); // reuse
-				
+
 				Result result = ihn // last template?
-					? new StreamResult(buffer)
-					// if it's the last, write output to file
-					: new StreamResult(new BufferedOutputStream(
-							serializer.getOutputStream()));
-										
+				? new StreamResult(buffer)
+						// if it's the last, write output to file
+						: new StreamResult(new BufferedOutputStream(serializer.getOutputStream()));
+
 				transformer.transform(source, result);
-				
-				if(ihn) {
+
+				if (ihn) {
 					bytesIn = buffer.toByteArray();
 					buffer.reset();
 				}
 			}
-		}
-		finally {
+		} finally {
 			bytesIn = null;
 			try {
 				buffer.close();
-			}
-			catch(IOException e) {
+			} catch (IOException e) {
 				// do nothing
 			}
 		}

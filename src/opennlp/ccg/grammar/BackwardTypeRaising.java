@@ -25,8 +25,8 @@ import opennlp.ccg.synsem.*;
 /**
  * Backward type-raising: X => Y\(Y/X).
  *
- * @author  Jason Baldridge
- * @author  Michael White
+ * @author Jason Baldridge
+ * @author Michael White
  * @version $Revision: 1.5 $, $Date: 2009/07/17 04:23:30 $
  */
 public class BackwardTypeRaising extends AbstractTypeRaisingRule {
@@ -34,18 +34,17 @@ public class BackwardTypeRaising extends AbstractTypeRaisingRule {
 	private static final long serialVersionUID = 4334502669369098203L;
 
 	/** Creates a backward type raising rule with the given parameters. */
-    public BackwardTypeRaising(boolean useDollar, Category arg, Category result) {
-        super("<T", new Slash('\\', new VarModality("i")), new Slash('/', new VarModality("i")),
-              useDollar, arg, result);
-    }
-    
-    /** Returns an XML element representing the rule. */
-    public Element toXml() {
-    	return super.toXml("backward");
-    }
+	public BackwardTypeRaising(boolean useDollar, Category arg, Category result) {
+		super("<T", new Slash('\\', new VarModality("i")), new Slash('/', new VarModality("i")),
+				useDollar, arg, result);
+	}
 
-    public String toString() {
-        return "X => Y\\(Y/X)";
-    }
+	/** Returns an XML element representing the rule. */
+	public Element toXml() {
+		return super.toXml("backward");
+	}
+
+	public String toString() {
+		return "X => Y\\(Y/X)";
+	}
 }
-

@@ -56,8 +56,7 @@ public final class ComplexCat extends AbstractCat {
 		super(lf);
 		_target = target;
 		if (args.size() < 1) {
-			System.out.println("WARNING!!! Creating a ComplexCat with"
-					+ " empty argument stack!");
+			System.out.println("WARNING!!! Creating a ComplexCat with" + " empty argument stack!");
 		}
 		_args = args;
 	}
@@ -80,37 +79,38 @@ public final class ComplexCat extends AbstractCat {
 		// set modifier slashes
 		setModifierSlashes();
 	}
-	
-    /**Returns an XML element representing the category. */
-    public Element toXml() {
-    	Element retval = new Element("complexcat");
-    	retval.addContent(_target.toXml());
-    	_args.toXml(retval);
-    	// call super to add LF if present
-    	super.toXml(retval);
-    	return retval;
-    }
-	
+
+	/** Returns an XML element representing the category. */
+	public Element toXml() {
+		Element retval = new Element("complexcat");
+		retval.addContent(_target.toXml());
+		_args.toXml(retval);
+		// call super to add LF if present
+		super.toXml(retval);
+		return retval;
+	}
+
 	// sets modifier slashes based on feat struc ids
 	private void setModifierSlashes() {
-		FeatureStructure targetFS = _target.getFeatureStructure(); 
+		FeatureStructure targetFS = _target.getFeatureStructure();
 		int targetIndex = targetFS.getIndex();
-		if (targetIndex == 0) targetIndex = targetFS.getInheritsFrom();
-		if (targetIndex == 0) return;
-		for (int i=0; i < _args.size(); i++) {
+		if (targetIndex == 0)
+			targetIndex = targetFS.getInheritsFrom();
+		if (targetIndex == 0)
+			return;
+		for (int i = 0; i < _args.size(); i++) {
 			Arg arg = _args.get(i);
 			if (arg instanceof BasicArg) {
-				setModifierSlash(targetIndex, (BasicArg)arg);
-			}
-			else if (arg instanceof SetArg) {
+				setModifierSlash(targetIndex, (BasicArg) arg);
+			} else if (arg instanceof SetArg) {
 				SetArg sArg = (SetArg) arg;
-				for (int j=0; j < sArg.size(); j++) {
+				for (int j = 0; j < sArg.size(); j++) {
 					setModifierSlash(targetIndex, sArg.get(j));
 				}
 			}
 		}
 	}
-	
+
 	// sets modifier slash based on the target index
 	private void setModifierSlash(int targetIndex, BasicArg arg) {
 		FeatureStructure argFS = arg.getCat().getTarget().getFeatureStructure();
@@ -119,7 +119,6 @@ public final class ComplexCat extends AbstractCat {
 			arg.getSlash().setModifier(true);
 	}
 
-	
 	/**
 	 * Returns the target category of this category.
 	 */
@@ -205,8 +204,8 @@ public final class ComplexCat extends AbstractCat {
 	}
 
 	public Category copy() {
-		return new ComplexCat((TargetCat) _target.copy(), _args.copy(),
-				(_lf == null) ? null : (LF) _lf.copy());
+		return new ComplexCat((TargetCat) _target.copy(), _args.copy(), (_lf == null) ? null
+				: (LF) _lf.copy());
 	}
 
 	public Category shallowCopy() {
@@ -277,20 +276,21 @@ public final class ComplexCat extends AbstractCat {
 	}
 
 	public String toString() {
-	    DisplayPrefs prefs = Grammar.theGrammar.prefs;
-	    StringBuffer sb = new StringBuffer();
-	    sb.append(_target.toString()).append(_args.toString());
-	    if (_lf != null && prefs.showSem) {
-	    	sb.append(" : ").append(_lf.toString());
-	    }
-	    return sb.toString();
+		DisplayPrefs prefs = Grammar.theGrammar.prefs;
+		StringBuffer sb = new StringBuffer();
+		sb.append(_target.toString()).append(_args.toString());
+		if (_lf != null && prefs.showSem) {
+			sb.append(" : ").append(_lf.toString());
+		}
+		return sb.toString();
 	}
 
 	/**
 	 * Returns the interned supertag for the category.
 	 */
 	public String getSupertag() {
-		if (_supertag != null) return _supertag;
+		if (_supertag != null)
+			return _supertag;
 		StringBuffer sb = new StringBuffer();
 		sb.append(_target.getSupertag()).append(_args.getSupertag());
 		_supertag = sb.toString().intern();
@@ -319,8 +319,7 @@ public final class ComplexCat extends AbstractCat {
 	 * Returns whether this category equals the given object up to variable
 	 * names, using the given maps from vars to ints, ignoring the LFs (if any).
 	 */
-	public boolean equalsNoLF(Object obj, TObjectIntHashMap varMap,
-			TObjectIntHashMap varMap2) {
+	public boolean equalsNoLF(Object obj, TObjectIntHashMap varMap, TObjectIntHashMap varMap2) {
 		if (obj.getClass() != this.getClass()) {
 			return false;
 		}

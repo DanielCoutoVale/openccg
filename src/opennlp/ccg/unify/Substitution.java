@@ -30,16 +30,13 @@ public interface Substitution {
 	/**
 	 * Request the Substitution to identify a variable with an object.
 	 * 
-	 * @param var
-	 *            the variable whose value has been determined
-	 * @param o
-	 *            the Object identified with the variable
+	 * @param var the variable whose value has been determined
+	 * @param o the Object identified with the variable
 	 * @return the Object identified with the variable, which has potentially
 	 *         undergone further unifications as a result of making the
 	 *         substitution
-	 * @exception throws
-	 *                UnifyFailure if the Object cannot be unified with a
-	 *                previous value substituted for the Variable.
+	 * @exception throws UnifyFailure if the Object cannot be unified with a
+	 *            previous value substituted for the Variable.
 	 */
 	public Object makeSubstitution(Variable var, Object u) throws UnifyFailure;
 
@@ -47,8 +44,7 @@ public interface Substitution {
 	 * Try to get the value of a variable from this Substitution. Should return
 	 * null if the variable is unknown to the Substitution.
 	 * 
-	 * @param var
-	 *            the variable whose value after unification is desired
+	 * @param var the variable whose value after unification is desired
 	 * @return the Object which this variable has been unified with
 	 */
 	public Object getValue(Variable var);

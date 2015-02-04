@@ -23,25 +23,25 @@ import org.jdom.*;
 /**
  * Utility class to build categories.
  *
- * @author      Jason Baldridge
- * @author      Gann Bierner
- * @author      Michael White
- * @version     $Revision: 1.4 $, $Date: 2005/10/18 22:20:15 $
+ * @author Jason Baldridge
+ * @author Gann Bierner
+ * @author Michael White
+ * @version $Revision: 1.4 $, $Date: 2005/10/18 22:20:15 $
  */
 public class CatReader {
-    
-    public static Category getCat(Element catel) {
-        Category cat = null;
-        String catType = catel.getName();
-        
-        if (catType.equals("atomcat") || catType.equals("ac")) {    
-            cat =  new AtomCat(catel);
-        }
-        
-        else if (catType.equals("complexcat") || catType.equals("cc")) {    
-            cat =  new ComplexCat(catel);
-        }
 
-        return cat;
-    }
+	public static Category getCat(Element catel) {
+		Category cat = null;
+		String catType = catel.getName();
+
+		if (catType.equals("atomcat") || catType.equals("ac")) {
+			cat = new AtomCat(catel);
+		}
+
+		else if (catType.equals("complexcat") || catType.equals("cc")) {
+			cat = new ComplexCat(catel);
+		}
+
+		return cat;
+	}
 }

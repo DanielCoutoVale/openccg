@@ -24,43 +24,42 @@ import gnu.trove.*;
 /**
  * An interface for objects that can be arguments in a category.
  *
- * @author      Jason Baldridge
- * @author      Michael White
- * @version     $Revision: 1.8 $, $Date: 2009/11/28 03:39:27 $
+ * @author Jason Baldridge
+ * @author Michael White
+ * @version $Revision: 1.8 $, $Date: 2009/11/28 03:39:27 $
  */
 public interface Arg extends Unifiable, Mutable {
 
-    public Arg copy();
-    public void forall(CategoryFcn fcn);
-    public void unifySlash(Slash s) throws UnifyFailure;
-    
-    /** Sets the modifier status of each slash. */
-    public void setSlashModifier(boolean modifier);
-    
-    /** Sets the harmonic composition result of each slash. */
-    public void setSlashHarmonicCompositionResult(boolean harmonicResult);
-    
-    /**
-     * Returns a hash code for this arg, 
-     * using the given map from vars to ints.
-     */
-    public int hashCode(TObjectIntHashMap varMap);
-    
-    /**
-     * Returns whether this arg equals the given object  
-     * up to variable names, using the given maps from vars to ints.
-     */
-    public boolean equals(Object obj, TObjectIntHashMap varMap, TObjectIntHashMap varMap2);
-    
-    /**
-     * Returns the supertag for the arg.
-     */
-    public String getSupertag();
-    
-    /**
-     * Returns a TeX-formatted string representation for the arg.
-     */
-    public String toTeX();
+	public Arg copy();
+
+	public void forall(CategoryFcn fcn);
+
+	public void unifySlash(Slash s) throws UnifyFailure;
+
+	/** Sets the modifier status of each slash. */
+	public void setSlashModifier(boolean modifier);
+
+	/** Sets the harmonic composition result of each slash. */
+	public void setSlashHarmonicCompositionResult(boolean harmonicResult);
+
+	/**
+	 * Returns a hash code for this arg, using the given map from vars to ints.
+	 */
+	public int hashCode(TObjectIntHashMap varMap);
+
+	/**
+	 * Returns whether this arg equals the given object up to variable names,
+	 * using the given maps from vars to ints.
+	 */
+	public boolean equals(Object obj, TObjectIntHashMap varMap, TObjectIntHashMap varMap2);
+
+	/**
+	 * Returns the supertag for the arg.
+	 */
+	public String getSupertag();
+
+	/**
+	 * Returns a TeX-formatted string representation for the arg.
+	 */
+	public String toTeX();
 }
-
-

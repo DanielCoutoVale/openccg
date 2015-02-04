@@ -23,16 +23,13 @@ import java.util.*;
 /**
  * Interface for edge pruning strategies.
  *
- * @author      Michael White
- * @version     $Revision: 1.4 $, $Date: 2011/03/27 14:45:32 $
+ * @author Michael White
+ * @version $Revision: 1.4 $, $Date: 2011/03/27 14:45:32 $
  */
-public interface PruningStrategy
-{
-    /**
-     * Prunes and returns a (possibly empty) list of edges 
-     * from the given ones, which should be sorted by score, 
-     * from highest to lowest.
-     */
-    public List<Edge> pruneEdges(List<Edge> catEdges);
+public interface PruningStrategy {
+	/**
+	 * Prunes and returns a (possibly empty) list of edges from the given ones,
+	 * which should be sorted by score, from highest to lowest.
+	 */
+	public List<Edge> pruneEdges(List<Edge> catEdges);
 }
-

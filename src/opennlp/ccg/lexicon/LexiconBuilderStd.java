@@ -8,8 +8,8 @@ import java.util.List;
 import org.jdom.Element;
 
 /**
- * A lexicon builder that reads in a series of families among other objects. The format comes from
- * previous versions of OpenCCG.
+ * A lexicon builder that reads in a series of families among other objects. The
+ * format comes from previous versions of OpenCCG.
  *
  * @author Daniel Couto-Vale
  */

@@ -28,31 +28,32 @@ import org.jdom.Element;
 /**
  * Forward application: X/Y Y => X
  *
- * @author  Jason Baldridge
+ * @author Jason Baldridge
  * @version $Revision: 1.3 $, $Date: 2009/07/17 04:23:30 $
  */
 public class BackwardApplication extends AbstractApplicationRule {
 
 	private static final long serialVersionUID = 6981288425455531650L;
 
-	public BackwardApplication () {
+	public BackwardApplication() {
 		_name = "<";
 		_functorSlash = new Slash('\\');
 		_functorSlash.setAbility("active");
-    }
-    
-    /** Returns an XML element representing the rule. */
-    public Element toXml() { return super.toXml("backward"); }
-    
-    public List<Category> applyRule(Category[] inputs) throws UnifyFailure {
+	}
+
+	/** Returns an XML element representing the rule. */
+	public Element toXml() {
+		return super.toXml("backward");
+	}
+
+	public List<Category> applyRule(Category[] inputs) throws UnifyFailure {
 		if (inputs.length != 2) {
-		    throw new UnifyFailure();
+			throw new UnifyFailure();
 		}
 		return apply(inputs[1], inputs[0]);
-    }
+	}
 
-    public String toString() {
+	public String toString() {
 		return "Y X\\Y => X";
-    }
+	}
 }
-

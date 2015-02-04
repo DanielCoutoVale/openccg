@@ -29,63 +29,62 @@ import java.util.*;
 /**
  * Adds the features from macros to a category.
  *
- * @author      Jason Baldridge
- * @author      Gann Bierner
- * @author      Michael White
- * @version     $Revision: 1.6 $, $Date: 2011/03/20 20:11:57 $
+ * @author Jason Baldridge
+ * @author Gann Bierner
+ * @author Michael White
+ * @version $Revision: 1.6 $, $Date: 2011/03/20 20:11:57 $
  */
 public class MacroAdder {
 
-    private IntHashSetMap _specificMacros;
-    private List<MacroItem> _macroItems; // for LF macros
+	private IntHashSetMap _specificMacros;
+	private List<MacroItem> _macroItems; // for LF macros
 
-    public MacroAdder(IntHashSetMap sm, List<MacroItem> macroItems) {
-        _specificMacros = sm;
-        _macroItems = macroItems;
-    }
+	public MacroAdder(IntHashSetMap sm, List<MacroItem> macroItems) {
+		_specificMacros = sm;
+		_macroItems = macroItems;
+	}
 
-    public void addMacros(Category cat) {
-        // add features 
-        cat.deepMap(addIndexedFeatures);
-        // append preds to LF
-        LF lf = cat.getLF();
-        for (int i=0; i < _macroItems.size(); i++) {
-            MacroItem mi = _macroItems.get(i);
-            LF[] preds = mi.getPreds();
-            for (int j=0; j < preds.length; j++) {
-                LF pred = (LF) preds[j].copy();
-                if (!HyloHelper.getInstance().isElementaryPredication(pred)) {
-                    System.out.println(
-                        "Warning: ignoring LF macro pred, which is not an elementary predication: " +
-                        pred
-                    );
-                    continue;
-                }
-                lf = HyloHelper.getInstance().append(lf, pred);
-            }
-        }
-        // sort and reset LF
-        HyloHelper.getInstance().sort(lf);
-        cat.setLF(lf);
-    }
-    
-    private ModFcn addIndexedFeatures = new ModFcn() {
-        @SuppressWarnings("rawtypes")
+	public void addMacros(Category cat) {
+		// add features
+		cat.deepMap(addIndexedFeatures);
+		// append preds to LF
+		LF lf = cat.getLF();
+		for (int i = 0; i < _macroItems.size(); i++) {
+			MacroItem mi = _macroItems.get(i);
+			LF[] preds = mi.getPreds();
+			for (int j = 0; j < preds.length; j++) {
+				LF pred = (LF) preds[j].copy();
+				if (!HyloHelper.getInstance().isElementaryPredication(pred)) {
+					System.out
+							.println("Warning: ignoring LF macro pred, which is not an elementary predication: "
+									+ pred);
+					continue;
+				}
+				lf = HyloHelper.getInstance().append(lf, pred);
+			}
+		}
+		// sort and reset LF
+		HyloHelper.getInstance().sort(lf);
+		cat.setLF(lf);
+	}
+
+	private ModFcn addIndexedFeatures = new ModFcn() {
+		@SuppressWarnings("rawtypes")
 		public void modify(Mutable c) {
-            if (c instanceof AtomCat) {
-                FeatureStructure fs = ((AtomCat)c).getFeatureStructure();
-                int fsIndex = fs.getIndex();
-                Set featStrucs = (Set)_specificMacros.get(fsIndex);
-                if (null == featStrucs) {
-                    return;
-                }
-                FeatureStructure $fs = fs.copy();
-                for (Iterator fsIt = featStrucs.iterator(); fsIt.hasNext();) {
-                    FeatureStructure macroFS = (FeatureStructure) fsIt.next();
-                    $fs = $fs.inherit(macroFS);
-                }
-                ((AtomCat)c).setFeatureStructure($fs);
-            }
-        }
-    };
+			if (c instanceof AtomCat) {
+				FeatureStructure fs = ((AtomCat) c).getFeatureStructure();
+				int fsIndex = fs.getIndex();
+				Set featStrucs = (Set) _specificMacros.get(fsIndex);
+				if (null == featStrucs) {
+					return;
+				}
+				FeatureStructure $fs = fs.copy();
+				for (Iterator fsIt = featStrucs.iterator(); fsIt.hasNext();) {
+					FeatureStructure macroFS = (FeatureStructure) fsIt.next();
+					$fs = $fs.inherit(macroFS);
+				}
+				((AtomCat) c).setFeatureStructure($fs);
+			}
+		}
+	};
 }

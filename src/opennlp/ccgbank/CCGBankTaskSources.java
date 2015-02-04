@@ -29,10 +29,10 @@ import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
 
-
 /**
- * Represents a set of source files. This class encapsulates a set of 
+ * Represents a set of source files. This class encapsulates a set of
  * {@link FileSet}s.
+ * 
  * @author <a href="http://www.ling.osu.edu/~scott/">Scott Martin</a>
  * @version $Revision: 1.1 $
  * @see <a href="http://ant.apache.org/">Ant home page</a>
@@ -46,15 +46,13 @@ public class CCGBankTaskSources extends CCGBankTaskFileGroup<FileSet> {
 	public CCGBankTaskSources() {
 		super(new HashSet<FileSet>());
 	}
-	
-	
+
 	/**
 	 * Adds a file set to this sources object.
 	 */
 	public void addConfiguredFileSet(FileSet fileSet) {
 		addGroup(fileSet);
 	}
-
 
 	/**
 	 * Gets the files in the specified group as an array of files. The files in
@@ -66,12 +64,12 @@ public class CCGBankTaskSources extends CCGBankTaskFileGroup<FileSet> {
 		Project proj = getProject();
 		DirectoryScanner scanner = group.getDirectoryScanner(proj);
 		scanner.scan();
-		
+
 		String[] fileNames = scanner.getIncludedFiles();
-		if(fileNames.length == 0) {
+		if (fileNames.length == 0) {
 			throw new BuildException("no source files included");
 		}
-		
+
 		return makeFiles(group.getDir(proj), fileNames);
 	}
 

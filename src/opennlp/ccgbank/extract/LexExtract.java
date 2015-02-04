@@ -48,102 +48,116 @@ import org.xml.sax.XMLFilter;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-
 /**
- * Program which reads in each file of the bare parse xml rep and generates a lexicon, 
- * a freq tally of the lexical info and a list of ccgbank sentences.
+ * Program which reads in each file of the bare parse xml rep and generates a
+ * lexicon, a freq tally of the lexical info and a list of ccgbank sentences.
  */
-public class LexExtract{
-	
-	public static void extractLex(ExtractionProperties extractProps) throws TransformerException,TransformerConfigurationException,SAXException,IOException,JDOMException {
-		
+public class LexExtract {
+
+	public static void extractLex(ExtractionProperties extractProps) throws TransformerException,
+			TransformerConfigurationException, SAXException, IOException, JDOMException {
+
 		System.out.println("Extracting lexicon info:");
-		
+
 		File lexFile = new File(new File(extractProps.destDir), "lexicon.xml");
 		File tempFile = new File(new File(extractProps.tempDir), "temp.xml");
-		PrintWriter tempOut = new PrintWriter(new FileOutputStream(tempFile),true);
-		
+		PrintWriter tempOut = new PrintWriter(new FileOutputStream(tempFile), true);
+
 		File ccgbankDir = new File(extractProps.srcDir);
-		File[] ccgbankSections=ccgbankDir.listFiles();
+		File[] ccgbankSections = ccgbankDir.listFiles();
 		Arrays.sort(ccgbankSections);
-		
+
 		FreqTally.CAT_FREQ_CUTOFF = extractProps.catFreqCutoff;
 		FreqTally.LEX_FREQ_CUTOFF = extractProps.lexFreqCutoff;
 		FreqTally.OPEN_FREQ_CUTOFF = extractProps.openFreqCutoff;
-		
-		//temp.xml creation
+
+		// temp.xml creation
 
 		TransformerFactory tFactory = TransformerFactory.newInstance();
-		Transformer lexExtrTransformer = tFactory.newTransformer(ExtractGrammar.getSource("opennlp.ccgbank/transform/lexExtr.xsl"));
-		
-		// add root 
+		Transformer lexExtrTransformer = tFactory.newTransformer(ExtractGrammar
+				.getSource("opennlp.ccgbank/transform/lexExtr.xsl"));
+
+		// add root
 		tempOut.println("<ccg-lexicon>");
-		
-		for (int i=extractProps.startSection; i<=extractProps.endSection; i++){
-			
+
+		for (int i = extractProps.startSection; i <= extractProps.endSection; i++) {
+
 			System.out.println("Section " + ccgbankSections[i].getName());
-			File[] files=ccgbankSections[i].listFiles();
+			File[] files = ccgbankSections[i].listFiles();
 			Arrays.sort(files);
-			
-			int fileStart = 0; int fileLimit = files.length;
+
+			int fileStart = 0;
+			int fileLimit = files.length;
 			if (extractProps.fileNum >= 0) {
 				fileStart = extractProps.fileNum;
 				fileLimit = extractProps.fileNum + 1;
 			}
-			
-			for (int j=fileStart; j<fileLimit; j++){
-				String inputFile=files[j].getAbsolutePath();
-				if (j == fileStart) System.out.print(files[j].getName() + " ");
-				else if (j == (fileLimit-1)) System.out.println(" " + files[j].getName());
-				else System.out.print(".");
-				if (fileStart == fileLimit-1) System.out.println();
+
+			for (int j = fileStart; j < fileLimit; j++) {
+				String inputFile = files[j].getAbsolutePath();
+				if (j == fileStart)
+					System.out.print(files[j].getName() + " ");
+				else if (j == (fileLimit - 1))
+					System.out.println(" " + files[j].getName());
+				else
+					System.out.print(".");
+				if (fileStart == fileLimit - 1)
+					System.out.println();
 				try {
-					lexExtrTransformer.transform(new StreamSource(inputFile), new StreamResult(tempOut));
-				}
-				catch (Exception exc) {
-                    System.out.println("Skipping: " + inputFile);
-                    System.out.println(exc.toString());
+					lexExtrTransformer.transform(new StreamSource(inputFile), new StreamResult(
+							tempOut));
+				} catch (Exception exc) {
+					System.out.println("Skipping: " + inputFile);
+					System.out.println(exc.toString());
 				}
 				tempOut.flush();
 			}
 		}
-		
-		//Closing the root element
+
+		// Closing the root element
 		tempOut.println("</ccg-lexicon>");
 		tempOut.flush();
 		tempOut.close();
-		
-		//Generating a freq tally from static datastructures
+
+		// Generating a freq tally from static datastructures
 		FreqTally.printTally(extractProps);
-		
+
 		System.out.println("Generating lexicon.xml");
-		
+
 		if (tFactory.getFeature(SAXSource.FEATURE) && tFactory.getFeature(SAXResult.FEATURE)) {
-			
+
 			SAXTransformerFactory saxTFactory = ((SAXTransformerFactory) tFactory);
-			
+
 			// Create an XMLFilter for each stylesheet.
-			
+
 			// Extract lexicon from temp.xml
-			XMLFilter xmlFilter0 = saxTFactory.newXMLFilter(ExtractGrammar.getSource("opennlp.ccgbank/transform/filterLex.xsl"));
-			
-			XMLFilter xmlFilter1 = saxTFactory.newXMLFilter(ExtractGrammar.getSource("opennlp.ccgbank/transform/closedCatInsert.xsl"));
-			
-			XMLFilter xmlFilter2 = saxTFactory.newXMLFilter(ExtractGrammar.getSource("opennlp.ccgbank/transform/insertLF.xsl"));
+			XMLFilter xmlFilter0 = saxTFactory.newXMLFilter(ExtractGrammar
+					.getSource("opennlp.ccgbank/transform/filterLex.xsl"));
 
-			XMLFilter xmlFilter3 = saxTFactory.newXMLFilter(ExtractGrammar.getSource("opennlp.ccgbank/transform/insertPunctLF.xsl"));
+			XMLFilter xmlFilter1 = saxTFactory.newXMLFilter(ExtractGrammar
+					.getSource("opennlp.ccgbank/transform/closedCatInsert.xsl"));
 
-			XMLFilter xmlFilter4 = saxTFactory.newXMLFilter(ExtractGrammar.getSource("opennlp.ccgbank/transform/insertOrigPunctsLF.xsl"));
+			XMLFilter xmlFilter2 = saxTFactory.newXMLFilter(ExtractGrammar
+					.getSource("opennlp.ccgbank/transform/insertLF.xsl"));
 
-			XMLFilter xmlFilter5 = saxTFactory.newXMLFilter(ExtractGrammar.getSource("opennlp.ccgbank/transform/addFilterLexFeats.xsl"));
-			
-			XMLFilter xmlFilter6 = saxTFactory.newXMLFilter(ExtractGrammar.getSource("opennlp.ccgbank/transform/insertSemFeats.xsl"));
-			
-			XMLFilter xmlFilter7 = saxTFactory.newXMLFilter(ExtractGrammar.getSource("opennlp.ccgbank/transform/markUnmatched.xsl"));
-			
+			XMLFilter xmlFilter3 = saxTFactory.newXMLFilter(ExtractGrammar
+					.getSource("opennlp.ccgbank/transform/insertPunctLF.xsl"));
+
+			XMLFilter xmlFilter4 = saxTFactory.newXMLFilter(ExtractGrammar
+					.getSource("opennlp.ccgbank/transform/insertOrigPunctsLF.xsl"));
+
+			XMLFilter xmlFilter5 = saxTFactory.newXMLFilter(ExtractGrammar
+					.getSource("opennlp.ccgbank/transform/addFilterLexFeats.xsl"));
+
+			XMLFilter xmlFilter6 = saxTFactory.newXMLFilter(ExtractGrammar
+					.getSource("opennlp.ccgbank/transform/insertSemFeats.xsl"));
+
+			XMLFilter xmlFilter7 = saxTFactory.newXMLFilter(ExtractGrammar
+					.getSource("opennlp.ccgbank/transform/markUnmatched.xsl"));
+
 			// Create an XMLReader.
 			XMLReader reader = XMLReaderFactory.createXMLReader();
-			
+
 			// xmlFilter0 uses the XMLReader as its reader.
 			xmlFilter0.setParent(reader);
 			xmlFilter1.setParent(xmlFilter0);
@@ -159,16 +173,18 @@ public class LexExtract{
 				xmlFilter6.setParent(xmlFilter4);
 			}
 
-			else xmlFilter6.setParent(xmlFilter3);
+			else
+				xmlFilter6.setParent(xmlFilter3);
 
 			xmlFilter7.setParent(xmlFilter6);
 			XMLFilter xmlFilter = xmlFilter7;
-			
-			java.util.Properties xmlProps = OutputPropertiesFactory.getDefaultMethodProperties("xml");
+
+			java.util.Properties xmlProps = OutputPropertiesFactory
+					.getDefaultMethodProperties("xml");
 			xmlProps.setProperty("indent", "yes");
-			xmlProps.setProperty("standalone", "no"); 
-    		xmlProps.setProperty("{http://xml.apache.org/xalan}indent-amount", "2");
-			Serializer serializer = SerializerFactory.getSerializer(xmlProps);              
+			xmlProps.setProperty("standalone", "no");
+			xmlProps.setProperty("{http://xml.apache.org/xalan}indent-amount", "2");
+			Serializer serializer = SerializerFactory.getSerializer(xmlProps);
 			serializer.setOutputStream(new FileOutputStream(lexFile));
 			xmlFilter.setContentHandler(serializer.asContentHandler());
 			xmlFilter.parse(new InputSource(tempFile.getPath()));

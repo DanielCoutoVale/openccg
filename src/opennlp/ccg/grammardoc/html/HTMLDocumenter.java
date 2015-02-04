@@ -40,9 +40,9 @@ public class HTMLDocumenter extends AbstractDocumenter implements URIResolver {
 	private static final int FILE_BUFFER_SIZE = 256;
 	private SourceGrammar sourceGrammar;
 	private Map<String, Templates> templateCache;
-	
+
 	final TransformerFactory factory = TransformerFactory.newInstance();
-	
+
 	static enum FileName {
 		STYLESHEET("grammardoc.css"), LEXICON_SCRIPT("lexicon.js");
 
@@ -70,55 +70,46 @@ public class HTMLDocumenter extends AbstractDocumenter implements URIResolver {
 		this.sourceGrammar = grammar;
 		File destDir = documenterContext.getDestinationDirectory();
 		copyFiles(destDir);
-		
+
 		String sections;
 		StringBuilder sb = new StringBuilder();
-		for(SourceGrammarFileType fileType
-				: grammar.getSourceGrammarFileTypes()) {
-			if(sb.length() > 0) {
+		for (SourceGrammarFileType fileType : grammar.getSourceGrammarFileTypes()) {
+			if (sb.length() > 0) {
 				sb.append('|');
 			}
 			sb.append(fileType.getFileName());
 		}
 		sections = sb.toString();
 
-		for(SourceGrammarFileType fileType : grammar
-				.getSourceGrammarFileTypes()) {
+		for (SourceGrammarFileType fileType : grammar.getSourceGrammarFileTypes()) {
 			String baseName = fileType.getFileName();
 
 			StringBuilder fb = new StringBuilder();
-			fb.append(baseName.equals(
-					SourceGrammarFileType.GRAMMAR.getFileName())
-					? "index" : baseName);
+			fb.append(baseName.equals(SourceGrammarFileType.GRAMMAR.getFileName()) ? "index"
+					: baseName);
 			fb.append(".html");
 			String targetName = fb.toString();
 
-			SourceGrammarFile sourceFile
-				= grammar.getSourceGrammarFile(fileType);
+			SourceGrammarFile sourceFile = grammar.getSourceGrammarFile(fileType);
 			Templates templates = loadTemplates(baseName);
-			
-			if(templates != null) {
+
+			if (templates != null) {
 				documenterContext.log("Generating " + targetName);
 
 				try {
 					File f = new File(destDir, targetName);
-					StreamResult res = new StreamResult(
-							new BufferedOutputStream(new FileOutputStream(f)));
+					StreamResult res = new StreamResult(new BufferedOutputStream(
+							new FileOutputStream(f)));
 					res.setSystemId(f);
-					
+
 					Transformer transformer = templates.newTransformer();
 					transformer.setURIResolver(this);
-					transformer.setParameter("sections", sections);		
-					transformer.transform(
-							new StreamSource(sourceFile.getSourceFile()), res);
-				}
-				catch(TransformerException te) {
-					throw new DocumenterSourceException(
-							"problem transforming output: "
-									+ te.getMessageAndLocation(), te,
-									sourceFile);
-				}
-				catch(IOException ioe) {
+					transformer.setParameter("sections", sections);
+					transformer.transform(new StreamSource(sourceFile.getSourceFile()), res);
+				} catch (TransformerException te) {
+					throw new DocumenterSourceException("problem transforming output: "
+							+ te.getMessageAndLocation(), te, sourceFile);
+				} catch (IOException ioe) {
 					throw new DocumenterException(ioe);
 				}
 			}
@@ -132,65 +123,59 @@ public class HTMLDocumenter extends AbstractDocumenter implements URIResolver {
 	public Source resolve(String href, String base) throws TransformerException {
 
 		StreamSource ss = null;
-		
-		if(href != null && href.length() > 0) {
-			if(href.endsWith(".xsl")) {
+
+		if (href != null && href.length() > 0) {
+			if (href.endsWith(".xsl")) {
 				ss = new StreamSource(getResource(href));
-			}
-			else {
+			} else {
 				File f = new File(sourceGrammar.getSourceDirectory(), href);
-				if(!f.exists()) {
+				if (!f.exists()) {
 					throw new TransformerException("file does not exist: " + f);
 				}
-				if(f.isDirectory()) {
+				if (f.isDirectory()) {
 					throw new TransformerException("file is a directory: " + f);
 				}
-				
+
 				ss = new StreamSource(f);
 				ss.setSystemId(f);
 			}
 		}
-		
+
 		return ss;
 	}
 
-	private Templates loadTemplates(String baseName)
-			throws DocumenterException {
+	private Templates loadTemplates(String baseName) throws DocumenterException {
 		StringBuilder tb = new StringBuilder(baseName);
 		tb.append(".xsl");
 		String templateName = tb.toString();
 
-		if(!templateCache.containsKey(templateName)) {
+		if (!templateCache.containsKey(templateName)) {
 			InputStream is = getResource(templateName.toString());
-			if(is == null) {
+			if (is == null) {
 				return null;
 			}
 
 			try { // cache for later
-				templateCache.put(templateName, 
-						factory.newTemplates(new StreamSource(is)));
-			}
-			catch(TransformerConfigurationException tce) {
-				throw new DocumenterException("problem loading template "
-						+ templateName.toString() + ": "
-							+ tce.getMessageAndLocation(), tce);
+				templateCache.put(templateName, factory.newTemplates(new StreamSource(is)));
+			} catch (TransformerConfigurationException tce) {
+				throw new DocumenterException("problem loading template " + templateName.toString()
+						+ ": " + tce.getMessageAndLocation(), tce);
 			}
 		}
-		
+
 		return templateCache.get(templateName);
 	}
 
 	private void copyFiles(File destDir) throws DocumenterException {
-		for(FileName fileName : FileName.values()) {
+		for (FileName fileName : FileName.values()) {
 			doCopyFile(fileName, destDir);
 		}
 	}
 
-	private void doCopyFile(FileName fileName, File destDir)
-			throws DocumenterException {
+	private void doCopyFile(FileName fileName, File destDir) throws DocumenterException {
 		InputStream in = getResource(fileName.name);
 
-		if(in == null) {
+		if (in == null) {
 			throw new DocumenterException("Could not find " + fileName.name);
 		}
 
@@ -202,16 +187,14 @@ public class HTMLDocumenter extends AbstractDocumenter implements URIResolver {
 			byte[] buffer = new byte[HTMLDocumenter.FILE_BUFFER_SIZE];
 
 			int i;
-			while((i = in.read(buffer)) != -1) {
+			while ((i = in.read(buffer)) != -1) {
 				fileOut.write(buffer, 0, i);
 			}
 
 			in.close();
 			fileOut.close();
-		}
-		catch(IOException ioe) {
-			throw new DocumenterException("problem copying file: "
-					+ ioe.getMessage(), ioe);
+		} catch (IOException ioe) {
+			throw new DocumenterException("problem copying file: " + ioe.getMessage(), ioe);
 		}
 	}
 

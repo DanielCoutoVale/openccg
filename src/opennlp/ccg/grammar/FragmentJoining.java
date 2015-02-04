@@ -25,7 +25,6 @@ import java.util.*;
 
 import org.jdom.Element;
 
-
 /**
  * Rule for joining fragments that don't fit together, when all else fails.
  *
@@ -37,13 +36,17 @@ public class FragmentJoining extends AbstractRule {
 	private static final long serialVersionUID = 7451163798607652012L;
 
 	/** Constructor. */
-	public FragmentJoining() { _name = "*"; }
-	
-    /** Returns an XML element representing the rule (not supported). */
-    public Element toXml() { throw new RuntimeException("toXml not supported for FragmentJoining rules"); }
+	public FragmentJoining() {
+		_name = "*";
+	}
+
+	/** Returns an XML element representing the rule (not supported). */
+	public Element toXml() {
+		throw new RuntimeException("toXml not supported for FragmentJoining rules");
+	}
 
 	/**
-	 *  Returns the result of applying this rule to two input signs.
+	 * Returns the result of applying this rule to two input signs.
 	 */
 	public Symbol applyRule(Symbol sign1, Symbol sign2) {
 		List<Symbol> results = new ArrayList<Symbol>(1);
@@ -51,37 +54,41 @@ public class FragmentJoining extends AbstractRule {
 		applyRule(inputs, results);
 		return results.get(0);
 	}
-	
-    /**
-     * Apply this rule to two input categories.  
-     * Returns a copy of the first cat with the LFs appended.
-     **/
-    public List<Category> applyRule(Category[] inputs) throws UnifyFailure {
-		if (inputs.length != 2) { throw new UnifyFailure(); }
+
+	/**
+	 * Apply this rule to two input categories. Returns a copy of the first cat
+	 * with the LFs appended.
+	 **/
+	public List<Category> applyRule(Category[] inputs) throws UnifyFailure {
+		if (inputs.length != 2) {
+			throw new UnifyFailure();
+		}
 		List<Category> results = new ArrayList<Category>(1);
-        _headCats.clear();
+		_headCats.clear();
 		Category result = inputs[0].shallowCopy();
 		try {
 			appendLFs(inputs[0], inputs[1], result, new EmptySubstitution());
-		}
-		catch (UnifyFailure uf) { // not expected
+		} catch (UnifyFailure uf) { // not expected
 			// System.err.println("Unexpected unify failure in appending LFs when joining fragments:");
-			// System.err.println("cat0: " + inputs[0] + " lf: " + inputs[0].getLF());
-			// System.err.println("cat1: " + inputs[1] + " lf: " + inputs[1].getLF());
+			// System.err.println("cat0: " + inputs[0] + " lf: " +
+			// inputs[0].getLF());
+			// System.err.println("cat1: " + inputs[1] + " lf: " +
+			// inputs[1].getLF());
 		}
 		results.add(result);
 		_headCats.add(inputs[0]);
 		return results;
-    }
+	}
 
-    /**
-     * The number of arguments this rule takes.
-     **/
-    public int arity() { return 2; }
+	/**
+	 * The number of arguments this rule takes.
+	 **/
+	public int arity() {
+		return 2;
+	}
 
-    /** Returns a string for this rule. */
+	/** Returns a string for this rule. */
 	public String toString() {
 		return "X Y *=> X";
 	}
 }
-
