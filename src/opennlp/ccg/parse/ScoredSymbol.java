@@ -122,7 +122,7 @@ public class ScoredSymbol implements Serializable {
 	}
 
 	/** Returns the sign. */
-	public Symbol getSign() {
+	public Symbol getSymbol() {
 		return symbol;
 	}
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import opennlp.ccg.parse.ChartCompleter;
+import opennlp.ccg.parse.ScoredSymbol;
 import opennlp.ccg.synsem.Symbol;
 
 /**
@@ -135,6 +136,20 @@ public class ParseProduct {
 	 */
 	public final void setChartCompleter(ChartCompleter chart) {
 		this.chartCompleter = chart;
+	}
+
+	/**
+	 * @param scoredSymbols the scored symbols
+	 */
+	public final void setScoredSymbols(List<ScoredSymbol> scoredSymbols) {
+		List<Symbol> symbols = new ArrayList<Symbol>();
+		List<Double> scores = new ArrayList<Double>();
+		for (ScoredSymbol scoredSymbol : scoredSymbols) {
+			symbols.add(scoredSymbol.getSymbol());
+			scores.add(scoredSymbol.getScore());
+		}
+		setSymbols(symbols);
+		setScores(scores);
 	}
 
 	/**

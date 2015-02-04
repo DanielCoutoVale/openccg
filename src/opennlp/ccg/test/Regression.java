@@ -579,8 +579,8 @@ public class Regression {
 			LF transformedParsedLF = null;
 			boolean parsed = false;
 			boolean parsedComplete = false;
+			ParseProduct product = null;
 			if (doParsing) {
-				ParseProduct product = null;
 				try {
 					// use full-words or words from stored sign if possible
 					List<Association> words = null;
@@ -753,7 +753,7 @@ public class Regression {
 					// update best if not exact match
 					if (parseScore.fscore != 1.0) {
 						// check oracle best
-						Pair<Symbol, Boolean> bestPair = parser.oracleBest(goldLF);
+						Pair<Symbol, Boolean> bestPair = parser.oracleBest(goldLF, product);
 						if (bestPair.a != null)
 							oracleBetter++;
 						if (bestPair.b) {

@@ -109,11 +109,6 @@ public class Parser {
 	private boolean gluingFlag = false;
 
 	/**
-	 * The product of parsing
-	 */
-	private ParseProduct product;
-
-	/**
 	 * The chart completer config
 	 */
 	private ChartCompleterConfig config;
@@ -197,7 +192,7 @@ public class Parser {
 	 *                string
 	 */
 	public final ParseProduct parse(String string) throws ParseException {
-		List<Association> musters = lexicon.tokenizer.tokenize(string);
+		List<Association> musters = lexicon.tokenizer.tokenize(string); 
 		return parse(musters);
 	}
 
@@ -209,11 +204,16 @@ public class Parser {
 	 * @throws ParseException
 	 */
 	public final ParseProduct parse(List<Association> musters) throws ParseException {
+		ParseProduct product = null;
 		if (supertagger != null) {
-			return parseIterativeBetaBest(musters);
+			product = parseIterativeBetaBest(musters);
 		} else {
-			return parseOnce(musters);
+			product = parseOnce(musters);
 		}
+		if (product.getSymbols().size() == 0) {
+			throw new ParseException("Unable to parse");
+		}
+		return product;
 	}
 
 	/**
@@ -224,8 +224,8 @@ public class Parser {
 	 * @throws ParseException
 	 */
 	private final ParseProduct parseOnce(List<Association> musters) throws ParseException {
+		ParseProduct product = new ParseProduct();
 		try {
-			product = new ParseProduct();
 			// init
 			long lexStartTime = System.currentTimeMillis();
 			UnifyControl.startUnifySequence();
@@ -238,16 +238,16 @@ public class Parser {
 			// do parsing
 			product.setStartTime(System.currentTimeMillis());
 			product.setChartCompleter(buildChartCompleter(symbolHashes));
-			parseEntries(product.getChartCompleter());
+			parse(product.getChartCompleter(), product);
 			return product;
 		} catch (LexException e) {
-			setGiveUpTime();
+			setGiveUpTime(product);
 			String msg = "Unable to retrieve lexical entries:\n\t" + e.toString();
 			if (debugParse)
 				System.out.println(msg);
 			throw new ParseException(msg);
 		} catch (ParseException e) {
-			setGiveUpTime();
+			setGiveUpTime(product);
 			// show chart for failed parse if apropos
 			if (debugParse) {
 				System.out.println(e);
@@ -299,7 +299,7 @@ public class Parser {
 	private final ParseProduct parseIterativeBetaBest(List<Association> words)
 			throws ParseException {
 		// set supertagger in lexicon
-		product = new ParseProduct();
+		ParseProduct product = new ParseProduct();
 		grammar.lexicon.setSupertagger(supertagger);
 		// ensure gluing off
 		gluingFlag = false;
@@ -330,7 +330,7 @@ public class Parser {
 				// set up chart
 				product.setStartTime(System.currentTimeMillis());
 				product.setChartCompleter(buildChartCompleter(entries));
-				parseEntries(product.getChartCompleter());
+				parse(product.getChartCompleter(), product);
 				// done
 				done = true;
 				// reset supertagger in lexicon, turn gluing off
@@ -343,7 +343,7 @@ public class Parser {
 				}
 				// otherwise give up
 				else {
-					setGiveUpTime();
+					setGiveUpTime(product);
 					// reset supertagger in lexicon, turn gluing off
 					grammar.lexicon.setSupertagger(null);
 					gluingFlag = false;
@@ -372,7 +372,7 @@ public class Parser {
 				}
 				// otherwise give up
 				else {
-					setGiveUpTime();
+					setGiveUpTime(product);
 					// show chart for failed parse if apropos
 					if (debugParse) {
 						System.out.println(e);
@@ -393,11 +393,6 @@ public class Parser {
 	/** Returns the supertagger's final beta value (or 0 if none). */
 	public final double getSupertaggerBeta() {
 		return (supertagger != null) ? supertagger.getCurrentBetaValue() : 0;
-	}
-
-	// parses from lex entries
-	private final void parseEntries(ChartCompleter chartCompleter) throws ParseException {
-		parse(chartCompleter.getSize());
 	}
 
 	/**
@@ -427,11 +422,12 @@ public class Parser {
 	/**
 	 * Parse using the Cocke–Younger–Kasami (CKY) algorithm
 	 * 
-	 * @param size the size of the chart
+	 * @param chartCompleter a chart completer
+	 * @param product TODO
 	 * @throws ParseException
 	 */
-	private final void parse(int size) throws ParseException {
-		ChartCompleter chartCompleter = product.getChartCompleter();
+	private final void parse(ChartCompleter chartCompleter, ParseProduct product) throws ParseException {
+		int size = chartCompleter.getSize();
 
 		// Annotate index forms with unary rules
 		for (int i = 0; i < size; i++) {
@@ -466,36 +462,37 @@ public class Parser {
 			}
 		}
 
+		// Keep chart construction time
 		product.setChartTime((int) (System.currentTimeMillis() - product.getStartTime()));
-		// extract results
-		createResult(size);
+
+		// Extract results
+		List<ScoredSymbol> scoredSymbols = unpackScoredSymbols(chartCompleter);
+		product.setScoredSymbols(scoredSymbols);
+
+		// Keep total parse time
 		product.setParseTime((int) (System.currentTimeMillis() - product.getStartTime()));
 		product.setUnpackingTime(product.getParseTime() - product.getChartTime());
 	}
 
-	// create answer ArrayList
-	private final void createResult(int size) throws ParseException {
-		List<Symbol> symbols = new ArrayList<Symbol>();
-		List<Double> scores = new ArrayList<Double>();
-		ChartCompleter chartCompleter = product.getChartCompleter();
-		// unpack top
-		List<ScoredSymbol> edges = lazyUnpacking ? chartCompleter.lazyUnpack(0, size - 1)
-				: chartCompleter.unpack(0, size - 1);
-		// add signs for unpacked edges
-		for (ScoredSymbol edge : edges) {
-			symbols.add(edge.symbol);
-			scores.add(edge.score);
+	/**
+	 * Unpacks scored symbols
+	 * 
+	 * @param chartCompleter the chart completer
+	 * @return the scored symbols
+	 * @throws ParseException
+	 */
+	private final List<ScoredSymbol> unpackScoredSymbols(ChartCompleter chartCompleter)
+			throws ParseException {
+		int size = chartCompleter.getSize();
+		if (lazyUnpacking) {
+			return chartCompleter.lazyUnpack(0, size - 1);
+		} else {
+			return chartCompleter.unpack(0, size - 1);
 		}
-		// check non-empty
-		if (symbols.size() == 0) {
-			throw new ParseException("Unable to parse");
-		}
-		product.setSymbols(symbols);
-		product.setScores(scores);
 	}
 
 	// set parse time when giving up
-	private final void setGiveUpTime() {
+	private final void setGiveUpTime(ParseProduct product) {
 		product.setChartTime((int) (System.currentTimeMillis() - product.getStartTime()));
 		product.setParseTime(product.getChartTime());
 		product.setUnpackingTime(0);
@@ -539,8 +536,9 @@ public class Parser {
 	 * the gold LF was found (as indicated by an f-score of 1.0). NB: It would
 	 * be better to return the forest oracle, but the nominal conversion would
 	 * be tricky to do correctly.
+	 * @param product TODO
 	 */
-	public final Pair<Symbol, Boolean> oracleBest(LF goldLF) {
+	public final Pair<Symbol, Boolean> oracleBest(LF goldLF, ParseProduct product) {
 		Symbol retval = null;
 		List<Symbol> result = product.getSymbols();
 		double bestF = 0.0;
