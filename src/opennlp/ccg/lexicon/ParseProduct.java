@@ -15,11 +15,6 @@ import opennlp.ccg.synsem.Symbol;
 public class ParseProduct {
 
 	/**
-	 * The timestamp of parse start
-	 */
-	private long startTime = 0;
-
-	/**
 	 * The duration of parse
 	 */
 	private int parseTime = 0;
@@ -66,20 +61,6 @@ public class ParseProduct {
 	 */
 	public final void setLexTime(int lexTime) {
 		this.lexTime = lexTime;
-	}
-
-	/**
-	 * @return the startTime
-	 */
-	public final long getStartTime() {
-		return startTime;
-	}
-
-	/**
-	 * @param startTime the startTime to set
-	 */
-	public final void setStartTime(long startTime) {
-		this.startTime = startTime;
 	}
 
 	/**
@@ -132,10 +113,10 @@ public class ParseProduct {
 	}
 
 	/**
-	 * @param chart the chart to set
+	 * @param chartCompleter the chart to set
 	 */
-	public final void setChartCompleter(ChartCompleter chart) {
-		this.chartCompleter = chart;
+	public final void setChartCompleter(ChartCompleter chartCompleter) {
+		this.chartCompleter = chartCompleter;
 	}
 
 	/**

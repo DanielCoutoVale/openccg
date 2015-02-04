@@ -588,7 +588,7 @@ public class Lexicon {
 
 	/**
 	 * Gets all associations that are indexed by a given
-	 * morpho-(phono-/grapho-)logical association (form, tone, caps). If the
+	 * morpho-(phono-/grapho-)logical muster (form, tone, caps). If the
 	 * morphological muster is not an association index, the muster is sent to
 	 * another component for linguistic analysis.
 	 * 
@@ -611,7 +611,7 @@ public class Lexicon {
 	 * @return a sign hash
 	 * @exception LexException thrown if word not found
 	 */
-	public final SymbolHash recognizePhenomenon(Association phenomenon) throws LexException {
+	public final SymbolHash recognizeMuster(Association phenomenon) throws LexException {
 		Association muster = AssociationPool.createMuster(phenomenon);
 
 		// Reduces a muster by removing the coarticulated associate keys

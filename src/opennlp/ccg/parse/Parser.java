@@ -216,6 +216,16 @@ public class Parser {
 		return product;
 	}
 
+	public final ParseProduct parse(Chart chart, int lexTime) throws ParseException {
+		try {
+			ParseProduct product = new ParseProduct();
+			product.setLexTime(lexTime);
+			return product;
+		} catch (Exception e) {
+			throw new ParseException("There was an error while parsing the chart.");
+		}
+	}
+
 	/**
 	 * Parses a list of musters
 	 * 
@@ -225,6 +235,7 @@ public class Parser {
 	 */
 	private final ParseProduct parseOnce(List<Association> musters) throws ParseException {
 		ParseProduct product = new ParseProduct();
+		long startTime = System.currentTimeMillis();
 		try {
 			// init
 			long lexStartTime = System.currentTimeMillis();
@@ -232,22 +243,22 @@ public class Parser {
 			// get entries for each word
 			List<SymbolHash> symbolHashes = new ArrayList<SymbolHash>(musters.size());
 			for (Association muster : musters) {
-				symbolHashes.add(lexicon.recognizePhenomenon(muster));
+				symbolHashes.add(lexicon.recognizeMuster(muster));
 			}
 			product.setLexTime((int) (System.currentTimeMillis() - lexStartTime));
 			// do parsing
-			product.setStartTime(System.currentTimeMillis());
+			startTime = System.currentTimeMillis();
 			product.setChartCompleter(buildChartCompleter(symbolHashes));
-			parse(product.getChartCompleter(), product);
+			parse(product.getChartCompleter(), product, startTime);
 			return product;
 		} catch (LexException e) {
-			setGiveUpTime(product);
+			setGiveUpTime(product, startTime);
 			String msg = "Unable to retrieve lexical entries:\n\t" + e.toString();
 			if (debugParse)
 				System.out.println(msg);
 			throw new ParseException(msg);
 		} catch (ParseException e) {
-			setGiveUpTime(product);
+			setGiveUpTime(product, startTime);
 			// show chart for failed parse if apropos
 			if (debugParse) {
 				System.out.println(e);
@@ -310,6 +321,7 @@ public class Parser {
 			supertagger.resetBetaToMax();
 		// loop
 		boolean done = false;
+		long startTime = System.currentTimeMillis();
 		while (!done) {
 			try {
 				// init
@@ -321,16 +333,16 @@ public class Parser {
 				for (int i = 0; i < words.size(); i++) {
 					supertagger.setWord(i);
 					Association word = words.get(i);
-					entries.add(lexicon.recognizePhenomenon(word));
+					entries.add(lexicon.recognizeMuster(word));
 				}
 				product.setLexTime((int) (System.currentTimeMillis() - lexStartTime));
 				;
 				// do parsing
 
 				// set up chart
-				product.setStartTime(System.currentTimeMillis());
+				startTime = System.currentTimeMillis();
 				product.setChartCompleter(buildChartCompleter(entries));
-				parse(product.getChartCompleter(), product);
+				parse(product.getChartCompleter(), product, startTime);
 				// done
 				done = true;
 				// reset supertagger in lexicon, turn gluing off
@@ -343,7 +355,7 @@ public class Parser {
 				}
 				// otherwise give up
 				else {
-					setGiveUpTime(product);
+					setGiveUpTime(product, startTime);
 					// reset supertagger in lexicon, turn gluing off
 					grammar.lexicon.setSupertagger(null);
 					gluingFlag = false;
@@ -372,7 +384,7 @@ public class Parser {
 				}
 				// otherwise give up
 				else {
-					setGiveUpTime(product);
+					setGiveUpTime(product, startTime);
 					// show chart for failed parse if apropos
 					if (debugParse) {
 						System.out.println(e);
@@ -426,7 +438,7 @@ public class Parser {
 	 * @param product TODO
 	 * @throws ParseException
 	 */
-	private final void parse(ChartCompleter chartCompleter, ParseProduct product) throws ParseException {
+	private final void parse(ChartCompleter chartCompleter, ParseProduct product, long startTime) throws ParseException {
 		int size = chartCompleter.getSize();
 
 		// Annotate index forms with unary rules
@@ -463,14 +475,14 @@ public class Parser {
 		}
 
 		// Keep chart construction time
-		product.setChartTime((int) (System.currentTimeMillis() - product.getStartTime()));
+		product.setChartTime((int) (System.currentTimeMillis() - startTime));
 
 		// Extract results
 		List<ScoredSymbol> scoredSymbols = unpackScoredSymbols(chartCompleter);
 		product.setScoredSymbols(scoredSymbols);
 
 		// Keep total parse time
-		product.setParseTime((int) (System.currentTimeMillis() - product.getStartTime()));
+		product.setParseTime((int) (System.currentTimeMillis() - startTime));
 		product.setUnpackingTime(product.getParseTime() - product.getChartTime());
 	}
 
@@ -492,8 +504,8 @@ public class Parser {
 	}
 
 	// set parse time when giving up
-	private final void setGiveUpTime(ParseProduct product) {
-		product.setChartTime((int) (System.currentTimeMillis() - product.getStartTime()));
+	private final void setGiveUpTime(ParseProduct product, long startTime) {
+		product.setChartTime((int) (System.currentTimeMillis() - startTime));
 		product.setParseTime(product.getChartTime());
 		product.setUnpackingTime(0);
 	}
