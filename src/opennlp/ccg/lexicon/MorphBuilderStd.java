@@ -102,7 +102,7 @@ public class MorphBuilderStd implements MorphBuilder {
 		if (coart) {
 			String indexAttr = wordString.substring(0, wordString.indexOf("-"));
 			String indexVal = surfaceWord.getAssociateValue(indexAttr);
-			coartIndexingWord = AssociationPool.createWord(indexAttr, indexVal);
+			coartIndexingWord = AssociationPool.createAssociation(indexAttr, indexVal);
 		}
 		morph.getMorphItems().add(
 				new MorphItem(surfaceWord, word, coartIndexingWord, macros, excluded, coart));

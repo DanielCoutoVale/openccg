@@ -31,32 +31,32 @@ public class MorphItem {
 
 	private static final String[] empty = new String[0];
 
-	private final Association surfaceWord;
-	private final Association word;
-	private final Association coartIndexingWord;
+	private final Association muster;
+	private final Association container;
+	private final Association coarticulee;
 	private final String[] macros;
 	private final String[] excluded;
-	private final boolean coart;
+	private final boolean modal;
 
 	/** Constructor. */
 	public MorphItem() {
-		surfaceWord = null;
-		word = null;
-		coartIndexingWord = null;
+		muster = null;
+		container = null;
+		coarticulee = null;
 		macros = empty;
 		excluded = empty;
-		coart = false;
+		modal = false;
 	};
 
 	/** Constructor from XML element. */
-	public MorphItem(Association surfaceWord, Association word, Association coartIndexingWord,
-			String[] macros, String[] excluded, boolean coart) {
-		this.surfaceWord = surfaceWord;
-		this.word = word;
-		this.coartIndexingWord = coartIndexingWord;
+	public MorphItem(Association muster, Association container, Association coarticulee,
+			String[] macros, String[] excluded, boolean modal) {
+		this.muster = muster;
+		this.container = container;
+		this.coarticulee = coarticulee;
 		this.macros = macros;
 		this.excluded = excluded;
-		this.coart = coart;
+		this.modal = modal;
 	}
 
 	/**
@@ -78,13 +78,13 @@ public class MorphItem {
 	}
 
 	/** Returns the full word. */
-	public Association getWord() {
-		return word;
+	public Association getContainer() {
+		return container;
 	}
 
 	/** Returns the surface word (without the stem, POS and semantic class). */
-	public Association getSurfaceWord() {
-		return surfaceWord;
+	public Association getMuster() {
+		return muster;
 	}
 
 	/** Returns the macro names. */
@@ -98,16 +98,16 @@ public class MorphItem {
 	}
 
 	/** Returns whether the morph item is a coarticulation, eg a pitch accent. */
-	public boolean isCoart() {
-		return coart;
+	public boolean isModal() {
+		return modal;
 	}
 
 	/**
 	 * Returns the word for indexing this coarticulation (or null if not a
 	 * coarticulation).
 	 */
-	public Association getCoartIndexingWord() {
-		return coartIndexingWord;
+	public Association getCoarticulee() {
+		return coarticulee;
 	}
 
 	/** Returns a string for this morph item. */
@@ -121,6 +121,6 @@ public class MorphItem {
 				sb.append(',');
 		}
 		sb.append(']');
-		return "{" + word + " => " + sb + "}";
+		return "{" + container + " => " + sb + "}";
 	}
 }

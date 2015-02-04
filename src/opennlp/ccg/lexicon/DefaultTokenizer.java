@@ -123,12 +123,12 @@ public class DefaultTokenizer implements Tokenizer {
 	 * white-space delimited tokens.
 	 */
 	public List<Association> tokenize(String s, boolean strictFactors) {
-		List<Association> retval = new ArrayList<Association>();
+		List<Association> associations = new ArrayList<Association>();
 		StringTokenizer st = new StringTokenizer(s);
 		while (st.hasMoreTokens()) {
-			retval.add(parseToken(st.nextToken(), strictFactors));
+			associations.add(parseToken(st.nextToken(), strictFactors));
 		}
-		return retval;
+		return associations;
 	}
 
 	/**

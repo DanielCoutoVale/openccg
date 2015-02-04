@@ -527,7 +527,7 @@ public class Grammar {
 	/**
 	 * Returns whether the given string is a recognized pitch accent.
 	 */
-	public static boolean isPitchAccent(String s) {
+	public static boolean isTone(String s) {
 		if (pitchAccentsSet == null) {
 			pitchAccentsSet = new HashSet<String>();
 			for (int i = 0; i < pitchAccents.length; i++) {

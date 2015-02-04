@@ -192,53 +192,52 @@ public class Parser {
 	 * Parses a character sequence.
 	 *
 	 * @param string the character sequence
-	 * @return
+	 * @return the parse product
 	 * @exception ParseException thrown if a parse can't be found for the entire
 	 *                string
 	 */
 	public final ParseProduct parse(String string) throws ParseException {
-		List<Association> words = lexicon.tokenizer.tokenize(string);
-		return parse(words);
+		List<Association> musters = lexicon.tokenizer.tokenize(string);
+		return parse(musters);
 	}
 
 	/**
-	 * Parses a list of words
+	 * Parses a list of musters
 	 * 
-	 * @param words the list of words
-	 * @return
+	 * @param musters the list of musters
+	 * @return the parse product
 	 * @throws ParseException
 	 */
-	public final ParseProduct parse(List<Association> words) throws ParseException {
+	public final ParseProduct parse(List<Association> musters) throws ParseException {
 		if (supertagger != null) {
-			return parseIterativeBetaBest(words);
+			return parseIterativeBetaBest(musters);
 		} else {
-			return parseOnce(words);
+			return parseOnce(musters);
 		}
 	}
 
 	/**
-	 * Parses a list of words
+	 * Parses a list of musters
 	 * 
-	 * @param words the list of words
-	 * @return
+	 * @param musters the list of musters
+	 * @return the parse product
 	 * @throws ParseException
 	 */
-	private final ParseProduct parseOnce(List<Association> words) throws ParseException {
-
+	private final ParseProduct parseOnce(List<Association> musters) throws ParseException {
 		try {
 			product = new ParseProduct();
 			// init
 			long lexStartTime = System.currentTimeMillis();
 			UnifyControl.startUnifySequence();
 			// get entries for each word
-			List<SymbolHash> entries = new ArrayList<SymbolHash>(words.size());
-			for (Association w : words) {
-				entries.add(lexicon.recognizePhenomenon(w));
+			List<SymbolHash> symbolHashes = new ArrayList<SymbolHash>(musters.size());
+			for (Association muster : musters) {
+				symbolHashes.add(lexicon.recognizePhenomenon(muster));
 			}
 			product.setLexTime((int) (System.currentTimeMillis() - lexStartTime));
 			// do parsing
 			product.setStartTime(System.currentTimeMillis());
-			product.setChartCompleter(buildChartCompleter(entries));
+			product.setChartCompleter(buildChartCompleter(symbolHashes));
 			parseEntries(product.getChartCompleter());
 			return product;
 		} catch (LexException e) {

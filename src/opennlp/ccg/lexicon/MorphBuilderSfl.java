@@ -76,15 +76,15 @@ public class MorphBuilderSfl implements MorphBuilder {
 		boolean modal = "graphic".equals(modeString) || "phonetic".equals(modeString);
 		String form = element.getAttributeValue("form");
 		Association tokenizedWord = Grammar.theGrammar.lexicon.tokenizer.parseToken(form, modal);
-		Association surfaceWord = AssociationPool.createMuster(tokenizedWord);
+		Association muster = AssociationPool.createMuster(tokenizedWord);
 		String term = element.getAttributeValue("term");
 		if (term == null) {
-			term = surfaceWord.getForm();
+			term = muster.getForm();
 		}
 		String functions = element.getAttributeValue("functions");
 		String supertag = null;
 		String entityClass = element.getAttributeValue("entity-class");
-		Association word = AssociationPool.createContainer(surfaceWord, term, functions, supertag,
+		Association container = AssociationPool.createContainer(muster, term, functions, supertag,
 				entityClass);
 		String featuresString = element.getAttributeValue("features");
 		String[] features = empty;
@@ -97,15 +97,14 @@ public class MorphBuilderSfl implements MorphBuilder {
 		if (excludedString != null) {
 			excluded = excludedString.split("\\s+");
 		}
-		// FIXME use more transparent nomenclature
-		Association coartIndexingWord = null;
+		Association coarticulee = null;
 		if (modal) {
-			String indexAttribute = form.substring(0, form.indexOf("-"));
-			String indexValue = surfaceWord.getAssociateValue(indexAttribute);
-			coartIndexingWord = AssociationPool.createWord(indexAttribute, indexValue);
+			String associateKey = form.substring(0, form.indexOf("-"));
+			String associateValue = muster.getAssociateValue(associateKey);
+			coarticulee = AssociationPool.createAssociation(associateKey, associateValue);
 		}
 		morph.getMorphItems().add(
-				new MorphItem(surfaceWord, word, coartIndexingWord, features, excluded, modal));
+				new MorphItem(muster, container, coarticulee, features, excluded, modal));
 	}
 
 	@Override

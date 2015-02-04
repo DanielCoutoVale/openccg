@@ -152,11 +152,11 @@ public class Lexicon {
 		coarticulateeKeys = new HashSet<String>();
 		_indexedCoartAttrs = new HashSet<String>();
 		for (MorphItem morphItem : morphItems) {
-			Association surfaceWord = morphItem.getSurfaceWord();
+			Association surfaceWord = morphItem.getMuster();
 			associationMap.put(surfaceWord, morphItem);
-			_predToWords.put(morphItem.getWord().getTerm(), surfaceWord);
-			if (morphItem.isCoart()) {
-				Association indexingWord = morphItem.getCoartIndexingWord();
+			_predToWords.put(morphItem.getContainer().getTerm(), surfaceWord);
+			if (morphItem.isModal()) {
+				Association indexingWord = morphItem.getCoarticulee();
 				associationMap.put(indexingWord, morphItem);
 				Pair<String, String> first = indexingWord.getToneAndNonCanonicalAssociates().get(0);
 				_indexedCoartAttrs.add(first.a);
@@ -288,7 +288,7 @@ public class Lexicon {
 
 		// with morph items, check POS, macro names, excluded list for xref
 		for (MorphItem morphItem : morphItems) {
-			Association w = morphItem.getWord();
+			Association w = morphItem.getContainer();
 			if (!openlex && !_stems.containsKey(w.getTerm() + w.getFunctions())
 					&& !_posToEntries.containsKey(w.getFunctions())) {
 				System.err.println("Warning: no entries for stem '" + w.getTerm() + "' and POS '"
@@ -298,14 +298,14 @@ public class Lexicon {
 			for (int j = 0; j < macroNames.length; j++) {
 				if (!_macroItems.containsKey(macroNames[j])) {
 					System.err.println("Warning: macro " + macroNames[j] + " not found for word '"
-							+ morphItem.getWord() + "'");
+							+ morphItem.getContainer() + "'");
 				}
 			}
 			String[] excludedNames = morphItem.getExcluded();
 			for (int j = 0; j < excludedNames.length; j++) {
 				if (!familyAndEntryNames.contains(excludedNames[j])) {
 					System.err.println("Warning: excluded family or entry '" + excludedNames[j]
-							+ "' not found for word '" + morphItem.getWord() + "'");
+							+ "' not found for word '" + morphItem.getContainer() + "'");
 				}
 			}
 		}
@@ -644,7 +644,7 @@ public class Lexicon {
 			if (!_indexedCoartAttrs.contains(attributeName))
 				continue;
 			String attributeValue = (String) pair.b;
-			Association coartWord = AssociationPool.createWord(attributeName, attributeValue);
+			Association coartWord = AssociationPool.createAssociation(attributeName, attributeValue);
 			SymbolHash coartSymbolHash = recognizeArticulatee(coartWord);
 			for (Symbol coartSymbol : coartSymbolHash.asSymbolSet()) {
 				// apply to each input
@@ -746,8 +746,8 @@ public class Lexicon {
 		MacroAdder macAdder = getMacAdder(morphItem);
 
 		// if we have this stem in our lexicon
-		String stem = morphItem.getWord().getTerm();
-		String pos = morphItem.getWord().getFunctions();
+		String stem = morphItem.getContainer().getTerm();
+		String pos = morphItem.getContainer().getFunctions();
 		Set<EntriesItem[]> explicitEntries = null; // for storing entries from
 													// explicitly listed family
 													// members
@@ -851,7 +851,7 @@ public class Lexicon {
 
 			// replace DEFAULT_VAL with pred, after first
 			// unifying type of associated nom var(s) with sem class
-			unifySemClass(cat, mi.getWord().getEntityClass());
+			unifySemClass(cat, mi.getContainer().getEntityClass());
 			REPLACEMENT = pred;
 			cat.deepMap(defaultReplacer);
 
@@ -880,7 +880,7 @@ public class Lexicon {
 
 			// merge stem, pos, sem class from morph item, plus supertag from
 			// cat
-			Association word = AssociationPool.createContainer(w, mi.getWord(), cat.getSupertag());
+			Association word = AssociationPool.createContainer(w, mi.getContainer(), cat.getSupertag());
 
 			// set origin and lexprob
 			Symbol sign = new Symbol(new SingletonList<Association>(word), cat);
@@ -997,7 +997,7 @@ public class Lexicon {
 			} else {
 				// should be checked earlier too
 				System.err.println("Warning: macro " + newMacroNames[i] + " not found for word '"
-						+ mi.getWord() + "'");
+						+ mi.getContainer() + "'");
 			}
 		}
 		retval = new MacroAdder(macrosFromLex, macroItems);

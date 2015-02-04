@@ -366,7 +366,7 @@ abstract public class Association implements Serializable, Comparable<Associatio
 		// create words
 		Association w = AssociationPool.createMuster("ran");
 		Association fw = AssociationPool.createContainer(w, "run", "VBD", "s\\np", "MOTION");
-		Association wb = AssociationPool.createAssociation(w, AssociationPool.createWord("B", "L"));
+		Association wb = AssociationPool.createAssociation(w, AssociationPool.createAssociation("B", "L"));
 		// write to tmp.out
 		String filename = "tmp.ser";
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename));

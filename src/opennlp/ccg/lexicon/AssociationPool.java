@@ -127,11 +127,15 @@ public class AssociationPool {
 	 * Creates a (surface or full) word with the given attribute name and value.
 	 * The attribute names Tokenizer.WORD_ATTR, ..., Tokenizer.SEM_CLASS_ATTR
 	 * may be used for the form, ..., semantic class.
+	 * 
+	 * @param associatekey the associate key
+	 * @param associateValue the associate value
+	 * @return the association
 	 */
-	public static synchronized Association createWord(String attributeName, String attributeValue) {
-		attributeName = attributeName.intern();
-		attributeValue = (attributeValue != null) ? attributeValue.intern() : null;
-		return factory.create(attributeName, attributeValue);
+	public static synchronized Association createAssociation(String associatekey, String associateValue) {
+		associatekey = associatekey.intern();
+		associateValue = (associateValue != null) ? associateValue.intern() : null;
+		return factory.create(associatekey, associateValue);
 	}
 
 	/**
