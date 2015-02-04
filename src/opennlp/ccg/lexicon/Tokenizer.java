@@ -54,7 +54,7 @@ public interface Tokenizer {
 	public static final String ENTITY_CLASS_ASSOCIATE = "C";
 
 	/** Name used to tokenize discourse entity associate. */
-	public static final String ENTITY_ASSOCIATE = "C";
+	public static final String ENTITY_ASSOCIATE = "E";
 
 	/** Constant used to signal the substitution of a date as the pred. */
 	public static final String DATE_VAL = "[*DATE*]";
