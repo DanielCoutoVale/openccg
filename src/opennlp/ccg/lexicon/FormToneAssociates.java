@@ -19,26 +19,37 @@
 package opennlp.ccg.lexicon;
 
 /**
- * A WordWithPitchAccent object is a surface word with an optional pitch accent 
- * but no further attributes.
+ * Form and tone associates are an association that has a form and a tone as associates.
  *
- * @author      Michael White
- * @version     $Revision: 1.4 $, $Date: 2009/07/17 04:23:30 $
+ * @author Michael White
+ * @author Daniel Couto-Vale
+ * @version $Revision: 1.4 $, $Date: 2009/07/17 04:23:30 $
  */
 public class FormToneAssociates extends FormAssociate {
-    
-	private static final long serialVersionUID = 1510997962756436949L;
-	
-	/** The pitch accent. */
-    protected String pitchAccent;
-    
-    /** Returns the pitch accent. */
-    public String getTone() { return pitchAccent; }
-    
-    /** Constructor. */
-    protected FormToneAssociates(String form, String pitchAccent) {
-        super(form); 
-        this.pitchAccent = pitchAccent;
-    }
-}
 
+	/**
+	 * Generated serial version
+	 */
+	private static final long serialVersionUID = 1510997962756436949L;
+
+	/**
+	 * The tone
+	 */
+	protected String tone;
+
+	@Override
+	public final String getTone() {
+		return tone;
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param form the form
+	 * @param tone the tone
+	 */
+	protected FormToneAssociates(String form, String tone) {
+		super(form);
+		this.tone = tone;
+	}
+}

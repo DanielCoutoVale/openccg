@@ -19,89 +19,95 @@
 package opennlp.ccg.lexicon;
 
 import opennlp.ccg.util.*;
+
 import java.util.*;
 
 /**
- * A SimpleWord object is a surface word which stores just the word form.
- * SimpleWord serves as the base class for concrete instantiations of words.
+ * A form associate is an association that has a form as associate.
  *
  * @author Michael White
+ * @author Daniel Couto-Vale
  * @version $Revision: 1.4 $, $Date: 2009/07/17 04:23:30 $
  */
 public class FormAssociate extends Association {
 
+	/**
+	 * Generated serial version
+	 */
 	private static final long serialVersionUID = 181491057498517717L;
 
-	/** The surface form. */
+	/**
+	 * The form
+	 */
 	protected String form;
 
-	/** Returns the surface form. */
-	public String getForm() {
-		return form;
+	/**
+	 * Constructor
+	 * 
+	 * @param form the form
+	 */
+	protected FormAssociate(String form) {
+		this.form = form;
 	}
 
-	/** Returns the pitch accent. */
-	public String getTone() {
-		return null;
-	}
-
-	/** Returns the list of extra attribute-value pairs. */
+	@Override
 	protected List<Pair<String, String>> getAssociates() {
 		return null;
 	}
 
-	/** Returns the stem. */
-	public String getTerm() {
-		return null;
-	}
-
-	/** Returns the part of speech. */
-	public String getFunctions() {
-		return null;
-	}
-
-	/** Returns the supertag. */
-	public String getSupertag() {
-		return null;
-	}
-
-	/** Returns the semantic class. */
-	public String getEntityClass() {
-		return null;
-	}
-
-	/**
-	 * Returns the value of the attribute with the given name, or null if none.
-	 * The attribute names Tokenizer.WORD_ATTR, ..., Tokenizer.SEM_CLASS_ATTR
-	 * may be used to retrieve the form, ..., semantic class.
-	 */
-	public String getAssociateValue(String attr) {
-		String internedAttr = attr.intern(); // use == on interned attr
-		if (internedAttr == Tokenizer.WORD_ASSOCIATE)
+	@Override
+	public final String getAssociateValue(String associateKey) {
+		associateKey = associateKey.intern();
+		if (associateKey == Tokenizer.WORD_ASSOCIATE)
 			return getForm();
-		if (internedAttr == Tokenizer.TONE_ASSOCIATE)
+		if (associateKey == Tokenizer.TONE_ASSOCIATE)
 			return getTone();
-		if (internedAttr == Tokenizer.TERM_ASSOCIATE)
+		if (associateKey == Tokenizer.TERM_ASSOCIATE)
 			return getTerm();
-		if (internedAttr == Tokenizer.FUNCTIONS_ASSOCIATE)
+		if (associateKey == Tokenizer.FUNCTIONS_ASSOCIATE)
 			return getFunctions();
-		if (internedAttr == Tokenizer.SUPERTAG_ASSOCIATE)
+		if (associateKey == Tokenizer.SUPERTAG_ASSOCIATE)
 			return getSupertag();
-		if (internedAttr == Tokenizer.ENTITY_CLASS_ASSOCIATE)
+		if (associateKey == Tokenizer.ENTITY_CLASS_ASSOCIATE)
 			return getEntityClass();
 		List<Pair<String, String>> pairs = getAssociates();
 		if (pairs == null)
 			return null;
 		for (int i = 0; i < pairs.size(); i++) {
 			Pair<String, String> p = pairs.get(i);
-			if (p.a == internedAttr)
+			if (p.a == associateKey)
 				return p.b;
 		}
-		return null; // not found
+		return null;
 	}
 
-	/** Constructor. */
-	protected FormAssociate(String form) {
-		this.form = form;
+	@Override
+	public String getEntityClass() {
+		return null;
+	}
+
+	@Override
+	public final String getForm() {
+		return form;
+	}
+
+	@Override
+	public String getFunctions() {
+		return null;
+	}
+
+	@Override
+	public String getSupertag() {
+		return null;
+	}
+
+	@Override
+	public String getTerm() {
+		return null;
+	}
+
+	@Override
+	public String getTone() {
+		return null;
 	}
 }
