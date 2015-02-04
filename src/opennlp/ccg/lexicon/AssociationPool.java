@@ -7,15 +7,20 @@ import java.util.Set;
 
 import opennlp.ccg.util.Pair;
 
+/**
+ * A pool of associations that interns the associations for efficiency reasons.
+ * 
+ * @author Daniel Couto-Vale
+ */
 public class AssociationPool {
 
-	// factory methods
-
-	/** The word factory to use. */
+	/**
+	 * The association factory
+	 */
 	protected static AssociationFactory factory = new AssociateCanonFactory();
 
-	// //////////////////////////////////////////////////////////////////////////////////////////////
-	// Interstratal Factory Methods
+	// /////////////////////////////////////////////////////////////////////////////////////////////
+	// Content-containing Association Factory Methods
 
 	/**
 	 * Creates an association of a muster with grammatical and semantic content.
@@ -38,12 +43,16 @@ public class AssociationPool {
 	}
 
 	/**
-	 * Creates a full word from the given surface one, adding the second (full)
-	 * given word's stem, POS and semantic class, as well as the second word's
-	 * additional attr-val pairs, plus the given supertag.
+	 * Creates an association of a muster with grammatical and semantic content
+	 * from the container plus the given supertag.
+	 * 
+	 * @param muster the muster
+	 * @param container the container
+	 * @param supertag the supertag
+	 * @return the content-containing association
 	 */
-	public static synchronized Association createContainer(Association muster, Association container,
-			String supertag) {
+	public static synchronized Association createContainer(Association muster,
+			Association container, String supertag) {
 		boolean mixedAssociates = false;
 		List<Pair<String, String>> musterAssociates = muster.getAssociates();
 		List<Pair<String, String>> containerAssociates = container.getAssociates();
@@ -60,16 +69,18 @@ public class AssociationPool {
 		}
 		if (mixedAssociates) {
 			return createAssociation(muster.getForm(), muster.getTone(), container.getTerm(),
-					container.getFunctions(), supertag, container.getEntityClass(), musterAssociates);
+					container.getFunctions(), supertag, container.getEntityClass(),
+					musterAssociates);
 		} else {
 			supertag = (supertag != null) ? supertag.intern() : null;
 			return factory.create(muster.getForm(), muster.getTone(), container.getTerm(),
-					container.getFunctions(), supertag, container.getEntityClass(), musterAssociates);
+					container.getFunctions(), supertag, container.getEntityClass(),
+					musterAssociates);
 		}
 	}
 
-	// //////////////////////////////////////////////////////////////////////////////////////////////
-	// Morphologic Factory Methods (Contentless)
+	// /////////////////////////////////////////////////////////////////////////////////////////////
+	// Contentless Association Factory Methods
 
 	/**
 	 * Creates a muster for an association by returning an association without
@@ -154,24 +165,35 @@ public class AssociationPool {
 		}
 	}
 
-	/** Creates a (surface or full) word. */
+	/**
+	 * Creates an association with the specified associates.
+	 * 
+	 * @param form the form
+	 * @param tone the tone
+	 * @param term the term
+	 * @param functions the functions
+	 * @param supertag the supertag
+	 * @param entityClass the entityClass
+	 * @param associates other associates
+	 * @return the association
+	 */
 	public static synchronized Association createAssociation(String form, String tone, String term,
 			String functions, String supertag, String entityClass,
-			List<Pair<String, String>> attrValPairs) {
+			List<Pair<String, String>> associates) {
 		// normalize factors
 		form = (form != null) ? form.intern() : null;
 		tone = (tone != null) ? tone.intern() : null;
-		if (attrValPairs != null) {
-			if (attrValPairs.isEmpty())
-				attrValPairs = null;
+		if (associates != null) {
+			if (associates.isEmpty())
+				associates = null;
 			else {
-				attrValPairs = new ArrayList<Pair<String, String>>(attrValPairs);
-				Association.sortAttrValPairs(attrValPairs);
-				for (int i = 0; i < attrValPairs.size(); i++) {
-					Pair<String, String> p = attrValPairs.get(i);
+				associates = new ArrayList<Pair<String, String>>(associates);
+				Association.sortAttrValPairs(associates);
+				for (int i = 0; i < associates.size(); i++) {
+					Pair<String, String> p = associates.get(i);
 					String attr = p.a.intern();
 					String val = (p.b != null) ? p.b.intern() : null;
-					attrValPairs.set(i, new Pair<String, String>(attr, val));
+					associates.set(i, new Pair<String, String>(attr, val));
 				}
 			}
 		}
@@ -179,31 +201,42 @@ public class AssociationPool {
 		functions = (functions != null) ? functions.intern() : null;
 		supertag = (supertag != null) ? supertag.intern() : null;
 		entityClass = (entityClass != null) ? entityClass.intern() : null;
-		return factory.create(form, tone, term, functions, supertag, entityClass, attrValPairs);
+		return factory.create(form, tone, term, functions, supertag, entityClass, associates);
 	}
 
 	/**
-	 * Creates a (surface or full) word from the given one, replacing the word
-	 * form with the given one.
+	 * Creates an association based on a given one, but with another form.
+	 * 
+	 * @param baseAssociation the base association
+	 * @param substituteForm the substitute form
+	 * @return the association
 	 */
-	public static synchronized Association createAssociation(Association word, String form) {
-		if (form != null)
-			form = form.intern();
-		return factory.create(form, word.getTone(), word.getTerm(), word.getFunctions(),
-				word.getSupertag(), word.getEntityClass(), word.getAssociates());
+	public static synchronized Association createAssociation(Association baseAssociation,
+			String substituteForm) {
+		if (substituteForm != null) {
+			substituteForm = substituteForm.intern();
+		}
+		return factory.create(substituteForm, baseAssociation.getTone(), baseAssociation.getTerm(),
+				baseAssociation.getFunctions(), baseAssociation.getSupertag(),
+				baseAssociation.getEntityClass(), baseAssociation.getAssociates());
 	}
 
 	/**
-	 * Creates a (surface or full) word from the given surface one, adding the
-	 * second word's additional attr-val pairs.
+	 * Creates an association based on a given one with the associates of a
+	 * muster with the exception of the form.
+	 * 
+	 * @param baseAssociation the base association
+	 * @param substituteMuster the substitute muster
+	 * @return the association
 	 */
-	public static synchronized Association createAssociationWithMuster(Association association, Association substituteMuster) {
-		String tone = association.getTone();
+	public static synchronized Association createAssociation(Association baseAssociation,
+			Association substituteMuster) {
+		String tone = baseAssociation.getTone();
 		if (tone == null) {
 			tone = substituteMuster.getTone();
 		}
 		boolean mixedAssociates = false;
-		List<Pair<String, String>> associates = association.getAssociates();
+		List<Pair<String, String>> associates = baseAssociation.getAssociates();
 		List<Pair<String, String>> substituteAssociates = substituteMuster.getAssociates();
 		if (associates == null && substituteAssociates != null) {
 			associates = substituteAssociates;
@@ -217,11 +250,11 @@ public class AssociationPool {
 			}
 		}
 		// get rest
-		String form = association.getForm();
-		String term = association.getTerm();
-		String functions = association.getFunctions();
-		String supertag = association.getSupertag();
-		String entityClass = association.getEntityClass();
+		String form = baseAssociation.getForm();
+		String term = baseAssociation.getTerm();
+		String functions = baseAssociation.getFunctions();
+		String supertag = baseAssociation.getSupertag();
+		String entityClass = baseAssociation.getEntityClass();
 		// with mixed attrs, need to normalize
 		if (mixedAssociates)
 			return createAssociation(form, tone, term, functions, supertag, entityClass, associates);

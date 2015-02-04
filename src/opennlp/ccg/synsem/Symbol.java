@@ -148,7 +148,7 @@ public class Symbol implements EntityRealizer, Serializable {
 			throw new RuntimeException("Can't create coarticulation sign from multiple words.");
 		Association word = words.get(0);
 		Association coartWord = coartSign.getWords().get(0);
-		Association wordPlus = AssociationPool.createAssociationWithMuster(word, coartWord);
+		Association wordPlus = AssociationPool.createAssociation(word, coartWord);
 		Rule coartRule = new Rule() {
 			public String name() {
 				return "coart";
