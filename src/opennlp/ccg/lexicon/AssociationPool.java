@@ -117,9 +117,9 @@ public class AssociationPool {
 	 * supertag and semantic class, and replacing the form with the semantic
 	 * class, uppercased.
 	 */
-	public static synchronized Association createSurfaceWordUsingSemClass(Association word) {
-		String form = word.getEntityClass().toUpperCase().intern();
-		return factory.create(form, word.getTone(), null, null, null, null, word.getAssociates());
+	public static synchronized Association createMusterWithEntityClass(Association association) {
+		String form = association.getEntityClass().toUpperCase().intern();
+		return factory.create(form, association.getTone(), null, null, null, null, association.getAssociates());
 	}
 
 	// NB: could try different factory methods for concrete words, but

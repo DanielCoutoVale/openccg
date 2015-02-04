@@ -143,7 +143,7 @@ public class FactoredNgramModelFamily extends NgramScorer {
 	 * name, in the SRILM format, and with the given flag for using sem classes.
 	 */
 	public FactoredNgramModelFamily(String filename, boolean useSemClasses) throws IOException {
-		this.useSemClasses = useSemClasses;
+		this.useEntityClasses = useSemClasses;
 		List<ModelGroup> modelGroups = readModel(filename);
 		this.primaryGroup = modelGroups.get(0);
 		if (modelGroups.size() == 1)
@@ -317,7 +317,7 @@ public class FactoredNgramModelFamily extends NgramScorer {
 				File lmfile = new File(infile.getParentFile(), lmfn);
 				lmfn = lmfile.getPath();
 				// load current model
-				models[currentModel] = new FactoredNgramModel(child, parents, lmfn, useSemClasses);
+				models[currentModel] = new FactoredNgramModel(child, parents, lmfn, useEntityClasses);
 				// share wordsToScore
 				models[currentModel].shareWordsToScore(wordsToScore);
 				// inc current model

@@ -44,7 +44,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
 
 	protected NgramScorer(int order, boolean useSemClasses) {
 		this.order = order;
-		this.useSemClasses = useSemClasses;
+		this.useEntityClasses = useSemClasses;
 	}
 
 	/** The n-gram order of the model. */
@@ -427,7 +427,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
 	/**
 	 * Flag whether to use sem classes in place of words. Defaults to false.
 	 */
-	protected boolean useSemClasses = false;
+	protected boolean useEntityClasses = false;
 
 	// tokenizer reference
 	private Tokenizer tokenizer = null;
@@ -443,7 +443,7 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
 	}
 
 	/** Returns whether the given semantic class is a replacement one. */
-	protected boolean isReplacementSemClass(String semClass) {
+	protected boolean isSubstituteEntityClass(String semClass) {
 		return semClass != null && getTokenizer().isReplacementSemClass(semClass);
 	}
 
@@ -452,9 +452,9 @@ public abstract class NgramScorer implements SymbolScorer, Reversible, FeatureEx
 	 * uppercased and interned) for the given word, if apropos, otherwise null.
 	 */
 	protected String semClassReplacement(Association w) {
-		if (useSemClasses) {
+		if (useEntityClasses) {
 			String semClass = w.getEntityClass();
-			if (isReplacementSemClass(semClass))
+			if (isSubstituteEntityClass(semClass))
 				return semClass.toUpperCase().intern();
 		}
 		// otherwise null

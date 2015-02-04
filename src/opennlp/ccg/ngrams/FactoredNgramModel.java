@@ -81,7 +81,7 @@ public class FactoredNgramModel extends NgramScorer {
 	 */
 	public FactoredNgramModel(String child, String parents[], String filename, boolean useSemClasses)
 			throws IOException {
-		this.useSemClasses = useSemClasses;
+		this.useEntityClasses = useSemClasses;
 		this.child = new ModelVariable(child);
 		this.parents = new ModelVariable[parents.length];
 		order = 1;

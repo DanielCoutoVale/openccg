@@ -110,7 +110,7 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
 	 * lowest-order (unigram) weight.
 	 */
 	public NgramPrecisionModel(String[] targets, int order, boolean useSemClasses, double[] weights) {
-		this.useSemClasses = useSemClasses;
+		this.useEntityClasses = useSemClasses;
 		this.order = order;
 		this.weights = new double[order];
 		for (int i = 0; i < order; i++) {
@@ -134,7 +134,7 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
 		reducedWords.clear();
 		for (int i = 0; i < wordsToScore.size(); i++) {
 			Association w = wordsToScore.get(i);
-			reducedWords.add(reduceWord(w));
+			reducedWords.add(reduceToMuster(w));
 		}
 	}
 
@@ -142,11 +142,11 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
 	 * Returns the given word reduced to a surface word, using the sem class, if
 	 * apropos.
 	 */
-	protected Association reduceWord(Association w) {
-		if (useSemClasses && isReplacementSemClass(w.getEntityClass()))
-			return AssociationPool.createSurfaceWordUsingSemClass(w);
+	protected Association reduceToMuster(Association association) {
+		if (useEntityClasses && isSubstituteEntityClass(association.getEntityClass()))
+			return AssociationPool.createMusterWithEntityClass(association);
 		else
-			return AssociationPool.createMuster(w);
+			return AssociationPool.createMuster(association);
 	}
 
 	/**
@@ -285,7 +285,7 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
 				continue;
 			// parse or tokenize target phrase into words
 			List<Association> words;
-			if (useSemClasses) // use parsed words to get sem classes
+			if (useEntityClasses) // use parsed words to get sem classes
 				words = Grammar.theGrammar.getParsedWords(targets[j]);
 			else
 				words = Grammar.theGrammar.lexicon.tokenizer.tokenize(targets[j]);
@@ -296,7 +296,7 @@ public class NgramPrecisionModel extends NgramScorer implements SelfParaphraseBi
 			int numWords = wordsToScore.size();
 			for (int i = 0; i < numWords; i++) {
 				Association w = wordsToScore.get(i);
-				wordsToScore.set(i, reduceWord(w));
+				wordsToScore.set(i, reduceToMuster(w));
 			}
 			// make and store target n-grams
 			for (int k = 0; k < order; k++) {
