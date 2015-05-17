@@ -396,7 +396,7 @@ public class Symbol implements EntityRealizer, Serializable {
 	// nominals
 	private final void setMaxOrthLengths(Set<Nominal> nominals, TObjectIntHashMap nominalsMap) {
 		// update map
-		Nominal index = category.getIndexNominal();
+		Nominal index = category.getValueNominal();
 		if (index != null && nominals.contains(index)) {
 			int orthLen = getOrthography().length();
 			if (!nominalsMap.containsKey(index) || orthLen > nominalsMap.get(index)) {
@@ -417,7 +417,7 @@ public class Symbol implements EntityRealizer, Serializable {
 	private final void addWordsToXml(Element parent, TObjectIntHashMap nominalsMap) {
 		// check for matching nominal as index of target cat;
 		// if found, update parent to labeled span element
-		Nominal index = category.getIndexNominal();
+		Nominal index = category.getValueNominal();
 		if (index != null && nominalsMap.containsKey(index)
 				&& nominalsMap.get(index) == getOrthography().length()) {
 			// remove index key from map, to avoid duplicate spans with the same

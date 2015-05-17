@@ -128,7 +128,7 @@ public interface Category extends Unifiable, Mutable, java.io.Serializable {
 	 * Returns the nominal which is the value of the index feature on the target
 	 * cat, or null if none.
 	 */
-	public Nominal getIndexNominal();
+	public Nominal getValueNominal();
 
 	/**
 	 * Returns the interned supertag for the category.

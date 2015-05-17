@@ -142,7 +142,7 @@ public class ChartCompleterImp implements ChartCompleter {
 		ScoredSymbol rep = form.get(scoredSymbol);
 		// if none, add as representative
 		if (rep == null) {
-			scoredSymbol.initAltEdges();
+			scoredSymbol.initAlternatives();
 			retval = form.add(scoredSymbol);
 		}
 		// otherwise add as an alternative
@@ -281,7 +281,7 @@ public class ChartCompleterImp implements ChartCompleter {
 		}
 		// restore alts
 		for (ScoredSymbol scoredSymbol : form.getScoredSymbols()) {
-			scoredSymbol.restoreAltEdges();
+			scoredSymbol.restoreAlternatives();
 		}
 		// return
 		return retval;
@@ -321,7 +321,7 @@ public class ChartCompleterImp implements ChartCompleter {
 			}
 		}
 		// replace scoredSymbol's alts
-		scoredSymbol.replaceAltEdges(mergedList);
+		scoredSymbol.replaceAltSymbols(mergedList);
 		// add to unpacked set
 		unpacked.add(scoredSymbol);
 	}
@@ -578,7 +578,7 @@ public class ChartCompleterImp implements ChartCompleter {
 		// nb: should only get initial candidates for representative
 		// scoredSymbols,
 		// but may as well ensure that at least this scoredSymbol is included
-		List<ScoredSymbol> alts = new ArrayList<ScoredSymbol>(scoredSymbol.getAltEdges());
+		List<ScoredSymbol> alts = new ArrayList<ScoredSymbol>(scoredSymbol.getAlternatives());
 		if (alts.isEmpty())
 			alts.add(scoredSymbol);
 		for (ScoredSymbol alt : alts) {

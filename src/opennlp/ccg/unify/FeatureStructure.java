@@ -145,4 +145,5 @@ public interface FeatureStructure extends Unifiable, Mutable {
 	 * Returns a TeX formatted feature structure.
 	 */
 	public String toTeX();
+
 }

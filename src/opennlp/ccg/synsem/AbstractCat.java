@@ -304,10 +304,13 @@ public abstract class AbstractCat implements Category, Serializable {
 	 * Returns the nominal which is the value of the index feature on the target
 	 * cat, or null if none.
 	 */
-	public Nominal getIndexNominal() {
+	public Nominal getValueNominal() {
 		Category target = getTarget();
 		FeatureStructure fs = target.getFeatureStructure();
 		if (fs != null) {
+			Object value = fs.getValue("value");
+			if (value instanceof Nominal)
+				return (Nominal) value;
 			Object index = fs.getValue("index");
 			if (index instanceof Nominal)
 				return (Nominal) index;

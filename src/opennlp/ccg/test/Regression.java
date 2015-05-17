@@ -610,7 +610,7 @@ public class Regression {
 							|| (doRealization && testItem.lfElt == null && testItem.sign == null)) {
 						Symbol sign = parses.get(0);
 						Category cat = sign.getCategory().copy();
-						Nominal index = cat.getIndexNominal();
+						Nominal index = cat.getValueNominal();
 						parsedLF = cat.getLF();
 						index = HyloHelper.getInstance().convertNominals(parsedLF, sign, index);
 						compactedLF = HyloHelper.getInstance().compact(parsedLF, index);
@@ -694,7 +694,7 @@ public class Regression {
 					// use LF from stored sign if available
 					lfToScore = parsedLF;
 					Category cat = testItem.sign.getCategory().copy();
-					Nominal index = cat.getIndexNominal();
+					Nominal index = cat.getValueNominal();
 					goldLF = cat.getLF();
 					index = HyloHelper.getInstance().convertNominals(goldLF, testItem.sign, index);
 				} else {
@@ -806,7 +806,7 @@ public class Regression {
 					Symbol sign = parses.get(k);
 					double edgeScore = parseScores.get(k);
 					Category cat = sign.getCategory().copy();
-					Nominal index = cat.getIndexNominal();
+					Nominal index = cat.getValueNominal();
 					LF parsedLFk = cat.getLF();
 					index = HyloHelper.getInstance().convertNominals(parsedLFk, sign, index);
 					LF compactedLFk = HyloHelper.getInstance().compact(parsedLFk, index);
@@ -864,7 +864,7 @@ public class Regression {
 			else if (testItem.sign != null) {
 				Symbol sign = testItem.sign;
 				Category cat = sign.getCategory().copy();
-				Nominal index = cat.getIndexNominal();
+				Nominal index = cat.getValueNominal();
 				LF convertedLF = HyloHelper.getInstance().compactAndConvertNominals(cat.getLF(),
 						index, sign);
 				inputLF = grammar.transformLF(convertedLF);
@@ -1016,7 +1016,7 @@ public class Regression {
 					nbestrealPW.println("<str>" + best + "</str>");
 					Symbol sign = bestEdge.getSign();
 					Category cat = sign.getCategory().copy();
-					Nominal index = cat.getIndexNominal();
+					Nominal index = cat.getValueNominal();
 					LF lf = cat.getLF();
 					index = HyloHelper.getInstance().convertNominalsToVars(lf, index);
 					index = HyloHelper.getInstance().convertNominals(lf, sign, index);
@@ -1051,7 +1051,7 @@ public class Regression {
 							nbestrealPW.println("<str>" + next + "</str>");
 							Symbol sign = e.getSign();
 							Category cat = sign.getCategory().copy();
-							Nominal index = cat.getIndexNominal();
+							Nominal index = cat.getValueNominal();
 							LF lf = cat.getLF();
 							index = HyloHelper.getInstance().convertNominalsToVars(lf, index);
 							index = HyloHelper.getInstance().convertNominals(lf, sign, index);

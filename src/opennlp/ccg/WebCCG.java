@@ -143,7 +143,7 @@ public class WebCCG {
 					LF convertedLF = null;
 					if (cat.getLF() != null) {
 						cat = cat.copy();
-						Nominal index = cat.getIndexNominal();
+						Nominal index = cat.getValueNominal();
 						convertedLF = HyloHelper.getInstance().compactAndConvertNominals(
 								cat.getLF(), index, results[i]);
 						cat.setLF(null);

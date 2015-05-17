@@ -107,11 +107,11 @@ public class ScoredSymbol implements Serializable {
 	protected List<ScoredSymbol> alternatives = null;
 
 	/** Saved list of alternative edges, for restoring chart after unpacking. */
-	protected transient List<ScoredSymbol> savedAltEdges = null;
+	protected transient List<ScoredSymbol> savedAlternatives = null;
 
 	/** Constructor (score defaults to 0.0). */
-	public ScoredSymbol(Symbol sign) {
-		this(sign, 0.0);
+	public ScoredSymbol(Symbol symbol) {
+		this(symbol, 0.0);
 	}
 
 	/** Constructor with score. */
@@ -121,50 +121,69 @@ public class ScoredSymbol implements Serializable {
 		symbol.addData(new ScoredSymbolHolder(this));
 	}
 
-	/** Returns the sign. */
-	public Symbol getSymbol() {
+	/**
+	 * Gets the symbol.
+	 * 
+	 * @return the symbol
+	 */
+	public final Symbol getSymbol() {
 		return symbol;
 	}
 
-	/** Returns the score. */
-	public double getScore() {
+	/**
+	 * Gets the score.
+	 * 
+	 * @return the score
+	 */
+	public final double getScore() {
 		return score;
 	}
 
-	/** Sets the score. */
-	public void setScore(double score) {
+	/**
+	 * Sets the score.
+	 * 
+	 * @param score the score
+	 */
+	public final void setScore(double score) {
 		this.score = score;
 	}
 
-	/** Returns whether this edge is a representative. */
-	public boolean isRepresentative() {
+	/**
+	 * Returns whether this symbol is a representative.
+	 */
+	public final boolean isRepresentative() {
 		return alternatives != null;
 	}
 
-	/** Returns whether this edge is disjunctive. */
-	public boolean isDisjunctive() {
+	/**
+	 * Returns whether this symbol is disjunctive.
+	 */
+	public final boolean isDisjunctive() {
 		return alternatives != null && alternatives.size() > 1;
 	}
 
-	/** Returns the list of alt edges, or the empty list if none. */
-	public List<ScoredSymbol> getAltEdges() {
-		if (alternatives == null)
+	/**
+	 * Gets the list of alternative symbols, or the empty list if none.
+	 */
+	public final List<ScoredSymbol> getAlternatives() {
+		if (alternatives == null) {
 			return Collections.emptyList();
-		else
+		} else {
 			return alternatives;
+		}
 	}
 
 	/**
-	 * Initializes the alt edges list with a default capacity, adding this edge.
+	 * Initializes the alt symbols list with a default capacity, adding this symbol.
 	 */
-	public void initAltEdges() {
-		initAltEdges(3);
+	public final void initAlternatives() {
+		initAlternatives(3);
 	}
 
 	/**
-	 * Initializes the alt edges list with the given capacity, adding this edge.
+	 * Initializes the alt symbols list with the given capacity, adding this symbol.
 	 */
-	public void initAltEdges(int capacity) {
+	private final void initAlternatives(int capacity) {
 		// check uninitialized
 		if (alternatives != null)
 			throw new RuntimeException("Alt edges already initialized!");
@@ -172,24 +191,26 @@ public class ScoredSymbol implements Serializable {
 		alternatives.add(this);
 	}
 
-	/** Replaces the alt edges, saving the current ones for later restoration. */
-	public void replaceAltEdges(List<ScoredSymbol> newAlts) {
-		savedAltEdges = alternatives;
-		alternatives = newAlts;
+	/**
+	 * Replaces the alt symbols, saving the current ones for later restoration.
+	 */
+	public final void replaceAltSymbols(List<ScoredSymbol> newAlternatives) {
+		savedAlternatives = alternatives;
+		alternatives = newAlternatives;
 	}
 
 	/** Recursively restores saved alt edges, if any. */
-	public void restoreAltEdges() {
-		if (savedAltEdges != null) {
+	public final void restoreAlternatives() {
+		if (savedAlternatives != null) {
 			// restore
-			alternatives = savedAltEdges;
-			savedAltEdges = null;
+			alternatives = savedAlternatives;
+			savedAlternatives = null;
 			// recurse
 			for (ScoredSymbol alt : alternatives) {
 				Symbol[] inputs = alt.symbol.getDerivationHistory().getInputs();
 				if (inputs != null) {
 					for (Symbol s : inputs)
-						recoverScoredSymbol(s).restoreAltEdges();
+						recoverScoredSymbol(s).restoreAlternatives();
 				}
 			}
 		}
@@ -199,7 +220,7 @@ public class ScoredSymbol implements Serializable {
 	 * Returns a hash code for this edge, based on its sign. (Alternatives and
 	 * the score are not considered.)
 	 */
-	public int hashCode() {
+	public final int hashCode() {
 		return symbol.hashCode() * 23;
 	}
 
@@ -207,7 +228,7 @@ public class ScoredSymbol implements Serializable {
 	 * Returns a hash code for this edge based on the sign's surface words.
 	 * (Alternatives and the score are not considered.)
 	 */
-	public int surfaceWordHashCode() {
+	public final int surfaceWordHashCode() {
 		return symbol.surfaceWordHashCode() * 23;
 	}
 
@@ -215,7 +236,7 @@ public class ScoredSymbol implements Serializable {
 	 * Returns whether this edge equals the given object. (Alternatives and the
 	 * score are not considered.)
 	 */
-	public boolean equals(Object obj) {
+	public final boolean equals(Object obj) {
 		if (obj == this)
 			return true;
 		if (!(obj instanceof ScoredSymbol))
@@ -228,13 +249,15 @@ public class ScoredSymbol implements Serializable {
 	 * Returns whether this edge equals the given object based on the sign's
 	 * surface words. (Alternatives and the score are not considered.)
 	 */
-	public boolean surfaceWordEquals(Object obj) {
-		if (obj == this)
+	public final boolean surfaceWordEquals(Object object) {
+		if (object == this) {
 			return true;
-		if (!(obj instanceof ScoredSymbol))
+		}
+		if (!(object instanceof ScoredSymbol)) {
 			return false;
-		ScoredSymbol edge = (ScoredSymbol) obj;
-		return symbol.surfaceWordEquals(edge.symbol);
+		}
+		ScoredSymbol symbol = (ScoredSymbol) object;
+		return symbol.surfaceWordEquals(symbol.symbol);
 	}
 
 	/**
@@ -243,10 +266,11 @@ public class ScoredSymbol implements Serializable {
 	 */
 	public String toString() {
 		StringBuffer sbuf = new StringBuffer();
-		if (score >= 0.001 || score == 0.0)
+		if (score >= 0.001 || score == 0.0) {
 			sbuf.append("[" + nf3.format(score) + "] ");
-		else
+		} else {
 			sbuf.append("[" + nfE.format(score) + "] ");
+		}
 		sbuf.append(symbol.toString());
 		return sbuf.toString();
 	}

@@ -197,7 +197,7 @@ public class Converter {
 	private static boolean lexDominated(String lexPred, Symbol lexSign) {
 		Category cat = lexSign.getCategory();
 		LF lf = cat.getLF();
-		Nominal index = cat.getIndexNominal();
+		Nominal index = cat.getValueNominal();
 		List<SatOp> preds = HyloHelper.getInstance().getPreds(lf);
 		// find EP with lexPred, other lex preds
 		SatOp lexEP = null;

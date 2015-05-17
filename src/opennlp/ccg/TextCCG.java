@@ -589,7 +589,7 @@ public class TextCCG {
 						LF convertedLF = null;
 						if (cat.getLF() != null) {
 							cat = cat.copy();
-							Nominal index = cat.getIndexNominal();
+							Nominal index = cat.getValueNominal();
 							Symbol rootSign = results[i]; // could add a switch
 															// here for naming
 															// convention

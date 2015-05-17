@@ -319,7 +319,7 @@ public class Testbed {
 					// System.out.println("Found LF");
 					sign = iter.next();
 					cat = sign.getCategory();
-					index = cat.getIndexNominal();
+					index = cat.getValueNominal();
 					flatLF = cat.getLF();
 					if (flatLF != null) {
 						lf = HyloHelper.getInstance()
@@ -338,7 +338,7 @@ public class Testbed {
 				if (matchSRLF == 0) {
 					sign = signs.asSymbolSet().iterator().next();
 					cat = sign.getCategory();
-					index = cat.getIndexNominal();
+					index = cat.getValueNominal();
 					flatLF = cat.getLF();
 					if (flatLF != null)
 						lf = HyloHelper.getInstance()

@@ -563,7 +563,7 @@ public class Parser {
 		double bestF = 0.0;
 		for (Symbol sign : result) {
 			Category cat = sign.getCategory().copy();
-			Nominal index = cat.getIndexNominal();
+			Nominal index = cat.getValueNominal();
 			LF parsedLF = cat.getLF();
 			if (parsedLF != null) {
 				index = HyloHelper.getInstance().convertNominals(parsedLF, sign, index);

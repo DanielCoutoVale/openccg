@@ -473,7 +473,7 @@ public class LexDepFeatureExtractor implements FeatureExtractor {
 			// set status to definite by default; check for indef
 			def = Boolean.TRUE;
 			// get sem feats
-			Nominal npNom = npSign.getCategory().getIndexNominal();
+			Nominal npNom = npSign.getCategory().getValueNominal();
 			List<SatOp> semFeats = HyloHelper.getInstance().getSemFeatsForHead(npNom,
 					npSign.getCategory().getLF());
 			// check for <det>nil
