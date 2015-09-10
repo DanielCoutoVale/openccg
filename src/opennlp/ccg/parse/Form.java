@@ -14,9 +14,16 @@ import opennlp.ccg.synsem.Symbol;
 import opennlp.ccg.synsem.SymbolHash;
 
 /**
- * An instance of a form that is associated with zero or more scored symbols.
- * Implementationwise, a form that is associated with a sorted list of scored
- * symbols and a scored symbol map.
+ * A form is a cell in a chart. From a graphic perspective, it corresponds to a 2-dimentional area
+ * on the computer screen, where glyphs are drawn (graphic form); from a graphological perspective,
+ * it corresponds to a 1-dimentional segment of a character string (graphological form); from a
+ * grammatic perspective, it corresponds to an atomic or composite symbol (lexicogrammatical form);
+ * and from a semantic perspective, it corresponds to a rhetorical entity (semantic/logical form). 
+ * 
+ * Implementationwise, since a form is stored as a cell in a graphological chart, it is a
+ * graphological form. Coming from graphology upwards into lexicogrammar, the same graphological
+ * form can be associated with different symbols. This one-to-many relation is represented
+ * here in the form of two field: 1) a sorted list of scored symbols and 2) a scored symbol map.
  *
  * @author Jason Baldridge
  * @author Gann Bierner
