@@ -137,8 +137,21 @@ public class FormRecognizer {
 	public final Chart recognizeForms(String characterSequence) throws IOException {
 		UnifyControl.startUnifySequence();
 		Chart chart = chartFactory.makeChart(characterSequence.length());
+		return recognizeForms(characterSequence, chart, 0);
+	}
+
+	/**
+	 * Recognizes words in a wording
+	 * 
+	 * @param characterSequence the wording
+	 * @param chart a chart with recognized words
+	 * @param begin the begin index
+	 * @return a chart with recognized words
+	 * @throws IOException when a chart document cannot be created
+	 */
+	public final Chart recognizeForms(String characterSequence, Chart chart, int begin) {
 		ChartCompleter chartCompleter = chartCompleterFactory.makeChartCompleter(chart);
-		for (int index = 0; index < characterSequence.length(); index++) {
+		for (int index = begin; index < characterSequence.length(); index++) {
 			recognizeForms(characterSequence, index, chartCompleter);
 		}
 		return chart;

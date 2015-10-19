@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The implementation of a sparse chart as a hash map of a hash map. This
@@ -19,7 +22,7 @@ import java.util.Map;
  * 
  * @author Daniel Couto-Vale
  */
-public class SparseChart implements Chart, Serializable {
+public class SparseChart implements Chart, Serializable, Iterable<TextSegment> {
 
 	/**
 	 * Generated serial version
@@ -34,7 +37,7 @@ public class SparseChart implements Chart, Serializable {
 	/**
 	 * The size of the chart.
 	 */
-	private final int size;
+	private int size;
 
 	/**
 	 * Constructor
@@ -106,4 +109,90 @@ public class SparseChart implements Chart, Serializable {
 		return size;
 	}
 
+	@Override
+	public Iterator<TextSegment> iterator() {
+		return new SparseChartFormIterator(formMapMap);
+	}
+
+	/**
+	 * Increment size
+	 */
+	public final void incSize() {
+		size++;
+	}
+
+	/**
+	 * Increment size
+	 * 
+	 * @param inc the size increment
+	 */
+	public final void incSize(int inc) {
+		size += inc;
+	}
+
+	/**
+	 * Clear from an offset on
+	 * 
+	 * @param offset the offset
+	 */
+	public final void clear(int offset) {
+		Set<Integer> keys = new HashSet<Integer>();
+		keys.addAll(formMapMap.keySet());
+		for (Integer key : keys) {
+			if (key >= offset) {
+				formMapMap.remove(key);
+			}
+		}
+	}
+
 }
+
+class SparseChartFormIterator implements Iterator<TextSegment> {
+
+	private final Map<Integer, Map<Integer, Form>> formMapMap;
+	private Iterator<Integer> beginIt;
+	private Iterator<Integer> endIt;
+	private Integer begin = -1;
+	private Integer end = -1;
+	private TextSegment next;
+
+	public SparseChartFormIterator(Map<Integer, Map<Integer, Form>> formMapMap) {
+		this.formMapMap = formMapMap;
+		next = fetchNext(); 
+	}
+
+	private final TextSegment fetchNext() {
+		if (beginIt == null) {
+			beginIt = formMapMap.keySet().iterator();
+		}
+		while (endIt == null || !endIt.hasNext()) {
+			if (!beginIt.hasNext()) {
+				return null;
+			} else {
+				begin = beginIt.next();
+				endIt = formMapMap.get(begin).keySet().iterator();
+			}
+		}
+		end = endIt.next();
+		return new TextSegment(begin, end);
+	}
+
+	@Override
+	public final boolean hasNext() {
+		return next != null;
+	}
+
+	@Override
+	public final TextSegment next() {
+		TextSegment current = next;
+		next = fetchNext();
+		return current;
+	}
+
+	@Override
+	public void remove() {
+		throw new UnsupportedOperationException();
+	}
+	
+}
+
