@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Author: Daniel Couto Vale -->
+<morph 
+  name="Latin"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../morph.xsd">
+    
+  <entry word="dīc"   pos="VerbStem" class="Dīcere" macros="@dīc-stem @ø-strand @ō-aspect @short"/>
+  <entry word="dīci"  pos="VerbStem" class="Dīcere" macros="@dīc-stem @ø-strand @ō-aspect @long @closed"/>
+  <entry word="dīce"  pos="VerbStem" class="Dīcere" macros="@dīc-stem @ø-strand @ō-aspect @long @open"/>
+  <entry word="dīx"   pos="VerbStem" class="Dīcere" macros="@dīc-stem @h-strand @ī-aspect"/>
+  <entry word="dict"  pos="VerbStem" class="Dīcere" macros="@dīc-stem @0-strand @ū-aspect"/>
+  
+  <entry word="faci"  pos="VerbStem" class="Facere" macros="@faci-stem @i-strand @ō-aspect @closed"/>
+  <entry word="face"  pos="VerbStem" class="Facere" macros="@faci-stem @i-strand @ō-aspect @open"/>
+  <entry word="fēc"   pos="VerbStem" class="Facere" macros="@faci-stem @h-strand @ī-aspect"/>
+  <entry word="fact"  pos="VerbStem" class="Facere" macros="@faci-stem @0-strand @ū-aspect"/>
+  
+  <entry word="jace"  pos="VerbStem" class="Jacēre" macros="@jacē-stem @ē-strand @ō-aspect @weak"/>
+  <entry word="jacē"  pos="VerbStem" class="Jacēre" macros="@jacē-stem @ē-strand @ō-aspect @strong"/>
+  <entry word="jacu"  pos="VerbStem" class="Jacēre" macros="@jacē-stem @h-strand @ī-aspect"/>
+  <entry word="jacit" pos="VerbStem" class="Jacēre" macros="@jacē-stem @0-strand @ū-aspect"/>
+    
+  <entry word="loqu"  pos="VerbStem" class="Loquī" macros="@loqu-stem @ø-strand @ō-aspect @short"/>
+  <entry word="loqui" pos="VerbStem" class="Loquī" macros="@loqu-stem @ø-strand @ō-aspect @long @closed"/>
+  <entry word="loque" pos="VerbStem" class="Loquī" macros="@loqu-stem @ø-strand @ō-aspect @long @open"/>
+  <entry word="locūt" pos="VerbStem" class="Loquī" macros="@loqu-stem @0-strand @ū-aspect"/>
+  
+  <entry word="nōsci" pos="VerbStem" class="Nōvisse" macros="@nō-stem @i-strand @ō-aspect @closed"/>
+  <entry word="nōsce" pos="VerbStem" class="Nōvisse" macros="@nō-stem @i-strand @ō-aspect @open"/>
+  <entry word="nōv"   pos="VerbStem" class="Nōvisse" macros="@nō-stem @h-strand @ī-aspect"/>
+  <entry word="nōt"   pos="VerbStem" class="Nōvisse" macros="@nō-stem @0-strand @ū-aspect"/>
+  
+  <entry word="put"   pos="VerbStem" class="Putāre" macros="@putā-stem @ā-strand @ō-aspect @short"/>
+  <entry word="puta"  pos="VerbStem" class="Putāre" macros="@putā-stem @ā-strand @ō-aspect @long @weak"/>
+  <entry word="putā"  pos="VerbStem" class="Putāre" macros="@putā-stem @ā-strand @ō-aspect @long @strong"/>
+  <entry word="putā"  pos="VerbStem" class="Putāre" macros="@putā-stem @v-strand @ī-aspect @short"/>
+  <entry word="putāv" pos="VerbStem" class="Putāre" macros="@putā-stem @v-strand @ī-aspect @long"/>
+  <entry word="putāt" pos="VerbStem" class="Putāre" macros="@putā-stem @0-strand @ū-aspect"/>
+  
+  <entry word="sede"  pos="VerbStem" class="Sedēre" macros="@sedē-stem @ē-strand @ō-aspect @weak"/>
+  <entry word="sedē"  pos="VerbStem" class="Sedēre" macros="@sedē-stem @ē-strand @ō-aspect @strong"/>
+  <entry word="sēd"   pos="VerbStem" class="Sedēre" macros="@sedē-stem @h-strand @ī-aspect"/>
+  <entry word="sess"  pos="VerbStem" class="Sedēre" macros="@sedē-stem @0-strand @ū-aspect"/>
+  
+  <entry word="st"    pos="VerbStem" class="Stāre" macros="@stā-stem @ā-strand @ō-aspect @short"/>
+  <entry word="sta"   pos="VerbStem" class="Stāre" macros="@stā-stem @ā-strand @ō-aspect @long @weak"/>
+  <entry word="stā"   pos="VerbStem" class="Stāre" macros="@stā-stem @ā-strand @ō-aspect @long @strong"/>
+  <entry word="stet"  pos="VerbStem" class="Stāre" macros="@stā-stem @h-strand @ī-aspect"/>
+  <entry word="stat"  pos="VerbStem" class="Stāre" macros="@stā-stem @0-strand @ū-aspect"/>
+  
+  <entry word="veni"  pos="VerbStem" class="Venīre" macros="@venī-stem @ī-strand @ō-aspect @weak"/>
+  <entry word="venī"  pos="VerbStem" class="Venīre" macros="@venī-stem @ī-strand @ō-aspect @strong"/>
+  <entry word="vēn"   pos="VerbStem" class="Venīre" macros="@venī-stem @h-strand @ī-aspect"/>
+  <entry word="vent"  pos="VerbStem" class="Venīre" macros="@venī-stem @0-strand @ū-aspect"/>
+  
+  <entry word="vide"  pos="VerbStem" class="Vidēre" macros="@vidē-stem @ē-strand @ō-aspect @weak"/>
+  <entry word="vidē"  pos="VerbStem" class="Vidēre" macros="@vidē-stem @ē-strand @ō-aspect @strong"/>
+  <entry word="vīd"   pos="VerbStem" class="Vidēre" macros="@vidē-stem @h-strand @ī-aspect"/>
+  <entry word="vīs"   pos="VerbStem" class="Vidēre" macros="@vidē-stem @0-strand @ū-aspect"/>
+  
+  <entry word="ō"     pos="VerbLeaf" macros="@ō-leaf @ō-adaption"/>
+  <entry word="s"     pos="VerbLeaf" macros="@s-leaf @s-adaption"/>
+  <entry word="t"     pos="VerbLeaf" macros="@t-leaf @t-adaption"/>
+  <entry word="mus"   pos="VerbLeaf" macros="@mus-leaf @s-adaption"/>
+  <entry word="tis"   pos="VerbLeaf" macros="@tis-leaf @s-adaption"/>
+  <entry word="nt"    pos="VerbLeaf" macros="@nt-leaf @n-adaption @ā-strand"/>
+  <entry word="nt"    pos="VerbLeaf" macros="@nt-leaf @n-adaption @ē-strand"/>
+  <entry word="unt"   pos="VerbLeaf" macros="@nt-leaf @n-adaption @ī-strand"/>
+  <entry word="unt"   pos="VerbLeaf" macros="@nt-leaf @n-adaption @i-strand"/>
+  <entry word="unt"   pos="VerbLeaf" macros="@nt-leaf @n-adaption @ø-strand"/>
+  <entry word="or"    pos="VerbLeaf" macros="@or-leaf @ō-adaption"/>
+  <entry word="ris"   pos="VerbLeaf" macros="@ris-leaf @s-adaption"/>
+  <entry word="tur"   pos="VerbLeaf" macros="@tur-leaf @s-adaption"/>
+  <entry word="mur"   pos="VerbLeaf" macros="@mur-leaf @s-adaption"/>
+  <entry word="minī"  pos="VerbLeaf" macros="@minī-leaf @s-adaption"/>
+  <entry word="ntur"  pos="VerbLeaf" macros="@ntur-leaf @n-adaption @ā-strand"/>
+  <entry word="ntur"  pos="VerbLeaf" macros="@ntur-leaf @n-adaption @ē-strand"/>
+  <entry word="untur" pos="VerbLeaf" macros="@ntur-leaf @n-adaption @ī-strand"/>
+  <entry word="untur" pos="VerbLeaf" macros="@ntur-leaf @n-adaption @i-strand"/>
+  <entry word="untur" pos="VerbLeaf" macros="@ntur-leaf @n-adaption @ø-strand"/>
+  
+  <entry word="ī"     pos="VerbLeaf" macros="@ī-leaf @ī-adaption"/>
+  <entry word="istī"  pos="VerbLeaf" macros="@istī-leaf @š-adaption @h-strand"/>
+  <entry word="stī"   pos="VerbLeaf" macros="@istī-leaf @š-adaption @v-strand"/>
+  <entry word="it"    pos="VerbLeaf" macros="@it-leaf @ī-adaption"/>
+  <entry word="imus"  pos="VerbLeaf" macros="@imus-leaf @ī-adaption"/>
+  <entry word="itis"  pos="VerbLeaf" macros="@istis-leaf @š-adaption @h-strand"/>
+  <entry word="stis"  pos="VerbLeaf" macros="@istis-leaf @š-adaption @v-strand"/>
+  <entry word="ērunt" pos="VerbLeaf" macros="@ērunt-leaf @š-adaption @h-strand"/>
+  <entry word="runt"  pos="VerbLeaf" macros="@ērunt-leaf @š-adaption @v-strand"/>
+  
+  <entry word="a"     pos="VerbLeaf" macros="@a-leaf @0-adaption"/>
+  <entry word="ae"    pos="VerbLeaf" macros="@ae-leaf @0-adaption"/>
+  <entry word="am"    pos="VerbLeaf" macros="@am-leaf @0-adaption"/>
+  <entry word="ā"     pos="VerbLeaf" macros="@ā-leaf @0-adaption"/>
+  <entry word="ārum"  pos="VerbLeaf" macros="@ārum-leaf @0-adaption"/>
+  <entry word="ās"    pos="VerbLeaf" macros="@ās-leaf @0-adaption"/>
+  <entry word="ī"     pos="VerbLeaf" macros="@ī-leaf @0-adaption"/>
+  <entry word="īs"    pos="VerbLeaf" macros="@īs-leaf @0-adaption"/>
+  <entry word="ō"     pos="VerbLeaf" macros="@ō-leaf @0-adaption"/>
+  <entry word="ōrum"  pos="VerbLeaf" macros="@ōrum-leaf @0-adaption"/>
+  <entry word="ōs"    pos="VerbLeaf" macros="@ōs-leaf @0-adaption"/>
+  <entry word="um"    pos="VerbLeaf" macros="@um-leaf @0-adaption"/>
+  <entry word="us"    pos="VerbLeaf" macros="@us-leaf @0-adaption"/>
+  
+  <macro name="@dīc-stem"><fs id="1"><feat attr="stem" val="dīc"/></fs></macro>
+  <macro name="@faci-stem"><fs id="1"><feat attr="stem" val="faci"/></fs></macro>
+  <macro name="@jacē-stem"><fs id="1"><feat attr="stem" val="jacē"/></fs></macro>
+  <macro name="@loqu-stem"><fs id="1"><feat attr="stem" val="loqu"/></fs></macro>
+  <macro name="@nō-stem"><fs id="1"><feat attr="stem" val="nō"/></fs></macro>
+  <macro name="@putā-stem"><fs id="1"><feat attr="stem" val="putā"/></fs></macro>
+  <macro name="@sedē-stem"><fs id="1"><feat attr="stem" val="sedē"/></fs></macro>
+  <macro name="@stā-stem"><fs id="1"><feat attr="stem" val="stā"/></fs></macro>
+  <macro name="@venī-stem"><fs id="1"><feat attr="stem" val="venī"/></fs></macro>
+  <macro name="@vidē-stem"><fs id="1"><feat attr="stem" val="vidē"/></fs></macro>
+  
+  <macro name="@ō-leaf"><fs id="1"><feat attr="leaf" val="ō"/></fs></macro>
+  <macro name="@s-leaf"><fs id="1"><feat attr="leaf" val="s"/></fs></macro>
+  <macro name="@t-leaf"><fs id="1"><feat attr="leaf" val="t"/></fs></macro>
+  <macro name="@mus-leaf"><fs id="1"><feat attr="leaf" val="mus"/></fs></macro>
+  <macro name="@tis-leaf"><fs id="1"><feat attr="leaf" val="tis"/></fs></macro>
+  <macro name="@nt-leaf"><fs id="1"><feat attr="leaf" val="nt"/></fs></macro>
+  <macro name="@or-leaf"><fs id="1"><feat attr="leaf" val="or"/></fs></macro>
+  <macro name="@ris-leaf"><fs id="1"><feat attr="leaf" val="ris"/></fs></macro>
+  <macro name="@tur-leaf"><fs id="1"><feat attr="leaf" val="tur"/></fs></macro>
+  <macro name="@mur-leaf"><fs id="1"><feat attr="leaf" val="mur"/></fs></macro>
+  <macro name="@minī-leaf"><fs id="1"><feat attr="leaf" val="minī"/></fs></macro>
+  <macro name="@ntur-leaf"><fs id="1"><feat attr="leaf" val="ntur"/></fs></macro>
+  
+  <macro name="@ī-leaf"><fs id="1"><feat attr="leaf" val="ī"/></fs></macro>
+  <macro name="@istī-leaf"><fs id="1"><feat attr="leaf" val="istī"/></fs></macro>
+  <macro name="@it-leaf"><fs id="1"><feat attr="leaf" val="it"/></fs></macro>
+  <macro name="@imus-leaf"><fs id="1"><feat attr="leaf" val="imus"/></fs></macro>
+  <macro name="@istis-leaf"><fs id="1"><feat attr="leaf" val="istis"/></fs></macro>
+  <macro name="@ērunt-leaf"><fs id="1"><feat attr="leaf" val="ērunt"/></fs></macro>
+  
+  <macro name="@a-leaf"><fs id="1"><feat attr="leaf" val="a"/></fs></macro>
+  <macro name="@ae-leaf"><fs id="1"><feat attr="leaf" val="ae"/></fs></macro>
+  <macro name="@am-leaf"><fs id="1"><feat attr="leaf" val="am"/></fs></macro>
+  <macro name="@ā-leaf"><fs id="1"><feat attr="leaf" val="ā"/></fs></macro>
+  <macro name="@ārum-leaf"><fs id="1"><feat attr="leaf" val="ārum"/></fs></macro>
+  <macro name="@ās-leaf"><fs id="1"><feat attr="leaf" val="ās"/></fs></macro>
+  <macro name="@īs-leaf"><fs id="1"><feat attr="leaf" val="īs"/></fs></macro>
+  <macro name="@ōrum-leaf"><fs id="1"><feat attr="leaf" val="ōrum"/></fs></macro>
+  <macro name="@ōs-leaf"><fs id="1"><feat attr="leaf" val="ōs"/></fs></macro>
+  <macro name="@um-leaf"><fs id="1"><feat attr="leaf" val="um"/></fs></macro>
+  <macro name="@us-leaf"><fs id="1"><feat attr="leaf" val="us"/></fs></macro>
+  
+  <macro name="@ō-aspect"><fs id="1"><feat attr="aspect" val="ō"/></fs></macro>
+  <macro name="@ī-aspect"><fs id="1"><feat attr="aspect" val="ī"/></fs></macro>
+  <macro name="@ū-aspect"><fs id="1"><feat attr="aspect" val="ū"/></fs></macro>
+  
+  <macro name="@ā-strand"><fs id="1"><feat attr="strand" val="ā"/></fs></macro>
+  <macro name="@ē-strand"><fs id="1"><feat attr="strand" val="ē"/></fs></macro>
+  <macro name="@ī-strand"><fs id="1"><feat attr="strand" val="ī"/></fs></macro>
+  <macro name="@i-strand"><fs id="1"><feat attr="strand" val="i"/></fs></macro>
+  <macro name="@ø-strand"><fs id="1"><feat attr="strand" val="ø"/></fs></macro>
+  <macro name="@v-strand"><fs id="1"><feat attr="strand" val="v"/></fs></macro>
+  <macro name="@h-strand"><fs id="1"><feat attr="strand" val="hard"/></fs></macro>
+  <macro name="@0-strand"><fs id="1"><feat attr="strand" val="no"/></fs></macro>
+
+  <macro name="@short"><fs id="1"><feat attr="length" val="short"/></fs></macro>
+  <macro name="@long"><fs id="1"><feat attr="length" val="long"/></fs></macro>
+
+  <macro name="@weak"><fs id="1"><feat attr="strength" val="weak"/></fs></macro>
+  <macro name="@strong"><fs id="1"><feat attr="strength" val="strong"/></fs></macro>
+  
+  <macro name="@open"><fs id="1"><feat attr="opening" val="open"/></fs></macro>
+  <macro name="@closed"><fs id="1"><feat attr="opening" val="closed"/></fs></macro>
+  
+  <macro name="@ō-adaption"><fs id="1"><feat attr="adaption" val="ō"/></fs></macro>
+  <macro name="@n-adaption"><fs id="1"><feat attr="adaption" val="n"/></fs></macro>
+  <macro name="@t-adaption"><fs id="1"><feat attr="adaption" val="t"/></fs></macro>
+  <macro name="@s-adaption"><fs id="1"><feat attr="adaption" val="s"/></fs></macro>
+  <macro name="@r-adaption"><fs id="1"><feat attr="adaption" val="r"/></fs></macro>
+  <macro name="@š-adaption"><fs id="1"><feat attr="adaption" val="š"/></fs></macro>
+  <macro name="@ī-adaption"><fs id="1"><feat attr="adaption" val="ī"/></fs></macro>
+  <macro name="@0-adaption"><fs id="1"><feat attr="adaption" val="no"/></fs></macro>
+  
+</morph>

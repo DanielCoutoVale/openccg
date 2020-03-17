@@ -1,0 +1,1726 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Author: Daniel Couto Vale -->
+<rules
+  name="Latin"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../rules.xsd"
+>
+  <application dir="forward"/>
+  <application dir="backward"/>
+  <composition dir="forward" harmonic="true"/>
+  <composition dir="forward" harmonic="false"/>
+  <composition dir="backward" harmonic="true"/>
+  <composition dir="backward" harmonic="false"/>
+  <typeraising dir="forward" useDollar="false"/>
+  <typeraising dir="backward" useDollar="true"/>
+  <substitution dir="forward" harmonic="true"/>
+  <substitution dir="forward" harmonic="false"/>
+  <substitution dir="backward" harmonic="true"/>
+  <substitution dir="backward" harmonic="false"/>
+  
+  <!-- Adaptions -->
+  <typechanging name="ā-ō-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ā"/>
+          <feat attr="length" val="short"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="ō"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ā-n-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ā"/>
+          <feat attr="length" val="long"/>
+          <feat attr="strength" val="weak"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="n"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ā-t-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ā"/>
+          <feat attr="length" val="long"/>
+          <feat attr="strength" val="weak"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="t"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ā-s-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ā"/>
+          <feat attr="length" val="long"/>
+          <feat attr="strength" val="strong"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="s"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ā-r-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ā"/>
+          <feat attr="length" val="long"/>
+          <feat attr="strength" val="strong"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="r"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  
+  <typechanging name="ē-ō-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ē"/>
+          <feat attr="strength" val="weak"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="ō"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ē-n-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ē"/>
+          <feat attr="strength" val="weak"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="n"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ē-t-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ē"/>
+          <feat attr="strength" val="weak"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="t"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ē-s-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ē"/>
+          <feat attr="strength" val="strong"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="s"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ē-r-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ē"/>
+          <feat attr="strength" val="strong"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="r"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  
+  <typechanging name="ī-ō-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ī"/>
+          <feat attr="strength" val="weak"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="ō"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ī-n-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ī"/>
+          <feat attr="strength" val="weak"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="n"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ī-t-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ī"/>
+          <feat attr="strength" val="weak"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="t"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ī-s-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ī"/>
+          <feat attr="strength" val="strong"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="s"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ī-r-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ī"/>
+          <feat attr="strength" val="strong"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="r"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  
+  <typechanging name="i-ō-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="i"/>
+          <feat attr="opening" val="closed"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="ō"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="i-n-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="i"/>
+          <feat attr="opening" val="closed"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="n"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="i-t-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="i"/>
+          <feat attr="opening" val="closed"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="t"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="i-s-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="i"/>
+          <feat attr="opening" val="closed"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="s"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="i-r-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="i"/>
+          <feat attr="opening" val="open"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="r"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  
+  <typechanging name="ø-ō-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ø"/>
+          <feat attr="length" val="short"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="ō"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ø-n-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ø"/>
+          <feat attr="length" val="short"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="n"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ø-t-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ø"/>
+          <feat attr="length" val="long"/>
+          <feat attr="opening" val="closed"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="t"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ø-s-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ø"/>
+          <feat attr="length" val="long"/>
+          <feat attr="opening" val="closed"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="s"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ø-r-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="ø"/>
+          <feat attr="length" val="long"/>
+          <feat attr="opening" val="open"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="r"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  
+  <typechanging name="v-ī-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="v"/>
+          <feat attr="length" val="long"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="ī"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="v-š-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="v"/>
+          <feat attr="length" val="short"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="š"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  
+  <typechanging name="hard-ī-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="hard"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="ī"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="hard-š-adaption">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="hard"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="š"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+
+  <typechanging name="0-strand">
+    <arg>
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="strand" val="no"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Stem2">
+        <fs id="1">
+          <feat attr="adaption" val="no"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  
+  <!-- OST-SEAMS -->
+  <typechanging name="core1">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="ō"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="ō-seam"/>
+          <feat attr="foliage" val="ō-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core2">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="or"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="ō-seam"/>
+          <feat attr="foliage" val="or-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core3">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="s"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="s-seam"/>
+          <feat attr="foliage" val="ō-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core4">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="ris"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="s-seam"/>
+          <feat attr="foliage" val="or-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core5">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="t"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="t-seam"/>
+          <feat attr="foliage" val="ō-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core6">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="tur"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="t-seam"/>
+          <feat attr="foliage" val="or-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core7">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="mus"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="mus-seam"/>
+          <feat attr="foliage" val="ō-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core8">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="mur"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="mus-seam"/>
+          <feat attr="foliage" val="or-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core9">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="tis"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="tis-seam"/>
+          <feat attr="foliage" val="ō-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core10">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="minī"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="tis-seam"/>
+          <feat attr="foliage" val="or-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core11">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="nt"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="nt-seam"/>
+          <feat attr="foliage" val="ō-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core12">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="ntur"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="nt-seam"/>
+          <feat attr="foliage" val="or-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core13">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ī"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="ī"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="ō-seam"/>
+          <feat attr="foliage" val="ī-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core14">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ī"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="istī"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="s-seam"/>
+          <feat attr="foliage" val="ī-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core15">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ī"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="it"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="t-seam"/>
+          <feat attr="foliage" val="ī-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core16">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ī"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="imus"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="mus-seam"/>
+          <feat attr="foliage" val="ī-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core17">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ī"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="istis"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="tis-seam"/>
+          <feat attr="foliage" val="ī-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core18">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ī"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="ērunt"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="nt-seam"/>
+          <feat attr="foliage" val="ī-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core19">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ū"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="a"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ū-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="a-am-seam"/>
+          <feat attr="foliage" val="a-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core20">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ū"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="um"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ū-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="um-um-seam"/>
+          <feat attr="foliage" val="a-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core21">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ū"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="us"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ū-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="us-um-seam"/>
+          <feat attr="foliage" val="a-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core22">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ū"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="ae"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ū-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="ae-ās-seam"/>
+          <feat attr="foliage" val="a-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core23">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ū"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="a"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ū-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="a-a-seam"/>
+          <feat attr="foliage" val="a-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core24">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ū"/>
+          <feat attr="branch" val="none"/>
+          <feat attr="leaf" val="ī"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ū-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="seam" val="ī-ōs-seam"/>
+          <feat attr="foliage" val="a-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  
+  <typechanging name="ō-seam">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="ō-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="person"/>
+          <feat attr="seamed-element-speech-role" val="sender"/>
+          <feat attr="seamed-element-quantity" val="1"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="s-seam">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="s-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="person"/>
+          <feat attr="seamed-element-speech-role" val="addressee"/>
+          <feat attr="seamed-element-quantity" val="1"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="t-seam1">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="t-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="person"/>
+          <feat attr="seamed-element-speech-role" val="noninteractant"/>
+          <feat attr="seamed-element-quantity" val="1"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="t-seam2">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="t-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="substance"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="t-seam3">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="t-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="classified-stuff"/>
+          <feat attr="seamed-element-quantity" val="1"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="t-seam4">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="t-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="named-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="a-am-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="t-seam5">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="t-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="named-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="um-um-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="t-seam6">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="t-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="named-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="us-um-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="mus-seam">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="mus-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="person"/>
+          <feat attr="seamed-element-speech-role" val="sender+"/>
+          <feat attr="seamed-element-quantity" val="2+"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="tis-seam">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="tis-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="person"/>
+          <feat attr="seamed-element-speech-role" val="sender-addressee+"/>
+          <feat attr="seamed-element-quantity" val="2+"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="nt-seam1">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="nt-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="person"/>
+          <feat attr="seamed-element-speech-role" val="sender-addressee-"/>
+          <feat attr="seamed-element-quantity" val="2+"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="nt-seam2">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="nt-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="classified-stuff"/>
+          <feat attr="seamed-element-quantity" val="2+"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="nt-seam3">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="nt-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="named-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="ae-ās-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="nt-seam4">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="nt-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="named-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="a-a-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="nt-seam5">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="nt-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="named-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="ī-ōs-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="a-am-seam1">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="a-am-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="named-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="a-am-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="a-am-seam2">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="a-am-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="classified-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="a-rhyme"/>
+          <feat attr="seamed-element-quantity" val="1"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="a-am-seam3">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="a-am-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="substance"/>
+          <feat attr="seamed-element-rhyme-category" val="a-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="a-am-seam4">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="a-am-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="person"/>
+          <feat attr="seamed-element-gender" val="female"/>
+          <feat attr="seamed-element-quantity" val="1"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="um-um-seam1">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="um-um-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="named-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="um-um-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="um-um-seam2">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="um-um-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="classified-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="um-rhyme"/>
+          <feat attr="seamed-element-quantity" val="1"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="um-um-seam3">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="um-um-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="substance"/>
+          <feat attr="seamed-element-rhyme-category" val="um-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="us-um-seam1">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="us-um-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="named-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="us-um-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="us-um-seam2">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="us-um-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="classified-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="us-rhyme"/>
+          <feat attr="seamed-element-quantity" val="1"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="us-um-seam3">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="us-um-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="substance"/>
+          <feat attr="seamed-element-rhyme-category" val="us-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="us-um-seam4">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="us-um-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="person"/>
+          <feat attr="seamed-element-gender" val="male"/>
+          <feat attr="seamed-element-quantity" val="1"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ae-ās-seam1">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="ae-ās-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="named-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="ae-ās-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ae-ās-seam2">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="ae-ās-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="classified-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="a-rhyme"/>
+          <feat attr="seamed-element-quantity" val="2+"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ae-ās-seam4">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="ae-ās-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="person"/>
+          <feat attr="seamed-element-gender" val="male-"/>
+          <feat attr="seamed-element-quantity" val="2+"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="a-a-seam1">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="a-a-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="named-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="a-a-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="a-a-seam2">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="a-a-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="classified-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="um-rhyme"/>
+          <feat attr="seamed-element-quantity" val="2+"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ī-ōs-seam1">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="ī-ōs-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="named-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="ī-ōs-rhyme"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="ī-ōs-seam2">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="ī-ōs-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="classified-stuff"/>
+          <feat attr="seamed-element-rhyme-category" val="us-rhyme"/>
+          <feat attr="seamed-element-quantity" val="2+"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="us-um-seam4">
+    <arg>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="seam" val="ī-ōs-seam"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="seamed-element-type" val="person"/>
+          <feat attr="seamed-element-gender" val="male+"/>
+          <feat attr="seamed-element-quantity" val="2+"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  
+  <!-- TENSE: present -->
+  <typechanging name="Sedeō-type-present">
+    <arg>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="foliage" val="ō-foliage"/>
+          <feat attr="index"><lf><nomvar name="P:Sedeō-type"/></lf></feat>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="VerbGroup">
+        <fs id="1">
+          <feat attr="tense" val="present"/>
+          <feat attr="mode" val="injunctive"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="Nōvī-type-present">
+    <arg>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="foliage" val="ī-foliage"/>
+          <feat attr="index"><lf><nomvar name="P:Nōvī-type"/></lf></feat>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="VerbGroup">
+        <fs id="1">
+          <feat attr="tense" val="present"/>
+          <feat attr="mode" val="injunctive"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="Dīcō-type-present">
+    <arg>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="foliage" val="ō-foliage"/>
+          <feat attr="index"><lf><nomvar name="P:Dīcō-type"/></lf></feat>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="VerbGroup">
+        <fs id="1">
+          <feat attr="tense" val="present"/>
+          <feat attr="mode" val="injunctive"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="Loquor-type-present">
+    <arg>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="foliage" val="or-foliage"/>
+          <feat attr="index"><lf><nomvar name="P:Loquor-type"/></lf></feat>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="VerbGroup">
+        <fs id="1">
+          <feat attr="tense" val="present"/>
+          <feat attr="mode" val="injunctive"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  
+</rules>

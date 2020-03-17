@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- Author: Daniel Couto Vale -->
+<grammar name="Latin"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../grammar.xsd"
+>
+
+  <lexicon file="lexicon.xml"/>
+  <morphology file="morphemes.xml"/>
+  <rules file="rules.xml"/>
+  <types file="types.xml"/>
+
+</grammar>
+

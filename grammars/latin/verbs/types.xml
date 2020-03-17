@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Author: Daniel Couto Vale -->
+<types name="Latin"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="../../types.xsd" >
+  <type name="Phenomenon"/>
+  <type name="Dīcō-type"/>
+  <type name="Loquor-type"/>
+  <type name="Nōvī-type"/>
+  <type name="Sedeō-type"/>
+  <type name="Process" parents="Phenomenon"/>
+  <type name="Dīcere"  parents="Process Dīcō-type"/>
+  <type name="Facere"  parents="Process Dīcō-type"/>
+  <type name="Jacēre"  parents="Process Sedeō-type"/>
+  <type name="Loquī"   parents="Process Loquor-type"/>
+  <type name="Nōvisse" parents="Process Nōvī-type"/>
+  <type name="Putāre"  parents="Process Dīcō-type"/>
+  <type name="Sedēre"  parents="Process Sedeō-type"/>
+  <type name="Stāre"   parents="Process Sedeō-type"/>
+  <type name="Vidēre"  parents="Process Dīcō-type"/>
+  <type name="Venīre"  parents="Process Dīcō-type"/>
+</types>
