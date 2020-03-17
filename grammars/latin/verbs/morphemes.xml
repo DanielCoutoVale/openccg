@@ -140,7 +140,15 @@
   <entry word="tis"   pos="VerbLeaf" macros="@branched @erā-branch @istis-leaf @strong-branch"/>
   <entry word="nt"    pos="VerbLeaf" macros="@branched @erā-branch @ērunt-leaf @strong-branch"/>
   
+  <entry word="sum"   pos="Verb" class="Esse" stem="es" macros="@es-stem @unbranched @ō-leaf @ō-aspect"/>
+  <entry word="es"    pos="Verb" class="Esse" stem="es" macros="@es-stem @unbranched @s-leaf @ō-aspect"/>
+  <entry word="est"   pos="Verb" class="Esse" stem="es" macros="@es-stem @unbranched @t-leaf @ō-aspect"/>
+  <entry word="sumus" pos="Verb" class="Esse" stem="es" macros="@es-stem @unbranched @mus-leaf @ō-aspect"/>
+  <entry word="estis" pos="Verb" class="Esse" stem="es" macros="@es-stem @unbranched @tis-leaf @ō-aspect"/>
+  <entry word="sunt"  pos="Verb" class="Esse" stem="es" macros="@es-stem @unbranched @nt-leaf @ō-aspect"/>
+  
   <macro name="@dīc-stem"><fs id="1"><feat attr="stem" val="dīc"/></fs></macro>
+  <macro name="@es-stem"><fs id="1"><feat attr="stem" val="es"/></fs></macro>
   <macro name="@faci-stem"><fs id="1"><feat attr="stem" val="faci"/></fs></macro>
   <macro name="@jacē-stem"><fs id="1"><feat attr="stem" val="jacē"/></fs></macro>
   <macro name="@loqu-stem"><fs id="1"><feat attr="stem" val="loqu"/></fs></macro>

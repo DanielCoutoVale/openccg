@@ -10,6 +10,7 @@
   <type name="Sedeō-type"/>
   <type name="Process" parents="Phenomenon"/>
   <type name="Dīcere"  parents="Process Dīcō-type"/>
+  <type name="Esse"    parents="Process Sedeō-type"/>
   <type name="Facere"  parents="Process Dīcō-type"/>
   <type name="Jacēre"  parents="Process Sedeō-type"/>
   <type name="Loquī"   parents="Process Loquor-type"/>

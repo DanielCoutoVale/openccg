@@ -2046,6 +2046,7 @@
     <arg>
       <atomcat type="Verb3">
         <fs id="1">
+          <feat attr="logic" val="process"/>
           <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
           <feat attr="edge" val="none"/>
           <feat attr="foliage" val="ō-foliage"/>
@@ -2066,6 +2067,7 @@
     <arg>
       <atomcat type="Verb3">
         <fs id="1">
+          <feat attr="logic" val="process"/>
           <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
           <feat attr="edge" val="none"/>
           <feat attr="foliage" val="ī-foliage"/>
@@ -2086,6 +2088,7 @@
     <arg>
       <atomcat type="Verb3">
         <fs id="1">
+          <feat attr="logic" val="process"/>
           <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
           <feat attr="edge" val="none"/>
           <feat attr="foliage" val="ō-foliage"/>
@@ -2106,6 +2109,7 @@
     <arg>
       <atomcat type="Verb3">
         <fs id="1">
+          <feat attr="logic" val="process"/>
           <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
           <feat attr="edge" val="none"/>
           <feat attr="foliage" val="or-foliage"/>
@@ -2128,6 +2132,7 @@
     <arg>
       <atomcat type="Verb3">
         <fs id="1">
+          <feat attr="logic" val="process"/>
           <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
           <feat attr="edge" val="bā"/>
           <feat attr="foliage" val="ō-foliage"/>
@@ -2148,6 +2153,7 @@
     <arg>
       <atomcat type="Verb3">
         <fs id="1">
+          <feat attr="logic" val="process"/>
           <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
           <feat attr="edge" val="erā"/>
           <feat attr="foliage" val="ī-foliage"/>
@@ -2164,10 +2170,11 @@
       </atomcat>
     </result>
   </typechanging>
-  <typechanging name="Dīcō-type-present">
+  <typechanging name="Dīcō-type-past">
     <arg>
       <atomcat type="Verb3">
         <fs id="1">
+          <feat attr="logic" val="process"/>
           <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
           <feat attr="edge" val="none"/>
           <feat attr="foliage" val="ī-foliage"/>
@@ -2182,6 +2189,158 @@
           <feat attr="mode" val="injunctive"/>
         </fs>
       </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="Loquor-type-past+person">
+    <arg>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="logic" val="auxiliary"/>
+          <feat attr="stem" val="es"/>
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="foliage" val="ō-foliage"/>
+          <feat attr="seamed-element-type" val="person"/>
+          <feat attr="seamed-element-quantity"><featvar name="QUANTITY"/></feat>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <complexcat>
+        <atomcat type="VerbGroup">
+          <fs id="1">
+            <feat attr="tense" val="past"/>
+            <feat attr="mode" val="injunctive"/>
+            <feat attr="seamed-element-gender"><featvar name="GENDER"/></feat>
+          </fs>
+        </atomcat>
+        <slash dir="|"/>
+        <atomcat type="Verb3">
+          <fs id="2">
+            <feat attr="logic" val="process"/>
+            <feat attr="core" val="unleafed-unbranched-ū-aspect"/>
+            <feat attr="edge" val="none"/>
+            <feat attr="foliage" val="a-foliage"/>
+            <feat attr="index"><lf><nomvar name="P:Loquor-type"/></lf></feat>
+            <feat attr="seamed-element-type" val="person"/>
+            <feat attr="seamed-element-quantity"><featvar name="QUANTITY"/></feat>
+            <feat attr="seamed-element-gender"><featvar name="GENDER"/></feat>
+          </fs>
+        </atomcat>
+      </complexcat>
+    </result>
+  </typechanging>
+  <typechanging name="Loquor-type-past+substance">
+    <arg>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="logic" val="auxiliary"/>
+          <feat attr="stem" val="es"/>
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="foliage" val="ō-foliage"/>
+          <feat attr="seamed-element-type" val="substance"/>
+          <feat attr="seamed-element-rhyme-category"><featvar name="CATEGORY"/></feat>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <complexcat>
+        <atomcat type="VerbGroup">
+          <fs id="1">
+            <feat attr="tense" val="past"/>
+            <feat attr="mode" val="injunctive"/>
+          </fs>
+        </atomcat>
+        <slash dir="|"/>
+        <atomcat type="Verb3">
+          <fs id="2">
+            <feat attr="logic" val="process"/>
+            <feat attr="core" val="unleafed-unbranched-ū-aspect"/>
+            <feat attr="edge" val="none"/>
+            <feat attr="foliage" val="a-foliage"/>
+            <feat attr="index"><lf><nomvar name="P:Loquor-type"/></lf></feat>
+            <feat attr="seamed-element-type" val="substance"/>
+            <feat attr="seamed-element-rhyme-category"><featvar name="CATEGORY"/></feat>
+          </fs>
+        </atomcat>
+      </complexcat>
+    </result>
+  </typechanging>
+  <typechanging name="Loquor-type-past+classified-stuff">
+    <arg>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="logic" val="auxiliary"/>
+          <feat attr="stem" val="es"/>
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="foliage" val="ō-foliage"/>
+          <feat attr="seamed-element-type" val="classified-stuff"/>
+          <feat attr="seamed-element-quantity"><featvar name="QUANTITY"/></feat>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <complexcat>
+        <atomcat type="VerbGroup">
+          <fs id="1">
+            <feat attr="tense" val="past"/>
+            <feat attr="mode" val="injunctive"/>
+            <feat attr="seamed-element-rhyme-category"><featvar name="CATEGORY"/></feat>
+          </fs>
+        </atomcat>
+        <slash dir="|"/>
+        <atomcat type="Verb3">
+          <fs id="2">
+            <feat attr="logic" val="process"/>
+            <feat attr="core" val="unleafed-unbranched-ū-aspect"/>
+            <feat attr="edge" val="none"/>
+            <feat attr="foliage" val="a-foliage"/>
+            <feat attr="index"><lf><nomvar name="P:Loquor-type"/></lf></feat>
+            <feat attr="seamed-element-type" val="classified-stuff"/>
+            <feat attr="seamed-element-quantity"><featvar name="QUANTITY"/></feat>
+            <feat attr="seamed-element-rhyme-category"><featvar name="CATEGORY"/></feat>
+          </fs>
+        </atomcat>
+      </complexcat>
+    </result>
+  </typechanging>
+  <typechanging name="Loquor-type-past+named-stuff">
+    <arg>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="logic" val="auxiliary"/>
+          <feat attr="stem" val="es"/>
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="foliage" val="ō-foliage"/>
+          <feat attr="seamed-element-type" val="named-stuff"/>
+          <feat attr="seamed-element-rhyme-category"><featvar name="CATEGORY"/></feat>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <complexcat>
+        <atomcat type="VerbGroup">
+          <fs id="1">
+            <feat attr="tense" val="past"/>
+            <feat attr="mode" val="injunctive"/>
+          </fs>
+        </atomcat>
+        <slash dir="|"/>
+        <atomcat type="Verb3">
+          <fs id="2">
+            <feat attr="logic" val="process"/>
+            <feat attr="core" val="unleafed-unbranched-ū-aspect"/>
+            <feat attr="edge" val="none"/>
+            <feat attr="foliage" val="a-foliage"/>
+            <feat attr="index"><lf><nomvar name="P:Loquor-type"/></lf></feat>
+            <feat attr="seamed-element-type" val="named-stuff"/>
+            <feat attr="seamed-element-rhyme-category"><featvar name="CATEGORY"/></feat>
+          </fs>
+        </atomcat>
+      </complexcat>
     </result>
   </typechanging>
   
