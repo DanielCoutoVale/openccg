@@ -104,16 +104,16 @@
   <entry word="um"    pos="VerbLeaf" macros="@unbranched @um-leaf @0-adaption"/>
   <entry word="us"    pos="VerbLeaf" macros="@unbranched @us-leaf @0-adaption"/>
   
-  <entry word="bā"    pos="VerbBranch" class="Vidēre" macros="@bā-branch @ā-strand @r-adaption @strong-branch"/>
-  <entry word="ba"    pos="VerbBranch" class="Vidēre" macros="@bā-branch @ā-strand @r-adaption @weak-branch"/>
-  <entry word="bā"    pos="VerbBranch" class="Vidēre" macros="@bā-branch @ē-strand @r-adaption @strong-branch"/>
-  <entry word="ba"    pos="VerbBranch" class="Vidēre" macros="@bā-branch @ē-strand @r-adaption @weak-branch"/>
-  <entry word="ēbā"   pos="VerbBranch" class="Vidēre" macros="@bā-branch @ī-strand @n-adaption @strong-branch"/>
-  <entry word="ēba"   pos="VerbBranch" class="Vidēre" macros="@bā-branch @ī-strand @n-adaption @weak-branch"/>
-  <entry word="ēbā"   pos="VerbBranch" class="Vidēre" macros="@bā-branch @i-strand @n-adaption @strong-branch"/>
-  <entry word="ēba"   pos="VerbBranch" class="Vidēre" macros="@bā-branch @i-strand @n-adaption @weak-branch"/>
-  <entry word="ēbā"   pos="VerbBranch" class="Vidēre" macros="@bā-branch @ø-strand @n-adaption @strong-branch"/>
-  <entry word="ēba"   pos="VerbBranch" class="Vidēre" macros="@bā-branch @ø-strand @n-adaption @weak-branch"/>
+  <entry word="bā"    pos="VerbBranch" macros="@bā-branch @ā-strand @r-adaption @strong-branch"/>
+  <entry word="ba"    pos="VerbBranch" macros="@bā-branch @ā-strand @r-adaption @weak-branch"/>
+  <entry word="bā"    pos="VerbBranch" macros="@bā-branch @ē-strand @r-adaption @strong-branch"/>
+  <entry word="ba"    pos="VerbBranch" macros="@bā-branch @ē-strand @r-adaption @weak-branch"/>
+  <entry word="ēbā"   pos="VerbBranch" macros="@bā-branch @ī-strand @n-adaption @strong-branch"/>
+  <entry word="ēba"   pos="VerbBranch" macros="@bā-branch @ī-strand @n-adaption @weak-branch"/>
+  <entry word="ēbā"   pos="VerbBranch" macros="@bā-branch @i-strand @n-adaption @strong-branch"/>
+  <entry word="ēba"   pos="VerbBranch" macros="@bā-branch @i-strand @n-adaption @weak-branch"/>
+  <entry word="ēbā"   pos="VerbBranch" macros="@bā-branch @ø-strand @n-adaption @strong-branch"/>
+  <entry word="ēba"   pos="VerbBranch" macros="@bā-branch @ø-strand @n-adaption @weak-branch"/>
   
   <entry word="m"     pos="VerbLeaf" macros="@branched @bā-branch @ō-leaf @weak-branch"/>
   <entry word="s"     pos="VerbLeaf" macros="@branched @bā-branch @s-leaf @strong-branch"/>
@@ -127,11 +127,52 @@
   <entry word="mur"   pos="VerbLeaf" macros="@branched @bā-branch @mur-leaf @strong-branch"/>
   <entry word="minī"  pos="VerbLeaf" macros="@branched @bā-branch @minī-leaf @strong-branch"/>
   <entry word="ntur"  pos="VerbLeaf" macros="@branched @bā-branch @ntur-leaf @weak-branch"/>
+  
+  <entry word="b"     pos="VerbBranch" macros="@b-branch @ā-strand @r-adaption @pulmonar-branch @short-branch"/>
+  <entry word="bi"    pos="VerbBranch" macros="@b-branch @ā-strand @r-adaption @pulmonar-branch @long-branch @closed-branch"/>
+  <entry word="be"    pos="VerbBranch" macros="@b-branch @ā-strand @r-adaption @pulmonar-branch @long-branch @open-branch"/>
+  <entry word="b"     pos="VerbBranch" macros="@b-branch @ē-strand @r-adaption @pulmonar-branch @short-branch"/>
+  <entry word="bi"    pos="VerbBranch" macros="@b-branch @ē-strand @r-adaption @pulmonar-branch @long-branch @closed-branch"/>
+  <entry word="be"    pos="VerbBranch" macros="@b-branch @ē-strand @r-adaption @pulmonar-branch @long-branch @open-branch"/>
+  <entry word="a"     pos="VerbBranch" macros="@b-branch @ī-strand @n-adaption @vocal-branch @open-branch"/>
+  <entry word="ē"     pos="VerbBranch" macros="@b-branch @ī-strand @n-adaption @vocal-branch @closed-branch @strong-branch"/>
+  <entry word="e"     pos="VerbBranch" macros="@b-branch @ī-strand @n-adaption @vocal-branch @closed-branch @weak-branch"/>
+  <entry word="a"     pos="VerbBranch" macros="@b-branch @i-strand @n-adaption @vocal-branch @open-branch"/>
+  <entry word="ē"     pos="VerbBranch" macros="@b-branch @i-strand @n-adaption @vocal-branch @closed-branch @strong-branch"/>
+  <entry word="e"     pos="VerbBranch" macros="@b-branch @i-strand @n-adaption @vocal-branch @closed-branch @weak-branch"/>
+  <entry word="a"     pos="VerbBranch" macros="@b-branch @ø-strand @n-adaption @vocal-branch @open-branch"/>
+  <entry word="ē"     pos="VerbBranch" macros="@b-branch @ø-strand @n-adaption @vocal-branch @closed-branch @strong-branch"/>
+  <entry word="e"     pos="VerbBranch" macros="@b-branch @ø-strand @n-adaption @vocal-branch @closed-branch @weak-branch"/>
+  
+  <entry word="ō"     pos="VerbLeaf" macros="@branched @b-branch @ō-leaf @pulmonar-branch @short-branch"/>
+  <entry word="s"     pos="VerbLeaf" macros="@branched @b-branch @s-leaf @pulmonar-branch @long-branch @closed-branch"/>
+  <entry word="t"     pos="VerbLeaf" macros="@branched @b-branch @t-leaf @pulmonar-branch @long-branch @closed-branch"/>
+  <entry word="mus"   pos="VerbLeaf" macros="@branched @b-branch @mus-leaf @pulmonar-branch @long-branch @closed-branch"/>
+  <entry word="tis"   pos="VerbLeaf" macros="@branched @b-branch @tis-leaf @pulmonar-branch @long-branch @closed-branch"/>
+  <entry word="unt"   pos="VerbLeaf" macros="@branched @b-branch @nt-leaf @pulmonar-branch @short-branch"/>
+  <entry word="r"     pos="VerbLeaf" macros="@branched @b-branch @or-leaf @pulmonar-branch @short-branch"/>
+  <entry word="ris"   pos="VerbLeaf" macros="@branched @b-branch @ris-leaf @pulmonar-branch @long-branch @open-branch"/>
+  <entry word="tur"   pos="VerbLeaf" macros="@branched @b-branch @tur-leaf @pulmonar-branch @long-branch @closed-branch"/>
+  <entry word="mur"   pos="VerbLeaf" macros="@branched @b-branch @mur-leaf @pulmonar-branch @long-branch @closed-branch"/>
+  <entry word="minī"  pos="VerbLeaf" macros="@branched @b-branch @minī-leaf @pulmonar-branch @long-branch @closed-branch"/>
+  <entry word="untur" pos="VerbLeaf" macros="@branched @b-branch @ntur-leaf @pulmonar-branch @short-branch"/>
+  <entry word="m"     pos="VerbLeaf" macros="@branched @b-branch @ō-leaf @vocal-branch @open-branch"/>
+  <entry word="s"     pos="VerbLeaf" macros="@branched @b-branch @s-leaf @vocal-branch @closed-branch @strong-branch"/>
+  <entry word="t"     pos="VerbLeaf" macros="@branched @b-branch @t-leaf @vocal-branch @closed-branch @weak-branch"/>
+  <entry word="mus"   pos="VerbLeaf" macros="@branched @b-branch @mus-leaf @vocal-branch @closed-branch @strong-branch"/>
+  <entry word="tis"   pos="VerbLeaf" macros="@branched @b-branch @tis-leaf @vocal-branch @closed-branch @strong-branch"/>
+  <entry word="nt"    pos="VerbLeaf" macros="@branched @b-branch @nt-leaf @vocal-branch @closed-branch @weak-branch"/>
+  <entry word="r"     pos="VerbLeaf" macros="@branched @b-branch @or-leaf @vocal-branch @open-branch"/>
+  <entry word="ris"   pos="VerbLeaf" macros="@branched @b-branch @ris-leaf @vocal-branch @closed-branch @strong-branch"/>
+  <entry word="tur"   pos="VerbLeaf" macros="@branched @b-branch @tur-leaf @vocal-branch @closed-branch @strong-branch"/>
+  <entry word="mur"   pos="VerbLeaf" macros="@branched @b-branch @mur-leaf @vocal-branch @closed-branch @strong-branch"/>
+  <entry word="minī"  pos="VerbLeaf" macros="@branched @b-branch @minī-leaf @vocal-branch @closed-branch @strong-branch"/>
+  <entry word="ntur"  pos="VerbLeaf" macros="@branched @b-branch @ntur-leaf @vocal-branch @closed-branch @weak-branch"/>
 
-  <entry word="rā"    pos="VerbBranch" class="Vidēre" macros="@erā-branch @v-strand @š-adaption @strong-branch"/>
-  <entry word="ra"    pos="VerbBranch" class="Vidēre" macros="@erā-branch @v-strand @š-adaption @weak-branch"/>  
-  <entry word="erā"   pos="VerbBranch" class="Vidēre" macros="@erā-branch @h-strand @š-adaption @strong-branch"/>
-  <entry word="era"   pos="VerbBranch" class="Vidēre" macros="@erā-branch @h-strand @š-adaption @weak-branch"/>
+  <entry word="rā"    pos="VerbBranch" macros="@erā-branch @v-strand @š-adaption @strong-branch"/>
+  <entry word="ra"    pos="VerbBranch" macros="@erā-branch @v-strand @š-adaption @weak-branch"/>  
+  <entry word="erā"   pos="VerbBranch" macros="@erā-branch @h-strand @š-adaption @strong-branch"/>
+  <entry word="era"   pos="VerbBranch" macros="@erā-branch @h-strand @š-adaption @weak-branch"/>
   
   <entry word="m"     pos="VerbLeaf" macros="@branched @erā-branch @ī-leaf @weak-branch"/>
   <entry word="s"     pos="VerbLeaf" macros="@branched @erā-branch @istī-leaf @strong-branch"/>
@@ -139,6 +180,18 @@
   <entry word="mus"   pos="VerbLeaf" macros="@branched @erā-branch @imus-leaf @strong-branch"/>
   <entry word="tis"   pos="VerbLeaf" macros="@branched @erā-branch @istis-leaf @strong-branch"/>
   <entry word="nt"    pos="VerbLeaf" macros="@branched @erā-branch @ērunt-leaf @strong-branch"/>
+
+  <entry word="r"     pos="VerbBranch" macros="@er-branch @v-strand @š-adaption @short-branch"/>
+  <entry word="ri"    pos="VerbBranch" macros="@er-branch @v-strand @š-adaption @long-branch"/>  
+  <entry word="er"    pos="VerbBranch" macros="@er-branch @h-strand @š-adaption @short-branch"/>
+  <entry word="eri"   pos="VerbBranch" macros="@er-branch @h-strand @š-adaption @long-branch"/>
+  
+  <entry word="ō"     pos="VerbLeaf" macros="@branched @er-branch @ī-leaf @short-branch"/>
+  <entry word="s"     pos="VerbLeaf" macros="@branched @er-branch @istī-leaf @long-branch"/>
+  <entry word="t"     pos="VerbLeaf" macros="@branched @er-branch @it-leaf @long-branch"/>
+  <entry word="mus"   pos="VerbLeaf" macros="@branched @er-branch @imus-leaf @long-branch"/>
+  <entry word="tis"   pos="VerbLeaf" macros="@branched @er-branch @istis-leaf @long-branch"/>
+  <entry word="nt"    pos="VerbLeaf" macros="@branched @er-branch @ērunt-leaf @long-branch"/>
   
   <entry word="sum"   pos="Verb" class="Esse" stem="es" macros="@es-stem @unbranched @ō-leaf @ō-aspect"/>
   <entry word="es"    pos="Verb" class="Esse" stem="es" macros="@es-stem @unbranched @s-leaf @ō-aspect"/>
@@ -153,6 +206,13 @@
   <entry word="erāmus" pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @bā-branch @mus-leaf @ō-aspect"/>
   <entry word="erātis" pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @bā-branch @tis-leaf @ō-aspect"/>
   <entry word="erant"  pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @bā-branch @nt-leaf @ō-aspect"/>
+  
+  <entry word="erō"    pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @b-branch @ō-leaf @ō-aspect"/>
+  <entry word="eris"   pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @b-branch @s-leaf @ō-aspect"/>
+  <entry word="erit"   pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @b-branch @t-leaf @ō-aspect"/>
+  <entry word="erimus" pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @b-branch @mus-leaf @ō-aspect"/>
+  <entry word="eritis" pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @b-branch @tis-leaf @ō-aspect"/>
+  <entry word="erint"  pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @b-branch @nt-leaf @ō-aspect"/>
   
   <macro name="@dīc-stem"><fs id="1"><feat attr="stem" val="dīc"/></fs></macro>
   <macro name="@es-stem"><fs id="1"><feat attr="stem" val="es"/></fs></macro>
@@ -214,7 +274,9 @@
   <macro name="@unbranched"><fs id="1"><feat attr="branching" val="unbranched"/></fs></macro>
   <macro name="@branched"><fs id="1"><feat attr="branching" val="branched"/></fs></macro>
   <macro name="@bā-branch"><fs id="1"><feat attr="branch" val="bā"/></fs></macro>
+  <macro name="@b-branch"><fs id="1"><feat attr="branch" val="b"/></fs></macro>
   <macro name="@erā-branch"><fs id="1"><feat attr="branch" val="erā"/></fs></macro>
+  <macro name="@er-branch"><fs id="1"><feat attr="branch" val="er"/></fs></macro>
   
   <macro name="@short"><fs id="1"><feat attr="length" val="short"/></fs></macro>
   <macro name="@long"><fs id="1"><feat attr="length" val="long"/></fs></macro>
@@ -225,8 +287,20 @@
   <macro name="@open"><fs id="1"><feat attr="opening" val="open"/></fs></macro>
   <macro name="@closed"><fs id="1"><feat attr="opening" val="closed"/></fs></macro>
   
+  <macro name="@pulmonar-branch"><fs id="1"><feat attr="branch-type" val="pulmonar"/></fs></macro>
+  <macro name="@vocal-branch"><fs id="1"><feat attr="branch-type" val="vocal"/></fs></macro>
+  
+  <macro name="@short-branch"><fs id="1"><feat attr="branch-length" val="short"/></fs></macro>
+  <macro name="@long-branch"><fs id="1"><feat attr="branch-length" val="long"/></fs></macro>
+  
   <macro name="@weak-branch"><fs id="1"><feat attr="branch-strength" val="weak"/></fs></macro>
   <macro name="@strong-branch"><fs id="1"><feat attr="branch-strength" val="strong"/></fs></macro>
+  
+  <macro name="@open-branch"><fs id="1"><feat attr="branch-opening" val="open"/></fs></macro>
+  <macro name="@closed-branch"><fs id="1"><feat attr="branch-opening" val="closed"/></fs></macro>
+  
+  <macro name="@round-branch"><fs id="1"><feat attr="branch-rounding" val="round"/></fs></macro>
+  <macro name="@flat-branch"><fs id="1"><feat attr="branch-rounding" val="flat"/></fs></macro>
   
   <macro name="@ō-adaption"><fs id="1"><feat attr="adaption" val="ō"/></fs></macro>
   <macro name="@n-adaption"><fs id="1"><feat attr="adaption" val="n"/></fs></macro>
