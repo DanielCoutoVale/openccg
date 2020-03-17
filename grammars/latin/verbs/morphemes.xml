@@ -147,6 +147,13 @@
   <entry word="estis" pos="Verb" class="Esse" stem="es" macros="@es-stem @unbranched @tis-leaf @ō-aspect"/>
   <entry word="sunt"  pos="Verb" class="Esse" stem="es" macros="@es-stem @unbranched @nt-leaf @ō-aspect"/>
   
+  <entry word="eram"   pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @bā-branch @ō-leaf @ō-aspect"/>
+  <entry word="erās"   pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @bā-branch @s-leaf @ō-aspect"/>
+  <entry word="erat"   pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @bā-branch @t-leaf @ō-aspect"/>
+  <entry word="erāmus" pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @bā-branch @mus-leaf @ō-aspect"/>
+  <entry word="erātis" pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @bā-branch @tis-leaf @ō-aspect"/>
+  <entry word="erant"  pos="Verb" class="Esse" stem="es" macros="@es-stem @branched @bā-branch @nt-leaf @ō-aspect"/>
+  
   <macro name="@dīc-stem"><fs id="1"><feat attr="stem" val="dīc"/></fs></macro>
   <macro name="@es-stem"><fs id="1"><feat attr="stem" val="es"/></fs></macro>
   <macro name="@faci-stem"><fs id="1"><feat attr="stem" val="faci"/></fs></macro>
