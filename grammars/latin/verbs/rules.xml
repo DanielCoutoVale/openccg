@@ -7,10 +7,10 @@
 >
   <application dir="forward"/>
   <application dir="backward"/>
-  <composition dir="forward" harmonic="true"/>
+<!--   <composition dir="forward" harmonic="true"/>
   <composition dir="forward" harmonic="false"/>
   <composition dir="backward" harmonic="true"/>
-  <composition dir="backward" harmonic="false"/>
+  <composition dir="backward" harmonic="false"/> -->
   <typeraising dir="forward" useDollar="false"/>
   <typeraising dir="backward" useDollar="true"/>
   <substitution dir="forward" harmonic="true"/>
@@ -541,13 +541,13 @@
     </result>
   </typechanging>
   
-  <!-- OST-SEAMS -->
+  <!-- unleafed-unbranched-ō-aspect -->
   <typechanging name="core1">
     <arg>
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ō"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="ō"/>
         </fs>
       </atomcat>
@@ -568,7 +568,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ō"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="or"/>
         </fs>
       </atomcat>
@@ -589,7 +589,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ō"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="s"/>
         </fs>
       </atomcat>
@@ -610,7 +610,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ō"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="ris"/>
         </fs>
       </atomcat>
@@ -631,7 +631,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ō"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="t"/>
         </fs>
       </atomcat>
@@ -652,7 +652,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ō"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="tur"/>
         </fs>
       </atomcat>
@@ -673,7 +673,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ō"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="mus"/>
         </fs>
       </atomcat>
@@ -694,7 +694,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ō"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="mur"/>
         </fs>
       </atomcat>
@@ -715,7 +715,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ō"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="tis"/>
         </fs>
       </atomcat>
@@ -736,7 +736,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ō"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="minī"/>
         </fs>
       </atomcat>
@@ -757,7 +757,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ō"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="nt"/>
         </fs>
       </atomcat>
@@ -778,7 +778,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ō"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="ntur"/>
         </fs>
       </atomcat>
@@ -794,12 +794,278 @@
       </atomcat>
     </result>
   </typechanging>
+  <!-- unleafed-unbranched-ō-aspect + bā -->
+  <typechanging name="core1+bā">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="bā"/>
+          <feat attr="leaf" val="ō"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="bā"/>
+          <feat attr="seam" val="ō-seam"/>
+          <feat attr="foliage" val="ō-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core2+bā">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="bā"/>
+          <feat attr="leaf" val="or"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="bā"/>
+          <feat attr="seam" val="ō-seam"/>
+          <feat attr="foliage" val="or-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core3+bā">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="bā"/>
+          <feat attr="leaf" val="s"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="bā"/>
+          <feat attr="seam" val="s-seam"/>
+          <feat attr="foliage" val="ō-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core4+bā">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="bā"/>
+          <feat attr="leaf" val="ris"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="bā"/>
+          <feat attr="seam" val="s-seam"/>
+          <feat attr="foliage" val="or-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core5+bā">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="bā"/>
+          <feat attr="leaf" val="t"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="bā"/>
+          <feat attr="seam" val="t-seam"/>
+          <feat attr="foliage" val="ō-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core6+bā">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="bā"/>
+          <feat attr="leaf" val="tur"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="bā"/>
+          <feat attr="seam" val="t-seam"/>
+          <feat attr="foliage" val="or-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core7+bā">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="bā"/>
+          <feat attr="leaf" val="mus"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="bā"/>
+          <feat attr="seam" val="mus-seam"/>
+          <feat attr="foliage" val="ō-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core8+bā">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="bā"/>
+          <feat attr="leaf" val="mur"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="bā"/>
+          <feat attr="seam" val="mus-seam"/>
+          <feat attr="foliage" val="or-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core9+bā">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="bā"/>
+          <feat attr="leaf" val="tis"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="bā"/>
+          <feat attr="seam" val="tis-seam"/>
+          <feat attr="foliage" val="ō-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core10+bā">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="bā"/>
+          <feat attr="leaf" val="minī"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="bā"/>
+          <feat attr="seam" val="tis-seam"/>
+          <feat attr="foliage" val="or-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core11+bā">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="bā"/>
+          <feat attr="leaf" val="nt"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="bā"/>
+          <feat attr="seam" val="nt-seam"/>
+          <feat attr="foliage" val="ō-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core12+bā">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ō"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="bā"/>
+          <feat attr="leaf" val="ntur"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="bā"/>
+          <feat attr="seam" val="nt-seam"/>
+          <feat attr="foliage" val="or-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <!-- unleafed-unbranched-ī-aspect -->
   <typechanging name="core13">
     <arg>
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ī"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="ī"/>
         </fs>
       </atomcat>
@@ -820,7 +1086,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ī"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="istī"/>
         </fs>
       </atomcat>
@@ -841,7 +1107,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ī"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="it"/>
         </fs>
       </atomcat>
@@ -862,7 +1128,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ī"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="imus"/>
         </fs>
       </atomcat>
@@ -883,7 +1149,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ī"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="istis"/>
         </fs>
       </atomcat>
@@ -904,7 +1170,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ī"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="ērunt"/>
         </fs>
       </atomcat>
@@ -920,12 +1186,146 @@
       </atomcat>
     </result>
   </typechanging>
+  <!-- unleafed-unbranched-ī-aspect+erā -->
+  <typechanging name="core13">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ī"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="erā"/>
+          <feat attr="leaf" val="ī"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="erā"/>
+          <feat attr="seam" val="ō-seam"/>
+          <feat attr="foliage" val="ī-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core14">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ī"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="erā"/>
+          <feat attr="leaf" val="istī"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="erā"/>
+          <feat attr="seam" val="s-seam"/>
+          <feat attr="foliage" val="ī-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core15">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ī"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="erā"/>
+          <feat attr="leaf" val="it"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="erā"/>
+          <feat attr="seam" val="t-seam"/>
+          <feat attr="foliage" val="ī-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core16">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ī"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="erā"/>
+          <feat attr="leaf" val="imus"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="erā"/>
+          <feat attr="seam" val="mus-seam"/>
+          <feat attr="foliage" val="ī-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core17">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ī"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="erā"/>
+          <feat attr="leaf" val="istis"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="erā"/>
+          <feat attr="seam" val="tis-seam"/>
+          <feat attr="foliage" val="ī-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="core18">
+    <arg>
+      <atomcat type="Verb1">
+        <fs id="1">
+          <feat attr="aspect" val="ī"/>
+          <feat attr="branching" val="branched"/>
+          <feat attr="branch" val="erā"/>
+          <feat attr="leaf" val="ērunt"/>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="Verb2">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="erā"/>
+          <feat attr="seam" val="nt-seam"/>
+          <feat attr="foliage" val="ī-foliage"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <!-- unleafed-unbranched-ū-aspect -->
   <typechanging name="core19">
     <arg>
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ū"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="a"/>
         </fs>
       </atomcat>
@@ -946,7 +1346,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ū"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="um"/>
         </fs>
       </atomcat>
@@ -967,7 +1367,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ū"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="us"/>
         </fs>
       </atomcat>
@@ -988,7 +1388,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ū"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="ae"/>
         </fs>
       </atomcat>
@@ -1009,7 +1409,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ū"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="a"/>
         </fs>
       </atomcat>
@@ -1030,7 +1430,7 @@
       <atomcat type="Verb1">
         <fs id="1">
           <feat attr="aspect" val="ū"/>
-          <feat attr="branch" val="none"/>
+          <feat attr="branching" val="unbranched"/>
           <feat attr="leaf" val="ī"/>
         </fs>
       </atomcat>
@@ -1717,6 +2117,68 @@
       <atomcat type="VerbGroup">
         <fs id="1">
           <feat attr="tense" val="present"/>
+          <feat attr="mode" val="injunctive"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+
+  <!-- TENSE: past -->
+  <typechanging name="Sedeō-type-past">
+    <arg>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ō-aspect"/>
+          <feat attr="edge" val="bā"/>
+          <feat attr="foliage" val="ō-foliage"/>
+          <feat attr="index"><lf><nomvar name="P:Sedeō-type"/></lf></feat>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="VerbGroup">
+        <fs id="1">
+          <feat attr="tense" val="past"/>
+          <feat attr="mode" val="injunctive"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="Nōvī-type-past">
+    <arg>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="erā"/>
+          <feat attr="foliage" val="ī-foliage"/>
+          <feat attr="index"><lf><nomvar name="P:Nōvī-type"/></lf></feat>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="VerbGroup">
+        <fs id="1">
+          <feat attr="tense" val="past"/>
+          <feat attr="mode" val="injunctive"/>
+        </fs>
+      </atomcat>
+    </result>
+  </typechanging>
+  <typechanging name="Dīcō-type-present">
+    <arg>
+      <atomcat type="Verb3">
+        <fs id="1">
+          <feat attr="core" val="unleafed-unbranched-ī-aspect"/>
+          <feat attr="edge" val="none"/>
+          <feat attr="foliage" val="ī-foliage"/>
+          <feat attr="index"><lf><nomvar name="P:Dīcō-type"/></lf></feat>
+        </fs>
+      </atomcat>
+    </arg>
+    <result>
+      <atomcat type="VerbGroup">
+        <fs id="1">
+          <feat attr="tense" val="past"/>
           <feat attr="mode" val="injunctive"/>
         </fs>
       </atomcat>

@@ -4,9 +4,21 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="../../lexicon.xsd">
   <family closed="false" pos="VerbStem" name="VerbStem">
-    <entry name="primary">
+    <entry name="branchless">
       <atomcat type="Stem1">
         <fs id="1">
+          <feat attr="branching" val="unbranched"/>
+          <feat attr="index"><lf><nomvar name="X"/></lf></feat>
+        </fs>
+        <lf>
+          <satop nomvar="X"><prop name="[*DEFAULT*]"/></satop>
+        </lf>
+      </atomcat>
+    </entry>
+    <entry name="branched">
+      <atomcat type="Stem1">
+        <fs id="1">
+          <feat attr="branching" val="branched"/>
           <feat attr="index"><lf><nomvar name="X"/></lf></feat>
         </fs>
         <lf>
@@ -15,13 +27,26 @@
       </atomcat>
     </entry>
   </family>
+  <family closed="false" pos="VerbBranch" name="VerbBranch">
+    <entry name="primary">
+      <complexcat>
+        <atomcat type="Stem2">
+          <fs id="1">
+            <feat attr="branching" val="branched"/>
+          </fs>
+        </atomcat>
+        <slash dir="\"/>
+        <atomcat type="Stem2">
+          <fs id="1"/>
+        </atomcat>
+      </complexcat>
+    </entry>
+  </family>
   <family closed="false" pos="VerbLeaf" name="VerbStem">
     <entry name="primary">
       <complexcat>
         <atomcat type="Verb1">
-          <fs id="1">
-            <feat attr="branch" val="none"/>
-          </fs>
+          <fs id="1"/>
         </atomcat>
         <slash dir="\"/>
         <atomcat type="Stem2">
